@@ -4,6 +4,7 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 
 import java.awt.image.BufferedImage;
+import java.util.function.Consumer;
 
 public abstract class BaseCardFace implements CardFace {
     // these two fields are effectively final as they are
@@ -33,6 +34,13 @@ public abstract class BaseCardFace implements CardFace {
 
     public CardFaceSide getCardFaceSide() {
         return cardFaceSide;
+    }
+
+    // takes a consumer, typically used for when binding an editor/component to a field and adds a step that
+    // marks the correct sheet as changed on the parent GameComponent to force activities such as UI unchanged status
+    // and repainting of the relevant sheet
+    protected <T> Consumer<T> wrapEditorBindingWithMarkedChanged(Consumer<T> consumer) {
+        return consumer.andThen(t -> getCard().markChanged(getSheetIndex()));
     }
 
     public Sheet<Card> getSheet() {

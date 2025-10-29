@@ -1,10 +1,11 @@
 package com.mickeytheq.strangeeons.ahlcg4j;
 
-import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import resources.Settings;
 
 import javax.swing.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public interface CardFace {
     // called immediately after a CardFace is constructed, either created new or de-serialised/loaded from a file
@@ -18,7 +19,9 @@ public interface CardFace {
 
     Sheet<Card> createSheet();
 
-    void readFace(Settings settings);
+    void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream);
 
-    void writeFace(Settings settings);
+    void beforeSettingsWrite(Settings settings);
+
+    void afterSettingsWrite(ObjectOutputStream objectOutputStream);
 }

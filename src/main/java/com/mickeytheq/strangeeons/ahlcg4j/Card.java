@@ -63,20 +63,21 @@ public class Card extends AbstractGameComponent {
         out.writeObject(getName());
         out.writeObject(comments);
 
-        writeFace(frontFace, CardFaceSide.Front);
-        writeFace(backFace, CardFaceSide.Back);
+        writeFaceSettings(frontFace, CardFaceSide.Front);
+        writeFaceSettings(backFace, CardFaceSide.Back);
 
         out.writeObject(privateSettings);
 
-        // TODO: allow the card faces to participate in the object stream?
+        frontFace.afterSettingsWrite(out);
+        backFace.afterSettingsWrite(out);
     }
 
-    private void writeFace(CardFace cardFace, CardFaceSide cardFaceSide) {
+    private void writeFaceSettings(CardFace cardFace, CardFaceSide cardFaceSide) {
         String type = CardFaceTypeRegister.get().getSettingsTypeCodeForCardFaceClass(cardFace.getClass());
 
         getSettings().set(cardFaceSide.getSettingsPrefix() + ".Type", type);
 
-        frontFace.writeFace(getSettings());
+        cardFace.beforeSettingsWrite(getSettings());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -89,13 +90,13 @@ public class Card extends AbstractGameComponent {
 
         privateSettings = (Settings)in.readObject();
 
-        frontFace = readFace(CardFaceSide.Front);
-        backFace = readFace(CardFaceSide.Back);
+        frontFace = readFace(CardFaceSide.Front, in);
+        backFace = readFace(CardFaceSide.Back, in);
 
         // TODO: allow the card faces to participate in the object stream?
     }
 
-    private CardFace readFace(CardFaceSide cardFaceSide) {
+    private CardFace readFace(CardFaceSide cardFaceSide, ObjectInputStream objectInputStream) {
         String settingsKey = cardFaceSide.getSettingsPrefix() + ".Type";
 
         String type = getSettings().get(settingsKey);
@@ -118,7 +119,7 @@ public class Card extends AbstractGameComponent {
 
         cardFace.initialise(this, cardFaceSide);
 
-        cardFace.readFace(getSettings());
+        cardFace.afterSettingsRead(getSettings(), objectInputStream);
 
         return cardFace;
     }

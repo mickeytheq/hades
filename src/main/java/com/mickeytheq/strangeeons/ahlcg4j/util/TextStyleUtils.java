@@ -3,6 +3,7 @@ package com.mickeytheq.strangeeons.ahlcg4j.util;
 import ca.cgjennings.layout.TextStyle;
 import resources.Settings;
 
+import java.awt.*;
 import java.awt.font.TextAttribute;
 
 public class TextStyleUtils {
@@ -14,6 +15,8 @@ public class TextStyleUtils {
     private static final TextStyle STORY_TEXT_STYLE;
     private static final TextStyle FLAVOR_TEXT_STYLE;
     private static final TextStyle ARKHAM_HORROR_FONT_TEXT_STYLE;
+    private static final TextStyle COLLECTION_NUMBER_TEXT_STYLE;
+    private static final TextStyle ENCOUNTER_NUMBER_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -31,7 +34,7 @@ public class TextStyleUtils {
         TITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         TITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
         TITLE_TEXT_STYLE.add(TextAttribute.TRACKING, 0.015);
-        TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Settings.Colour.BLACK);
+        TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
         TITLE_TEXT_STYLE.add(TextAttribute.KERNING, TextAttribute.KERNING_ON);
 
         BODY_TEXT_STYLE = new TextStyle();
@@ -40,7 +43,7 @@ public class TextStyleUtils {
         BODY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         BODY_TEXT_STYLE.add(TextAttribute.WIDTH, 0.98);
         BODY_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
-        BODY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Settings.Colour.BLACK);
+        BODY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         TRAIT_TEXT_STYLE = new TextStyle();
         TRAIT_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
@@ -65,6 +68,16 @@ public class TextStyleUtils {
         ARKHAM_HORROR_FONT_TEXT_STYLE = new TextStyle();
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, "AHLCGSymbol");
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 6.8);
+
+        COLLECTION_NUMBER_TEXT_STYLE = new TextStyle();
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.SIZE, 4.5);
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.TRACKING, 0.01);
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.WHITE);
+
+        // same as collection
+        ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
     }
 
     public static TextStyle getLargeLabelTextStyle() {
@@ -99,4 +112,11 @@ public class TextStyleUtils {
         return ARKHAM_HORROR_FONT_TEXT_STYLE;
     }
 
+    public static TextStyle getCollectionNumberTextStyle() {
+        return COLLECTION_NUMBER_TEXT_STYLE;
+    }
+
+    public static TextStyle getEncounterNumberTextStyle() {
+        return ENCOUNTER_NUMBER_TEXT_STYLE;
+    }
 }

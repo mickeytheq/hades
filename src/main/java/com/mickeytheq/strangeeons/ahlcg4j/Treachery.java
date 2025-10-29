@@ -5,20 +5,17 @@ import ca.cgjennings.apps.arkham.component.DefaultPortrait;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.layout.MarkupRenderer;
-import ca.cgjennings.ui.DocumentEventAdapter;
-import com.mickeytheq.strangeeons.ahlcg4j.util.EditorLayoutBuilder;
-import com.mickeytheq.strangeeons.ahlcg4j.util.MarkupUtils;
-import com.mickeytheq.strangeeons.ahlcg4j.util.TextStyleUtils;
+import com.mickeytheq.strangeeons.ahlcg4j.util.*;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Settings;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 
 @CardFaceType(settingsTypeCode = "Treachery")
@@ -49,6 +46,10 @@ public class Treachery extends BaseCardFace {
     // perhaps a small utility library to create an object per field to manage some/all of the above
     // could further drive creation and setup of the above via annotations to cut down further - perhaps good for simple cases
 
+    // TODO: saving via Ctrl+S doesn't clear the saved status - the title of the card in the explorer window stays bold
+
+    // TODO: i18n/l10n for visible text. leverage the existing plugin property files or copy from them
+
     private String title;
     private String traits;
     private String keywords;
@@ -59,9 +60,9 @@ public class Treachery extends BaseCardFace {
     private String artist;
     private String copyright;
 
-    private Integer collectionNumber;
+    private String collectionNumber;
     private String encounterNumber;
-    private Integer encounterTotal;
+    private String encounterTotal;
 
     private JTextField titleField;
     private JTextField copyrightField;
@@ -75,17 +76,30 @@ public class Treachery extends BaseCardFace {
     private JTextField encounterNumberEditor;
     private JTextField encounterTotalEditor;
 
-    private DefaultPortrait portrait;
+    private DefaultPortrait artPortrait;
     private DefaultPortrait collectionPortrait;
     private DefaultPortrait encounterPortrait;
+
+    // locations to draw portraits
+    private static final Rectangle COLLECTION_PORTRAIT_CLIP = new Rectangle(320, 510, 13, 13);
+    private static final Rectangle ENCOUNTER_PORTRAIT_CLIP = new Rectangle(175, 254, 28, 28);
+    private static final Rectangle ART_PORTRAIT_CLIP = new Rectangle(17, 0, 344, 298);
+
+    // locations to draw other elements
+    private static final Rectangle LABEL_CLIP = new Rectangle(137, 286, 104, 14);
+    private static final Rectangle TITLE_CLIP = new Rectangle(39, 307, 299, 29);
+    private static final Rectangle BODY_CLIP = new Rectangle(30, 340, 318, 160);
+    private static final Rectangle COLLECTION_NUMBER_CLIP = new Rectangle(318,512,37,10);
+    private static final Rectangle ENCOUNTER_NUMBERS_CLIP = new Rectangle(247,512,55,10);
+
 
     @Override
     public void initialiseCardFace() {
         super.initialiseCardFace();
 
-        portrait = createPortrait(getCardFaceSide().name(), new Rectangle(17, 0, 344, 298), getClass().getResource("/portrait/DefaultTexture.jp2"), true);
-        collectionPortrait = createPortrait("Collection", new Rectangle(320, 510, 13, 13), getClass().getResource("/resources/spacers/empty1x1.png"), false);
-        encounterPortrait = createPortrait("Encounter", new Rectangle(175, 254, 28, 28), getClass().getResource("/resources/spacers/empty1x1.png"), false);
+        artPortrait = createPortrait(getCardFaceSide().name(), ART_PORTRAIT_CLIP, getClass().getResource("/portrait/DefaultTexture.jp2"), true);
+        collectionPortrait = createPortrait("Collection", COLLECTION_PORTRAIT_CLIP, getClass().getResource("/resources/spacers/empty1x1.png"), false);
+        encounterPortrait = createPortrait("Encounter", ENCOUNTER_PORTRAIT_CLIP, getClass().getResource("/resources/spacers/empty1x1.png"), false);
     }
 
     private DefaultPortrait createPortrait(String portraitKey, Rectangle clipRegion, URL defaultImageResource, boolean fillBackground) {
@@ -99,7 +113,11 @@ public class Treachery extends BaseCardFace {
         defaultPortrait.setScaleUsesMinimum(false);
         defaultPortrait.setBackgroundFilled(fillBackground);
         defaultPortrait.installDefault();
-        defaultPortrait.setSource(defaultImageResource.toExternalForm());
+
+        // the obvious thing to do here is call portrait.setSource() but that then shows the path to the
+        // default image resource so instead we load the image ourselves and pass it in with a null source
+        BufferedImage defaultImage = ImageUtils.loadImage(defaultImageResource);
+        defaultPortrait.setImage(null, defaultImage);
 
         return defaultPortrait;
     }
@@ -108,13 +126,14 @@ public class Treachery extends BaseCardFace {
     public void createEditors(JTabbedPane tabbedPane) {
         JPanel mainPanel = new JPanel(new MigLayout());
 
-        titleField = new JTextField(30);
-        traitsField = new JTextField(30);
-        keywordsField = new JTextArea(6, 30);
-        rulesField = new JTextArea(6, 30);
-        flavorTextField = new JTextArea(6, 30);
-        victoryField = new JTextArea(2, 30);
+        titleField = EditorUtils.createTextField(30);
+        traitsField = EditorUtils.createTextField(30);
+        keywordsField = EditorUtils.createTextArea(6, 30);
+        rulesField = EditorUtils.createTextArea(6, 30);
+        flavorTextField = EditorUtils.createTextArea(6, 30);
+        victoryField = EditorUtils.createTextArea(2, 30);
 
+        // TODO: this builder concept is kinda pointless right now
         EditorLayoutBuilder editorLayoutBuilder = EditorLayoutBuilder.create();
 
         JPanel generalPanel = editorLayoutBuilder.createGroupLayoutBuilder("General")
@@ -130,80 +149,26 @@ public class Treachery extends BaseCardFace {
 
         PortraitPanel portraitPanel = new PortraitPanel();
         portraitPanel.setPanelTitle("Portrait");
-        portraitPanel.setPortrait(portrait);
+        portraitPanel.setPortrait(artPortrait);
 
         mainPanel.add(portraitPanel, "wrap, pushx, growx");
 
         // add the panel to the main tab control
         tabbedPane.addTab(getCardFaceSide().name(), mainPanel);
 
-        // title
-        titleField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                title = titleField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
-
-        traitsField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                traits = traitsField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
-
-        keywordsField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                keywords = keywordsField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
-
-        rulesField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                rules = rulesField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
-
-        flavorTextField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                flavourText = flavorTextField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
-
-        victoryField.getDocument().addDocumentListener(new DocumentEventAdapter() {
-            @Override
-            public void changedUpdate(DocumentEvent documentEvent) {
-                victory = victoryField.getText();
-
-                // CRIT: need to pass in the right sheet index
-                getCard().markChanged(0);
-            }
-        });
+        EditorUtils.bindTextComponent(titleField, wrapEditorBindingWithMarkedChanged(s -> title = s));
+        EditorUtils.bindTextComponent(traitsField, wrapEditorBindingWithMarkedChanged(s -> traits = s));
+        EditorUtils.bindTextComponent(keywordsField, wrapEditorBindingWithMarkedChanged(s -> keywords = s));
+        EditorUtils.bindTextComponent(rulesField, wrapEditorBindingWithMarkedChanged(s -> rules = s));
+        EditorUtils.bindTextComponent(flavorTextField, wrapEditorBindingWithMarkedChanged(s -> flavourText = s));
+        EditorUtils.bindTextComponent(victoryField, wrapEditorBindingWithMarkedChanged(s -> victory = s));
 
         titleField.setText(title);
+        traitsField.setText(traits);
         keywordsField.setText(keywords);
         rulesField.setText(rules);
         flavorTextField.setText(flavourText);
         victoryField.setText(victory);
-
 
 
         // collection
@@ -211,7 +176,7 @@ public class Treachery extends BaseCardFace {
         collectionPortraitPanel.setPanelTitle("Collection portrait");
         collectionPortraitPanel.setPortrait(collectionPortrait);
 
-        collectionNumberEditor = new JTextField(8);
+        collectionNumberEditor = EditorUtils.createTextField(8);
         collectionNumberEditor.setHorizontalAlignment(JTextField.RIGHT);
 
         JPanel collectionDetailPanel = new JPanel(new MigLayout());
@@ -224,9 +189,9 @@ public class Treachery extends BaseCardFace {
         encounterPortraitPanel.setPanelTitle("Encounter portrait");
         encounterPortraitPanel.setPortrait(encounterPortrait);
 
-        encounterNumberEditor = new JTextField(8);
+        encounterNumberEditor = EditorUtils.createTextField(8);
         encounterNumberEditor.setHorizontalAlignment(JTextField.RIGHT);
-        encounterTotalEditor = new JTextField(4);
+        encounterTotalEditor = EditorUtils.createTextField(4);
 
         JPanel encounterDetailPanel = new JPanel(new MigLayout());
         encounterDetailPanel.setBorder(BorderFactory.createTitledBorder("Encounter"));
@@ -244,20 +209,14 @@ public class Treachery extends BaseCardFace {
 
         tabbedPane.addTab("Collection / encounter", collectionEncounterPanel);
 
-
-        // TODO: the font gets changed to an SE 'default' by AppFrame.installTextEditorFont which affects all JTextComponent derived classes
-        // TODO: which is called shortly after GameComponent.createDefaultEditor()
-        // TODO: can be disabled by setting StrangeEonsAppWindow.NO_EDITOR_FONT property on the JTextField by using JComponent.putClientProperty
-        // TODO: need a helper to set this this on all JTextComponent in the tree before returning from this method (or have some framework code do it)
+        EditorUtils.bindTextComponent(collectionNumberEditor, wrapEditorBindingWithMarkedChanged(s -> collectionNumber = s));
+        EditorUtils.bindTextComponent(encounterNumberEditor, wrapEditorBindingWithMarkedChanged(s -> encounterNumber = s));
+        EditorUtils.bindTextComponent(encounterTotalEditor, wrapEditorBindingWithMarkedChanged(s -> encounterTotal = s));
     }
 
     @Override
     public BufferedImage loadTemplateImage() {
-        try {
-            return ImageIO.read(getClass().getResource("/templates/AHLCG-Treachery.jp2"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return ImageUtils.loadImage(getClass().getResource("/templates/AHLCG-Treachery.jp2"));
     }
 
     @Override
@@ -269,8 +228,8 @@ public class Treachery extends BaseCardFace {
             // so we have to clear it first to paint onto a blank canvas
             g.clearRect(0, 0, sheet.getTemplateWidth(), sheet.getTemplateHeight());
 
-            // portraits - paint these first as they effectively sit 'behind' the template
-            portrait.paint(g, renderTarget);
+            // paint the main/art portrait first as it sits behind the card template
+            artPortrait.paint(g, renderTarget);
 
             // draw the template
             g.drawImage(loadTemplateImage(), 0, 0, null);
@@ -280,14 +239,14 @@ public class Treachery extends BaseCardFace {
             markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
             markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
             markupRenderer.setMarkupText("TREACHERY");
-            markupRenderer.drawAsSingleLine(g, new Rectangle(137, 286, 104, 14));
+            markupRenderer.drawAsSingleLine(g, LABEL_CLIP);
 
             // title
             markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
             markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
             markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
             markupRenderer.setMarkupText(title);
-            markupRenderer.drawAsSingleLine(g, new Rectangle(39, 307, 299, 29));
+            markupRenderer.drawAsSingleLine(g, TITLE_CLIP);
 
             // body
             drawBody(g);
@@ -295,6 +254,23 @@ public class Treachery extends BaseCardFace {
             // collection and encounter
             collectionPortrait.paint(g, renderTarget);
             encounterPortrait.paint(g, renderTarget);
+
+            if (!StringUtils.isEmpty(collectionNumber)) {
+                markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
+                markupRenderer.setDefaultStyle(TextStyleUtils.getCollectionNumberTextStyle());
+                markupRenderer.setMarkupText(collectionNumber);
+                markupRenderer.drawAsSingleLine(g, COLLECTION_NUMBER_CLIP);
+            }
+
+            if (!StringUtils.isEmpty(encounterNumber) || !StringUtils.isEmpty(encounterTotal)) {
+                markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
+                markupRenderer.setDefaultStyle(TextStyleUtils.getEncounterNumberTextStyle());
+
+                String text = StringUtils.defaultIfEmpty(encounterNumber, "") + " / " + StringUtils.defaultIfEmpty(encounterTotal, "");
+
+                markupRenderer.setMarkupText(text);
+                markupRenderer.drawAsSingleLine(g, ENCOUNTER_NUMBERS_CLIP);
+            }
         } finally {
             g.dispose();
         }
@@ -303,7 +279,6 @@ public class Treachery extends BaseCardFace {
     private void drawBody(Graphics2D g) {
         MarkupRenderer markupRenderer = MarkupUtils.getBodyMarkupRenderer(getSheet());
 
-        // TODO: trait rendering
         // TODO: spacing
 
         StringBuilder sb = new StringBuilder();
@@ -344,7 +319,7 @@ public class Treachery extends BaseCardFace {
         if (!StringUtils.isEmpty(flavourText)) {
             if (sb.length() > 0)
                 sb.append("\n");
-            sb.append("<left>");
+            sb.append("<center>");
             sb.append("<fs>");
             sb.append(flavourText);
             sb.append("</fs>");
@@ -370,28 +345,47 @@ public class Treachery extends BaseCardFace {
 
         // TODO: add tag values for name, fullname and fullnameb
 
-        markupRenderer.draw(g, new Rectangle(30, 340, 318, 160));
+        markupRenderer.draw(g, BODY_CLIP);
     }
 
     // TODO: consider how to serialise Portraits - do we follow the same as SE and embed the image or make it a much lighter concept
     // TODO: and instead just serialise the image path and pan/scale settings
     @Override
-    public void readFace(Settings settings) {
+    public void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream) {
         title = settings.get("Front.Title");
         rules = settings.get("Front.Rules");
         flavourText = settings.get("Front.FlavorText");
         victory = settings.get("Front.Victory");
         keywords = settings.get("Front.Keywords");
         traits = settings.get("Front.Traits");
+
+        try {
+            artPortrait = (DefaultPortrait)objectInputStream.readObject();
+            collectionPortrait = (DefaultPortrait)objectInputStream.readObject();
+            encounterPortrait = (DefaultPortrait)objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void writeFace(Settings settings) {
+    public void beforeSettingsWrite(Settings settings) {
         settings.set("Front.Title", title);
         settings.set("Front.Rules", rules);
         settings.set("Front.FlavorText", flavourText);
         settings.set("Front.Victory", victory);
         settings.set("Front.Keywords", keywords);
         settings.set("Front.Traits", traits);
+    }
+
+    @Override
+    public void afterSettingsWrite(ObjectOutputStream objectOutputStream) {
+        try {
+            objectOutputStream.writeObject(artPortrait);
+            objectOutputStream.writeObject(collectionPortrait);
+            objectOutputStream.writeObject(encounterPortrait);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

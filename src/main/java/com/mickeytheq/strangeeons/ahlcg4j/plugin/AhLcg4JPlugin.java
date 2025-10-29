@@ -3,6 +3,8 @@ package com.mickeytheq.strangeeons.ahlcg4j.plugin;
 import ca.cgjennings.apps.arkham.plugins.AbstractPlugin;
 import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
+import ca.cgjennings.apps.arkham.project.Actions;
+import com.mickeytheq.strangeeons.ahlcg4j.tasks.AhLcg4jActionTree;
 import gamedata.ClassMap;
 import gamedata.Game;
 
@@ -21,7 +23,14 @@ public class AhLcg4JPlugin extends AbstractPlugin {
 //        Game.register("AHLCG4J", "Arkham Horror: LCG");
         ClassMap.add("/AHLCG.classmap");
 
+        // TODO: not allowed to embed Arno Pro so instead check for and fail to start if Arno Pro isn't present
+        // TODO: and provide (a link to) clear instructions to download the fonts and where to put them (plugin folder maybe?)
         loadFonts();
+
+        // TODO: add a 'New' action that bypasses the regular SE new dialog and provides a better experience for creating a new card
+        // TODO: allowing easy creation of common card types and completely custom/arbitrary front/back combinations
+
+        Actions.register(new AhLcg4jActionTree(), Actions.PRIORITY_IMPORT_EXPORT);
 
         return true;
     }
