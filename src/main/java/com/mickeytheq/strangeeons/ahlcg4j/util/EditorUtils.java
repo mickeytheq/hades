@@ -38,4 +38,10 @@ public class EditorUtils {
             }
         });
     }
+
+    public static <T> void bindComboBox(JComboBox<T> comboBox, Consumer<T> consumer) {
+        comboBox.addItemListener(e -> {
+            consumer.accept((T)comboBox.getSelectedItem());
+        });
+    }
 }

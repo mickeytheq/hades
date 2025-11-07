@@ -6,6 +6,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -46,5 +47,9 @@ public class ImageUtils {
         } catch (IOException e) {
             throw new RuntimeException("Error reading image from URL: " + urlToImage.toExternalForm(), e);
         }
+    }
+
+    public static void drawImage(Graphics2D g, BufferedImage bufferedImage, Rectangle rectangle) {
+        g.drawImage(bufferedImage, (int)rectangle.getX(), (int)rectangle.getY(), (int)rectangle.getWidth(), (int)rectangle.getHeight(), null);
     }
 }

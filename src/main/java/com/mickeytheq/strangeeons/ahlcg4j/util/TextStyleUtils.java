@@ -9,6 +9,7 @@ import java.awt.font.TextAttribute;
 public class TextStyleUtils {
     private static final TextStyle LARGE_LABEL_TEXT_STYLE;
     private static final TextStyle TITLE_TEXT_STYLE;
+    private static final TextStyle SUB_TYPE_TEXT_STYLE;
     private static final TextStyle BODY_TEXT_STYLE;
     private static final TextStyle TRAIT_TEXT_STYLE;
     private static final TextStyle VICTORY_TEXT_STYLE;
@@ -17,6 +18,8 @@ public class TextStyleUtils {
     private static final TextStyle ARKHAM_HORROR_FONT_TEXT_STYLE;
     private static final TextStyle COLLECTION_NUMBER_TEXT_STYLE;
     private static final TextStyle ENCOUNTER_NUMBER_TEXT_STYLE;
+    private static final TextStyle ARTIST_TEXT_STYLE;
+    private static final TextStyle COPYRIGHT_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -36,6 +39,13 @@ public class TextStyleUtils {
         TITLE_TEXT_STYLE.add(TextAttribute.TRACKING, 0.015);
         TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
         TITLE_TEXT_STYLE.add(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+
+        SUB_TYPE_TEXT_STYLE = new TextStyle();
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.SIZE, 6.0);
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         BODY_TEXT_STYLE = new TextStyle();
         BODY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
@@ -78,6 +88,8 @@ public class TextStyleUtils {
 
         // same as collection
         ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
+        ARTIST_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
+        COPYRIGHT_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
     }
 
     public static TextStyle getLargeLabelTextStyle() {
@@ -86,6 +98,10 @@ public class TextStyleUtils {
 
     public static TextStyle getTitleTextStyle() {
         return TITLE_TEXT_STYLE;
+    }
+
+    public static TextStyle getSubTypeTextStyle() {
+        return SUB_TYPE_TEXT_STYLE;
     }
 
     public static TextStyle getBodyTextStyle() {
@@ -118,5 +134,13 @@ public class TextStyleUtils {
 
     public static TextStyle getEncounterNumberTextStyle() {
         return ENCOUNTER_NUMBER_TEXT_STYLE;
+    }
+
+    public static TextStyle getArtistTextStyle() {
+        return ARTIST_TEXT_STYLE;
+    }
+
+    public static TextStyle getCopyrightTextStyle() {
+        return COPYRIGHT_TEXT_STYLE;
     }
 }

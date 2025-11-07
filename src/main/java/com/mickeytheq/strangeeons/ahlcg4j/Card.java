@@ -23,8 +23,6 @@ public class Card extends AbstractGameComponent {
         // TODO: launch a dialog/wizard to specify the front/back faces
         // TODO: have flexibility of choice provided the front/back are the same size
 
-        // TODO: create two CardFace or similar objects to represent the front and back
-
         frontFace = new Treachery();
         frontFace.initialise(this, CardFaceSide.Front);
         backFace = new EncounterCardBack();
@@ -70,6 +68,8 @@ public class Card extends AbstractGameComponent {
 
         frontFace.afterSettingsWrite(out);
         backFace.afterSettingsWrite(out);
+
+        markSaved();
     }
 
     private void writeFaceSettings(CardFace cardFace, CardFaceSide cardFaceSide) {
@@ -85,6 +85,7 @@ public class Card extends AbstractGameComponent {
 
         NewerVersionException.check(CURRENT_VERSION, version);
 
+        // TODO: do we need to store the name? a card is just two faces so the less 'Card' level fields the better
         setNameImpl((String)in.readObject());
         comments = (String)in.readObject();
 

@@ -36,6 +36,9 @@ public class LoadGameComponentPerformanceTest extends TaskAction {
 
     @Override
     public boolean appliesTo(Project project, Task task, Member member) {
+        if (member == null)
+            return false;
+
         if (member.isFolder())
             return false;
 
