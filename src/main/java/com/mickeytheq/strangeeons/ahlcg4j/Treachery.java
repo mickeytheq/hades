@@ -6,9 +6,11 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.graphics.filters.InversionFilter;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.util.*;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
+import resources.Language;
 import resources.Settings;
 
 import javax.swing.*;
@@ -20,7 +22,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
 
-@CardFaceType(settingsTypeCode = "Treachery")
+@CardFaceType(typeCode = "Treachery", interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class Treachery extends BaseCardFace {
     // TODO: add some help to get rid of the boilerplate for each field that consists of:
     //
@@ -156,8 +158,6 @@ public class Treachery extends BaseCardFace {
 
     @Override
     public void createEditors(JTabbedPane tabbedPane) {
-        JPanel mainPanel = new JPanel(new MigLayout());
-
         weaknessTypeEditor = new JComboBox<>();
         weaknessTypeEditor.addItem(WeaknessType.None);
         weaknessTypeEditor.addItem(WeaknessType.Basic);
@@ -189,6 +189,8 @@ public class Treachery extends BaseCardFace {
                 .addLabelledEditor("Victory", victoryEditor)
                 .addLabelledEditor("Copyright", copyrightEditor)
                 .getGroupPanel();
+
+        JPanel mainPanel = new JPanel(new MigLayout());
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
 
@@ -286,81 +288,71 @@ public class Treachery extends BaseCardFace {
     }
 
     @Override
-    protected void paint(Sheet<Card> sheet, RenderTarget renderTarget) {
-        // template
-        Graphics2D g = sheet.createGraphics();
-        try {
-            // the graphics object created is on top of the existing image
-            // so we have to clear it first to paint onto a blank canvas
-            g.clearRect(0, 0, sheet.getTemplateWidth(), sheet.getTemplateHeight());
+    protected void paint(Sheet<Card> sheet, Graphics2D g, RenderTarget renderTarget) {
+        // paint the main/art portrait first as it sits behind the card template
+        artPortrait.paint(g, renderTarget);
 
-            // paint the main/art portrait first as it sits behind the card template
-            artPortrait.paint(g, renderTarget);
+        // draw the template
+        g.drawImage(loadTemplateImage(), 0, 0, null);
 
-            // draw the template
-            g.drawImage(loadTemplateImage(), 0, 0, null);
+        MarkupRenderer markupRenderer;
 
-            MarkupRenderer markupRenderer;
+        // label
+        markupRenderer = new MarkupRenderer(getSheet().getTemplateResolution());
+        markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText("TREACHERY");
+        markupRenderer.drawAsSingleLine(g, LABEL_CLIP);
 
-            // label
-            markupRenderer = new MarkupRenderer(getSheet().getTemplateResolution());
-            markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
-            markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-            markupRenderer.setMarkupText("TREACHERY");
-            markupRenderer.drawAsSingleLine(g, LABEL_CLIP);
+        // title
+        markupRenderer = new MarkupRenderer(getSheet().getTemplateResolution());
+        markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(title);
+        markupRenderer.drawAsSingleLine(g, TITLE_CLIP);
 
-            // title
-            markupRenderer = new MarkupRenderer(getSheet().getTemplateResolution());
-            markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
-            markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-            markupRenderer.setMarkupText(title);
-            markupRenderer.drawAsSingleLine(g, TITLE_CLIP);
+        if (weaknessType == WeaknessType.None)
+            drawNonWeaknessContent(g, renderTarget);
+        else
+            drawWeaknessContent(g, renderTarget);
 
-            if (weaknessType == WeaknessType.None)
-                drawNonWeaknessContent(g, renderTarget);
-            else
-                drawWeaknessContent(g, renderTarget);
+        // the 'footer' content that is at the bottom of the card
+        // TODO: hopefully footer is consistent enough across most/all card types that the below code can be made a utility/library function and re-used
 
-            // the 'footer' content that is at the bottom of the card
-            // TODO: hopefully footer is consistent enough across most/all card types that the below code can be made a utility/library function and re-used
+        // artist
+        markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
+        markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
+        markupRenderer.setMarkupText(artist);
+        markupRenderer.drawAsSingleLine(g, ARTIST_CLIP);
 
-            // artist
+        // copyright
+        markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
+        markupRenderer.setDefaultStyle(TextStyleUtils.getCopyrightTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(copyright);
+        markupRenderer.drawAsSingleLine(g, COPYRIGHT_CLIP);
+
+        // collection icon needs inverting as the source should be black but the background on most cards is white
+        BufferedImageOp inversionOp = new InversionFilter();
+        BufferedImage inverted = inversionOp.filter(collectionPortrait.getImage(), null);
+        g.drawImage(inverted, (int) COLLECTION_PORTRAIT_CLIP.getX(), (int) COLLECTION_PORTRAIT_CLIP.getY(), (int) COLLECTION_PORTRAIT_CLIP.getWidth(), (int) COLLECTION_PORTRAIT_CLIP.getHeight(), null);
+
+        if (!StringUtils.isEmpty(collectionNumber)) {
             markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-            markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
-            markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
-            markupRenderer.setMarkupText(artist);
-            markupRenderer.drawAsSingleLine(g, ARTIST_CLIP);
+            markupRenderer.setDefaultStyle(TextStyleUtils.getCollectionNumberTextStyle());
+            markupRenderer.setMarkupText(collectionNumber);
+            markupRenderer.drawAsSingleLine(g, COLLECTION_NUMBER_CLIP);
+        }
 
-            // copyright
+        if (!StringUtils.isEmpty(encounterNumber) || !StringUtils.isEmpty(encounterTotal)) {
             markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-            markupRenderer.setDefaultStyle(TextStyleUtils.getCopyrightTextStyle());
-            markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-            markupRenderer.setMarkupText(copyright);
-            markupRenderer.drawAsSingleLine(g, COPYRIGHT_CLIP);
+            markupRenderer.setDefaultStyle(TextStyleUtils.getEncounterNumberTextStyle());
 
-            // collection icon needs inverting as the source should be black but the background on most cards is white
-            BufferedImageOp inversionOp = new InversionFilter();
-            BufferedImage inverted = inversionOp.filter(collectionPortrait.getImage(), null);
-            g.drawImage(inverted, (int)COLLECTION_PORTRAIT_CLIP.getX(), (int)COLLECTION_PORTRAIT_CLIP.getY(), (int)COLLECTION_PORTRAIT_CLIP.getWidth(), (int)COLLECTION_PORTRAIT_CLIP.getHeight(), null);
+            String text = StringUtils.defaultIfEmpty(encounterNumber, "") + " / " + StringUtils.defaultIfEmpty(encounterTotal, "");
 
-            if (!StringUtils.isEmpty(collectionNumber)) {
-                markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-                markupRenderer.setDefaultStyle(TextStyleUtils.getCollectionNumberTextStyle());
-                markupRenderer.setMarkupText(collectionNumber);
-                markupRenderer.drawAsSingleLine(g, COLLECTION_NUMBER_CLIP);
-            }
-
-            if (!StringUtils.isEmpty(encounterNumber) || !StringUtils.isEmpty(encounterTotal)) {
-                markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-                markupRenderer.setDefaultStyle(TextStyleUtils.getEncounterNumberTextStyle());
-
-                String text = StringUtils.defaultIfEmpty(encounterNumber, "") + " / " + StringUtils.defaultIfEmpty(encounterTotal, "");
-
-                markupRenderer.setMarkupText(text);
-                markupRenderer.drawAsSingleLine(g, ENCOUNTER_NUMBERS_CLIP);
-            }
-        } finally {
-            g.dispose();
+            markupRenderer.setMarkupText(text);
+            markupRenderer.drawAsSingleLine(g, ENCOUNTER_NUMBERS_CLIP);
         }
     }
 
@@ -387,7 +379,7 @@ public class Treachery extends BaseCardFace {
         }
 
         // the weakness/basic weakness fixed text
-        String subTypeText = "WEAKNESS";
+        String subTypeText = Language.gstring("WEAKNESS");
 
         if (weaknessType == WeaknessType.Basic)
             subTypeText = "BASIC WEAKNESS";
