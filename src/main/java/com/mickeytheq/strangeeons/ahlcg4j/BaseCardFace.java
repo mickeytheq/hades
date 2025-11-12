@@ -3,6 +3,7 @@ package com.mickeytheq.strangeeons.ahlcg4j;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
@@ -59,7 +60,7 @@ public abstract class BaseCardFace implements CardFace {
 
     public abstract BufferedImage loadTemplateImage();
 
-    protected abstract void paint(Sheet<Card> sheet, RenderTarget renderTarget);
+    protected abstract void paint(Sheet<Card> sheet, Graphics2D g, RenderTarget renderTarget);
 
     private class CardSheet extends Sheet<Card> {
         public CardSheet(Card gameComponent) {
@@ -73,7 +74,17 @@ public abstract class BaseCardFace implements CardFace {
 
         @Override
         protected void paintSheet(RenderTarget renderTarget) {
-            BaseCardFace.this.paint(this, renderTarget);
+            Graphics2D g = createGraphics();
+            try {
+                // the graphics object created is on top of the existing image
+                // so we have to clear it first to paint onto a blank canvas
+                g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
+
+                BaseCardFace.this.paint(this, g, renderTarget);
+            }
+            finally {
+                g.dispose();
+            }
         }
     }
 }

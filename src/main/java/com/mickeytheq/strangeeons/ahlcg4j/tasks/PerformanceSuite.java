@@ -1,29 +1,28 @@
 package com.mickeytheq.strangeeons.ahlcg4j.tasks;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
-import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.project.Project;
 import ca.cgjennings.apps.arkham.project.Task;
 import ca.cgjennings.apps.arkham.project.TaskAction;
 import org.apache.commons.lang3.time.StopWatch;
-import resources.ResourceKit;
 
 import javax.swing.*;
 
-public class LoadEditorPerformanceTest extends TaskAction {
+public class PerformanceSuite extends TaskAction {
     @Override
     public String getLabel() {
-        return "Load game component UI editor performance test";
+        return "Run all performance tests";
     }
 
     @Override
     public boolean perform(Project project, Task task, Member member) {
-        int iterations = 100;
-        StopWatch stopWatch = PerformanceTests.performEditorTest(member.getFile(), iterations);
+        StopWatch stopWatch1 = PerformanceTests.performGameComponentLoadTest(member.getFile(), 100);
+        StopWatch stopWatch2 = PerformanceTests.performEditorTest(member.getFile(), 100);
+        StopWatch stopWatch3 = PerformanceTests.performPaintTest(member.getFile(), 100);
 
-        JOptionPane.showMessageDialog(StrangeEons.getWindow(), "Ran " + iterations + " iterations of test on '" + member.getFile().getAbsolutePath() + "' in " + stopWatch.formatTime());
-
+        JOptionPane.showMessageDialog(StrangeEons.getWindow(),
+                "Component load: " + stopWatch1.formatTime() + ". Editor creation: " + stopWatch2.formatTime() + ". Paint: " + stopWatch3.formatTime());
         return true;
     }
 

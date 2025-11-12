@@ -2,18 +2,17 @@ package com.mickeytheq.strangeeons.ahlcg4j;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.util.ImageUtils;
 import resources.Settings;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-@CardFaceType(settingsTypeCode = "EncounterCardBack")
+@CardFaceType(typeCode = "EncounterCardBack", interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
 public class EncounterCardBack extends BaseCardFace {
     @Override
     public BufferedImage loadTemplateImage() {
@@ -26,16 +25,11 @@ public class EncounterCardBack extends BaseCardFace {
     }
 
     @Override
-    protected void paint(Sheet<Card> sheet, RenderTarget renderTarget) {
+    protected void paint(Sheet<Card> sheet, Graphics2D g, RenderTarget renderTarget) {
         // TODO: can we cache this instead of drawing it each time?
         // TODO: although may not be worth it. for bulk operations the sheet must be created a drawn from scratch so
         // TODO: this would only improve subsequent paints of the same sheet which aren't that high frequency
-        Graphics2D g = sheet.createGraphics();
-        try {
-            g.drawImage(loadTemplateImage(), 0, 0, null);
-        } finally {
-            g.dispose();
-        }
+        g.drawImage(loadTemplateImage(), 0, 0, null);
     }
 
     @Override

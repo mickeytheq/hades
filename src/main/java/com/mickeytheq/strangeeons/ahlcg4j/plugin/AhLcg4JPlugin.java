@@ -7,6 +7,7 @@ import ca.cgjennings.apps.arkham.project.Actions;
 import com.mickeytheq.strangeeons.ahlcg4j.tasks.AhLcg4jActionTree;
 import gamedata.ClassMap;
 import gamedata.Game;
+import resources.Language;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class AhLcg4JPlugin extends AbstractPlugin {
         // TODO: not allowed to embed Arno Pro so instead check for and fail to start if Arno Pro isn't present
         // TODO: and provide (a link to) clear instructions to download the fonts and where to put them (plugin folder maybe?)
         loadFonts();
+
+        loadLanguageFiles();
 
         // TODO: add a 'New' action that bypasses the regular SE new dialog and provides a better experience for creating a new card
         // TODO: allowing easy creation of common card types and completely custom/arbitrary front/back combinations
@@ -56,5 +59,10 @@ public class AhLcg4JPlugin extends AbstractPlugin {
         } catch (FontFormatException e) {
             throw new RuntimeException("Format error loading font file '" + resourcePath + "'", e);
         }
+    }
+
+    private void loadLanguageFiles() {
+        Language.getGame().addStrings("/language/AHLCG-Game");
+        Language.getInterface().addStrings("/language/AHLCG-Interface");
     }
 }

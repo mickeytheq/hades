@@ -1,8 +1,11 @@
 package com.mickeytheq.strangeeons.ahlcg4j.util;
 
+import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.TextStyle;
+import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.GameConstants;
+import resources.Language;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,13 +67,13 @@ public class MarkupUtils {
 //        BODY_TAG_REPLACEMENT.put("TextEntry3A", "<image res://ArkhamHorrorLCG/images/EntryLineArno.png 1.0in 8pt bottom>");
 //        BODY_TAG_REPLACEMENT.put("TextEntry4A", "<image res://ArkhamHorrorLCG/images/EntryLineArno.png 1.25in 8pt bottom>");
 //        BODY_TAG_REPLACEMENT.put("TextEntry5A", "<image res://ArkhamHorrorLCG/images/EntryLineArno.png 1.5in 8pt bottom>");
-        BODY_TAG_REPLACEMENT.put("pre", "#AHLCG-Prey-tag");
-        BODY_TAG_REPLACEMENT.put("spa", "#AHLCG-Spawn-tag");
-        BODY_TAG_REPLACEMENT.put("rev", "#AHLCG-Revelation-tag");
-        BODY_TAG_REPLACEMENT.put("for", "#AHLCG-Forced-tag");
-        BODY_TAG_REPLACEMENT.put("obj", "#AHLCG-Objective-tag");
-        BODY_TAG_REPLACEMENT.put("hau", "#AHLCG-Haunted-tag");
-        BODY_TAG_REPLACEMENT.put("shi", "#AHLCG-Shift-tag");
+        BODY_TAG_REPLACEMENT.put("pre", Language.gstring(GameConstants.PREY_TAG));
+        BODY_TAG_REPLACEMENT.put("spa", Language.gstring(GameConstants.SPAWN_TAG));
+        BODY_TAG_REPLACEMENT.put("rev", Language.gstring(GameConstants.REVELATION_TAG));
+        BODY_TAG_REPLACEMENT.put("for", Language.gstring(GameConstants.FORCED_TAG));
+        BODY_TAG_REPLACEMENT.put("obj", Language.gstring(GameConstants.OBJECTIVE_TAG));
+        BODY_TAG_REPLACEMENT.put("hau", Language.gstring(GameConstants.HAUNTED_TAG));
+        BODY_TAG_REPLACEMENT.put("shi", Language.gstring(GameConstants.SHIFT_TAG));
         BODY_TAG_REPLACEMENT.put("cop", "\u00a9");
         BODY_TAG_REPLACEMENT.put("xpbox", "<family>\u29e0</family>");
 

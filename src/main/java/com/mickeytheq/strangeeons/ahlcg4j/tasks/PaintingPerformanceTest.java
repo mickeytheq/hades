@@ -22,23 +22,11 @@ public class PaintingPerformanceTest extends TaskAction {
 
     @Override
     public boolean perform(Project project, Task task, Member member) {
-        GameComponent gameComponent = ResourceKit.getGameComponentFromFile(member.getFile(), true);
-
         int iterations = 100;
 
-        StopWatch stopWatch = StopWatch.createStarted();
+        StopWatch stopWatch = PerformanceTests.performPaintTest(member.getFile(), iterations);
 
-        for (int i = 0; i < iterations; i++) {
-            Sheet[] sheets = gameComponent.createDefaultSheets();
-
-            for (Sheet sheet : sheets) {
-                BufferedImage bufferedImage = sheet.paint(RenderTarget.EXPORT, 300);
-            }
-        }
-
-        stopWatch.stop();
-
-        JOptionPane.showMessageDialog(StrangeEons.getWindow(), "Ran " + iterations + " iterations of test '" + member.getFile().getAbsolutePath() + "' in " + stopWatch.formatTime());
+        JOptionPane.showMessageDialog(StrangeEons.getWindow(), "Ran " + iterations + " iterations of test on '" + member.getFile().getAbsolutePath() + "' in " + stopWatch.formatTime());
 
         return true;
     }

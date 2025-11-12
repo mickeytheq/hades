@@ -1,0 +1,43 @@
+package com.mickeytheq.strangeeons.ahlcg4j.codegenerated;
+
+public class GameConstants {
+    public static final String LABEL_ENEMY = "AHLCG4J-Label-Enemy";
+    public static final String LABEL_EVENT = "AHLCG4J-Label-Event";
+    public static final String DIFFICULTY_BACK = "AHLCG4J-Difficulty-Back";
+    public static final String FORCED_TAG = "AHLCG4J-Forced-tag";
+    public static final String SCENARIO_HEADER = "AHLCG4J-Scenario-Header";
+    public static final String DIFFICULTY_UNIQUE = "AHLCG4J-Difficulty-Unique";
+    public static final String DECKREQUIREMENTS_FORMAT = "AHLCG4J-DeckRequirements-format";
+    public static final String SCENARIO_HEADER2 = "AHLCG4J-Scenario-Header2";
+    public static final String SCENARIO_HEADER1 = "AHLCG4J-Scenario-Header1";
+    public static final String LABEL_TREACHERY = "AHLCG4J-Label-Treachery";
+    public static final String SHIFT_TAG = "AHLCG4J-Shift-tag";
+    public static final String HAUNTED_TAG = "AHLCG4J-Haunted-tag";
+    public static final String SPAWN_TAG = "AHLCG4J-Spawn-tag";
+    public static final String LABEL_ASSET = "AHLCG4J-Label-Asset";
+    public static final String PREY_TAG = "AHLCG4J-Prey-tag";
+    public static final String LABEL_WEAKNESS = "AHLCG4J-Label-Weakness";
+    public static final String GUIDE_KEYS = "AHLCG4J-Guide-Keys";
+    public static final String LABEL_ACT = "AHLCG4J-Label-Act";
+    public static final String DECKRESTRICTIONS_FORMAT = "AHLCG4J-DeckRestrictions-format";
+    public static final String LABEL_BASICWEAKNESS = "AHLCG4J-Label-BasicWeakness";
+    public static final String OBJECTIVE_TAG = "AHLCG4J-Objective-tag";
+    public static final String ILLUSTRATORSHORT = "AHLCG4J-IllustratorShort";
+    public static final String LABEL_LOCATION = "AHLCG4J-Label-Location";
+    public static final String LABEL_KEY = "AHLCG4J-Label-Key";
+    public static final String LABEL_CAMPAIGNGUIDE = "AHLCG4J-Label-CampaignGuide";
+    public static final String DECKOPTIONS_FORMAT = "AHLCG4J-DeckOptions-format";
+    public static final String LABEL_AGENDA = "AHLCG4J-Label-Agenda";
+    public static final String REVELATION_TAG = "AHLCG4J-Revelation-tag";
+    public static final String GUIDE_STANDALONE = "AHLCG4J-Guide-Standalone";
+    public static final String DECKSIZE_FORMATEND = "AHLCG4J-DeckSize-formatEnd";
+    public static final String ADDITIONALREQUIREMENTS_FORMAT = "AHLCG4J-AdditionalRequirements-format";
+    public static final String RESOLUTIONSMALL_TAG = "AHLCG4J-ResolutionSmall-tag";
+    public static final String DECKSIZE_FORMAT = "AHLCG4J-DeckSize-format";
+    public static final String SECONDARYCLASS_FORMAT = "AHLCG4J-SecondaryClass-format";
+    public static final String LABEL_STORY = "AHLCG4J-Label-Story";
+    public static final String DIFFICULTY_FRONT = "AHLCG4J-Difficulty-Front";
+    public static final String RESOLUTION_TAG = "AHLCG4J-Resolution-tag";
+    public static final String LABEL_SKILL = "AHLCG4J-Label-Skill";
+    public static final String LABEL_CUSTOMIZABLE = "AHLCG4J-Label-Customizable";
+}

@@ -5,5 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CardFaceType {
-    String settingsTypeCode();
+    String typeCode();
+
+    String interfaceLanguageKey();
 }

@@ -1,6 +1,7 @@
 package com.mickeytheq.strangeeons.ahlcg4j;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
+import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
@@ -20,12 +21,14 @@ public class Card extends AbstractGameComponent {
     private transient CardFace backFace;
 
     public Card() {
-        // TODO: launch a dialog/wizard to specify the front/back faces
-        // TODO: have flexibility of choice provided the front/back are the same size
+        NewCardDialog newCardDialog = new NewCardDialog(false);
+        newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
+        newCardDialog.setVisible(true);
 
-        frontFace = new Treachery();
+        frontFace = createCardFace(newCardDialog.getSelectedFrontFace().getCardFaceClass());
         frontFace.initialise(this, CardFaceSide.Front);
-        backFace = new EncounterCardBack();
+
+        backFace = createCardFace(newCardDialog.getSelectedBackFace().getCardFaceClass());
         backFace.initialise(this, CardFaceSide.Back);
     }
 
@@ -73,7 +76,7 @@ public class Card extends AbstractGameComponent {
     }
 
     private void writeFaceSettings(CardFace cardFace, CardFaceSide cardFaceSide) {
-        String type = CardFaceTypeRegister.get().getSettingsTypeCodeForCardFaceClass(cardFace.getClass());
+        String type = CardFaceTypeRegister.get().getInfoForCardFaceClass(cardFace.getClass()).getTypeCode();
 
         getSettings().set(cardFaceSide.getSettingsPrefix() + ".Type", type);
 
@@ -102,8 +105,16 @@ public class Card extends AbstractGameComponent {
 
         String type = getSettings().get(settingsKey);
 
-        Class<? extends CardFace> cardFaceClass = CardFaceTypeRegister.get().getCardFaceClassForSettingsTypeCode(type);
+        Class<? extends CardFace> cardFaceClass = CardFaceTypeRegister.get().getInfoForTypeCode(type).getCardFaceClass();
 
+        CardFace cardFace = createCardFace(cardFaceClass);
+        cardFace.initialise(this, cardFaceSide);
+        cardFace.afterSettingsRead(getSettings(), objectInputStream);
+
+        return cardFace;
+    }
+
+    private CardFace createCardFace(Class<? extends CardFace> cardFaceClass) {
         Constructor<? extends CardFace> constructor;
         try {
             constructor = cardFaceClass.getConstructor();
@@ -117,10 +128,6 @@ public class Card extends AbstractGameComponent {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-
-        cardFace.initialise(this, cardFaceSide);
-
-        cardFace.afterSettingsRead(getSettings(), objectInputStream);
 
         return cardFace;
     }
