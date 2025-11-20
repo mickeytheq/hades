@@ -1,11 +1,15 @@
 package com.mickeytheq.strangeeons.ahlcg4j;
 
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.Asset;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBack;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.PlayerCardBack;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBackView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import net.miginfocom.swing.MigLayout;
 import resources.Language;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class NewCardDialog extends JDialog {
@@ -60,11 +64,11 @@ public class NewCardDialog extends JDialog {
         });
 
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ASSET), "Asset with player card back",
-                cardFaceTypeRegister.getInfoForCardFaceClass(Asset.class),
-                cardFaceTypeRegister.getInfoForCardFaceClass(PlayerCardBack.class)));
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Asset.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(PlayerCardBack.class)));
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.TREACHERY), "Treachery with encounter card back",
-                cardFaceTypeRegister.getInfoForCardFaceClass(Treachery.class),
-                cardFaceTypeRegister.getInfoForCardFaceClass(EncounterCardBack.class)));
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Treachery.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
 
         // buttons
         JButton createButton = new JButton("Create");

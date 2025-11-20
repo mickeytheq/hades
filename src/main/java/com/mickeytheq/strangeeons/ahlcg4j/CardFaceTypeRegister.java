@@ -1,12 +1,22 @@
 package com.mickeytheq.strangeeons.ahlcg4j;
 
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceModel;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.Asset;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.AssetView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBack;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBackView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.PlayerCardBack;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.PlayerCardBackView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.TreacheryView;
 import resources.Language;
 
 import java.util.*;
 
 public class CardFaceTypeRegister {
     private final Map<String, CardFaceInfo> typeCodeLookup = new HashMap<>();
-    private final Map<Class<? extends CardFace>, CardFaceInfo> classLookup = new HashMap<>();
+    private final Map<Class<? extends CardFaceModel>, CardFaceInfo> modelClassLookup = new HashMap<>();
 
     private static final CardFaceTypeRegister cardFaceTypeRegister = new CardFaceTypeRegister();
 
@@ -15,23 +25,23 @@ public class CardFaceTypeRegister {
     }
 
     private CardFaceTypeRegister() {
-        register(Asset.class);
-        register(Treachery.class);
+        register(Asset.class, AssetView.class);
+        register(Treachery.class, TreacheryView.class);
 
-        register(EncounterCardBack.class);
-        register(PlayerCardBack.class);
+        register(EncounterCardBack.class, EncounterCardBackView.class);
+        register(PlayerCardBack.class, PlayerCardBackView.class);
     }
 
-    private void register(Class<? extends CardFace> cardFaceClass) {
-        CardFaceInfo cardFaceInfo = buildInfo(cardFaceClass);
+    private void register(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {
+        CardFaceInfo cardFaceInfo = buildInfo(cardFaceModelClass, cardFaceViewClass);
 
         typeCodeLookup.put(cardFaceInfo.getTypeCode(), cardFaceInfo);
-        classLookup.put(cardFaceClass, cardFaceInfo);
+        modelClassLookup.put(cardFaceModelClass, cardFaceInfo);
     }
 
-    public CardFaceInfo getInfoForCardFaceClass(Class<? extends CardFace> cardFaceClass) {
-        return Optional.ofNullable(classLookup.get(cardFaceClass))
-                .orElseThrow(() -> new NoSuchElementException("Card face class '" + cardFaceClass.getName() + "' is not registered"));
+    public CardFaceInfo getInfoForCardFaceModelClass(Class<? extends CardFaceModel> cardFaceClass) {
+        return Optional.ofNullable(modelClassLookup.get(cardFaceClass))
+                .orElseThrow(() -> new NoSuchElementException("Card face model class '" + cardFaceClass.getName() + "' is not registered"));
     }
 
     public CardFaceInfo getInfoForTypeCode(String typeCode) {
@@ -40,33 +50,39 @@ public class CardFaceTypeRegister {
     }
 
     public List<CardFaceInfo> getAllCardInformation() {
-        return new ArrayList<>(classLookup.values());
+        return new ArrayList<>(modelClassLookup.values());
     }
 
-    private CardFaceInfo buildInfo(Class<? extends CardFace> cardFaceClass) {
-        CardFaceType cardFaceType = cardFaceClass.getAnnotation(CardFaceType.class);
+    private CardFaceInfo buildInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {
+        CardFaceType cardFaceType = cardFaceModelClass.getAnnotation(CardFaceType.class);
 
         if (cardFaceType == null)
-            throw new RuntimeException("CardFace class '" + cardFaceClass.getName() + "' does not have the CardFaceType annotation");
+            throw new RuntimeException("CardFaceModel implementation '" + cardFaceModelClass.getName() + "' does not have the CardFaceType annotation");
 
-        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceClass, cardFaceType.typeCode(), cardFaceType.interfaceLanguageKey());
+        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, cardFaceType.typeCode(), cardFaceType.interfaceLanguageKey());
 
         return cardFaceInfo;
     }
 
     public static class CardFaceInfo {
-        private final Class<? extends CardFace> cardFaceClass;
+        private final Class<? extends CardFaceModel> cardFaceModelClass;
+        private final Class<? extends CardFaceView> cardFaceViewClass;
         private final String typeCode;
         private final String interfaceLanguageKey;
 
-        public CardFaceInfo(Class<? extends CardFace> cardFaceClass, String typeCode, String interfaceLanguageKey) {
-            this.cardFaceClass = cardFaceClass;
+        public CardFaceInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass, String typeCode, String interfaceLanguageKey) {
+            this.cardFaceModelClass = cardFaceModelClass;
+            this.cardFaceViewClass = cardFaceViewClass;
             this.typeCode = typeCode;
             this.interfaceLanguageKey = interfaceLanguageKey;
         }
 
-        public Class<? extends CardFace> getCardFaceClass() {
-            return cardFaceClass;
+        public Class<? extends CardFaceModel> getCardFaceModelClass() {
+            return cardFaceModelClass;
+        }
+
+        public Class<? extends CardFaceView> getCardFaceViewClass() {
+            return cardFaceViewClass;
         }
 
         public String getTypeCode() {
@@ -82,12 +98,12 @@ public class CardFaceTypeRegister {
             if (this == o) return true;
             if (!(o instanceof CardFaceInfo)) return false;
             CardFaceInfo that = (CardFaceInfo) o;
-            return Objects.equals(cardFaceClass, that.cardFaceClass);
+            return Objects.equals(cardFaceModelClass, that.cardFaceModelClass);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(cardFaceClass);
+            return Objects.hash(cardFaceModelClass);
         }
 
         @Override

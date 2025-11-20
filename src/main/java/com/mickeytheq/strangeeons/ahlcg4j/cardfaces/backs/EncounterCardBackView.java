@@ -1,7 +1,12 @@
-package com.mickeytheq.strangeeons.ahlcg4j;
+package com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.strangeeons.ahlcg4j.Card;
+import com.mickeytheq.strangeeons.ahlcg4j.CardFaceType;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.BaseCardFaceView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.util.ImageUtils;
 import resources.Settings;
@@ -12,8 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-@CardFaceType(typeCode = "EncounterCardBack", interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
-public class EncounterCardBack extends BaseCardFace {
+public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
     @Override
     public BufferedImage loadTemplateImage() {
         return ImageUtils.loadImage(getClass().getResource("/templates/AHLCG-EncounterBack.jp2"));
@@ -25,25 +29,10 @@ public class EncounterCardBack extends BaseCardFace {
     }
 
     @Override
-    protected void paint(Sheet<Card> sheet, Graphics2D g, RenderTarget renderTarget) {
+    protected void paint(PaintContext paintContext) {
         // TODO: can we cache this instead of drawing it each time?
         // TODO: although may not be worth it. for bulk operations the sheet must be created a drawn from scratch so
         // TODO: this would only improve subsequent paints of the same sheet which aren't that high frequency
-        g.drawImage(loadTemplateImage(), 0, 0, null);
-    }
-
-    @Override
-    public void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream) {
-
-    }
-
-    @Override
-    public void beforeSettingsWrite(Settings settings) {
-
-    }
-
-    @Override
-    public void afterSettingsWrite(ObjectOutputStream objectOutputStream) {
-
+        paintContext.getGraphics().drawImage(loadTemplateImage(), 0, 0, null);
     }
 }

@@ -6,6 +6,8 @@ import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.io.NewerVersionException;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceModel;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceView;
 import resources.Settings;
 
 import java.io.IOException;
@@ -17,34 +19,50 @@ import java.lang.reflect.InvocationTargetException;
 public class Card extends AbstractGameComponent {
     private static final int CURRENT_VERSION = 1;
 
-    private transient CardFace frontFace;
-    private transient CardFace backFace;
+    private CardFaceModel frontFaceModel;
+    private CardFaceView frontFaceView;
+    private CardFaceModel backFaceModel;
+    private CardFaceView backFaceView;
 
     public Card() {
         NewCardDialog newCardDialog = new NewCardDialog(false);
         newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
         newCardDialog.setVisible(true);
 
-        frontFace = createCardFace(newCardDialog.getSelectedFrontFace().getCardFaceClass());
-        frontFace.initialise(this, CardFaceSide.Front);
+        frontFaceModel = createCardFaceModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass());
+        frontFaceModel.initialiseModel(this, CardFaceSide.Front);
 
-        backFace = createCardFace(newCardDialog.getSelectedBackFace().getCardFaceClass());
-        backFace.initialise(this, CardFaceSide.Back);
+        frontFaceView = createViewForModel(frontFaceModel);
+
+        if (newCardDialog.getSelectedBackFace() != null) {
+            backFaceModel = createCardFaceModel(newCardDialog.getSelectedBackFace().getCardFaceModelClass());
+            backFaceModel.initialiseModel(this, CardFaceSide.Back);
+
+            backFaceView = createViewForModel(backFaceModel);
+        }
     }
 
-    public CardFace getFrontFace() {
-        return frontFace;
+    public CardFaceModel getFrontFaceModel() {
+        return frontFaceModel;
     }
 
-    public CardFace getBackFace() {
-        return backFace;
+    public CardFaceModel getBackFaceModel() {
+        return backFaceModel;
+    }
+
+    public CardFaceView getFrontFaceView() {
+        return frontFaceView;
+    }
+
+    public CardFaceView getBackFaceView() {
+        return backFaceView;
     }
 
     @Override
     public Sheet[] createDefaultSheets() {
         // create sheet objects that are provided by the card's face
-        Sheet frontSheet = getFrontFace().createSheet();
-        Sheet backSheet = getBackFace().createSheet();
+        Sheet frontSheet = getFrontFaceView().createSheet();
+        Sheet backSheet = getBackFaceView().createSheet();
 
         Sheet[] sheets = new Sheet[]{frontSheet, backSheet};
 
@@ -64,23 +82,23 @@ public class Card extends AbstractGameComponent {
         out.writeObject(getName());
         out.writeObject(comments);
 
-        writeFaceSettings(frontFace, CardFaceSide.Front);
-        writeFaceSettings(backFace, CardFaceSide.Back);
+        writeFaceSettings(frontFaceModel, CardFaceSide.Front);
+        writeFaceSettings(backFaceModel, CardFaceSide.Back);
 
         out.writeObject(privateSettings);
 
-        frontFace.afterSettingsWrite(out);
-        backFace.afterSettingsWrite(out);
+        frontFaceModel.afterSettingsWrite(out);
+        backFaceModel.afterSettingsWrite(out);
 
         markSaved();
     }
 
-    private void writeFaceSettings(CardFace cardFace, CardFaceSide cardFaceSide) {
-        String type = CardFaceTypeRegister.get().getInfoForCardFaceClass(cardFace.getClass()).getTypeCode();
+    private void writeFaceSettings(CardFaceModel cardFaceModel, CardFaceSide cardFaceSide) {
+        String type = CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass()).getTypeCode();
 
         getSettings().set(cardFaceSide.getSettingsPrefix() + ".Type", type);
 
-        cardFace.beforeSettingsWrite(getSettings());
+        cardFaceModel.beforeSettingsWrite(getSettings());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -94,41 +112,68 @@ public class Card extends AbstractGameComponent {
 
         privateSettings = (Settings)in.readObject();
 
-        frontFace = readFace(CardFaceSide.Front, in);
-        backFace = readFace(CardFaceSide.Back, in);
-
-        // TODO: allow the card faces to participate in the object stream?
+        frontFaceModel = readFace(CardFaceSide.Front, in);
+        frontFaceView = createViewForModel(frontFaceModel);
+        backFaceModel = readFace(CardFaceSide.Back, in);
+        backFaceView = createViewForModel(backFaceModel);
     }
 
-    private CardFace readFace(CardFaceSide cardFaceSide, ObjectInputStream objectInputStream) {
+    private CardFaceModel readFace(CardFaceSide cardFaceSide, ObjectInputStream objectInputStream) {
         String settingsKey = cardFaceSide.getSettingsPrefix() + ".Type";
 
         String type = getSettings().get(settingsKey);
 
-        Class<? extends CardFace> cardFaceClass = CardFaceTypeRegister.get().getInfoForTypeCode(type).getCardFaceClass();
+        Class<? extends CardFaceModel> cardFaceClass = CardFaceTypeRegister.get().getInfoForTypeCode(type).getCardFaceModelClass();
 
-        CardFace cardFace = createCardFace(cardFaceClass);
-        cardFace.initialise(this, cardFaceSide);
-        cardFace.afterSettingsRead(getSettings(), objectInputStream);
+        CardFaceModel cardFaceModel = createCardFaceModel(cardFaceClass);
+        cardFaceModel.initialiseModel(this, cardFaceSide);
+        cardFaceModel.afterSettingsRead(getSettings(), objectInputStream);
 
-        return cardFace;
+        return cardFaceModel;
     }
 
-    private CardFace createCardFace(Class<? extends CardFace> cardFaceClass) {
-        Constructor<? extends CardFace> constructor;
+    private static CardFaceModel createCardFaceModel(Class<? extends CardFaceModel> cardFaceClass) {
+        Constructor<? extends CardFaceModel> constructor;
         try {
             constructor = cardFaceClass.getConstructor();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("The required single argument 'Card' constructor is not present on CardFace class '" + cardFaceClass.getName() + "'");
         }
 
-        CardFace cardFace;
+        CardFaceModel cardFaceModel;
         try {
-            cardFace = constructor.newInstance();
+            cardFaceModel = constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
 
-        return cardFace;
+        return cardFaceModel;
+    }
+
+    private static CardFaceView createViewForModel(CardFaceModel cardFaceModel) {
+        CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass());
+
+        CardFaceView cardFaceView = createCardFaceView(cardFaceInfo.getCardFaceViewClass());
+        cardFaceView.initialiseView(cardFaceModel);
+
+        return cardFaceView;
+    }
+
+    private static CardFaceView createCardFaceView(Class<? extends CardFaceView> cardFaceViewClass) {
+        Constructor<? extends CardFaceView> constructor;
+        try {
+            constructor = cardFaceViewClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("The required single argument 'Card' constructor is not present on CardFaceView class '" + cardFaceViewClass.getName() + "'");
+        }
+
+        CardFaceView cardFaceView;
+        try {
+            cardFaceView = constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cardFaceView;
     }
 }

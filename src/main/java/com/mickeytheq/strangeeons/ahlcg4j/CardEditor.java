@@ -8,11 +8,10 @@ public class CardEditor extends AbstractGameComponentEditor<Card> {
     public CardEditor(Card card) {
         setGameComponent(card);
 
-        // TODO: delegate to the individual 'face types' to create editor controls to go in the editor
-
+        // delegate to the individual card faces to create editor controls to go in the editor
         JTabbedPane editorTabbedPane = new JTabbedPane();
-        card.getFrontFace().createEditors(editorTabbedPane);
-        card.getBackFace().createEditors(editorTabbedPane);
+        card.getFrontFaceView().createEditors(editorTabbedPane);
+        card.getBackFaceView().createEditors(editorTabbedPane);
 
         // TODO: add a comment tab
 

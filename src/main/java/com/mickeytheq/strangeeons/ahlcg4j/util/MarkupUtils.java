@@ -84,9 +84,7 @@ public class MarkupUtils {
 //        BODY_TAG_REPLACEMENT.put("CheckBoxA", "\u2610");
     }
 
-    public static MarkupRenderer getBodyMarkupRenderer(Sheet<?> sheet) {
-        MarkupRenderer markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-
+    public static void applyBodyMarkupConfiguration(MarkupRenderer markupRenderer) {
         markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
         markupRenderer.setLineTightness(0.6f * 0.9f);
@@ -98,8 +96,13 @@ public class MarkupUtils {
         markupRenderer.setStyleForTag("ts", TextStyleUtils.getTraitTextStyle());
         markupRenderer.setStyleForTag("vic", TextStyleUtils.getVictoryTextStyle());
         markupRenderer.setStyleForTag("fs", TextStyleUtils.getFlavorTextStyle());
+        markupRenderer.setStyleForTag("t", TextStyleUtils.getTraitTextStyle());
+        markupRenderer.setStyleForTag("hdr", TextStyleUtils.getHeaderTextStyle());
+        markupRenderer.setStyleForTag("fla", TextStyleUtils.getFlavorTextStyle());
+        markupRenderer.setStyleForTag("sto", TextStyleUtils.getStoryTextStyle());
+        markupRenderer.setStyleForTag("bod", TextStyleUtils.getBodyTextStyle());
 
-        return markupRenderer;
+        // TODO: missing tags with styles - iss, css, gss, section, header, boxbullet, suf, sufb
     }
 
     // the res:// protocol maps into a 'resources' folder in the root of the classpath which is why

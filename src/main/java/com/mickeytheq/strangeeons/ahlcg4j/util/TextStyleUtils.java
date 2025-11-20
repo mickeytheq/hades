@@ -20,6 +20,7 @@ public class TextStyleUtils {
     private static final TextStyle ENCOUNTER_NUMBER_TEXT_STYLE;
     private static final TextStyle ARTIST_TEXT_STYLE;
     private static final TextStyle COPYRIGHT_TEXT_STYLE;
+    private static final TextStyle HEADER_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -90,6 +91,9 @@ public class TextStyleUtils {
         ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
         ARTIST_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
         COPYRIGHT_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
+
+        // same as victory
+        HEADER_TEXT_STYLE = VICTORY_TEXT_STYLE;
     }
 
     public static TextStyle getLargeLabelTextStyle() {
@@ -142,5 +146,9 @@ public class TextStyleUtils {
 
     public static TextStyle getCopyrightTextStyle() {
         return COPYRIGHT_TEXT_STYLE;
+    }
+
+    public static TextStyle getHeaderTextStyle() {
+        return HEADER_TEXT_STYLE;
     }
 }

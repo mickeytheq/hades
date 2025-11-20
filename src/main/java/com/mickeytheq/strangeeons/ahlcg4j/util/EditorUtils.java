@@ -2,6 +2,7 @@ package com.mickeytheq.strangeeons.ahlcg4j.util;
 
 import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.ui.DocumentEventAdapter;
+import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
