@@ -1,5 +1,7 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces;
 
+import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
+
 import java.net.URL;
 
 public class PortraitModel {
@@ -10,6 +12,7 @@ public class PortraitModel {
 
     private URL source;
 
+    @Property("PanX")
     public double getPanX() {
         return panX;
     }
@@ -18,6 +21,7 @@ public class PortraitModel {
         this.panX = panX;
     }
 
+    @Property("PanY")
     public double getPanY() {
         return panY;
     }
@@ -26,6 +30,7 @@ public class PortraitModel {
         this.panY = panY;
     }
 
+    @Property("Scale")
     public double getScale() {
         return scale;
     }
@@ -34,6 +39,7 @@ public class PortraitModel {
         this.scale = scale;
     }
 
+    @Property("Rotation")
     public double getRotation() {
         return rotation;
     }
@@ -42,6 +48,7 @@ public class PortraitModel {
         this.rotation = rotation;
     }
 
+    @Property("Source")
     public URL getSource() {
         return source;
     }

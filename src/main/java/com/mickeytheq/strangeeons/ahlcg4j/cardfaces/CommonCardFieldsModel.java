@@ -1,5 +1,7 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces;
 
+import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
+
 public class CommonCardFieldsModel {
     private String title;
     private String traits;
@@ -14,6 +16,7 @@ public class CommonCardFieldsModel {
 
 
 
+    @Property("Title")
     public String getTitle() {
         return title;
     }
@@ -22,6 +25,7 @@ public class CommonCardFieldsModel {
         this.title = title;
     }
 
+    @Property("Traits")
     public String getTraits() {
         return traits;
     }
@@ -30,6 +34,7 @@ public class CommonCardFieldsModel {
         this.traits = traits;
     }
 
+    @Property("Keywords")
     public String getKeywords() {
         return keywords;
     }
@@ -38,6 +43,7 @@ public class CommonCardFieldsModel {
         this.keywords = keywords;
     }
 
+    @Property("Rules")
     public String getRules() {
         return rules;
     }
@@ -46,6 +52,7 @@ public class CommonCardFieldsModel {
         this.rules = rules;
     }
 
+    @Property("Flavor")
     public String getFlavourText() {
         return flavourText;
     }
@@ -54,6 +61,7 @@ public class CommonCardFieldsModel {
         this.flavourText = flavourText;
     }
 
+    @Property("Victory")
     public String getVictory() {
         return victory;
     }
@@ -62,6 +70,7 @@ public class CommonCardFieldsModel {
         this.victory = victory;
     }
 
+    @Property("Copyright")
     public String getCopyright() {
         return copyright;
     }
@@ -70,6 +79,7 @@ public class CommonCardFieldsModel {
         this.copyright = copyright;
     }
 
+    @Property("ArtPortrait")
     public PortraitModel getArtPortraitModel() {
         return artPortraitModel;
     }
@@ -78,6 +88,7 @@ public class CommonCardFieldsModel {
         this.artPortraitModel = artPortraitModel;
     }
 
+    @Property("Artist")
     public String getArtist() {
         return artist;
     }

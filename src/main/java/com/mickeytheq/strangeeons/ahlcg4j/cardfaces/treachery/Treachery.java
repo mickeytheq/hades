@@ -5,6 +5,7 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.*;
 import com.mickeytheq.strangeeons.ahlcg4j.CardFaceType;
 import com.mickeytheq.strangeeons.ahlcg4j.WeaknessType;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
+import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
 import org.checkerframework.checker.units.qual.N;
 import resources.Settings;
 
@@ -45,17 +46,18 @@ public class Treachery extends BaseCardFaceModel {
 
     private WeaknessType weaknessType;
 
-    private CommonCardFieldsModel commonCardFieldsModel;
+    private final CommonCardFieldsModel commonCardFieldsModel;
 
-    private NumberingModel numberingModel;
+    private final NumberingModel numberingModel;
 
-    public void initialiseModel() {
+    public Treachery() {
         weaknessType = WeaknessType.None;
 
         commonCardFieldsModel = new CommonCardFieldsModel();
         numberingModel = new NumberingModel();
     }
 
+    @Property("WeaknessType")
     public WeaknessType getWeaknessType() {
         return weaknessType;
     }
@@ -64,10 +66,12 @@ public class Treachery extends BaseCardFaceModel {
         this.weaknessType = weaknessType;
     }
 
+    @Property(flatten = true)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
+    @Property(flatten = true)
     public NumberingModel getNumberingModel() {
         return numberingModel;
     }

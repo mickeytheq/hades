@@ -1,5 +1,7 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces;
 
+import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
+
 public class NumberingModel {
     private String encounterNumber;
     private String encounterTotal;
@@ -7,6 +9,7 @@ public class NumberingModel {
     private PortraitModel collectionPortraitModel = new PortraitModel();
     private PortraitModel encounterPortraitModel = new PortraitModel();
 
+    @Property("EncounterNumber")
     public String getEncounterNumber() {
         return encounterNumber;
     }
@@ -15,6 +18,7 @@ public class NumberingModel {
         this.encounterNumber = encounterNumber;
     }
 
+    @Property("EncounterTotal")
     public String getEncounterTotal() {
         return encounterTotal;
     }
@@ -23,6 +27,7 @@ public class NumberingModel {
         this.encounterTotal = encounterTotal;
     }
 
+    @Property("CollectionNumber")
     public String getCollectionNumber() {
         return collectionNumber;
     }
@@ -31,6 +36,7 @@ public class NumberingModel {
         this.collectionNumber = collectionNumber;
     }
 
+    @Property("CollectionPortrait")
     public PortraitModel getCollectionPortraitModel() {
         return collectionPortraitModel;
     }
@@ -39,6 +45,7 @@ public class NumberingModel {
         this.collectionPortraitModel = collectionPortraitModel;
     }
 
+    @Property("EncounterPortrait")
     public PortraitModel getEncounterPortraitModel() {
         return encounterPortraitModel;
     }
