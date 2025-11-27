@@ -2,7 +2,8 @@ package com.mickeytheq.strangeeons.ahlcg4j.util;
 
 import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.ui.DocumentEventAdapter;
-import net.miginfocom.swing.MigLayout;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.Statistic;
+import com.mickeytheq.strangeeons.ahlcg4j.ui.component.StatisticComponent;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 public class EditorUtils {
+    public static final String DEFAULT_NULL_COMBO_BOX_DISPLAY = "(None)"; // TODO: i18n
+
     public static JTextField createTextField(int columns) {
         JTextField textFieldEditor = new JTextField(columns);
         applyNoEditorOverride(textFieldEditor);
@@ -21,6 +24,30 @@ public class EditorUtils {
         JTextArea textAreaEditor = new JTextArea(rows, columns);
         applyNoEditorOverride(textAreaEditor);
         return textAreaEditor;
+    }
+
+    public static <E extends Enum> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz) {
+        return createEnumComboBoxNullable(clazz, DEFAULT_NULL_COMBO_BOX_DISPLAY);
+    }
+
+    public static <E extends Enum> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz, String nullDisplay) {
+        JComboBox<E> comboBox = createNullableComboBox(nullDisplay);
+
+        for (E enumConstant : clazz.getEnumConstants()) {
+            comboBox.addItem(enumConstant);
+        }
+
+        return comboBox;
+    }
+
+    public static <E extends Enum> JComboBox<E> createEnumComboBox(Class<E> clazz) {
+        JComboBox<E> comboBox = new JComboBox<>();
+
+        for (E enumConstant : clazz.getEnumConstants()) {
+            comboBox.addItem(enumConstant);
+        }
+
+        return comboBox;
     }
 
     public static void applyNoEditorOverride(JComponent component) {
@@ -44,5 +71,50 @@ public class EditorUtils {
         comboBox.addItemListener(e -> {
             consumer.accept((T)comboBox.getSelectedItem());
         });
+    }
+
+    public static void bindStatisticComponent(StatisticComponent statisticComponent, Consumer<Statistic> consumer) {
+        statisticComponent.addActionListener(e -> {
+            consumer.accept(statisticComponent.getStatistic());
+        });
+    }
+
+    public static <E> JComboBox<E> createNullableComboBox() {
+        return createNullableComboBox(DEFAULT_NULL_COMBO_BOX_DISPLAY);
+    }
+
+    // creates a combo box that inserts a default 'null' value as the first item and
+    // displays the given string when that item is selected
+    public static <E> JComboBox<E> createNullableComboBox(String nullDisplay) {
+        JComboBox<E> comboBox = new JComboBox<>();
+        comboBox.addItem(null);
+
+        // it is better to wrap the existing combobox renderer that has all the look and feel elements completed
+        // and just tinker with the display text
+        comboBox.setRenderer(new NullDisplayRenderer<E>(comboBox.getRenderer(), nullDisplay));
+
+        return comboBox;
+    }
+
+    static class NullDisplayRenderer<E> implements ListCellRenderer<E> {
+        private final ListCellRenderer<? super E> renderer;
+        private final String nullDisplay;
+
+        public NullDisplayRenderer(ListCellRenderer<? super E> renderer, String nullDisplay) {
+            this.renderer = renderer;
+            this.nullDisplay = nullDisplay;
+        }
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component component = renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            if (value == null && component instanceof JLabel) {
+                JLabel label = (JLabel)component;
+                label.setText(nullDisplay);
+            }
+
+            return component;
+        }
     }
 }

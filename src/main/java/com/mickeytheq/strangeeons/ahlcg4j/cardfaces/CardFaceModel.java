@@ -13,10 +13,4 @@ public interface CardFaceModel {
     Card getCard();
 
     CardFaceSide getCardFaceSide();
-
-    void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream);
-
-    void beforeSettingsWrite(Settings settings);
-
-    void afterSettingsWrite(ObjectOutputStream objectOutputStream);
 }

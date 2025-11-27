@@ -31,14 +31,14 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(17, 0, 344, 298);
 
     // locations to draw other elements
-    private static final Rectangle LABEL_CLIP = new Rectangle(137, 286, 104, 14);
-    private static final Rectangle TITLE_CLIP = new Rectangle(39, 307, 299, 29);
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(137, 286, 104, 14);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(39, 307, 299, 29);
     private static final Rectangle BODY_NON_WEAKNESS_DRAW_REGION = new Rectangle(30, 340, 318, 160);
     private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(30, 357, 318, 145);
 
-    private static final Rectangle BASIC_WEAKNESS_OVERLAY_CLIP = new Rectangle(156, 243, 66, 41);
-    private static final Rectangle BASIC_WEAKNESS_ICON_CLIP = new Rectangle(175, 253, 28, 28);
-    private static final Rectangle WEAKNESS_SUBTYPE_CLIP = new Rectangle(88, 335, 200, 17);
+    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(156, 243, 66, 41);
+    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(175, 253, 28, 28);
+    private static final Rectangle WEAKNESS_SUBTYPE_DRAW_REGION = new Rectangle(88, 335, 200, 17);
 
     @Override
     public void initialiseView() {
@@ -104,14 +104,15 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), LABEL_CLIP);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), LABEL_DRAW_REGION);
 
         // title
+        // TODO: move this into CommonCardFieldsView
         markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getTitle());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), TITLE_CLIP);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), TITLE_DRAW_REGION);
 
         if (getModel().getWeaknessType() == WeaknessType.None)
             paintNonWeaknessContent(paintContext);
@@ -135,10 +136,10 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         WeaknessType weaknessType = getModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), BASIC_WEAKNESS_OVERLAY_CLIP);
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), BASIC_WEAKNESS_OVERLAY_DRAW_REGION);
 
             if (weaknessType == WeaknessType.Basic) {
-                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_CLIP);
+                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
             }
             else {
                 numberingView.paintEncounterPortrait(paintContext);
@@ -156,7 +157,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), WEAKNESS_SUBTYPE_CLIP);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), WEAKNESS_SUBTYPE_DRAW_REGION);
 
         commonCardFieldsView.paint(paintContext, BODY_WEAKNESS_DRAW_REGION);
 

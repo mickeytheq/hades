@@ -7,6 +7,7 @@ import com.mickeytheq.strangeeons.ahlcg4j.util.EditorUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.MarkupUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.MigLayoutUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.TextStyleUtils;
+import net.miginfocom.layout.LC;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -68,20 +69,20 @@ public class CommonCardFieldsView {
     }
 
     public void addTitleEditorToPanel(JPanel panel) {
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.TITLE), titleEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.TITLE), titleEditor);
     }
 
     public void addNonTitleEditorsToPanel(JPanel panel) {
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.FLAVOR), flavorTextEditor);
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
-        MigLayoutUtils.addLabelledComponentRow(panel, Language.string(InterfaceConstants.COPYRIGHT), copyrightEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.FLAVOR), flavorTextEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
+        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.COPYRIGHT), copyrightEditor);
     }
 
     public JPanel createStandardArtPanel() {
-        JPanel artistWithPortraitPanel = MigLayoutUtils.createPanel();
+        JPanel artistWithPortraitPanel = MigLayoutUtils.createPanel(new LC().insets("0"));
 
         PortraitPanel portraitPanel = new PortraitPanel();
         portraitPanel.setPanelTitle(Language.string(InterfaceConstants.PORTRAIT));
@@ -90,7 +91,7 @@ public class CommonCardFieldsView {
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
         JPanel artistPanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.ARTIST));
-        MigLayoutUtils.addLabelledComponentRow(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
+        MigLayoutUtils.addLabelledComponentWrap(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
 
         artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
 

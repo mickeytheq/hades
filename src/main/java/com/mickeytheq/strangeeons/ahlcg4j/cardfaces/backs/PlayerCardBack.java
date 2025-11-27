@@ -18,18 +18,4 @@ import java.io.ObjectOutputStream;
 
 @CardFaceType(typeCode = "PlayerCardBack", interfaceLanguageKey = InterfaceConstants.BACK_PLAYER)
 public class PlayerCardBack extends BaseCardFaceModel {
-    @Override
-    public void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream) {
-        // nothing to do
-    }
-
-    @Override
-    public void beforeSettingsWrite(Settings settings) {
-        // nothing to do
-    }
-
-    @Override
-    public void afterSettingsWrite(ObjectOutputStream objectOutputStream) {
-        // nothing to do
-    }
 }

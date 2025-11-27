@@ -11,18 +11,4 @@ import java.io.ObjectOutputStream;
 
 @CardFaceType(typeCode = "EncounterCardBack", interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
 public class EncounterCardBack extends BaseCardFaceModel {
-    @Override
-    public void afterSettingsRead(Settings settings, ObjectInputStream objectInputStream) {
-        // nothing to do
-    }
-
-    @Override
-    public void beforeSettingsWrite(Settings settings) {
-        // nothing to do
-    }
-
-    @Override
-    public void afterSettingsWrite(ObjectOutputStream objectOutputStream) {
-        // nothing to do
-    }
 }

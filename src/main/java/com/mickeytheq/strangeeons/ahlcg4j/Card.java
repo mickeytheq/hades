@@ -42,6 +42,15 @@ public class Card extends AbstractGameComponent {
         }
     }
 
+    public Card(CardFaceView frontFaceView, CardFaceModel frontFaceModel, CardFaceView backFaceView, CardFaceModel backFaceModel) {
+        // constructor used for testing
+        this.frontFaceView = frontFaceView;
+        this.frontFaceModel = frontFaceModel;
+
+        this.backFaceView = backFaceView;
+        this.backFaceModel = backFaceModel;
+    }
+
     public CardFaceModel getFrontFaceModel() {
         return frontFaceModel;
     }
@@ -87,9 +96,6 @@ public class Card extends AbstractGameComponent {
 
         out.writeObject(privateSettings);
 
-        frontFaceModel.afterSettingsWrite(out);
-        backFaceModel.afterSettingsWrite(out);
-
         markSaved();
     }
 
@@ -98,7 +104,6 @@ public class Card extends AbstractGameComponent {
 
         getSettings().set(cardFaceSide.getSettingsPrefix() + ".Type", type);
 
-        cardFaceModel.beforeSettingsWrite(getSettings());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -127,7 +132,6 @@ public class Card extends AbstractGameComponent {
 
         CardFaceModel cardFaceModel = createCardFaceModel(cardFaceClass);
         cardFaceModel.initialiseModel(this, cardFaceSide);
-        cardFaceModel.afterSettingsRead(getSettings(), objectInputStream);
 
         return cardFaceModel;
     }
