@@ -97,22 +97,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         // draw the template
         paintContext.getGraphics().drawImage(loadTemplateImage(), 0, 0, null);
 
-        MarkupRenderer markupRenderer;
-
         // label
-        markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-        markupRenderer.setMarkupText(Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), LABEL_DRAW_REGION);
+        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
 
         // title
-        // TODO: move this into CommonCardFieldsView
-        markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-        markupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getTitle());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
 
         if (getModel().getWeaknessType() == WeaknessType.None)
             paintNonWeaknessContent(paintContext);
@@ -126,7 +115,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         numberingView.paintCollectionPortrait(paintContext, true);
         numberingView.paintCollectionNumber(paintContext);
 
-        commonCardFieldsView.paint(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -159,7 +148,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), WEAKNESS_SUBTYPE_DRAW_REGION);
 
-        commonCardFieldsView.paint(paintContext, BODY_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_WEAKNESS_DRAW_REGION);
 
         numberingView.paintCollectionPortrait(paintContext, true);
         numberingView.paintCollectionNumber(paintContext);

@@ -63,14 +63,26 @@ public class GenerateLanguageConstants {
         printWriter.println("package com.mickeytheq.strangeeons.ahlcg4j.codegenerated;");
         printWriter.println();
 
+        printWriter.println("@SuppressWarnings(\"unused\")");
         printWriter.println("public class " + className + " {");
 
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            printWriter.println("    // English value: " + makeSingleLineValue(entry.getValue()));
             printWriter.println("    public static final String " + makeKey(entry.getKey().toString()) + " = \"" + makeValue(entry.getKey().toString()) + "\";");
         }
         printWriter.println("}");
 
         return stringWriter.toString();
+    }
+
+    private String makeSingleLineValue(Object value) {
+        String text = String.valueOf(value);
+
+        text = StringUtils.replace(text, "\r", "");
+        text = StringUtils.replace(text, "\n", "");
+        text = StringUtils.replace(text, "\t", " ");
+
+        return text;
     }
 
     private String makeKey(String rawKey) {

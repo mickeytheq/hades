@@ -5,11 +5,13 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardClass;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardType;
+import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.ui.component.StatisticComponent;
 import com.mickeytheq.strangeeons.ahlcg4j.util.EditorUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.ImageUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.MigLayoutUtils;
+import com.mickeytheq.strangeeons.ahlcg4j.util.PaintUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import resources.Language;
@@ -17,7 +19,10 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class AssetView extends BaseCardFaceView<Asset> {
     private JComboBox<PlayerCardType> assetTypeEditor;
@@ -51,22 +56,44 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     @Override
     public BufferedImage loadTemplateImage() {
-        String templateResource;
-
-        if (getModel().getPlayerCardType() == PlayerCardType.Standard) {
-            templateResource = "/templates/asset/AHLCG-Asset-" + getModel().getPlayerCardClass1().name() + ".jp2";
-        }
-        else {
-            templateResource = "/templates/asset/AHLCG-Asset-" + PlayerCardClass.Guardian.name() + ".jp2";
-        }
+        String templateResource = getTemplateResource();
 
         return ImageUtils.loadImage(getClass().getResource(templateResource));
     }
 
-    @Override
-    protected void paint(PaintContext paintContext) {
-        // draw the template
-        paintContext.getGraphics().drawImage(loadTemplateImage(), 0, 0, null);
+    private String getTemplateResource() {
+        if (getModel().getPlayerCardType() == PlayerCardType.Standard) {
+            List<PlayerCardClass> cardClasses = Stream.of(getModel().getPlayerCardClass1(), getModel().getPlayerCardClass2(), getModel().getPlayerCardClass3())
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            if (cardClasses.size() > 1)
+                return "/templates/asset/AHLCG-Asset-MultiClass.jp2";
+            else
+                return "/templates/asset/AHLCG-Asset-" + cardClasses.get(0) + ".jp2";
+        }
+
+        switch (getModel().getPlayerCardType()) {
+            case Neutral:
+                return "/templates/asset/AHLCG-Asset-Neutral.jp2";
+
+            case Specialist:
+                return "/templates/asset/AHLCG-Asset-Specialist.jp2";
+
+            case Story:
+                return "/templates/asset/AHLCG-Asset-Story.jp2";
+
+            case StoryWeakness:
+                return "/templates/asset/AHLCG-Asset-StoryWeakness.jp2";
+
+            case Weakness:
+            case BasicWeakness:
+                return "/templates/asset/AHLCG-Asset-Weakness.jp2";
+
+            default:
+                throw new RuntimeException("Unsupported player card type " + getModel().getPlayerCardType().name());
+        }
+
     }
 
     @Override
@@ -78,6 +105,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
         tabbedPane.addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
     }
 
+    // TODO: look at factoring out some/most of these player card fields into a component that can be shared between Asset/Event/Skill
+    // TODO: only the health, sanity and slots are asset specific
     private void createTitleAndStatisticsEditors(JTabbedPane tabbedPane) {
         // title
         // TODO: sub-title
@@ -225,4 +254,29 @@ public class AssetView extends BaseCardFaceView<Asset> {
         // add the panel to the main tab control
         tabbedPane.addTab("Rules / portrait", mainPanel); // TODO: i18n
     }
+
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(20, 62, 38, 14);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(68, 14, 238, 29);
+    private static final Rectangle BODY_DRAW_REGION = new Rectangle(20, 320, 336, 140);
+
+    @Override
+    protected void paint(PaintContext paintContext) {
+        // paint the main/art portrait first as it sits behind the card template
+        commonCardFieldsView.paintArtPortrait(paintContext);
+
+        // draw the template
+        paintContext.getGraphics().drawImage(loadTemplateImage(), 0, 0, null);
+
+        // label
+        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
+
+        // title
+        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+
+        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_DRAW_REGION);
+
+        numberingView.paintCollectionPortrait(paintContext, true);
+        numberingView.paintCollectionNumber(paintContext);
+    }
+
 }

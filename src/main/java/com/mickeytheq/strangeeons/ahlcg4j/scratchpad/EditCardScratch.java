@@ -6,6 +6,7 @@ import ca.cgjennings.imageio.JPEG2000;
 import ca.cgjennings.io.protocols.MappedURLHandler;
 import com.mickeytheq.strangeeons.ahlcg4j.Card;
 import com.mickeytheq.strangeeons.ahlcg4j.CardFaceSide;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceView;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.Asset;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.AssetView;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
@@ -24,7 +25,6 @@ public class EditCardScratch {
     }
 
     private void run() {
-
         Bootstrapper.initaliseOutsideStrangeEons();
 
         asset();
@@ -42,10 +42,7 @@ public class EditCardScratch {
         model.initialiseModel(card, CardFaceSide.Front);
         view.initialiseView(model);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
-        view.createEditors(tabbedPane);
-
-        displayEditors(tabbedPane);
+        displayEditors(view);
     }
 
     private void treachery() {
@@ -59,13 +56,13 @@ public class EditCardScratch {
         model.initialiseModel(card, CardFaceSide.Front);
         view.initialiseView(model);
 
+        displayEditors(view);
+    }
+
+    private static void displayEditors(CardFaceView view) {
         JTabbedPane tabbedPane = new JTabbedPane();
         view.createEditors(tabbedPane);
 
-        displayEditors(tabbedPane);
-    }
-
-    private static void displayEditors(JTabbedPane tabbedPane) {
         JFrame frame = new JFrame();
         frame.getContentPane().setLayout(new FlowLayout());
         frame.getContentPane().add(tabbedPane);

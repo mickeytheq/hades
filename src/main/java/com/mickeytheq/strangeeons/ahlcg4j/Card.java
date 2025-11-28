@@ -16,6 +16,10 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+// TODO: refactor this to
+// - put the serialisation/construction logic of a set of views/models in a utility where it can be used outside of a card being constructed/read inside Strange Eons, e.g. testing
+// - further de-couple the Card concept from StrangeEons by having a very light 'Card' to join the two faces together and have a CardGameComponent to be the SE bridge to allow
+//   the Card model/view to be used outside SE, e.g. testing. ideally the model/view becomes somewhat SE agnostic/unaware
 public class Card extends AbstractGameComponent {
     private static final int CURRENT_VERSION = 1;
 

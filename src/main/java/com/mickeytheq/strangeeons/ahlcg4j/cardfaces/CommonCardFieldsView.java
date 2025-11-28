@@ -106,7 +106,15 @@ public class CommonCardFieldsView {
         artPortraitView.paint(paintContext);
     }
 
-    public void paint(PaintContext paintContext, Rectangle bodyDrawRegion) {
+    public void paintTitle(PaintContext paintContext, Rectangle titleDrawRegion) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(getModel().getTitle());
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), titleDrawRegion);
+    }
+
+    public void paintBodyCopyrightArtist(PaintContext paintContext, Rectangle bodyDrawRegion) {
         String bodyString = composeBodyString();
         paintBodyText(paintContext, bodyString, bodyDrawRegion);
 

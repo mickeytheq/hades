@@ -22,12 +22,7 @@ public class PaintFaceScratch {
     }
 
     private void run() {
-        JPEG2000.registerServiceProviders(true);
-        Language.setGameLocale(Locale.ENGLISH);
-        Language.setInterfaceLocale(Locale.ENGLISH);
-        MappedURLHandler.install();
-
-        Bootstrapper.initialise();
+        Bootstrapper.initaliseOutsideStrangeEons();
 
         Treachery treachery = new Treachery();
         treachery.getCommonCardFieldsModel().setTitle("Rat Swarm");
