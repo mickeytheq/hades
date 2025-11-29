@@ -15,8 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CommonCardFieldsView {
-    private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(137, 512, 101, 10);
-    private static final Rectangle ARTIST_DRAW_REGION = new Rectangle(14, 512, 121, 10);
+    private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(274, 1024, 202, 20);
+    private static final Rectangle ARTIST_DRAW_REGION = new Rectangle(28, 1024, 242, 20);
 
 
     private final CommonCardFieldsModel model;
@@ -111,6 +111,14 @@ public class CommonCardFieldsView {
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(getModel().getTitle());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), titleDrawRegion);
+    }
+
+    public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(getModel().getSubtitle());
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), subtitleDrawRegion);
     }
 
     public void paintBodyCopyrightArtist(PaintContext paintContext, Rectangle bodyDrawRegion) {

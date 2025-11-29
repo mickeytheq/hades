@@ -28,8 +28,8 @@ public class EditCardScratch {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-//        asset();
-        treachery();
+        asset();
+//        treachery();
     }
 
     private void asset() {
@@ -98,6 +98,7 @@ public class EditCardScratch {
             JFrame frame = new JFrame();
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(splitPane);
+            frame.setPreferredSize(new Dimension(1400, 1200));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);

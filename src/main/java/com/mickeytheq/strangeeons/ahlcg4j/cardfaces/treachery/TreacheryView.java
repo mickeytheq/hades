@@ -16,9 +16,9 @@ import java.net.URL;
 
 public class TreacheryView extends BaseCardFaceView<Treachery> {
     private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
-    private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/AHLCG-WeaknessTreachery.jp2");
+    private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
 
-    private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/AHLCG-BasicWeakness.png");
+    private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/basic_weakness.png");
     private static final URL BASIC_WEAKNESS_ICON_RESOURCE = Treachery.class.getResource("/icons/AHLCG-BasicWeakness.png");
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
@@ -26,19 +26,19 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     private NumberingView numberingView;
 
     // locations to draw portraits
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(320, 510, 13, 13);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(175, 254, 28, 28);
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(17, 0, 344, 298);
+    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
+    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(350, 508, 56, 56);
+    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(34, 0, 688, 596);
 
     // locations to draw other elements
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(137, 286, 104, 14);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(39, 307, 299, 29);
-    private static final Rectangle BODY_NON_WEAKNESS_DRAW_REGION = new Rectangle(30, 340, 318, 160);
-    private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(30, 357, 318, 145);
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(274, 572, 208, 28);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(78, 614, 598, 58);
+    private static final Rectangle BODY_NON_WEAKNESS_DRAW_REGION = new Rectangle(60, 680, 636, 320);
+    private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(60, 714, 636, 290);
 
-    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(156, 243, 66, 41);
-    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(175, 253, 28, 28);
-    private static final Rectangle WEAKNESS_SUBTYPE_DRAW_REGION = new Rectangle(88, 335, 200, 17);
+    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(312, 486, 132, 82);
+    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(350, 506, 56, 56);
+    private static final Rectangle WEAKNESS_SUBTYPE_DRAW_REGION = new Rectangle(176, 674, 400, 34);
 
     @Override
     public void initialiseView() {

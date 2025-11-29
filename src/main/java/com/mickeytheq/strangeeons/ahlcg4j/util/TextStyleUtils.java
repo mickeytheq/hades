@@ -26,7 +26,7 @@ public class TextStyleUtils {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
         LARGE_LABEL_TEXT_STYLE = new TextStyle();
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.SIZE, 5.6);
+        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.SIZE, 11.2);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WIDTH, 1.05);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.TRACKING, 0);
@@ -34,7 +34,7 @@ public class TextStyleUtils {
 
         TITLE_TEXT_STYLE = new TextStyle();
         TITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arkhamic");
-        TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0);
+        TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 22.0);
         TITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         TITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
         TITLE_TEXT_STYLE.add(TextAttribute.TRACKING, 0.015);
@@ -43,14 +43,14 @@ public class TextStyleUtils {
 
         SUB_TYPE_TEXT_STYLE = new TextStyle();
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        SUB_TYPE_TEXT_STYLE.add(TextAttribute.SIZE, 6.0);
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.SIZE, 12.0);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         BODY_TEXT_STYLE = new TextStyle();
         BODY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        BODY_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
+        BODY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
         BODY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         BODY_TEXT_STYLE.add(TextAttribute.WIDTH, 0.98);
         BODY_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
@@ -78,11 +78,11 @@ public class TextStyleUtils {
 
         ARKHAM_HORROR_FONT_TEXT_STYLE = new TextStyle();
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, "AHLCGSymbol");
-        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 6.8);
+        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 13.6);
 
         COLLECTION_NUMBER_TEXT_STYLE = new TextStyle();
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.SIZE, 4.5);
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.SIZE, 9.0);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.TRACKING, 0.01);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.WHITE);

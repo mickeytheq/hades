@@ -3,7 +3,6 @@ package com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.*;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardClass;
-import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardType;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
@@ -14,6 +13,7 @@ import com.mickeytheq.strangeeons.ahlcg4j.util.MigLayoutUtils;
 import com.mickeytheq.strangeeons.ahlcg4j.util.PaintUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
@@ -34,9 +34,9 @@ public class AssetView extends BaseCardFaceView<Asset> {
     private NumberingView numberingView;
     private PlayerCardFieldsView playerCardFieldsView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(10, 40, 358, 258);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(329, 10, 30, 30);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(320, 508, 13, 13);
+    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
+    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
+    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1016, 26, 26);
 
     @Override
     public void initialiseView() {
@@ -53,6 +53,17 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     private String getTemplateResource() {
+        String templateResource = "/templates/asset/asset_" + getTemplateName();
+
+        if (canHaveSubtitleTemplate() && StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
+            templateResource = templateResource + "_subtitle";
+
+        templateResource = templateResource + ".png";
+
+        return templateResource;
+    }
+
+    private String getTemplateName() {
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType() == PlayerCardType.Standard) {
             List<PlayerCardClass> cardClasses = Stream.of(
                             getModel().getPlayerCardFieldsModel().getPlayerCardClass1(),
@@ -63,32 +74,40 @@ public class AssetView extends BaseCardFaceView<Asset> {
                     .collect(Collectors.toList());
 
             if (cardClasses.size() > 1)
-                return "/templates/asset/AHLCG-Asset-MultiClass.jp2";
+                return "multi";
             else
-                return "/templates/asset/AHLCG-Asset-" + cardClasses.get(0) + ".jp2";
+                return cardClasses.get(0).name().toLowerCase();
         }
 
         switch (getModel().getPlayerCardFieldsModel().getPlayerCardType()) {
             case Neutral:
-                return "/templates/asset/AHLCG-Asset-Neutral.jp2";
+                return "neutral";
 
             case Specialist:
-                return "/templates/asset/AHLCG-Asset-Specialist.jp2";
+                return "specialist";
 
             case Story:
-                return "/templates/asset/AHLCG-Asset-Story.jp2";
+                return "story";
 
             case StoryWeakness:
-                return "/templates/asset/AHLCG-Asset-StoryWeakness.jp2";
+                return "story_weakness";
 
             case Weakness:
             case BasicWeakness:
-                return "/templates/asset/AHLCG-Asset-Weakness.jp2";
+                return "weakness";
 
             default:
                 throw new RuntimeException("Unsupported player card type " + getModel().getPlayerCardFieldsModel().getPlayerCardType().name());
         }
+    }
 
+    private boolean canHaveSubtitleTemplate() {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+
+        if (playerCardType == PlayerCardType.StoryWeakness || playerCardType == PlayerCardType.Specialist)
+            return false;
+
+        return true;
     }
 
     @Override
@@ -188,9 +207,9 @@ public class AssetView extends BaseCardFaceView<Asset> {
         editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(20, 62, 38, 14);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(68, 14, 238, 29);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(20, 320, 336, 140);
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(136, 28, 476, 58);
+    private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 640, 672, 280);
 
 
     @Override

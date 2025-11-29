@@ -4,6 +4,7 @@ import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
 
 public class CommonCardFieldsModel {
     private String title;
+    private String subtitle;
     private String traits;
     private String keywords;
     private String rules;
@@ -23,6 +24,15 @@ public class CommonCardFieldsModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Property("Subtitle")
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     @Property("Traits")

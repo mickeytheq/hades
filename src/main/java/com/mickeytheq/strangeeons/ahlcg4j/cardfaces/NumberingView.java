@@ -11,8 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NumberingView {
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION = new Rectangle(318, 512, 37, 10);
-    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION = new Rectangle(247, 512, 55, 10);
+    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION = new Rectangle(636, 1024, 74, 20);
+    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION = new Rectangle(494, 1024, 110, 20);
 
     private final NumberingModel model;
 
