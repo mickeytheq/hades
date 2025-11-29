@@ -1,18 +1,18 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces;
 
 import ca.cgjennings.apps.arkham.sheet.Sheet;
-import com.mickeytheq.strangeeons.ahlcg4j.Card;
 import com.mickeytheq.strangeeons.ahlcg4j.CardFaceSide;
-import resources.Settings;
+import com.mickeytheq.strangeeons.ahlcg4j.CardGameComponent;
 
 import javax.swing.*;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.awt.*;
 
 public interface CardFaceView<M extends CardFaceModel> {
-    void initialiseView(M cardFaceModel);
+    void initialiseView(Card card, CardFaceSide cardFaceSide, M cardFaceModel);
 
-    void createEditors(JTabbedPane tabbedPane);
+    Dimension getDimension();
 
-    Sheet<Card> createSheet();
+    void createEditors(EditorContext editorContext);
+
+    void paint(PaintContext paintContext);
 }

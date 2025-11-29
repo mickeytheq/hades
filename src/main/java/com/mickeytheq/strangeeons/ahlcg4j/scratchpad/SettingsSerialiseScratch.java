@@ -1,6 +1,5 @@
 package com.mickeytheq.strangeeons.ahlcg4j.scratchpad;
 
-import com.mickeytheq.strangeeons.ahlcg4j.Card;
 import com.mickeytheq.strangeeons.ahlcg4j.WeaknessType;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBack;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;

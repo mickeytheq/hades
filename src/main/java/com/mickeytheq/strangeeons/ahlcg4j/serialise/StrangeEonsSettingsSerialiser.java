@@ -1,6 +1,6 @@
 package com.mickeytheq.strangeeons.ahlcg4j.serialise;
 
-import com.mickeytheq.strangeeons.ahlcg4j.Card;
+import com.mickeytheq.strangeeons.ahlcg4j.CardGameComponent;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.CardFaceModel;
 import com.mickeytheq.strangeeons.ahlcg4j.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.strangeeons.ahlcg4j.entity.EntityMetadata;
@@ -15,9 +15,9 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class StrangeEonsSettingsSerialiser {
-    public void serialiseCard(Settings settings, Card card) {
-        serialiseCardFace(settings, card.getFrontFaceModel(), "Front");
-        serialiseCardFace(settings, card.getBackFaceModel(), "Back");
+    public void serialiseCard(Settings settings, CardGameComponent cardGameComponent) {
+        serialiseCardFace(settings, cardGameComponent.getCard().getFrontFaceModel(), "Front");
+        serialiseCardFace(settings, cardGameComponent.getCard().getBackFaceModel(), "Back");
     }
 
     public void serialiseCardFace(Settings settings, CardFaceModel model, String settingsPrefix) {

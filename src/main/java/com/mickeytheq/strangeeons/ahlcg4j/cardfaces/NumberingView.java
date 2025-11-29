@@ -16,19 +16,21 @@ public class NumberingView {
 
     private final NumberingModel model;
 
-    private final JTextField collectionNumberEditor;
-    private final JTextField encounterNumberEditor;
-    private final JTextField encounterTotalEditor;
+    private JTextField collectionNumberEditor;
+    private JTextField encounterNumberEditor;
+    private JTextField encounterTotalEditor;
 
-    private final PortraitView encounterPortraitView;
-    private final PortraitView collectionPortraitView;
+    private PortraitView encounterPortraitView;
+    private PortraitView collectionPortraitView;
 
-    public NumberingView(NumberingModel model, ViewContext viewContext, Rectangle collectionPortraitDrawRegion, Rectangle encounterPortraitDrawRegion) {
+    public NumberingView(NumberingModel model) {
         this.model = model;
+    }
 
-        collectionPortraitView = PortraitView.createWithBlankImage(model.getCollectionPortraitModel(), collectionPortraitDrawRegion, viewContext::markChanged);
+    public void createEditors(EditorContext editorContext, Rectangle collectionPortraitDrawRegion, Rectangle encounterPortraitDrawRegion) {
+        collectionPortraitView = PortraitView.createWithBlankImage(model.getCollectionPortraitModel(), collectionPortraitDrawRegion, editorContext::markChanged);
         collectionPortraitView.setBackgroundFilled(false);
-        encounterPortraitView = PortraitView.createWithBlankImage(model.getEncounterPortraitModel(), encounterPortraitDrawRegion, viewContext::markChanged);
+        encounterPortraitView = PortraitView.createWithBlankImage(model.getEncounterPortraitModel(), encounterPortraitDrawRegion, editorContext::markChanged);
         encounterPortraitView.setBackgroundFilled(false);
 
         // collection
@@ -40,9 +42,9 @@ public class NumberingView {
         encounterNumberEditor.setHorizontalAlignment(JTextField.RIGHT);
         encounterTotalEditor = EditorUtils.createTextField(4);
 
-        EditorUtils.bindTextComponent(collectionNumberEditor, viewContext.wrapConsumerWithMarkedChanged(model::setCollectionNumber));
-        EditorUtils.bindTextComponent(encounterNumberEditor, viewContext.wrapConsumerWithMarkedChanged(model::setEncounterNumber));
-        EditorUtils.bindTextComponent(encounterTotalEditor, viewContext.wrapConsumerWithMarkedChanged(model::setEncounterTotal));
+        EditorUtils.bindTextComponent(collectionNumberEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCollectionNumber));
+        EditorUtils.bindTextComponent(encounterNumberEditor, editorContext.wrapConsumerWithMarkedChanged(model::setEncounterNumber));
+        EditorUtils.bindTextComponent(encounterTotalEditor, editorContext.wrapConsumerWithMarkedChanged(model::setEncounterTotal));
 
         collectionNumberEditor.setText(model.getCollectionNumber());
         encounterNumberEditor.setText(model.getEncounterNumber());

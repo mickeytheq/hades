@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class TreacheryView extends BaseCardFaceView<Treachery> {
-    private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/AHLCG-Treachery.jp2");
+    private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
     private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/AHLCG-WeaknessTreachery.jp2");
 
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/AHLCG-BasicWeakness.png");
@@ -42,13 +42,14 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), getViewContext(), ART_PORTRAIT_DRAW_REGION);
-        numberingView = new NumberingView(getModel().getNumberingModel(), getViewContext(), COLLECTION_PORTRAIT_DRAW_REGION, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        numberingView = new NumberingView(getModel().getNumberingModel());
     }
 
     @Override
-    public void createEditors(JTabbedPane tabbedPane) {
-        ViewContext viewContext = getViewContext();
+    public void createEditors(EditorContext editorContext) {
+        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
+        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
         weaknessTypeEditor = new JComboBox<>();
         weaknessTypeEditor.addItem(WeaknessType.None);
@@ -56,7 +57,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         weaknessTypeEditor.addItem(WeaknessType.Investigator);
         weaknessTypeEditor.addItem(WeaknessType.Story);
 
-        EditorUtils.bindComboBox(weaknessTypeEditor, viewContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
+        EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
 
         JPanel generalPanel = MigLayoutUtils.createPanel("General");
 
@@ -74,12 +75,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         mainPanel.add(commonCardFieldsView.createStandardArtPanel(), "wrap, pushx, growx");
 
         // add the panel to the main tab control
-        tabbedPane.addTab(getModel().getCardFaceSide().name(), mainPanel);
-        tabbedPane.addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
+        editorContext.getTabbedPane().addTab(getCardFaceSide().name(), mainPanel);
+        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
     }
 
-    @Override
-    public BufferedImage loadTemplateImage() {
+    public BufferedImage getTemplateImage() {
         URL templateUrl;
         if (getModel().getWeaknessType() != WeaknessType.None)
             templateUrl = WEAKNESS_TEMPLATE_RESOURCE;
@@ -90,12 +90,12 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     }
 
     @Override
-    protected void paint(PaintContext paintContext) {
+    public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
         commonCardFieldsView.paintArtPortrait(paintContext);
 
         // draw the template
-        paintContext.getGraphics().drawImage(loadTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // label
         PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
@@ -142,7 +142,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         if (weaknessType == WeaknessType.Basic)
             subTypeText = Language.gstring(GameConstants.LABEL_BASICWEAKNESS);
 
-        MarkupRenderer markupRenderer = new MarkupRenderer(getSheet().getTemplateResolution());
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(subTypeText.toUpperCase());

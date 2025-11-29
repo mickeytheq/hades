@@ -20,8 +20,6 @@ public class CommonCardFieldsView {
 
 
     private final CommonCardFieldsModel model;
-    private final ViewContext viewContext;
-
     private JTextField titleEditor;
     private JTextField copyrightEditor;
     private JTextField traitsEditor;
@@ -33,10 +31,11 @@ public class CommonCardFieldsView {
 
     private PortraitView artPortraitView;
 
-    public CommonCardFieldsView(CommonCardFieldsModel model, ViewContext viewContext, Rectangle artPortraitDrawRegion) {
+    public CommonCardFieldsView(CommonCardFieldsModel model) {
         this.model = model;
-        this.viewContext = viewContext;
+    }
 
+    public void createEditors(EditorContext editorContext, Rectangle artPortraitDrawRegion) {
         // TODO: what about the helper tooltips for the legal traits etc
         titleEditor = EditorUtils.createTextField(30);
         traitsEditor = EditorUtils.createTextField(30);
@@ -47,14 +46,14 @@ public class CommonCardFieldsView {
         copyrightEditor = EditorUtils.createTextField(30);
         artistEditor = EditorUtils.createTextField(30);
 
-        EditorUtils.bindTextComponent(titleEditor, viewContext.wrapConsumerWithMarkedChanged(model::setTitle));
-        EditorUtils.bindTextComponent(traitsEditor, viewContext.wrapConsumerWithMarkedChanged(model::setTraits));
-        EditorUtils.bindTextComponent(keywordsEditor, viewContext.wrapConsumerWithMarkedChanged(model::setKeywords));
-        EditorUtils.bindTextComponent(rulesEditor, viewContext.wrapConsumerWithMarkedChanged(model::setRules));
-        EditorUtils.bindTextComponent(flavorTextEditor, viewContext.wrapConsumerWithMarkedChanged(model::setFlavourText));
-        EditorUtils.bindTextComponent(victoryEditor, viewContext.wrapConsumerWithMarkedChanged(model::setVictory));
-        EditorUtils.bindTextComponent(copyrightEditor, viewContext.wrapConsumerWithMarkedChanged(model::setCopyright));
-        EditorUtils.bindTextComponent(artistEditor, viewContext.wrapConsumerWithMarkedChanged(model::setArtist));
+        EditorUtils.bindTextComponent(titleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTitle));
+        EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
+        EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
+        EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
+        EditorUtils.bindTextComponent(flavorTextEditor, editorContext.wrapConsumerWithMarkedChanged(model::setFlavourText));
+        EditorUtils.bindTextComponent(victoryEditor, editorContext.wrapConsumerWithMarkedChanged(model::setVictory));
+        EditorUtils.bindTextComponent(copyrightEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyright));
+        EditorUtils.bindTextComponent(artistEditor, editorContext.wrapConsumerWithMarkedChanged(model::setArtist));
 
         titleEditor.setText(model.getTitle());
         traitsEditor.setText(model.getTraits());
@@ -65,7 +64,7 @@ public class CommonCardFieldsView {
         copyrightEditor.setText(model.getCopyright());
         artistEditor.setText(model.getArtist());
 
-        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDrawRegion, viewContext::markChanged);
+        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDrawRegion, editorContext::markChanged);
     }
 
     public void addTitleEditorToPanel(JPanel panel) {

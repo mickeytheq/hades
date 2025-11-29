@@ -1,15 +1,17 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces;
 
-import ca.cgjennings.layout.MarkupRenderer;
-
+import javax.swing.*;
 import java.util.function.Consumer;
 
-public interface ViewContext {
+public interface EditorContext {
+    JTabbedPane getTabbedPane();
+
     //
     // mark changed methods
     //
 
-    // mark the relevant Strange Eons sheet/game component as changed
+    // call to signal a control has changed value so that any associated preview/displays
+    // can be repainted
     void markChanged();
 
     // convenience method that wraps a Consumer (for example when binding an editor component to a member variable) with another

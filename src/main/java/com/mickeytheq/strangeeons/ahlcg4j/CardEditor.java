@@ -1,27 +1,34 @@
 package com.mickeytheq.strangeeons.ahlcg4j;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.EditorContext;
 
 import javax.swing.*;
 
-public class CardEditor extends AbstractGameComponentEditor<Card> {
-    public CardEditor(Card card) {
-        setGameComponent(card);
+public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
+    private final CardGameComponent cardGameComponent;
+
+    public CardEditor(CardGameComponent cardGameComponent) {
+        this.cardGameComponent = cardGameComponent;
+
+        setGameComponent(cardGameComponent);
 
         // delegate to the individual card faces to create editor controls to go in the editor
         JTabbedPane editorTabbedPane = new JTabbedPane();
-        card.getFrontFaceView().createEditors(editorTabbedPane);
-        card.getBackFaceView().createEditors(editorTabbedPane);
+
+        EditorContext editorContext = new EditorContextImpl(editorTabbedPane, 0);
+        cardGameComponent.getCard().getFrontFaceView().createEditors(editorContext);
+
+        if (cardGameComponent.getCard().getBackFaceView() != null) {
+            editorContext = new EditorContextImpl(editorTabbedPane, 1);
+            cardGameComponent.getCard().getBackFaceView().createEditors(editorContext);
+        }
 
         // TODO: add a comment tab
 
         // TODO: decide whether to have encounter set info created by the 'card' rather than the face
         // TODO: or delegate to the face. however having different encounter set info on the front and back would be quite whacky although perhaps we should make this possible but not the default
         // TODO: same goes for collection although I think this is more certain to be 'card' level
-
-        // TODO: split pane with control pane and a preview pane
-        // TODO: preview pane should be pretty much the same as the existing plugin
-        // TODO: control pane should have some standard stuff but delegate to the individual faces for their control desire
 
         JTabbedPane previewPane = new JTabbedPane();
         initializeSheetViewers(previewPane);
@@ -36,5 +43,25 @@ public class CardEditor extends AbstractGameComponentEditor<Card> {
     @Override
     protected void populateComponentFromDelayedFields() {
 
+    }
+
+    private class EditorContextImpl implements EditorContext {
+        private final JTabbedPane tabbedPane;
+        private final int sheetIndex;
+
+        public EditorContextImpl(JTabbedPane tabbedPane, int sheetIndex) {
+            this.tabbedPane = tabbedPane;
+            this.sheetIndex = sheetIndex;
+        }
+
+        @Override
+        public JTabbedPane getTabbedPane() {
+            return tabbedPane;
+        }
+
+        @Override
+        public void markChanged() {
+            cardGameComponent.markChanged(sheetIndex);
+        }
     }
 }
