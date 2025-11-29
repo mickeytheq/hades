@@ -11,6 +11,7 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.EditorContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.Asset;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.AssetView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.TreacheryView;
 import com.mickeytheq.strangeeons.ahlcg4j.plugin.Bootstrapper;
@@ -36,6 +37,15 @@ public class EditCardScratch {
         Asset model = new Asset();
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
+        model.getPlayerCardFieldsModel().setSkillIcon1(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon2(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon3(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
+        model.setAssetSlot1(Asset.AssetSlot.Hand);
+        model.setAssetSlot2(Asset.AssetSlot.Arcane);
+        model.getPlayerCardFieldsModel().setCost("3");
+        model.getPlayerCardFieldsModel().setLevel(5);
 
         Card card = CardFaces.createCard(model, null);
 
@@ -129,6 +139,7 @@ public class EditCardScratch {
 
     private static class PaintContextImpl implements PaintContext {
         private final BufferedImage bufferedImage;
+        private final double dpi = 150;
 
         public PaintContextImpl(BufferedImage bufferedImage) {
             this.bufferedImage = bufferedImage;
@@ -151,13 +162,18 @@ public class EditCardScratch {
         }
 
         @Override
+        public double getRenderingDpi() {
+            return dpi;
+        }
+
+        @Override
         public void addTagReplacement(String tag, String replacement) {
 
         }
 
         @Override
         public MarkupRenderer createMarkupRenderer() {
-            return new MarkupRenderer(150);
+            return new MarkupRenderer(dpi);
         }
     }
 

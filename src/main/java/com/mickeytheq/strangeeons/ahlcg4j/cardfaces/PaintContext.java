@@ -10,6 +10,8 @@ public interface PaintContext {
 
     RenderTarget getRenderTarget();
 
+    double getRenderingDpi();
+
     //
     // markup methods
     //

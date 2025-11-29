@@ -1,8 +1,10 @@
 package com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset;
 
+import com.google.common.collect.Lists;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.*;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardClass;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardType;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
@@ -65,13 +67,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     private String getTemplateName() {
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType() == PlayerCardType.Standard) {
-            List<PlayerCardClass> cardClasses = Stream.of(
-                            getModel().getPlayerCardFieldsModel().getPlayerCardClass1(),
-                            getModel().getPlayerCardFieldsModel().getPlayerCardClass2(),
-                            getModel().getPlayerCardFieldsModel().getPlayerCardClass3())
-                    .filter(Objects::nonNull)
-                    .distinct()
-                    .collect(Collectors.toList());
+            List<PlayerCardClass> cardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
 
             if (cardClasses.size() > 1)
                 return "multi";
@@ -210,6 +206,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
     private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(136, 28, 476, 58);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 640, 672, 280);
+    private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 602, 406, 30);
+    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(658, 602, 406, 30);
 
 
     @Override
@@ -224,12 +222,196 @@ public class AssetView extends BaseCardFaceView<Asset> {
         PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
 
         // title
+        // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
         commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
 
         commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_DRAW_REGION);
 
         numberingView.paintCollectionPortrait(paintContext, true);
         numberingView.paintCollectionNumber(paintContext);
+
+        // player card icons
+        paintClassSymbols(paintContext);
+
+        // weakness labels
+        paintWeaknessContent(paintContext);
+
+        paintLevel(paintContext);
+
+        paintCost(paintContext);
+
+        paintSkillIcons(paintContext);
+
+        paintSlots(paintContext);
+//
+//        paintStats(paintContext);
     }
 
+    // regions are from right to left
+    private static final List<Rectangle> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
+            new Rectangle(458, 4, 104, 104),
+            new Rectangle(548, 4, 104, 104),
+            new Rectangle(638, 4, 104, 104)
+    );
+
+    private void paintClassSymbols(PaintContext paintContext) {
+        List<PlayerCardClass> playerCardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
+
+        // no class symbols if no classes
+        if (playerCardClasses.isEmpty())
+            return;
+
+        // for a single class the symbol is integrated into the template
+        if (playerCardClasses.size() == 1)
+            return;
+
+        // we want the symbols right justified on the card but in the correct order as specified by the individual fields
+        // so we calculate a number of symbols to skip which should be 0 or 1
+        int skipSymbolRegionsCount = 3 - playerCardClasses.size();
+
+        for (int i = 0; i < playerCardClasses.size(); i++) {
+            PlayerCardClass playerCardClass = playerCardClasses.get(i);
+
+            BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
+
+            Rectangle rectangle = CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount);
+
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), classSymbol, rectangle);
+        }
+    }
+
+    private void paintWeaknessContent(PaintContext paintContext) {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+
+        if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
+            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
+        } else if (playerCardType == PlayerCardType.BasicWeakness) {
+            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
+        }
+    }
+
+    private static final Rectangle LEVEL_DRAW_REGION = new Rectangle(30, 76, 92, 44);
+    private static final Rectangle NO_LEVEL_DRAW_REGION = new Rectangle(16, 10, 120, 116);
+
+    private void paintLevel(PaintContext paintContext) {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+
+        if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
+            Integer level = getModel().getPlayerCardFieldsModel().getLevel();
+            if (level == null) {
+                ImageUtils.drawImage(paintContext.getGraphics(),
+                        ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
+                        NO_LEVEL_DRAW_REGION);
+            } else if (level == 0) {
+                // do nothing for level 0
+            } else {
+                ImageUtils.drawImage(paintContext.getGraphics(),
+                        ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getPlayerCardFieldsModel().getLevel() + ".png")),
+                        LEVEL_DRAW_REGION);
+            }
+        }
+    }
+
+    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 30);
+    private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
+
+    private void paintCost(PaintContext paintContext) {
+        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                getModel().getPlayerCardFieldsModel().getCost(),
+                COST_DRAW_REGION,
+                COST_FONT,
+                30.0f, 1.6f,
+                Color.WHITE,
+                Color.BLACK,
+                0,
+                true);
+    }
+
+
+    private static final List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
+            new Rectangle(0, 168, 100, 76),
+            new Rectangle(0, 252, 100, 76),
+            new Rectangle(0, 336, 100, 76),
+            new Rectangle(0, 420, 100, 76),
+            new Rectangle(0, 504, 100, 76),
+            new Rectangle(0, 588, 100, 76)
+    );
+
+    private static final List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
+            new Rectangle(21, 178, 50, 52),
+            new Rectangle(21, 262, 50, 52),
+            new Rectangle(21, 346, 50, 52),
+            new Rectangle(21, 430, 50, 52),
+            new Rectangle(21, 514, 50, 52),
+            new Rectangle(21, 598, 50, 52)
+    );
+
+    private void paintSkillIcons(PaintContext paintContext) {
+        for (int i = 0; i < getModel().getPlayerCardFieldsModel().getSkillIcons().size(); i++) {
+            PlayerCardSkillIcon skillIcon = getModel().getPlayerCardFieldsModel().getSkillIcons().get(i);
+
+            // paint the skill box
+            PaintUtils.paintBufferedImage(
+                    paintContext.getGraphics(),
+                    ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
+                    SKILL_BOX_DRAW_REGIONS.get(i)
+            );
+
+            // paint the skill icon
+            PaintUtils.paintBufferedImage(
+                    paintContext.getGraphics(),
+                    ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
+                    SKILL_ICON_DRAW_REGIONS.get(i)
+            );
+        }
+    }
+
+    private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
+
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
+            resource = resource + "_weakness";
+
+        resource = resource + ".png";
+
+        return resource;
+    }
+
+    private String getSkillBoxName() {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+
+        if (getModel().getPlayerCardFieldsModel().getPlayerCardClasses().size() > 2)
+            return "multi";
+
+        if (playerCardType == PlayerCardType.Standard)
+            return getModel().getPlayerCardFieldsModel().getPlayerCardClasses().get(0).name().toLowerCase();
+
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
+            return "weakness";
+
+        return playerCardType.name().toLowerCase();
+    }
+
+    private static final List<Rectangle> SLOT_DRAW_REGIONS = Lists.newArrayList(
+            new Rectangle(618, 908, 102, 104),
+            new Rectangle(510, 908, 102, 104)
+    );
+
+    private void paintSlots(PaintContext paintContext) {
+        for (int i = 0; i < getModel().getAssetSlots().size(); i++) {
+            Asset.AssetSlot assetSlot = getModel().getAssetSlots().get(i);
+
+            PaintUtils.paintBufferedImage(
+                    paintContext.getGraphics(),
+                    ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
+                    SLOT_DRAW_REGIONS.get(i)
+            );
+        }
+    }
+
+    private String getSlotName(Asset.AssetSlot assetSlot) {
+        return assetSlot.name().toLowerCase();
+    }
 }

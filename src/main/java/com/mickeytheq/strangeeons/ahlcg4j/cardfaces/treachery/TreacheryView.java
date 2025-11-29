@@ -19,8 +19,6 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
 
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/basic_weakness.png");
-    private static final URL BASIC_WEAKNESS_ICON_RESOURCE = Treachery.class.getResource("/icons/AHLCG-BasicWeakness.png");
-
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
@@ -128,7 +126,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), BASIC_WEAKNESS_OVERLAY_DRAW_REGION);
 
             if (weaknessType == WeaknessType.Basic) {
-                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
+                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
             }
             else {
                 numberingView.paintEncounterPortrait(paintContext);

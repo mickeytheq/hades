@@ -12,6 +12,11 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.Statistic;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @CardFaceType(typeCode = "Asset", interfaceLanguageKey = InterfaceConstants.ASSET)
 public class Asset extends BaseCardFaceModel {
     public enum AssetSlot {
@@ -92,5 +97,12 @@ public class Asset extends BaseCardFaceModel {
     @Property(flatten = true)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
+    }
+
+    public List<AssetSlot> getAssetSlots() {
+        return Stream.of(getAssetSlot1(), getAssetSlot2())
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

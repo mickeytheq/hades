@@ -5,6 +5,11 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardType;
 import com.mickeytheq.strangeeons.ahlcg4j.entity.Property;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class PlayerCardFieldsModel {
     private PlayerCardType playerCardType;
     private PlayerCardClass playerCardClass1;
@@ -122,5 +127,31 @@ public class PlayerCardFieldsModel {
 
     public void setSkillIcon5(PlayerCardSkillIcon skillIcon5) {
         this.skillIcon5 = skillIcon5;
+    }
+
+    public List<PlayerCardClass> getPlayerCardClasses() {
+        List<PlayerCardClass> cardClasses = Stream.of(
+                        getPlayerCardClass1(),
+                        getPlayerCardClass2(),
+                        getPlayerCardClass3())
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return cardClasses;
+    }
+
+    public List<PlayerCardSkillIcon> getSkillIcons() {
+        List<PlayerCardSkillIcon> skillIcons = Stream.of(
+                        getSkillIcon1(),
+                        getSkillIcon2(),
+                        getSkillIcon3(),
+                        getSkillIcon4(),
+                        getSkillIcon5()
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return skillIcons;
     }
 }

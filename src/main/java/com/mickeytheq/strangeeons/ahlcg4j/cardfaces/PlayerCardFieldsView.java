@@ -58,6 +58,7 @@ public class PlayerCardFieldsView {
         playerCardLevelEditor = EditorUtils.createNullableComboBox();
         IntStream.rangeClosed(0, 5).forEach(value -> playerCardLevelEditor.addItem(value));
 
+        // TODO: there are max 6 skill icons for skills
         skillIcon1Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardSkillIcon.class);
         skillIcon2Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardSkillIcon.class);
         skillIcon3Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardSkillIcon.class);
@@ -69,6 +70,7 @@ public class PlayerCardFieldsView {
         EditorUtils.bindComboBox(playerCardClass1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass1(value)));
         EditorUtils.bindComboBox(playerCardClass2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass2(value)));
         EditorUtils.bindComboBox(playerCardClass3Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass3(value)));
+        EditorUtils.bindComboBox(playerCardLevelEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setLevel(value)));
         EditorUtils.bindTextComponent(costEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCost(value)));
 
         EditorUtils.bindComboBox(skillIcon1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSkillIcon1(value)));

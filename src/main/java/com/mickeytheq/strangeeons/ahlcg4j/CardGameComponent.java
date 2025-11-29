@@ -134,6 +134,11 @@ public class CardGameComponent extends AbstractGameComponent {
         }
 
         @Override
+        public double getRenderingDpi() {
+            return sheet.getTemplateResolution();
+        }
+
+        @Override
         public void addTagReplacement(String tag, String replacement) {
             tagReplacements.put(tag, replacement);
         }
