@@ -5,6 +5,7 @@ import com.mickeytheq.ahlcg4j.core.model.entity.Property;
 public class CommonCardFieldsModel {
     private String title;
     private String subtitle;
+    private Boolean unique;
     private String traits;
     private String keywords;
     private String rules;
@@ -24,6 +25,15 @@ public class CommonCardFieldsModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Property("Unique")
+    public Boolean getUnique() {
+        return unique;
+    }
+
+    public void setUnique(Boolean unique) {
+        this.unique = unique;
     }
 
     @Property("Subtitle")

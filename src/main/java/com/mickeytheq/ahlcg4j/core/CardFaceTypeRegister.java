@@ -1,8 +1,9 @@
 package com.mickeytheq.ahlcg4j.core;
 
 import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
-import com.mickeytheq.ahlcg4j.core.model.CardFaceType;
+import com.mickeytheq.ahlcg4j.core.model.Model;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
+import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.cardfaces.EncounterCardBackView;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.PlayerCardBack;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
@@ -17,6 +18,7 @@ import resources.Language;
 
 import java.util.*;
 
+// register of all model and view types with look-ups on key fields
 public class CardFaceTypeRegister {
     private final Map<String, CardFaceInfo> typeCodeLookup = new HashMap<>();
     private final Map<Class<? extends CardFaceModel>, CardFaceInfo> modelClassLookup = new HashMap<>();
@@ -58,12 +60,17 @@ public class CardFaceTypeRegister {
     }
 
     private CardFaceInfo buildInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {
-        CardFaceType cardFaceType = cardFaceModelClass.getAnnotation(CardFaceType.class);
+        Model model = cardFaceModelClass.getAnnotation(Model.class);
 
-        if (cardFaceType == null)
-            throw new RuntimeException("CardFaceModel implementation '" + cardFaceModelClass.getName() + "' does not have the CardFaceType annotation");
+        if (model == null)
+            throw new RuntimeException("Model class '" + cardFaceModelClass.getName() + "' does not have the @Model annotation");
 
-        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, cardFaceType.typeCode(), cardFaceType.interfaceLanguageKey());
+        View view = cardFaceViewClass.getAnnotation(View.class);
+
+        if (view == null)
+            throw new RuntimeException("View class '" + cardFaceModelClass.getName() + "' does not have the @View annotation");
+
+        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, model.typeCode(), view.interfaceLanguageKey());
 
         return cardFaceInfo;
     }

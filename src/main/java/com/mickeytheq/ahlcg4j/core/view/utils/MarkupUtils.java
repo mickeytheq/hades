@@ -81,11 +81,7 @@ public class MarkupUtils {
 //        BODY_TAG_REPLACEMENT.put("CheckBoxA", "\u2610");
     }
 
-    public static void applyBodyMarkupConfiguration(MarkupRenderer markupRenderer) {
-        markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
-        markupRenderer.setLineTightness(0.6f * 0.9f);
-        markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
+    public static void applyTagMarkupConfiguration(MarkupRenderer markupRenderer) {
 
         BODY_TAG_REPLACEMENT.forEach(markupRenderer::setReplacementForTag);
 

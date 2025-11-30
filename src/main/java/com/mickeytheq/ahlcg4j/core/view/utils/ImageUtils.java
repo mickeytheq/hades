@@ -1,9 +1,8 @@
-package com.mickeytheq.ahlcg4j.util;
+package com.mickeytheq.ahlcg4j.core.view.utils;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mickeytheq.ahlcg4j.core.view.component.StatisticComponent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,13 +13,24 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ImageUtils {
+    public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
+    public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");
+
     private static final LoadingCache<URL, BufferedImage> IMAGE_CACHE;
-    public static final URL PER_INVESTIGATOR_ICON_RESOURCE = StatisticComponent.class.getResource("/icons/AHLCG-PerInvestigator.png");
 
     static {
         IMAGE_CACHE = CacheBuilder.newBuilder()
                 .softValues()
                 .build(CacheLoader.from(ImageUtils::loadImageWithNoCaching));
+    }
+
+    public static BufferedImage loadImage(String absoluteResourcePath) {
+        URL resourceUrl = ImageUtils.class.getResource(absoluteResourcePath);
+
+        if (resourceUrl == null)
+            throw new RuntimeException("Image at absolute resource path '" + absoluteResourcePath + "' does not exist");
+
+        return loadImage(resourceUrl);
     }
 
     // loads an image, caching on the URL as a key

@@ -1,16 +1,24 @@
 package com.mickeytheq.ahlcg4j.core.view.common;
 
+import com.google.common.collect.Lists;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardClass;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardType;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
+import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.PaintUtils;
+import net.miginfocom.layout.LC;
+import net.miginfocom.swing.MigLayout;
 import resources.Language;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class PlayerCardFieldsView {
@@ -34,6 +42,23 @@ public class PlayerCardFieldsView {
 
     public PlayerCardFieldsModel getModel() {
         return playerCardFieldsModel;
+    }
+
+    public MigLayout createTwoColumnLayout() {
+        // create a layout that has two vertical sets of editors e.g. label: editor<gap>label: editor
+        //
+        // use vertical flow layout to aid construction readability as controls are loosely grouped by column
+        // each column of controls will be added/built one after another instead of row by row
+        // we'll use 'newline' constraint on the component at the beginning of a new column
+        MigLayout migLayout = new MigLayout(new LC().flowY());
+
+        // this constraint
+        // - makes the 2 control columns grow/fill all available space
+        // - adds a small visual gap between the two sets of vertical labels/controls
+        // - configure the last column to have a reasonable size
+        migLayout.setColumnConstraints("[][grow, fill]10[][grow, fill, :200:]");
+
+        return migLayout;
     }
 
     public void createEditors(EditorContext editorContext) {
@@ -127,5 +152,116 @@ public class PlayerCardFieldsView {
         panel.add(skillIcon3Editor);
         panel.add(skillIcon4Editor);
         panel.add(skillIcon5Editor);
+    }
+
+    private static final Rectangle LEVEL_DRAW_REGION = new Rectangle(30, 76, 92, 44);
+    private static final Rectangle NO_LEVEL_DRAW_REGION = new Rectangle(16, 10, 120, 116);
+
+    public void paintLevel(PaintContext paintContext) {
+        PlayerCardType playerCardType = getModel().getPlayerCardType();
+
+        if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
+            Integer level = getModel().getLevel();
+            if (level == null) {
+                ImageUtils.drawImage(paintContext.getGraphics(),
+                        ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
+                        NO_LEVEL_DRAW_REGION);
+            } else if (level == 0) {
+                // do nothing for level 0
+            } else {
+                ImageUtils.drawImage(paintContext.getGraphics(),
+                        ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getLevel() + ".png")),
+                        LEVEL_DRAW_REGION);
+            }
+        }
+    }
+
+    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 30);
+    private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
+
+    public void paintCost(PaintContext paintContext) {
+        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                getModel().getCost(),
+                COST_DRAW_REGION,
+                COST_FONT,
+                30.0f, 1.6f,
+                Color.WHITE,
+                Color.BLACK,
+                0,
+                true);
+    }
+
+
+    private static final java.util.List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
+            new Rectangle(0, 168, 100, 76),
+            new Rectangle(0, 252, 100, 76),
+            new Rectangle(0, 336, 100, 76),
+            new Rectangle(0, 420, 100, 76),
+            new Rectangle(0, 504, 100, 76),
+            new Rectangle(0, 588, 100, 76)
+    );
+
+    private static final List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
+            new Rectangle(21, 178, 50, 52),
+            new Rectangle(21, 262, 50, 52),
+            new Rectangle(21, 346, 50, 52),
+            new Rectangle(21, 430, 50, 52),
+            new Rectangle(21, 514, 50, 52),
+            new Rectangle(21, 598, 50, 52)
+    );
+
+    // TODO: at the moment there's a list of box regions and icon regions
+    // TODO: which when tweaked is easy to mess up the consistent box spacing and icon positioning within a box
+    // instead could an algorithm that paints based on a smaller number of configs
+    // - specify the position of the first box
+    // - specify a gap between boxes
+    // - specify a size of each box
+    // - specify the relative position of an icon within a box
+    // - specify the size of an icon within a box
+    public void paintSkillIcons(PaintContext paintContext) {
+        for (int i = 0; i < getModel().getSkillIcons().size(); i++) {
+            PlayerCardSkillIcon skillIcon = getModel().getSkillIcons().get(i);
+
+            // paint the skill box
+            PaintUtils.paintBufferedImage(
+                    paintContext.getGraphics(),
+                    ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
+                    SKILL_BOX_DRAW_REGIONS.get(i)
+            );
+
+            // paint the skill icon
+            PaintUtils.paintBufferedImage(
+                    paintContext.getGraphics(),
+                    ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
+                    SKILL_ICON_DRAW_REGIONS.get(i)
+            );
+        }
+    }
+
+    private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
+        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
+
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
+            resource = resource + "_weakness";
+
+        resource = resource + ".png";
+
+        return resource;
+    }
+
+    private String getSkillBoxName() {
+        PlayerCardType playerCardType = getModel().getPlayerCardType();
+
+        if (getModel().getPlayerCardClasses().size() > 2)
+            return "multi";
+
+        if (playerCardType == PlayerCardType.Standard)
+            return getModel().getPlayerCardClasses().get(0).name().toLowerCase();
+
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
+            return "weakness";
+
+        return playerCardType.name().toLowerCase();
     }
 }

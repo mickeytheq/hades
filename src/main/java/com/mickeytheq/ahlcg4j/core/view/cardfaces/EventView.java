@@ -5,10 +5,11 @@ import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
 import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
+import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
 import com.mickeytheq.ahlcg4j.core.view.common.PlayerCardFieldsView;
-import com.mickeytheq.ahlcg4j.util.ImageUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.PaintUtils;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardClass;
@@ -25,6 +26,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+@View(interfaceLanguageKey = InterfaceConstants.EVENT)
 public class EventView extends BaseCardFaceView<Event> {
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
@@ -47,11 +49,7 @@ public class EventView extends BaseCardFaceView<Event> {
     }
 
     private String getTemplateResource() {
-        String templateResource = "/templates/event/event_" + getTemplateName();
-
-        templateResource = templateResource + ".png";
-
-        return templateResource;
+        return "/templates/event/event_" + getTemplateName() + ".png";
     }
 
     private String getTemplateName() {
@@ -98,9 +96,8 @@ public class EventView extends BaseCardFaceView<Event> {
         commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
 
         // title
-        // TODO: sub-title
         JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorToPanel(titlePanel);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
 
         playerCardFieldsView.createEditors(editorContext);
 
@@ -192,11 +189,11 @@ public class EventView extends BaseCardFaceView<Event> {
         // weakness labels
         paintWeaknessContent(paintContext);
 
-        paintLevel(paintContext);
+        playerCardFieldsView.paintLevel(paintContext);
 
-        paintCost(paintContext);
+        playerCardFieldsView.paintCost(paintContext);
 
-        paintSkillIcons(paintContext);
+        playerCardFieldsView.paintSkillIcons(paintContext);
     }
 
     private Rectangle getBodyDrawRegion() {
@@ -274,108 +271,5 @@ public class EventView extends BaseCardFaceView<Event> {
             paintEncounterOrBasicWeaknessOverlay(paintContext);
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
         }
-    }
-
-    private static final Rectangle LEVEL_DRAW_REGION = new Rectangle(30, 76, 92, 44);
-    private static final Rectangle NO_LEVEL_DRAW_REGION = new Rectangle(16, 10, 120, 116);
-
-    private void paintLevel(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-
-        if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
-            Integer level = getModel().getPlayerCardFieldsModel().getLevel();
-            if (level == null) {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
-                        NO_LEVEL_DRAW_REGION);
-            } else if (level == 0) {
-                // do nothing for level 0
-            } else {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getPlayerCardFieldsModel().getLevel() + ".png")),
-                        LEVEL_DRAW_REGION);
-            }
-        }
-    }
-
-    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 30);
-    private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
-
-    private void paintCost(PaintContext paintContext) {
-        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                getModel().getPlayerCardFieldsModel().getCost(),
-                COST_DRAW_REGION,
-                COST_FONT,
-                30.0f, 1.6f,
-                Color.WHITE,
-                Color.BLACK,
-                0,
-                true);
-    }
-
-
-    private static final java.util.List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(0, 168, 100, 76),
-            new Rectangle(0, 252, 100, 76),
-            new Rectangle(0, 336, 100, 76),
-            new Rectangle(0, 420, 100, 76),
-            new Rectangle(0, 504, 100, 76),
-            new Rectangle(0, 588, 100, 76)
-    );
-
-    private static final java.util.List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(21, 178, 50, 52),
-            new Rectangle(21, 262, 50, 52),
-            new Rectangle(21, 346, 50, 52),
-            new Rectangle(21, 430, 50, 52),
-            new Rectangle(21, 514, 50, 52),
-            new Rectangle(21, 598, 50, 52)
-    );
-
-    private void paintSkillIcons(PaintContext paintContext) {
-        for (int i = 0; i < getModel().getPlayerCardFieldsModel().getSkillIcons().size(); i++) {
-            PlayerCardSkillIcon skillIcon = getModel().getPlayerCardFieldsModel().getSkillIcons().get(i);
-
-            // paint the skill box
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
-                    SKILL_BOX_DRAW_REGIONS.get(i)
-            );
-
-            // paint the skill icon
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
-                    SKILL_ICON_DRAW_REGIONS.get(i)
-            );
-        }
-    }
-
-    private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-        String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
-
-        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            resource = resource + "_weakness";
-
-        resource = resource + ".png";
-
-        return resource;
-    }
-
-    private String getSkillBoxName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-
-        if (getModel().getPlayerCardFieldsModel().getPlayerCardClasses().size() > 2)
-            return "multi";
-
-        if (playerCardType == PlayerCardType.Standard)
-            return getModel().getPlayerCardFieldsModel().getPlayerCardClasses().get(0).name().toLowerCase();
-
-        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            return "weakness";
-
-        return playerCardType.name().toLowerCase();
     }
 }

@@ -1,15 +1,13 @@
 package com.mickeytheq.ahlcg4j.core.view.common;
 
 import ca.cgjennings.apps.arkham.PortraitPanel;
+import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.MarkupUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.*;
 import net.miginfocom.layout.LC;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -24,6 +22,8 @@ public class CommonCardFieldsView {
 
     private final CommonCardFieldsModel model;
     private JTextField titleEditor;
+    private JTextField subtitleEditor;
+    private JToggleButton uniqueEditor;
     private JTextField copyrightEditor;
     private JTextField traitsEditor;
     private JTextArea keywordsEditor;
@@ -41,6 +41,8 @@ public class CommonCardFieldsView {
     public void createEditors(EditorContext editorContext, Rectangle artPortraitDrawRegion) {
         // TODO: what about the helper tooltips for the legal traits etc
         titleEditor = EditorUtils.createTextField(30);
+        subtitleEditor = EditorUtils.createTextField(30);
+        uniqueEditor = new JToggleButton(ImageUtilities.createIconForSize(ImageUtils.loadImage(ImageUtils.UNIQUE_STAR_ICON_RESOURCE), 12));
         traitsEditor = EditorUtils.createTextField(30);
         keywordsEditor = EditorUtils.createTextArea(6, 30);
         rulesEditor = EditorUtils.createTextArea(6, 30);
@@ -50,6 +52,8 @@ public class CommonCardFieldsView {
         artistEditor = EditorUtils.createTextField(30);
 
         EditorUtils.bindTextComponent(titleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTitle));
+        EditorUtils.bindTextComponent(subtitleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setSubtitle));
+        EditorUtils.bindToggleButton(uniqueEditor, editorContext.wrapConsumerWithMarkedChanged(model::setUnique));
         EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
         EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
@@ -59,6 +63,8 @@ public class CommonCardFieldsView {
         EditorUtils.bindTextComponent(artistEditor, editorContext.wrapConsumerWithMarkedChanged(model::setArtist));
 
         titleEditor.setText(model.getTitle());
+        subtitleEditor.setText(model.getSubtitle());
+        uniqueEditor.setSelected(model.getUnique() != null && model.getUnique());
         traitsEditor.setText(model.getTraits());
         keywordsEditor.setText(model.getKeywords());
         rulesEditor.setText(model.getRules());
@@ -70,8 +76,18 @@ public class CommonCardFieldsView {
         artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDrawRegion, editorContext::markChanged);
     }
 
-    public void addTitleEditorToPanel(JPanel panel) {
-        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.TITLE), titleEditor);
+    public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption) {
+        MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.TITLE));
+
+        // have the unique button share the same layout cell as the title text editor
+        if (uniqueOption) {
+            panel.add(uniqueEditor, "split, wmax 35, hmin 25, hmax 25");
+        }
+
+        panel.add(titleEditor, "wrap, pushx, growx");
+
+        if (subtitleOption)
+            MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.SUBTITLE), subtitleEditor);
     }
 
     public void addNonTitleEditorsToPanel(JPanel panel) {
@@ -108,17 +124,30 @@ public class CommonCardFieldsView {
         artPortraitView.paint(paintContext);
     }
 
+    public void paintTitles(PaintContext paintContext, Rectangle titleDrawRegion, Rectangle subtitleDrawRegion) {
+        paintTitle(paintContext, titleDrawRegion);
+        paintSubtitle(paintContext, subtitleDrawRegion);
+    }
+
     public void paintTitle(PaintContext paintContext, Rectangle titleDrawRegion) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-        markupRenderer.setMarkupText(getModel().getTitle());
+
+        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
+
+        String titleText = getModel().getTitle();
+
+        if (getModel().getUnique() != null && getModel().getUnique())
+            titleText = "<uni>" + titleText;
+
+        markupRenderer.setMarkupText(titleText);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), titleDrawRegion);
     }
 
     public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
+        markupRenderer.setDefaultStyle(TextStyleUtils.getSubtitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(getModel().getSubtitle());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), subtitleDrawRegion);
@@ -196,8 +225,12 @@ public class CommonCardFieldsView {
 
     private void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
+        markupRenderer.setLineTightness(0.6f * 0.9f);
+        markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
 
-        MarkupUtils.applyBodyMarkupConfiguration(markupRenderer);
+        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
 
         markupRenderer.setMarkupText(bodyText);
         markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);

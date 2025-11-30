@@ -1,13 +1,16 @@
 package com.mickeytheq.ahlcg4j.core.view.cardfaces;
 
+import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.EncounterCardBack;
-import com.mickeytheq.ahlcg4j.util.ImageUtils;
+import com.mickeytheq.ahlcg4j.core.view.View;
+import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 
 import java.awt.image.BufferedImage;
 
+@View(interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
 public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
     @Override
     public BufferedImage getTemplateImage() {

@@ -11,6 +11,7 @@ public class TextStyleUtils {
 
     private static final TextStyle LARGE_LABEL_TEXT_STYLE;
     private static final TextStyle TITLE_TEXT_STYLE;
+    private static final TextStyle SUBTITLE_TEXT_STYLE;
     private static final TextStyle SUB_TYPE_TEXT_STYLE;
     private static final TextStyle BODY_TEXT_STYLE;
     private static final TextStyle TRAIT_TEXT_STYLE;
@@ -42,6 +43,13 @@ public class TextStyleUtils {
         TITLE_TEXT_STYLE.add(TextAttribute.TRACKING, 0.015);
         TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
         TITLE_TEXT_STYLE.add(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+
+        SUBTITLE_TEXT_STYLE = new TextStyle();
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.SIZE, 12.8);
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 0.96);
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         SUB_TYPE_TEXT_STYLE = new TextStyle();
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
@@ -104,6 +112,10 @@ public class TextStyleUtils {
 
     public static TextStyle getTitleTextStyle() {
         return TITLE_TEXT_STYLE;
+    }
+
+    public static TextStyle getSubtitleTextStyle() {
+        return SUBTITLE_TEXT_STYLE;
     }
 
     public static TextStyle getSubTypeTextStyle() {

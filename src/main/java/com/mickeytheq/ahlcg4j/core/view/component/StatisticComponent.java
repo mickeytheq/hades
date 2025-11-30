@@ -3,7 +3,7 @@ package com.mickeytheq.ahlcg4j.core.view.component;
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.ui.DocumentEventAdapter;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
-import com.mickeytheq.ahlcg4j.util.ImageUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;

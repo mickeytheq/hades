@@ -30,7 +30,8 @@ public class EditCardScratch {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        event();
+        asset();
+//        event();
 //        treachery();
     }
 

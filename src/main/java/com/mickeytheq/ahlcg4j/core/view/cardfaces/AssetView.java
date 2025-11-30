@@ -10,15 +10,12 @@ import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
 import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
+import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
 import com.mickeytheq.ahlcg4j.core.view.common.PlayerCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.component.StatisticComponent;
-import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.PaintUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
-import com.mickeytheq.ahlcg4j.util.*;
+import com.mickeytheq.ahlcg4j.core.view.utils.*;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +26,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+@View(interfaceLanguageKey = InterfaceConstants.ASSET)
 public class AssetView extends BaseCardFaceView<Asset> {
     private JComboBox<Asset.AssetSlot> assetSlot1Editor;
     private JComboBox<Asset.AssetSlot> assetSlot2Editor;
@@ -58,7 +56,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
     private String getTemplateResource() {
         String templateResource = "/templates/asset/asset_" + getTemplateName();
 
-        if (canHaveSubtitleTemplate() && StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
+        // assets templates have the subtitle overlay already built in so switch template when a subtitle is present
+        if (canHaveSubtitleTemplate() && !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
             templateResource = templateResource + "_subtitle";
 
         templateResource = templateResource + ".png";
@@ -117,15 +116,12 @@ public class AssetView extends BaseCardFaceView<Asset> {
         editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
     }
 
-    // TODO: look at factoring out some/most of these player card fields into a component that can be shared between Asset/Event/Skill
-    // TODO: only the health, sanity and slots are asset specific
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
 
         // title
-        // TODO: sub-title
         JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorToPanel(titlePanel);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
 
         playerCardFieldsView.createEditors(editorContext);
 
@@ -135,20 +131,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
         healthEditor = new StatisticComponent();
         sanityEditor = new StatisticComponent();
 
-        // layout
-        //
-        // use vertical flow layout to aid readability
-        // each column of controls will be added/built one after another instead of row by row
-        // we'll use 'newline' constraint on the component at the beginning of a new column
-        MigLayout migLayout = new MigLayout(new LC().flowY());
-
-        // this constraint
-        // - makes the 2 control columns grow/fill all available space
-        // - adds a small visual gap between the two sets of vertical labels/controls
-        // - configure the last column to have a reasonable size
-        migLayout.setColumnConstraints("[][grow, fill]10[][grow, fill, :200:]");
-
-        JPanel statsPanel = new JPanel(migLayout);
+        JPanel statsPanel = new JPanel(playerCardFieldsView.createTwoColumnLayout());
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
         JPanel mainPanel = MigLayoutUtils.createPanel();
@@ -206,6 +189,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(136, 28, 476, 58);
+    private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(136, 88, 476, 44);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 640, 672, 280);
     private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 602, 406, 30);
     private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(658, 602, 406, 30);
@@ -224,7 +208,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
         // title
         // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
 
         commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_DRAW_REGION);
 
@@ -242,11 +226,11 @@ public class AssetView extends BaseCardFaceView<Asset> {
         // weakness labels
         paintWeaknessContent(paintContext);
 
-        paintLevel(paintContext);
+        playerCardFieldsView.paintLevel(paintContext);
 
-        paintCost(paintContext);
+        playerCardFieldsView.paintCost(paintContext);
 
-        paintSkillIcons(paintContext);
+        playerCardFieldsView.paintSkillIcons(paintContext);
 
         paintSlots(paintContext);
 
@@ -296,109 +280,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
             PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
         }
-    }
-
-    private static final Rectangle LEVEL_DRAW_REGION = new Rectangle(30, 76, 92, 44);
-    private static final Rectangle NO_LEVEL_DRAW_REGION = new Rectangle(16, 10, 120, 116);
-
-    private void paintLevel(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-
-        if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
-            Integer level = getModel().getPlayerCardFieldsModel().getLevel();
-            if (level == null) {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
-                        NO_LEVEL_DRAW_REGION);
-            } else if (level == 0) {
-                // do nothing for level 0
-            } else {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getPlayerCardFieldsModel().getLevel() + ".png")),
-                        LEVEL_DRAW_REGION);
-            }
-        }
-    }
-
-    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 30);
-    private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
-
-    private void paintCost(PaintContext paintContext) {
-        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                getModel().getPlayerCardFieldsModel().getCost(),
-                COST_DRAW_REGION,
-                COST_FONT,
-                30.0f, 1.6f,
-                Color.WHITE,
-                Color.BLACK,
-                0,
-                true);
-    }
-
-
-    private static final List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(0, 168, 100, 76),
-            new Rectangle(0, 252, 100, 76),
-            new Rectangle(0, 336, 100, 76),
-            new Rectangle(0, 420, 100, 76),
-            new Rectangle(0, 504, 100, 76),
-            new Rectangle(0, 588, 100, 76)
-    );
-
-    private static final List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(21, 178, 50, 52),
-            new Rectangle(21, 262, 50, 52),
-            new Rectangle(21, 346, 50, 52),
-            new Rectangle(21, 430, 50, 52),
-            new Rectangle(21, 514, 50, 52),
-            new Rectangle(21, 598, 50, 52)
-    );
-
-    private void paintSkillIcons(PaintContext paintContext) {
-        for (int i = 0; i < getModel().getPlayerCardFieldsModel().getSkillIcons().size(); i++) {
-            PlayerCardSkillIcon skillIcon = getModel().getPlayerCardFieldsModel().getSkillIcons().get(i);
-
-            // paint the skill box
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
-                    SKILL_BOX_DRAW_REGIONS.get(i)
-            );
-
-            // paint the skill icon
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
-                    SKILL_ICON_DRAW_REGIONS.get(i)
-            );
-        }
-    }
-
-    private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-        String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
-
-        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            resource = resource + "_weakness";
-
-        resource = resource + ".png";
-
-        return resource;
-    }
-
-    private String getSkillBoxName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-
-        if (getModel().getPlayerCardFieldsModel().getPlayerCardClasses().size() > 2)
-            return "multi";
-
-        if (playerCardType == PlayerCardType.Standard)
-            return getModel().getPlayerCardFieldsModel().getPlayerCardClasses().get(0).name().toLowerCase();
-
-        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            return "weakness";
-
-        return playerCardType.name().toLowerCase();
     }
 
     private static final List<Rectangle> SLOT_DRAW_REGIONS = Lists.newArrayList(

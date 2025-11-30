@@ -2,7 +2,7 @@ package com.mickeytheq.ahlcg4j.core.model.cardfaces;
 
 import com.mickeytheq.ahlcg4j.core.model.BaseCardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.entity.Property;
-import com.mickeytheq.ahlcg4j.core.model.CardFaceType;
+import com.mickeytheq.ahlcg4j.core.model.Model;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardFieldsModel;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@CardFaceType(typeCode = "Asset", interfaceLanguageKey = InterfaceConstants.ASSET)
+@Model(typeCode = "Asset")
 public class Asset extends BaseCardFaceModel {
     public enum AssetSlot {
         Ally,

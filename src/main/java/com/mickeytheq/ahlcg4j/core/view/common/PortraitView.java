@@ -7,7 +7,7 @@ import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.graphics.filters.InversionFilter;
 import com.mickeytheq.ahlcg4j.core.model.common.PortraitModel;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
-import com.mickeytheq.ahlcg4j.util.ImageUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

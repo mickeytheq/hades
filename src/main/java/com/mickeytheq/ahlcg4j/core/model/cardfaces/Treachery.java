@@ -4,11 +4,11 @@ import com.mickeytheq.ahlcg4j.core.model.BaseCardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
 import com.mickeytheq.ahlcg4j.core.model.entity.Property;
-import com.mickeytheq.ahlcg4j.core.model.CardFaceType;
+import com.mickeytheq.ahlcg4j.core.model.Model;
 import com.mickeytheq.ahlcg4j.core.model.common.WeaknessType;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 
-@CardFaceType(typeCode = "Treachery", interfaceLanguageKey = InterfaceConstants.TREACHERY)
+@Model(typeCode = "Treachery")
 public class Treachery extends BaseCardFaceModel {
     private WeaknessType weaknessType;
 

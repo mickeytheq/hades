@@ -1,17 +1,15 @@
 package com.mickeytheq.ahlcg4j.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Treachery;
 import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
+import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
-import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.PaintUtils;
-import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
-import com.mickeytheq.ahlcg4j.util.*;
+import com.mickeytheq.ahlcg4j.core.view.utils.*;
 import com.mickeytheq.ahlcg4j.core.model.common.WeaknessType;
 import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
 import net.miginfocom.swing.MigLayout;
@@ -22,11 +20,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+@View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class TreacheryView extends BaseCardFaceView<Treachery> {
     private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
     private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
-
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
+
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
@@ -67,7 +66,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         JPanel generalPanel = MigLayoutUtils.createPanel("General");
 
-        commonCardFieldsView.addTitleEditorToPanel(generalPanel);
+        commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false);
 
         generalPanel.add(new JLabel("Weakness type"));
         generalPanel.add(weaknessTypeEditor, "wrap, pushx, growx");

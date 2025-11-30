@@ -1,6 +1,6 @@
 package com.mickeytheq.ahlcg4j.core.model.cardfaces;
 
-import com.mickeytheq.ahlcg4j.core.model.CardFaceType;
+import com.mickeytheq.ahlcg4j.core.model.Model;
 import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
@@ -8,7 +8,7 @@ import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardFieldsModel;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.entity.Property;
 
-@CardFaceType(typeCode = "Event", interfaceLanguageKey = InterfaceConstants.EVENT)
+@Model(typeCode = "Event")
 public class Event implements CardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final NumberingModel numberingModel;

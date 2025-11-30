@@ -79,6 +79,12 @@ public class EditorUtils {
         });
     }
 
+    public static void bindToggleButton(JToggleButton button, Consumer<Boolean> consumer) {
+        button.addActionListener(e -> {
+            consumer.accept(button.isSelected());
+        });
+    }
+
     public static <E> JComboBox<E> createNullableComboBox() {
         return createNullableComboBox(DEFAULT_NULL_COMBO_BOX_DISPLAY);
     }
