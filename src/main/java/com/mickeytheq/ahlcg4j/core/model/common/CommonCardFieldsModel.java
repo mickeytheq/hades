@@ -1,0 +1,109 @@
+package com.mickeytheq.ahlcg4j.core.model.common;
+
+import com.mickeytheq.ahlcg4j.core.model.entity.Property;
+
+public class CommonCardFieldsModel {
+    private String title;
+    private String subtitle;
+    private String traits;
+    private String keywords;
+    private String rules;
+    private String flavourText;
+    private String victory;
+    private String copyright;
+
+    private PortraitModel artPortraitModel = new PortraitModel();
+    private String artist;
+
+
+
+    @Property("Title")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Property("Subtitle")
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    @Property("Traits")
+    public String getTraits() {
+        return traits;
+    }
+
+    public void setTraits(String traits) {
+        this.traits = traits;
+    }
+
+    @Property("Keywords")
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    @Property("Rules")
+    public String getRules() {
+        return rules;
+    }
+
+    public void setRules(String rules) {
+        this.rules = rules;
+    }
+
+    @Property("Flavor")
+    public String getFlavourText() {
+        return flavourText;
+    }
+
+    public void setFlavourText(String flavourText) {
+        this.flavourText = flavourText;
+    }
+
+    @Property("Victory")
+    public String getVictory() {
+        return victory;
+    }
+
+    public void setVictory(String victory) {
+        this.victory = victory;
+    }
+
+    @Property("Copyright")
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
+    @Property("ArtPortrait")
+    public PortraitModel getArtPortraitModel() {
+        return artPortraitModel;
+    }
+
+    public void setArtPortraitModel(PortraitModel artPortraitModel) {
+        this.artPortraitModel = artPortraitModel;
+    }
+
+    @Property("Artist")
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+}

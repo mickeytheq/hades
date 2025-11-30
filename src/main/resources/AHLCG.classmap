@@ -1,2 +1,2 @@
 AHLCG4J
-   Card = com.mickeytheq.strangeeons.ahlcg4j.CardGameComponent
+   Card = com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardGameComponent
