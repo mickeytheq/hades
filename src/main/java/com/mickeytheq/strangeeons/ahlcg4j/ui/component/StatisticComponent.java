@@ -14,20 +14,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 
 public class StatisticComponent extends JPanel {
-    private Statistic statistic;
+    private final JTextField textField;
+    private final JToggleButton perInvestigatorButton;
 
-    private JTextField textField;
-    private JToggleButton perInvestigatorButton;
-
-    private static final URL PER_INVESTIGATOR_ICON_RESOURCE = StatisticComponent.class.getResource("/icons/AHLCG-PerInvestigator.png");
+    private volatile boolean noEvents = false;
 
     public StatisticComponent() {
         textField = EditorUtils.createTextField(20);
 
-        BufferedImage image = ImageUtils.loadImage(PER_INVESTIGATOR_ICON_RESOURCE);
+        BufferedImage image = ImageUtils.loadImage(ImageUtils.PER_INVESTIGATOR_ICON_RESOURCE);
         Icon icon = ImageUtilities.createIconForSize(image, 12);
         perInvestigatorButton = new JToggleButton(icon, false);
 
@@ -43,12 +40,7 @@ public class StatisticComponent extends JPanel {
             }
         });
 
-        perInvestigatorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fireActionPerformed();
-            }
-        });
+        perInvestigatorButton.addActionListener(e -> fireActionPerformed());
     }
 
     public Statistic getStatistic() {
@@ -56,8 +48,18 @@ public class StatisticComponent extends JPanel {
     }
 
     public void setStatistic(Statistic statistic) {
-        textField.setText(statistic.getValue());
-        perInvestigatorButton.setSelected(statistic.isPerInvestigator());
+        // while updating new values we don't want the action event to fire until all the controls
+        // are updated otherwise we see the state half-updated
+        noEvents = true;
+        try {
+            textField.setText(statistic.getValue());
+            perInvestigatorButton.setSelected(statistic.isPerInvestigator());
+        }
+        finally {
+            noEvents = false;
+        }
+
+        fireActionPerformed();
     }
 
     public void addActionListener(ActionListener l) {
@@ -69,6 +71,9 @@ public class StatisticComponent extends JPanel {
     }
 
     protected void fireActionPerformed() {
+        if (noEvents)
+            return;
+
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         ActionEvent e = null;

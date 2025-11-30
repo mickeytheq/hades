@@ -12,13 +12,19 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.PaintContext;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.Asset;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset.AssetView;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.Statistic;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.event.Event;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.TreacheryView;
 import com.mickeytheq.strangeeons.ahlcg4j.plugin.Bootstrapper;
 import com.mickeytheq.strangeeons.ahlcg4j.util.MarkupUtils;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 public class EditCardScratch {
@@ -29,8 +35,26 @@ public class EditCardScratch {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        asset();
+        event();
 //        treachery();
+    }
+
+    private void event() {
+        Event model = new Event();
+        model.getCommonCardFieldsModel().setTitle("Rat Swarm");
+        model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
+        model.getPlayerCardFieldsModel().setSkillIcon1(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon2(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon3(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setCost("3");
+        model.getPlayerCardFieldsModel().setLevel(5);
+
+
+        Card card = CardFaces.createCard(model, null);
+
+        displayEditor(card);
     }
 
     private void asset() {
@@ -46,6 +70,9 @@ public class EditCardScratch {
         model.setAssetSlot2(Asset.AssetSlot.Arcane);
         model.getPlayerCardFieldsModel().setCost("3");
         model.getPlayerCardFieldsModel().setLevel(5);
+        model.setHealth(new Statistic("1", false));
+        model.setSanity(new Statistic("1", true));
+
 
         Card card = CardFaces.createCard(model, null);
 
@@ -108,7 +135,7 @@ public class EditCardScratch {
             JFrame frame = new JFrame();
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(splitPane);
-            frame.setPreferredSize(new Dimension(1400, 1200));
+            frame.setPreferredSize(new Dimension(1600, 1200));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);

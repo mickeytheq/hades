@@ -1,4 +1,4 @@
-package com.mickeytheq.strangeeons.ahlcg4j.cardfaces.asset;
+package com.mickeytheq.strangeeons.ahlcg4j.cardfaces.event;
 
 import com.google.common.collect.Lists;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.*;
@@ -8,11 +8,9 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardSkillIcon;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.common.PlayerCardType;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.strangeeons.ahlcg4j.codegenerated.InterfaceConstants;
-import com.mickeytheq.strangeeons.ahlcg4j.ui.component.StatisticComponent;
 import com.mickeytheq.strangeeons.ahlcg4j.util.*;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
-import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
@@ -20,18 +18,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class AssetView extends BaseCardFaceView<Asset> {
-    private JComboBox<Asset.AssetSlot> assetSlot1Editor;
-    private JComboBox<Asset.AssetSlot> assetSlot2Editor;
-    private StatisticComponent healthEditor;
-    private StatisticComponent sanityEditor;
-
+public class EventView extends BaseCardFaceView<Event> {
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
     private PlayerCardFieldsView playerCardFieldsView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
+    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 0, 750, 576);
+    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 517, 56, 56);
     private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1016, 26, 26);
 
     @Override
@@ -47,10 +40,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     private String getTemplateResource() {
-        String templateResource = "/templates/asset/asset_" + getTemplateName();
-
-        if (canHaveSubtitleTemplate() && StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
-            templateResource = templateResource + "_subtitle";
+        String templateResource = "/templates/event/event_" + getTemplateName();
 
         templateResource = templateResource + ".png";
 
@@ -59,7 +49,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     private String getTemplateName() {
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType() == PlayerCardType.Standard) {
-            List<PlayerCardClass> cardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
+            java.util.List<PlayerCardClass> cardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
 
             if (cardClasses.size() > 1)
                 return "multi";
@@ -78,8 +68,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
                 return "story";
 
             case StoryWeakness:
-                return "story_weakness";
-
             case Weakness:
             case BasicWeakness:
                 return "weakness";
@@ -87,15 +75,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
             default:
                 throw new RuntimeException("Unsupported player card type " + getModel().getPlayerCardFieldsModel().getPlayerCardType().name());
         }
-    }
-
-    private boolean canHaveSubtitleTemplate() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
-
-        if (playerCardType == PlayerCardType.StoryWeakness || playerCardType == PlayerCardType.Specialist)
-            return false;
-
-        return true;
     }
 
     @Override
@@ -108,8 +87,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
         editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
     }
 
-    // TODO: look at factoring out some/most of these player card fields into a component that can be shared between Asset/Event/Skill
-    // TODO: only the health, sanity and slots are asset specific
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
 
@@ -120,12 +97,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
         playerCardFieldsView.createEditors(editorContext);
 
-        assetSlot1Editor = EditorUtils.createEnumComboBoxNullable(Asset.AssetSlot.class);
-        assetSlot2Editor = EditorUtils.createEnumComboBoxNullable(Asset.AssetSlot.class);
-
-        healthEditor = new StatisticComponent();
-        sanityEditor = new StatisticComponent();
-
+        // TODO: factor this layout construction out
         // layout
         //
         // use vertical flow layout to aid readability
@@ -146,38 +118,13 @@ public class AssetView extends BaseCardFaceView<Asset> {
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.getTabbedPane().addTab(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.getTabbedPane().addTab(Language.string(InterfaceConstants.EVENT) + " - " + "Stats", mainPanel); // TODO: i18n
 
         // layout
-
-        // first column with additional labels
         playerCardFieldsView.layoutFirstColumnLabels(statsPanel);
-        MigLayoutUtils.addLabel(statsPanel, Language.string(InterfaceConstants.SLOT1));
-        MigLayoutUtils.addLabel(statsPanel, Language.string(InterfaceConstants.SLOT2));
-        MigLayoutUtils.addLabel(statsPanel, "Health"); // TODO: i18n
-        MigLayoutUtils.addLabel(statsPanel, Language.string(InterfaceConstants.SANITY));
-
-        // second column with additional editors
         playerCardFieldsView.layoutSecondColumnEditors(statsPanel);
-        statsPanel.add(assetSlot1Editor);
-        statsPanel.add(assetSlot2Editor);
-        statsPanel.add(healthEditor);
-        statsPanel.add(sanityEditor);
-
         playerCardFieldsView.layoutThirdColumnLabels(statsPanel);
         playerCardFieldsView.layoutFourthColumnEditors(statsPanel);
-
-        // bindings
-        EditorUtils.bindComboBox(assetSlot1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setAssetSlot1(value)));
-        EditorUtils.bindComboBox(assetSlot2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setAssetSlot2(value)));
-        EditorUtils.bindStatisticComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setHealth(value)));
-        EditorUtils.bindStatisticComponent(sanityEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSanity(value)));
-
-        // intialise values
-        assetSlot1Editor.setSelectedItem(getModel().getAssetSlot1());
-        assetSlot2Editor.setSelectedItem(getModel().getAssetSlot2());
-        healthEditor.setStatistic(getModel().getHealth());
-        sanityEditor.setStatistic(getModel().getSanity());
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
@@ -195,11 +142,13 @@ public class AssetView extends BaseCardFaceView<Asset> {
         editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(136, 28, 476, 58);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 640, 672, 280);
-    private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 602, 406, 30);
-    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(658, 602, 406, 30);
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(42, 126, 72, 28);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(80, 608, 594, 58);
+    private static final Rectangle BODY_DRAW_REGION = new Rectangle(88, 676, 576, 316);
+    private static final Rectangle BODY_WEAKESS_DRAW_REGION = new Rectangle(88, 704, 576, 286);
+    private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 666, 406, 30);
+    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(346, 516, 60, 60);
+    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(324, 494, 108, 106);
 
 
     @Override
@@ -211,13 +160,14 @@ public class AssetView extends BaseCardFaceView<Asset> {
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // label
-        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
+        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_EVENT).toUpperCase());
 
         // title
         // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
         commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
 
-        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_DRAW_REGION);
+        Rectangle bodyDrawRegion = getBodyDrawRegion();
+        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, bodyDrawRegion);
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
             numberingView.paintEncounterNumbers(paintContext);
@@ -230,6 +180,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
         // player card icons
         paintClassSymbols(paintContext);
 
+        paintEncounterContent(paintContext);
+
         // weakness labels
         paintWeaknessContent(paintContext);
 
@@ -238,22 +190,31 @@ public class AssetView extends BaseCardFaceView<Asset> {
         paintCost(paintContext);
 
         paintSkillIcons(paintContext);
+    }
 
-        paintSlots(paintContext);
+    private Rectangle getBodyDrawRegion() {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
 
-        paintHealth(paintContext);
-        paintSanity(paintContext);
+        if (playerCardType.isWeakness())
+            return BODY_WEAKESS_DRAW_REGION;
+
+        return BODY_DRAW_REGION;
     }
 
     // regions are from right to left
-    private static final List<Rectangle> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
-            new Rectangle(458, 4, 104, 104),
-            new Rectangle(548, 4, 104, 104),
-            new Rectangle(638, 4, 104, 104)
+    private static final List<Rectangle> CLASS_SYMBOL_REGIONS_PAIR = Lists.newArrayList(
+            new Rectangle(288, 512, 90, 90),
+            new Rectangle(374, 512, 90, 90)
+    );
+
+    private static final List<Rectangle> CLASS_SYMBOL_REGIONS_TRIPLE = Lists.newArrayList(
+            new Rectangle(246, 512, 90, 90),
+            new Rectangle(332, 512, 90, 90),
+            new Rectangle(418, 512, 90, 90)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {
-        List<PlayerCardClass> playerCardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
+        java.util.List<PlayerCardClass> playerCardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
 
         // no class symbols if no classes
         if (playerCardClasses.isEmpty())
@@ -263,19 +224,36 @@ public class AssetView extends BaseCardFaceView<Asset> {
         if (playerCardClasses.size() == 1)
             return;
 
-        // we want the symbols right justified on the card but in the correct order as specified by the individual fields
-        // so we calculate a number of symbols to skip which should be 0 or 1
-        int skipSymbolRegionsCount = 3 - playerCardClasses.size();
+        // the layout of the icons is different for 2 vs 3
+        List<Rectangle> drawRegions;
+
+        if (playerCardClasses.size() == 2)
+            drawRegions = CLASS_SYMBOL_REGIONS_PAIR;
+        else
+            drawRegions = CLASS_SYMBOL_REGIONS_TRIPLE;
 
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
             BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
 
-            Rectangle rectangle = CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount);
+            Rectangle rectangle = drawRegions.get(i);
 
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), classSymbol, rectangle);
         }
+    }
+
+    private void paintEncounterContent(PaintContext paintContext) {
+        if (!getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails())
+            return;
+
+        paintEncounterOrBasicWeaknessOverlay(paintContext);
+
+        numberingView.paintEncounterPortrait(paintContext);
+    }
+
+    private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
+        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/encounter_event.png")), BASIC_WEAKNESS_OVERLAY_DRAW_REGION);
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -283,8 +261,10 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
             PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
-        } else if (playerCardType == PlayerCardType.BasicWeakness) {
+        }
+        else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
+            paintEncounterOrBasicWeaknessOverlay(paintContext);
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
         }
     }
@@ -327,7 +307,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
 
-    private static final List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
+    private static final java.util.List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
             new Rectangle(0, 168, 100, 76),
             new Rectangle(0, 252, 100, 76),
             new Rectangle(0, 336, 100, 76),
@@ -336,7 +316,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
             new Rectangle(0, 588, 100, 76)
     );
 
-    private static final List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
+    private static final java.util.List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
             new Rectangle(21, 178, 50, 52),
             new Rectangle(21, 262, 50, 52),
             new Rectangle(21, 346, 50, 52),
@@ -390,130 +370,5 @@ public class AssetView extends BaseCardFaceView<Asset> {
             return "weakness";
 
         return playerCardType.name().toLowerCase();
-    }
-
-    private static final List<Rectangle> SLOT_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(618, 908, 102, 104),
-            new Rectangle(510, 908, 102, 104)
-    );
-
-    private void paintSlots(PaintContext paintContext) {
-        for (int i = 0; i < getModel().getAssetSlots().size(); i++) {
-            Asset.AssetSlot assetSlot = getModel().getAssetSlots().get(i);
-
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
-                    SLOT_DRAW_REGIONS.get(i)
-            );
-        }
-    }
-
-    private String getSlotName(Asset.AssetSlot assetSlot) {
-        return assetSlot.name().toLowerCase();
-    }
-
-    private static final Rectangle HEALTH_BASE_DRAW_REGION = new Rectangle(292, 936, 62, 78);
-    private static final Rectangle SANITY_BASE_DRAW_REGION = new Rectangle(394, 942, 86, 72);
-
-    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 24);
-    private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 6).deriveFont(6.5f);
-
-    private static final Color HEALTH_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
-    private static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
-    private static final Color SANITY_TEXT_COLOUR = HEALTH_TEXT_COLOUR;
-    private static final Color SANITY_TEXT_OUTLINE_COLOUR = new Color(0.25f, 0.33f, 0.44f);
-
-    // TODO: review this painting code in different scenarios particularly the per investigator scenarios
-    // TODO: ideally how it should work is draw the value text somewhere, and the per investigator text if present, work out
-    // TODO: the total width of those two elements and then place them centred on the health/sanity overlay/icon
-    private void paintHealth(PaintContext paintContext) {
-        String value = getModel().getHealth().getValue();
-
-        if (StringUtils.isEmpty(value))
-            return;
-
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/health_base.png")), HEALTH_BASE_DRAW_REGION);
-
-        if (getModel().getHealth().isPerInvestigator()) {
-            Rectangle healthStatDrawRegion = new Rectangle(HEALTH_BASE_DRAW_REGION);
-            healthStatDrawRegion.translate(-15, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(healthStatDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle healthStatDrawRegion = new Rectangle(HEALTH_BASE_DRAW_REGION);
-            healthStatDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-    }
-
-    private void paintSanity(PaintContext paintContext) {
-        String value = getModel().getSanity().getValue();
-
-        if (StringUtils.isEmpty(value))
-            return;
-
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/sanity_base.png")), SANITY_BASE_DRAW_REGION);
-
-        if (getModel().getSanity().isPerInvestigator()) {
-            Rectangle statDrawRegion = new Rectangle(SANITY_BASE_DRAW_REGION);
-            statDrawRegion.translate(-8, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(statDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle statDrawRegion = new Rectangle(SANITY_BASE_DRAW_REGION);
-            statDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
     }
 }

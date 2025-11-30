@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.font.TextAttribute;
 
 public class TextStyleUtils {
+    public static final String AHLCG_SYMBOL_FONT = "AHLCGSymbol";
+
     private static final TextStyle LARGE_LABEL_TEXT_STYLE;
     private static final TextStyle TITLE_TEXT_STYLE;
     private static final TextStyle SUB_TYPE_TEXT_STYLE;
@@ -77,7 +79,7 @@ public class TextStyleUtils {
         FLAVOR_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         ARKHAM_HORROR_FONT_TEXT_STYLE = new TextStyle();
-        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, "AHLCGSymbol");
+        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, AHLCG_SYMBOL_FONT);
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 13.6);
 
         COLLECTION_NUMBER_TEXT_STYLE = new TextStyle();

@@ -61,8 +61,20 @@ public class Bootstrapper {
         loadFont("/fonts/arnopro-bold.otf");
         loadFont("/fonts/arnopro-italic.otf");
         loadFont("/fonts/arnopro-bolditalic.otf");
+
+
         loadFont("/fonts/AHLCGSymbol.ttf");
         loadFont("/fonts/Arkhamic.ttf");
+
+        loadFont("/fonts/Bolton.ttf");
+
+        loadFont("/fonts/BoltonBold.ttf");
+        loadFont("/fonts/BoltonElongated.ttf");
+        loadFont("/fonts/BoltonOutline.ttf");
+
+        loadFont("/fonts/BoltonTitling.ttf");
+        loadFont("/fonts/BoltonTitlingBold.ttf");
+        loadFont("/fonts/BoltonTitlingOutline.ttf");
     }
 
     private static void loadFont(String resourcePath) {

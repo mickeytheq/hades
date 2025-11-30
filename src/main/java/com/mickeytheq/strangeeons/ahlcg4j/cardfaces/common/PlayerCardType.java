@@ -5,18 +5,30 @@ import resources.Language;
 
 // TODO: enums like this need a parameter for a language key to be used in toString() for UI display when used in comboboxes
 public enum PlayerCardType {
-    Standard(InterfaceConstants.STANDARD),
-    Neutral(InterfaceConstants.CLASS_NEUTRAL),
-    Specialist(InterfaceConstants.CLASS_SPECIALIST),
-    Story(InterfaceConstants.STORY),
-    StoryWeakness(InterfaceConstants.WKNTYPE_STORYWEAKNESS),
-    Weakness(InterfaceConstants.WKNTYPE_WEAKNESS),
-    BasicWeakness(InterfaceConstants.WKNTYPE_BASICWEAKNESS);
+    Standard(InterfaceConstants.STANDARD, false, false),
+    Neutral(InterfaceConstants.CLASS_NEUTRAL, false, false),
+    Specialist(InterfaceConstants.CLASS_SPECIALIST, false, false),
+    Story(InterfaceConstants.STORY, true, false),
+    StoryWeakness(InterfaceConstants.WKNTYPE_STORYWEAKNESS, true, true),
+    Weakness(InterfaceConstants.WKNTYPE_WEAKNESS, false, true),
+    BasicWeakness(InterfaceConstants.WKNTYPE_BASICWEAKNESS, false, true);
 
     private final String languageKey;
+    private final boolean hasEncounterDetails;
+    private final boolean isWeakness;
 
-    PlayerCardType(String languageKey) {
+    PlayerCardType(String languageKey, boolean hasEncounterDetails, boolean isWeakness) {
         this.languageKey = languageKey;
+        this.hasEncounterDetails = hasEncounterDetails;
+        this.isWeakness = isWeakness;
+    }
+
+    public boolean isHasEncounterDetails() {
+        return hasEncounterDetails;
+    }
+
+    public boolean isWeakness() {
+        return isWeakness;
     }
 
     @Override

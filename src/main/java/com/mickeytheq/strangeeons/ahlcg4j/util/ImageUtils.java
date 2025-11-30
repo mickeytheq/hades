@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
+import com.mickeytheq.strangeeons.ahlcg4j.ui.component.StatisticComponent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +17,7 @@ import java.net.URL;
 
 public class ImageUtils {
     private static final LoadingCache<URL, BufferedImage> IMAGE_CACHE;
+    public static final URL PER_INVESTIGATOR_ICON_RESOURCE = StatisticComponent.class.getResource("/icons/AHLCG-PerInvestigator.png");
 
     static {
         IMAGE_CACHE = CacheBuilder.newBuilder()
