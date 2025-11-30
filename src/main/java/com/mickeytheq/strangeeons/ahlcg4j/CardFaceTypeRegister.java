@@ -8,6 +8,8 @@ import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBack;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.EncounterCardBackView;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.PlayerCardBack;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.backs.PlayerCardBackView;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.event.Event;
+import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.event.EventView;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.Treachery;
 import com.mickeytheq.strangeeons.ahlcg4j.cardfaces.treachery.TreacheryView;
 import resources.Language;
@@ -27,6 +29,7 @@ public class CardFaceTypeRegister {
     private CardFaceTypeRegister() {
         register(Asset.class, AssetView.class);
         register(Treachery.class, TreacheryView.class);
+        register(Event.class, EventView.class);
 
         register(EncounterCardBack.class, EncounterCardBackView.class);
         register(PlayerCardBack.class, PlayerCardBackView.class);
