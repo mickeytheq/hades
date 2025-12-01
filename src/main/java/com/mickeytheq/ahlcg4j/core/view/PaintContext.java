@@ -5,23 +5,27 @@ import ca.cgjennings.layout.MarkupRenderer;
 
 import java.awt.*;
 
+/**
+ * Context used when drawing/painting a {@link CardFaceView}
+ */
 public interface PaintContext {
+    //
+    // context basics
+    //
+
+    // draw using this Graphics
     Graphics2D getGraphics();
 
+    // used to select quality vs speed
     RenderTarget getRenderTarget();
 
+    // desired resolution of the rendering
     double getRenderingDpi();
 
     //
     // markup methods
     //
 
-    // tag replacements
-    // adds a tag replacement that will be used by other method(s)
-    // for example "<fullname>" -> "Card title"
-    void addTagReplacement(String tag, String replacement);
-
     // creates a MarkupRenderer with a resolution that matches the current sheet/template
-    // and applies all previously added tag replacements to a MarkupRenderer
     MarkupRenderer createMarkupRenderer();
 }

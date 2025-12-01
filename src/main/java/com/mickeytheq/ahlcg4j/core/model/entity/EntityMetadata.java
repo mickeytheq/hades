@@ -2,6 +2,10 @@ package com.mickeytheq.ahlcg4j.core.model.entity;
 
 import java.util.List;
 
+/**
+ * Represents metadata on top of a Java Class. Typically used for serialisation or other logic that wants to operate
+ * once step removed from the specific Class.
+ */
 public interface EntityMetadata {
 
     Class<?> getEntityClass();

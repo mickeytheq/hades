@@ -1,4 +1,4 @@
-package com.mickeytheq.ahlcg4j.strangeeons;
+package com.mickeytheq.ahlcg4j.strangeeons.ui;
 
 import com.mickeytheq.ahlcg4j.core.CardFaceTypeRegister;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;

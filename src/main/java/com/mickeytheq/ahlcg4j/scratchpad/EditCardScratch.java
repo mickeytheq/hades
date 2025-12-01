@@ -2,7 +2,9 @@ package com.mickeytheq.ahlcg4j.scratchpad;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.ahlcg4j.core.model.Card;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
+import com.mickeytheq.ahlcg4j.core.view.CardView;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
@@ -11,7 +13,6 @@ import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Treachery;
 import com.mickeytheq.ahlcg4j.strangeeons.plugin.Bootstrapper;
-import com.mickeytheq.ahlcg4j.core.Card;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 
 import javax.swing.*;
@@ -48,7 +49,7 @@ public class EditCardScratch {
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
-        Card card = CardFaces.createCard(model, null);
+        Card card = CardFaces.createCardModel(model, null);
 
         displayEditor(card);
     }
@@ -70,7 +71,7 @@ public class EditCardScratch {
         model.setSanity(new Statistic("1", true));
 
 
-        Card card = CardFaces.createCard(model, null);
+        Card card = CardFaces.createCardModel(model, null);
 
         displayEditor(card);
     }
@@ -80,31 +81,32 @@ public class EditCardScratch {
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
 
-        Card card = CardFaces.createCard(model, null);
+        Card card = CardFaces.createCardModel(model, null);
 
         displayEditor(card);
     }
 
     private static void displayEditor(Card card) {
-        new Editor(card).display();
+        CardView cardView = CardFaces.createCardView(card);
+        new Editor(cardView).display();
     }
 
     private static class Editor {
-        private final Card card;
+        private final CardView cardView;
 
-        public Editor(Card card) {
-            this.card = card;
+        public Editor(CardView cardView) {
+            this.cardView = cardView;
         }
 
         public void display() {
             // draw/renderer
             JTabbedPane drawTabbedPane = new JTabbedPane();
-            Renderer frontRenderer = new Renderer(card.getFrontFaceView());
+            Renderer frontRenderer = new Renderer(cardView.getFrontFaceView());
             drawTabbedPane.addTab("Front", frontRenderer);
 
             Renderer backRenderer = null;
-            if (card.hasBack()) {
-                backRenderer = new Renderer(card.getBackFaceView());
+            if (cardView.hasBack()) {
+                backRenderer = new Renderer(cardView.getBackFaceView());
                 drawTabbedPane.addTab("Back", backRenderer);
             }
 
@@ -120,9 +122,9 @@ public class EditCardScratch {
                     backRendererFinal.repaint();
             });
 
-            card.getFrontFaceView().createEditors(editorContext);
-            if (card.hasBack()) {
-                card.getBackFaceView().createEditors(editorContext);
+            cardView.getFrontFaceView().createEditors(editorContext);
+            if (cardView.hasBack()) {
+                cardView.getBackFaceView().createEditors(editorContext);
             }
 
             // pane for both
@@ -187,11 +189,6 @@ public class EditCardScratch {
         @Override
         public double getRenderingDpi() {
             return dpi;
-        }
-
-        @Override
-        public void addTagReplacement(String tag, String replacement) {
-
         }
 
         @Override

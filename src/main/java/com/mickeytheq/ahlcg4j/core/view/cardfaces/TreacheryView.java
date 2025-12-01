@@ -53,8 +53,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
     @Override
     public void createEditors(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
-        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION.getSize());
+        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
 
         weaknessTypeEditor = new JComboBox<>();
         weaknessTypeEditor.addItem(WeaknessType.None);
@@ -77,11 +77,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
 
-        mainPanel.add(commonCardFieldsView.createStandardArtPanel(), "wrap, pushx, growx");
+        mainPanel.add(commonCardFieldsView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
         editorContext.getTabbedPane().addTab(getCardFaceSide().name(), mainPanel);
-        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
+        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
     }
 
     public BufferedImage getTemplateImage() {
@@ -97,7 +97,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        commonCardFieldsView.paintArtPortrait(paintContext);
+        commonCardFieldsView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -115,9 +115,9 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
-        numberingView.paintEncounterPortrait(paintContext);
+        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         numberingView.paintEncounterNumbers(paintContext);
-        numberingView.paintCollectionPortrait(paintContext, true);
+        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
 
         commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
@@ -136,7 +136,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
                 ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
             }
             else {
-                numberingView.paintEncounterPortrait(paintContext);
+                numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
                 numberingView.paintEncounterNumbers(paintContext);
             }
         }
@@ -155,7 +155,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_WEAKNESS_DRAW_REGION);
 
-        numberingView.paintCollectionPortrait(paintContext, true);
+        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
     }
 }

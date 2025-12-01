@@ -3,7 +3,14 @@ package com.mickeytheq.ahlcg4j.core.view;
 import javax.swing.*;
 import java.util.function.Consumer;
 
+/**
+ * Context used at the 'create editors' stage of the process
+ *
+ * When a card is hosted within Strange Eons this is used to convey the necessary information/context to {@link CardFaceView}
+ * implementations
+ */
 public interface EditorContext {
+    // the tabbed pane that sets of controls should be added to
     JTabbedPane getTabbedPane();
 
     //

@@ -1,14 +1,13 @@
-package com.mickeytheq.ahlcg4j.core;
+package com.mickeytheq.ahlcg4j.core.model;
 
-import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
-import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
-
+/**
+ * Card model that contains a front and optional back face plus any fields that are not face specific.
+ *
+ * In the majority of cases the interesting information is in the {@link CardFaceModel} implementations.
+ */
 public class Card {
     private CardFaceModel frontFaceModel;
-    private CardFaceView frontFaceView;
     private CardFaceModel backFaceModel;
-    private CardFaceView backFaceView;
-
     private String comments;
 
     public CardFaceModel getFrontFaceModel() {
@@ -19,28 +18,15 @@ public class Card {
         this.frontFaceModel = frontFaceModel;
     }
 
-    public CardFaceView getFrontFaceView() {
-        return frontFaceView;
-    }
-
-    public void setFrontFaceView(CardFaceView frontFaceView) {
-        this.frontFaceView = frontFaceView;
-    }
-
     public CardFaceModel getBackFaceModel() {
+        if (!hasBack())
+            throw new IllegalStateException("No back face in this model");
+
         return backFaceModel;
     }
 
     public void setBackFaceModel(CardFaceModel backFaceModel) {
         this.backFaceModel = backFaceModel;
-    }
-
-    public CardFaceView getBackFaceView() {
-        return backFaceView;
-    }
-
-    public void setBackFaceView(CardFaceView backFaceView) {
-        this.backFaceView = backFaceView;
     }
 
     public String getComments() {

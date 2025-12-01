@@ -1,21 +1,23 @@
 package com.mickeytheq.ahlcg4j.core.view;
 
-import com.mickeytheq.ahlcg4j.core.Card;
 import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardFaceView<M> {
-    private Card card;
+public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardFaceView {
+    private CardView cardView;
     private CardFaceSide cardFaceSide;
     private M cardFaceModel;
 
     @Override
-    public final void initialiseView(Card card, CardFaceSide cardFaceSide, M cardFaceModel) {
-        this.card = card;
+    public final void initialiseView(CardView cardView, CardFaceSide cardFaceSide, CardFaceModel cardFaceModel) {
+        this.cardView = cardView;
         this.cardFaceSide = cardFaceSide;
-        this.cardFaceModel = cardFaceModel;
+
+        // TODO: validate the model is of the correct type
+
+        this.cardFaceModel = (M)cardFaceModel;
 
         initialiseView();
     }
@@ -24,8 +26,8 @@ public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardF
         // default do nothing
     }
 
-    public Card getCard() {
-        return card;
+    public CardView getCardView() {
+        return cardView;
     }
 
     public CardFaceSide getCardFaceSide() {

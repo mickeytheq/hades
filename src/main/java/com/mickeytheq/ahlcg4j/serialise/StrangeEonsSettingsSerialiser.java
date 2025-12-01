@@ -16,8 +16,8 @@ import java.util.LinkedList;
 
 public class StrangeEonsSettingsSerialiser {
     public void serialiseCard(Settings settings, CardGameComponent cardGameComponent) {
-        serialiseCardFace(settings, cardGameComponent.getCard().getFrontFaceModel(), "Front");
-        serialiseCardFace(settings, cardGameComponent.getCard().getBackFaceModel(), "Back");
+        serialiseCardFace(settings, cardGameComponent.getCardView().getCard().getFrontFaceModel(), "Front");
+        serialiseCardFace(settings, cardGameComponent.getCardView().getCard().getBackFaceModel(), "Back");
     }
 
     public void serialiseCardFace(Settings settings, CardFaceModel model, String settingsPrefix) {

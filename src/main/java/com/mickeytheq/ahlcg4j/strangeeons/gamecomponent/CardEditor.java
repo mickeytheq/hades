@@ -17,11 +17,11 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         JTabbedPane editorTabbedPane = new JTabbedPane();
 
         EditorContext editorContext = new EditorContextImpl(editorTabbedPane, 0);
-        cardGameComponent.getCard().getFrontFaceView().createEditors(editorContext);
+        cardGameComponent.getCardView().getFrontFaceView().createEditors(editorContext);
 
-        if (cardGameComponent.getCard().getBackFaceView() != null) {
+        if (cardGameComponent.getCardView().hasBack()) {
             editorContext = new EditorContextImpl(editorTabbedPane, 1);
-            cardGameComponent.getCard().getBackFaceView().createEditors(editorContext);
+            cardGameComponent.getCardView().getBackFaceView().createEditors(editorContext);
         }
 
         // TODO: add a comment tab

@@ -38,7 +38,7 @@ public class CommonCardFieldsView {
         this.model = model;
     }
 
-    public void createEditors(EditorContext editorContext, Rectangle artPortraitDrawRegion) {
+    public void createEditors(EditorContext editorContext, Dimension artPortraitDimension) {
         // TODO: what about the helper tooltips for the legal traits etc
         titleEditor = EditorUtils.createTextField(30);
         subtitleEditor = EditorUtils.createTextField(30);
@@ -73,7 +73,7 @@ public class CommonCardFieldsView {
         copyrightEditor.setText(model.getCopyright());
         artistEditor.setText(model.getArtist());
 
-        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDrawRegion, editorContext::markChanged);
+        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDimension);
     }
 
     public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption) {
@@ -99,12 +99,10 @@ public class CommonCardFieldsView {
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.COPYRIGHT), copyrightEditor);
     }
 
-    public JPanel createStandardArtPanel() {
+    public JPanel createStandardArtPanel(EditorContext editorContext) {
         JPanel artistWithPortraitPanel = MigLayoutUtils.createPanel(new LC().insets("0"));
 
-        PortraitPanel portraitPanel = new PortraitPanel();
-        portraitPanel.setPanelTitle(Language.string(InterfaceConstants.PORTRAIT));
-        portraitPanel.setPortrait(artPortraitView);
+        PortraitPanel portraitPanel = artPortraitView.createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
 
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
@@ -120,8 +118,8 @@ public class CommonCardFieldsView {
         return model;
     }
 
-    public void paintArtPortrait(PaintContext paintContext) {
-        artPortraitView.paint(paintContext);
+    public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
+        artPortraitView.paint(paintContext, drawRegion, false);
     }
 
     public void paintTitles(PaintContext paintContext, Rectangle titleDrawRegion, Rectangle subtitleDrawRegion) {

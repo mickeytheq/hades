@@ -9,6 +9,7 @@ import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
+import org.mozilla.javascript.tools.debugger.Dim;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,10 +31,10 @@ public class NumberingView {
         this.model = model;
     }
 
-    public void createEditors(EditorContext editorContext, Rectangle collectionPortraitDrawRegion, Rectangle encounterPortraitDrawRegion) {
-        collectionPortraitView = PortraitView.createWithBlankImage(model.getCollectionPortraitModel(), collectionPortraitDrawRegion, editorContext::markChanged);
+    public void createEditors(EditorContext editorContext, Dimension collectionPortraitDimension, Dimension encounterPortraitDimension) {
+        collectionPortraitView = PortraitView.createWithBlankImage(model.getCollectionPortraitModel(), collectionPortraitDimension);
         collectionPortraitView.setBackgroundFilled(false);
-        encounterPortraitView = PortraitView.createWithBlankImage(model.getEncounterPortraitModel(), encounterPortraitDrawRegion, editorContext::markChanged);
+        encounterPortraitView = PortraitView.createWithBlankImage(model.getEncounterPortraitModel(), encounterPortraitDimension);
         encounterPortraitView.setBackgroundFilled(false);
 
         // collection
@@ -54,19 +55,15 @@ public class NumberingView {
         encounterTotalEditor.setText(model.getEncounterTotal());
     }
 
-    public JPanel createStandardCollectionEncounterPanel() {
-        PortraitPanel collectionPortraitPanel = new PortraitPanel();
-        collectionPortraitPanel.setPanelTitle("Collection portrait");
-        collectionPortraitPanel.setPortrait(collectionPortraitView);
+    public JPanel createStandardCollectionEncounterPanel(EditorContext editorContext) {
+        PortraitPanel collectionPortraitPanel = collectionPortraitView.createPortraitPanel(editorContext, "Collection portrait");
 
         JPanel collectionDetailPanel = new JPanel(new MigLayout());
         collectionDetailPanel.setBorder(BorderFactory.createTitledBorder("Collection"));
         collectionDetailPanel.add(new JLabel("Collection number: "), "aligny center");
         collectionDetailPanel.add(collectionNumberEditor, "wrap");
 
-        PortraitPanel encounterPortraitPanel = new PortraitPanel();
-        encounterPortraitPanel.setPanelTitle("Encounter portrait");
-        encounterPortraitPanel.setPortrait(encounterPortraitView);
+        PortraitPanel encounterPortraitPanel = encounterPortraitView.createPortraitPanel(editorContext, "Encounter portrait");
 
         JPanel encounterDetailPanel = new JPanel(new MigLayout());
         encounterDetailPanel.setBorder(BorderFactory.createTitledBorder("Encounter"));
@@ -85,15 +82,15 @@ public class NumberingView {
         return collectionEncounterPanel;
     }
 
-    public void paintEncounterPortrait(PaintContext paintContext) {
-        encounterPortraitView.paint(paintContext);
+    public void paintEncounterPortrait(PaintContext paintContext, Rectangle encounterPortraitDrawRegion) {
+        encounterPortraitView.paint(paintContext, encounterPortraitDrawRegion, false);
     }
 
-    public void paintCollectionPortrait(PaintContext paintContext, boolean paintInverted) {
+    public void paintCollectionPortrait(PaintContext paintContext, Rectangle collectionPortraitDrawRegion, boolean paintInverted) {
         // collection icon often needs inverting
         // the source icon is always black but the background on most cards is black as well therefore we want the icon inverted to white
         // this isn't always the case therefore it is at the discretion of the owning card face to decide
-        collectionPortraitView.paint(paintContext, paintInverted);
+        collectionPortraitView.paint(paintContext, collectionPortraitDrawRegion, paintInverted);
     }
 
     public void paintEncounterNumbers(PaintContext paintContext) {

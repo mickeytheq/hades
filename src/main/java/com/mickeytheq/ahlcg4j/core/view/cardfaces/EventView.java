@@ -88,13 +88,11 @@ public class EventView extends BaseCardFaceView<Event> {
 
         createRulesAndPortraitTab(editorContext);
 
-        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION, ENCOUNTER_PORTRAIT_DRAW_REGION);
-        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel());
+        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
     }
 
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
-
         // title
         JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
@@ -132,7 +130,7 @@ public class EventView extends BaseCardFaceView<Event> {
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION);
+        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION.getSize());
 
         JPanel generalPanel = MigLayoutUtils.createPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel);
@@ -140,7 +138,7 @@ public class EventView extends BaseCardFaceView<Event> {
         JPanel mainPanel = new JPanel(new MigLayout());
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
-        mainPanel.add(commonCardFieldsView.createStandardArtPanel(), "wrap, pushx, growx");
+        mainPanel.add(commonCardFieldsView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
         editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
@@ -158,7 +156,7 @@ public class EventView extends BaseCardFaceView<Event> {
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        commonCardFieldsView.paintArtPortrait(paintContext);
+        commonCardFieldsView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -175,10 +173,10 @@ public class EventView extends BaseCardFaceView<Event> {
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
             numberingView.paintEncounterNumbers(paintContext);
-            numberingView.paintEncounterPortrait(paintContext);
+            numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
-        numberingView.paintCollectionPortrait(paintContext, true);
+        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
 
         // player card icons
@@ -253,7 +251,7 @@ public class EventView extends BaseCardFaceView<Event> {
 
         paintEncounterOrBasicWeaknessOverlay(paintContext);
 
-        numberingView.paintEncounterPortrait(paintContext);
+        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
     }
 
     private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {

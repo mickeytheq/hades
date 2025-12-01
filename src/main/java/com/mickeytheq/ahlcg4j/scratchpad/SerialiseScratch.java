@@ -1,0 +1,45 @@
+package com.mickeytheq.ahlcg4j.scratchpad;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mickeytheq.ahlcg4j.core.CardFaces;
+import com.mickeytheq.ahlcg4j.core.model.Card;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
+import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
+import com.mickeytheq.ahlcg4j.serialise.JsonCardSerialiser;
+
+import java.io.IOException;
+import java.io.StringWriter;
+
+public class SerialiseScratch {
+    public static void main(String[] args) throws Exception {
+        new SerialiseScratch().run();
+    }
+
+    private void run() throws IOException {
+        Event model = new Event();
+        model.getCommonCardFieldsModel().setTitle("Rat Swarm");
+        model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
+        model.getPlayerCardFieldsModel().setSkillIcon1(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon2(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon3(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setCost("3");
+        model.getPlayerCardFieldsModel().setLevel(5);
+
+        Card card = CardFaces.createCardModel(model, null);
+        ObjectNode objectNode = JsonCardSerialiser.serialiseCard(card);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        StringWriter stringWriter = new StringWriter();
+        objectMapper.writeValue(stringWriter, objectNode);
+
+        System.out.println(stringWriter.toString());
+
+        Card newCard = JsonCardSerialiser.deserialiseCard(objectNode);
+
+    }
+}

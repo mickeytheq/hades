@@ -1,62 +1,56 @@
 package com.mickeytheq.ahlcg4j.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
-import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.io.NewerVersionException;
 import ca.cgjennings.layout.MarkupRenderer;
-import com.mickeytheq.ahlcg4j.core.Card;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
-import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
+import com.mickeytheq.ahlcg4j.core.model.Card;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
-import com.mickeytheq.ahlcg4j.strangeeons.NewCardDialog;
+import com.mickeytheq.ahlcg4j.core.view.CardView;
+import com.mickeytheq.ahlcg4j.serialise.JsonCardSerialiser;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
+import resources.Settings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
-// and the AHLCG4J 'Card' and associated faces model
+// and the AHLCG4J Card/CardView and associated face model/views
 public class CardGameComponent extends AbstractGameComponent {
     private static final int CURRENT_VERSION = 1;
 
-    private final Card card;
+    private CardView cardView;
 
+    // deserialisation constructor
     public CardGameComponent() {
-        NewCardDialog newCardDialog = new NewCardDialog(false);
-        newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
-        newCardDialog.setVisible(true);
-
-        Class<? extends CardFaceModel> backFaceModelClass = null;
-        if (newCardDialog.getSelectedBackFace() != null) {
-            backFaceModelClass = newCardDialog.getSelectedBackFace().getCardFaceModelClass();
-        }
-
-        card = CardFaces.createCard(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass);
     }
 
-    public Card getCard() {
-        return card;
+    // regular constructor
+    public CardGameComponent(CardView cardView) {
+        this.cardView = cardView;
+    }
+
+    public CardView getCardView() {
+        return cardView;
     }
 
     @Override
     public Sheet[] createDefaultSheets() {
         // create sheet objects that are provided by the card's face
-        Sheet frontSheet = new CardSheet(this, card.getFrontFaceView());
+        Sheet frontSheet = new CardSheet(this, cardView.getFrontFaceView());
 
         Sheet[] sheets;
 
-        if (card.getBackFaceView() != null) {
-            Sheet backSheet = new CardSheet(this, card.getBackFaceView());
+        if (cardView.hasBack()) {
+            Sheet backSheet = new CardSheet(this, cardView.getBackFaceView());
             sheets = new Sheet[]{frontSheet, backSheet};
         }
         else {
@@ -69,7 +63,7 @@ public class CardGameComponent extends AbstractGameComponent {
     }
 
     @Override
-    public AbstractGameComponentEditor<? extends GameComponent> createDefaultEditor() {
+    public AbstractGameComponentEditor<CardGameComponent> createDefaultEditor() {
         return new CardEditor(this);
     }
 
@@ -90,6 +84,11 @@ public class CardGameComponent extends AbstractGameComponent {
             // rather than the parameter being passed in. workaround this by setting it first
             setExpansionSymbolKey("dummy");
             initializeTemplate("dummy", template, "dummy", 150.0, 1.0);
+        }
+
+        @Override
+        public double getBleedMargin() {
+            return 0.0;
         }
 
         @Override
@@ -114,8 +113,6 @@ public class CardGameComponent extends AbstractGameComponent {
         private final RenderTarget renderTarget;
         private final Sheet<CardGameComponent> sheet;
 
-        private final Map<String, String> tagReplacements = new HashMap<>();
-
         public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, Sheet<CardGameComponent> sheet) {
             this.g = g;
             this.renderTarget = renderTarget;
@@ -138,18 +135,12 @@ public class CardGameComponent extends AbstractGameComponent {
         }
 
         @Override
-        public void addTagReplacement(String tag, String replacement) {
-            tagReplacements.put(tag, replacement);
-        }
-
-        @Override
         public MarkupRenderer createMarkupRenderer() {
             MarkupRenderer markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
 
             // TODO: need to set tag values for <title> to this face's title
             // TODO: need to set tag values for <fullname> and <fullnameb> for the front/back titles
 
-            tagReplacements.forEach(markupRenderer::setReplacementForTag);
             return markupRenderer;
         }
     }
@@ -157,7 +148,11 @@ public class CardGameComponent extends AbstractGameComponent {
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeInt(CURRENT_VERSION);
 
-        // TODO: serialisation
+        ObjectNode objectNode = JsonCardSerialiser.serialiseCard(cardView.getCard());
+        StringWriter stringWriter = new StringWriter();
+        createSerialisationObjectMapper().writeValue(stringWriter, objectNode);
+
+        out.writeUTF(stringWriter.toString());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -165,9 +160,23 @@ public class CardGameComponent extends AbstractGameComponent {
 
         NewerVersionException.check(CURRENT_VERSION, version);
 
-        // TODO: do we need to store the name? a card is just two faces so the less 'Card' level fields the better
-//        setNameImpl((String)in.readObject());
+        // TODO: if the CURRENT_VERSION > version then do an upgrade
+        // TODO: this should only pertain to major structural changes, e.g. if the content was previously encoded as JSON and we were switching to YAML
+        // TODO: changes to individual card/faces should be handled later
 
-        // TODO: serialisation
+        String jsonString = in.readUTF();
+        ObjectNode objectNode = (ObjectNode)createSerialisationObjectMapper().readTree(new StringReader(jsonString));
+        Card card = JsonCardSerialiser.deserialiseCard(objectNode);
+
+        cardView = CardFaces.createCardView(card);
+
+        // Strange Eons loves to interact with the settings all the time (even if it finds nothing)
+        // create an empty one to avoid a bunch of null pointers
+        privateSettings = new Settings();
+    }
+
+    private ObjectMapper createSerialisationObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper;
     }
 }
