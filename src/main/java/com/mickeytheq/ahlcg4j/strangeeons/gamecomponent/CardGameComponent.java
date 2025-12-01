@@ -36,6 +36,7 @@ public class CardGameComponent extends AbstractGameComponent {
     // regular constructor
     public CardGameComponent(CardView cardView) {
         this.cardView = cardView;
+        setNameImpl("Card");
     }
 
     public CardView getCardView() {
@@ -153,6 +154,9 @@ public class CardGameComponent extends AbstractGameComponent {
         createSerialisationObjectMapper().writeValue(stringWriter, objectNode);
 
         out.writeUTF(stringWriter.toString());
+
+        // must remember to call this otherwise the file will show as unsaved in the Strange Eons UI
+        markSaved();
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -173,6 +177,7 @@ public class CardGameComponent extends AbstractGameComponent {
         // Strange Eons loves to interact with the settings all the time (even if it finds nothing)
         // create an empty one to avoid a bunch of null pointers
         privateSettings = new Settings();
+        setNameImpl("Card");
     }
 
     private ObjectMapper createSerialisationObjectMapper() {

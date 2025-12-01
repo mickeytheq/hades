@@ -34,11 +34,13 @@ public class CommonCardFieldsView {
 
     private PortraitView artPortraitView;
 
-    public CommonCardFieldsView(CommonCardFieldsModel model) {
+    public CommonCardFieldsView(CommonCardFieldsModel model, Dimension artPortraitDimension) {
         this.model = model;
+
+        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDimension);
     }
 
-    public void createEditors(EditorContext editorContext, Dimension artPortraitDimension) {
+    public void createEditors(EditorContext editorContext) {
         // TODO: what about the helper tooltips for the legal traits etc
         titleEditor = EditorUtils.createTextField(30);
         subtitleEditor = EditorUtils.createTextField(30);
@@ -72,8 +74,6 @@ public class CommonCardFieldsView {
         victoryEditor.setText(model.getVictory());
         copyrightEditor.setText(model.getCopyright());
         artistEditor.setText(model.getArtist());
-
-        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDimension);
     }
 
     public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption) {

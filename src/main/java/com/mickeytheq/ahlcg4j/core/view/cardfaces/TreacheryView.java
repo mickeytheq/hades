@@ -47,14 +47,14 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
     public void createEditors(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION.getSize());
-        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        commonCardFieldsView.createEditors(editorContext);
+        numberingView.createEditors(editorContext);
 
         weaknessTypeEditor = new JComboBox<>();
         weaknessTypeEditor.addItem(WeaknessType.None);

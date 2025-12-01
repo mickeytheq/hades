@@ -43,8 +43,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel());
     }
 
@@ -108,17 +108,16 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     @Override
     public void createEditors(EditorContext editorContext) {
-        createTitleAndStatisticsEditors(editorContext);
+        commonCardFieldsView.createEditors(editorContext);
 
+        createTitleAndStatisticsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
 
-        numberingView.createEditors(editorContext, COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        numberingView.createEditors(editorContext);
         editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
     }
 
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION.getSize());
-
         // title
         JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
@@ -173,8 +172,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
-        commonCardFieldsView.createEditors(editorContext, ART_PORTRAIT_DRAW_REGION.getSize());
-
         JPanel generalPanel = MigLayoutUtils.createPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel);
 

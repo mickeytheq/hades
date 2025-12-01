@@ -27,16 +27,16 @@ public class NumberingView {
     private PortraitView encounterPortraitView;
     private PortraitView collectionPortraitView;
 
-    public NumberingView(NumberingModel model) {
+    public NumberingView(NumberingModel model, Dimension collectionPortraitDimension, Dimension encounterPortraitDimension) {
         this.model = model;
-    }
 
-    public void createEditors(EditorContext editorContext, Dimension collectionPortraitDimension, Dimension encounterPortraitDimension) {
         collectionPortraitView = PortraitView.createWithBlankImage(model.getCollectionPortraitModel(), collectionPortraitDimension);
         collectionPortraitView.setBackgroundFilled(false);
         encounterPortraitView = PortraitView.createWithBlankImage(model.getEncounterPortraitModel(), encounterPortraitDimension);
         encounterPortraitView.setBackgroundFilled(false);
+    }
 
+    public void createEditors(EditorContext editorContext) {
         // collection
         collectionNumberEditor = EditorUtils.createTextField(8);
         collectionNumberEditor.setHorizontalAlignment(JTextField.RIGHT);
