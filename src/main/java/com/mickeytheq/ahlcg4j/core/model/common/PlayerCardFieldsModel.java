@@ -19,6 +19,7 @@ public class PlayerCardFieldsModel {
     private PlayerCardSkillIcon skillIcon3;
     private PlayerCardSkillIcon skillIcon4;
     private PlayerCardSkillIcon skillIcon5;
+    private PlayerCardSkillIcon skillIcon6;
 
     public PlayerCardFieldsModel() {
         playerCardType = PlayerCardType.Standard;
@@ -126,6 +127,15 @@ public class PlayerCardFieldsModel {
         this.skillIcon5 = skillIcon5;
     }
 
+    @Property("SkillIcon6")
+    public PlayerCardSkillIcon getSkillIcon6() {
+        return skillIcon6;
+    }
+
+    public void setSkillIcon6(PlayerCardSkillIcon skillIcon6) {
+        this.skillIcon6 = skillIcon6;
+    }
+
     public List<PlayerCardClass> getPlayerCardClasses() {
         List<PlayerCardClass> cardClasses = Stream.of(
                         getPlayerCardClass1(),
@@ -144,7 +154,8 @@ public class PlayerCardFieldsModel {
                         getSkillIcon2(),
                         getSkillIcon3(),
                         getSkillIcon4(),
-                        getSkillIcon5()
+                        getSkillIcon5(),
+                        getSkillIcon6()
                 )
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

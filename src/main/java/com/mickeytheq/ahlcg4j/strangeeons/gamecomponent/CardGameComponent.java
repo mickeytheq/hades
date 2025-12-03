@@ -36,6 +36,8 @@ public class CardGameComponent extends AbstractGameComponent {
     // regular constructor
     public CardGameComponent(CardView cardView) {
         this.cardView = cardView;
+
+        // TODO: name should be the actual title?
         setNameImpl("Card");
     }
 

@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Deque;
 import java.util.LinkedList;
 
+// TODO: think this is defunct
 public class StrangeEonsSettingsSerialiser {
     public void serialiseCard(Settings settings, CardGameComponent cardGameComponent) {
         serialiseCardFace(settings, cardGameComponent.getCardView().getCard().getFrontFaceModel(), "Front");

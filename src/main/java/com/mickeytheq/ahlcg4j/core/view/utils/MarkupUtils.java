@@ -118,10 +118,12 @@ public class MarkupUtils {
         return createRatioIntoDrawRegionMapper(drawRegion, Function.identity());
     }
 
+    // creates a function that inverts the X coordinate wrt the overall draw region. e.g. 10% in from the left becomes 10% from the right
     public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapperInvertX(Rectangle drawRegion) {
         return createRatioIntoDrawRegionMapper(drawRegion, aDouble -> 1.0 - aDouble);
     }
 
+    // creates a function that translates the X coordinate by a fixed amount for each point mapping
     public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapperTranslateX(Rectangle drawRegion, double xShift) {
         return createRatioIntoDrawRegionMapper(drawRegion, aDouble -> xShift + aDouble);
     }

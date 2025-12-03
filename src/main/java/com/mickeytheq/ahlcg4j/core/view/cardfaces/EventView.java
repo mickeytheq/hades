@@ -284,7 +284,9 @@ public class EventView extends BaseCardFaceView<Event> {
         mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION);
 
         // skip the 'last' point in the list as we are already at that point
-        pathPointIterator.previous();
+        // move across to the bottom right corner
+        Point2D startSecondPassPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());
+        path2D.lineTo(startSecondPassPoint.getX(), startSecondPassPoint.getY());
 
         while (pathPointIterator.hasPrevious()) {
             Point2D nextPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());

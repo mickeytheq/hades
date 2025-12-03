@@ -13,10 +13,6 @@ public class CommonCardFieldsModel {
     private String victory;
     private String copyright;
 
-    private PortraitModel artPortraitModel = new PortraitModel();
-    private String artist;
-
-
 
     @Property("Title")
     public String getTitle() {
@@ -102,23 +98,5 @@ public class CommonCardFieldsModel {
 
     public void setCopyright(String copyright) {
         this.copyright = copyright;
-    }
-
-    @Property("ArtPortrait")
-    public PortraitModel getArtPortraitModel() {
-        return artPortraitModel;
-    }
-
-    public void setArtPortraitModel(PortraitModel artPortraitModel) {
-        this.artPortraitModel = artPortraitModel;
-    }
-
-    @Property("Artist")
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
     }
 }
