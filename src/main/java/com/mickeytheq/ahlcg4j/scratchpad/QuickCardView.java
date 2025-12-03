@@ -4,21 +4,19 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.ahlcg4j.core.model.Card;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class QuickCardView {
@@ -30,8 +28,9 @@ public class QuickCardView {
         Bootstrapper.initaliseOutsideStrangeEons();
 
 //        asset();
-        investigator();
+//        investigator();
 //        event();
+        skill();
 //        treachery();
     }
 
@@ -73,6 +72,23 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
         model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
         model.getPlayerCardFieldsModel().setCost("3");
+        model.getPlayerCardFieldsModel().setLevel(5);
+
+
+        Card card = CardFaces.createCardModel(model, null);
+
+        displayEditor(card);
+    }
+
+    private void skill() {
+        Skill model = new Skill();
+        model.getCommonCardFieldsModel().setTitle("Smeg skill");
+        model.getCommonCardFieldsModel().setRules("If this test succeeds, draw 1 card.");
+        model.getPlayerCardFieldsModel().setSkillIcon1(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon2(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon3(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
+        model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
@@ -234,8 +250,12 @@ public class QuickCardView {
         }
 
         @Override
-        public JTabbedPane getTabbedPane() {
-            return tabbedPane;
+        public void addDisplayComponent(String title, Component component) {
+            JPanel spacingPanel = MigLayoutUtils.createEmbeddedPanel();
+            spacingPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
+            spacingPanel.add(component, "wrap, growx, pushx");
+
+            tabbedPane.addTab(title, spacingPanel);
         }
 
         @Override

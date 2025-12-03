@@ -2,8 +2,10 @@ package com.mickeytheq.ahlcg4j.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     private final CardGameComponent cardGameComponent;
@@ -55,8 +57,12 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         }
 
         @Override
-        public JTabbedPane getTabbedPane() {
-            return tabbedPane;
+        public void addDisplayComponent(String title, Component component) {
+            JPanel spacingPanel = MigLayoutUtils.createEmbeddedPanel();
+            spacingPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
+            spacingPanel.add(component, "wrap, growx, pushx");
+
+            tabbedPane.addTab(title, spacingPanel);
         }
 
         @Override

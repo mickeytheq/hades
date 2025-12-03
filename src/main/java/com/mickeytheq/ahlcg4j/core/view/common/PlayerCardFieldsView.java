@@ -24,6 +24,8 @@ import java.util.stream.IntStream;
 public class PlayerCardFieldsView {
     private final PlayerCardFieldsModel playerCardFieldsModel;
 
+    private final boolean showCost;
+
     private JComboBox<PlayerCardType> typeEditor;
     private JComboBox<PlayerCardClass> playerCardClass1Editor;
     private JComboBox<PlayerCardClass> playerCardClass2Editor;
@@ -36,8 +38,40 @@ public class PlayerCardFieldsView {
     private JComboBox<PlayerCardSkillIcon> skillIcon4Editor;
     private JComboBox<PlayerCardSkillIcon> skillIcon5Editor;
 
-    public PlayerCardFieldsView(PlayerCardFieldsModel playerCardFieldsModel) {
+    public PlayerCardFieldsView(PlayerCardFieldsModel playerCardFieldsModel, boolean showCost) {
         this.playerCardFieldsModel = playerCardFieldsModel;
+        this.showCost = showCost;
+    }
+
+    public String getTemplateName() {
+        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        List<PlayerCardClass> cardClasses = getModel().getPlayerCardClasses();
+
+        if (playerCardType == PlayerCardType.Standard) {
+            if (cardClasses.size() > 1)
+                return "multi";
+            else
+                return cardClasses.get(0).name().toLowerCase();
+        }
+
+        switch (playerCardType) {
+            case Neutral:
+                return "neutral";
+
+            case Specialist:
+                return "specialist";
+
+            case Story:
+                return "story";
+
+            case StoryWeakness:
+            case Weakness:
+            case BasicWeakness:
+                return "weakness";
+
+            default:
+                throw new RuntimeException("Unsupported player card type " + playerCardType.name());
+        }
     }
 
     public PlayerCardFieldsModel getModel() {
@@ -81,7 +115,9 @@ public class PlayerCardFieldsView {
             playerCardClass3Editor.setEnabled(enableClassEditors);
         });
 
-        costEditor = EditorUtils.createTextField(30);
+        if (showCost)
+            costEditor = EditorUtils.createTextField(30);
+
         playerCardLevelEditor = EditorUtils.createNullableComboBox();
         IntStream.rangeClosed(0, 5).forEach(value -> playerCardLevelEditor.addItem(value));
 
@@ -98,7 +134,9 @@ public class PlayerCardFieldsView {
         EditorUtils.bindComboBox(playerCardClass2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass2(value)));
         EditorUtils.bindComboBox(playerCardClass3Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass3(value)));
         EditorUtils.bindComboBox(playerCardLevelEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setLevel(value)));
-        EditorUtils.bindTextComponent(costEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCost(value)));
+
+        if (showCost)
+            EditorUtils.bindTextComponent(costEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCost(value)));
 
         EditorUtils.bindComboBox(skillIcon1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSkillIcon1(value)));
         EditorUtils.bindComboBox(skillIcon2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSkillIcon2(value)));
@@ -111,7 +149,10 @@ public class PlayerCardFieldsView {
         playerCardClass1Editor.setSelectedItem(getModel().getPlayerCardClass1());
         playerCardClass2Editor.setSelectedItem(getModel().getPlayerCardClass2());
         playerCardClass3Editor.setSelectedItem(getModel().getPlayerCardClass3());
-        costEditor.setText(getModel().getCost());
+
+        if (showCost)
+            costEditor.setText(getModel().getCost());
+
         playerCardLevelEditor.setSelectedItem(getModel().getLevel());
         skillIcon1Editor.setSelectedItem(getModel().getSkillIcon1());
         skillIcon2Editor.setSelectedItem(getModel().getSkillIcon2());
@@ -125,7 +166,10 @@ public class PlayerCardFieldsView {
         MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.CLASS1));
         MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.CLASS2));
         MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.CLASS3));
-        MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.COST));
+
+        if (showCost)
+            MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.COST));
+
         MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.LEVEL));
     }
 
@@ -134,7 +178,10 @@ public class PlayerCardFieldsView {
         panel.add(playerCardClass1Editor);
         panel.add(playerCardClass2Editor);
         panel.add(playerCardClass3Editor);
-        panel.add(costEditor);
+
+        if (showCost)
+            panel.add(costEditor);
+
         panel.add(playerCardLevelEditor);
     }
 
@@ -192,7 +239,7 @@ public class PlayerCardFieldsView {
     }
 
 
-    private static final java.util.List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
+    private static final List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
             new Rectangle(0, 168, 100, 76),
             new Rectangle(0, 252, 100, 76),
             new Rectangle(0, 336, 100, 76),

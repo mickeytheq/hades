@@ -39,13 +39,13 @@ public class PortraitWithArtistView {
 
     public JPanel createStandardArtPanel(EditorContext editorContext) {
         // have a zero inset as to avoid a double-spaced margin as this panel is usually embedded within other panels
-        JPanel artistWithPortraitPanel = MigLayoutUtils.createPanel(new LC().insets("0"));
+        JPanel artistWithPortraitPanel = MigLayoutUtils.createEmbeddedPanel();
 
         PortraitPanel portraitPanel = portraitView.createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
 
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
-        JPanel artistPanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.ARTIST));
+        JPanel artistPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ARTIST));
         MigLayoutUtils.addLabelledComponentWrap(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
 
         artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");

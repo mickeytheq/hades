@@ -2,14 +2,17 @@ package com.mickeytheq.ahlcg4j.core.view.common;
 
 import ca.cgjennings.apps.arkham.PortraitPanel;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.mozilla.javascript.tools.debugger.Dim;
+import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,22 +61,20 @@ public class NumberingView {
     public JPanel createStandardCollectionEncounterPanel(EditorContext editorContext) {
         PortraitPanel collectionPortraitPanel = collectionPortraitView.createPortraitPanel(editorContext, "Collection portrait");
 
-        JPanel collectionDetailPanel = new JPanel(new MigLayout());
-        collectionDetailPanel.setBorder(BorderFactory.createTitledBorder("Collection"));
+        JPanel collectionDetailPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.COLLECTION));
         collectionDetailPanel.add(new JLabel("Collection number: "), "aligny center");
         collectionDetailPanel.add(collectionNumberEditor, "wrap");
 
         PortraitPanel encounterPortraitPanel = encounterPortraitView.createPortraitPanel(editorContext, "Encounter portrait");
 
-        JPanel encounterDetailPanel = new JPanel(new MigLayout());
-        encounterDetailPanel.setBorder(BorderFactory.createTitledBorder("Encounter"));
+        JPanel encounterDetailPanel = MigLayoutUtils.createTitledPanel("Encounter"); // TODO: i18n
         encounterDetailPanel.add(new JLabel("Encounter number: "), "aligny center");
         encounterDetailPanel.add(encounterNumberEditor, "split");
         encounterDetailPanel.add(new JLabel(" / "), "split");
         encounterDetailPanel.add(encounterTotalEditor, "split, wrap");
 
         // merge collection and encounter into a single tab
-        JPanel collectionEncounterPanel = new JPanel(new MigLayout());
+        JPanel collectionEncounterPanel = MigLayoutUtils.createEmbeddedPanel();
         collectionEncounterPanel.add(collectionDetailPanel, "wrap, pushx, growx");
         collectionEncounterPanel.add(collectionPortraitPanel, "wrap, pushx, growx");
         collectionEncounterPanel.add(encounterDetailPanel, "wrap, pushx, growx");

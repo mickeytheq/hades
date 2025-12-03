@@ -10,13 +10,9 @@ import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
 import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.View;
-import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
-import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
-import com.mickeytheq.ahlcg4j.core.view.common.PlayerCardFieldsView;
-import com.mickeytheq.ahlcg4j.core.view.common.PortraitWithArtistView;
+import com.mickeytheq.ahlcg4j.core.view.common.*;
 import com.mickeytheq.ahlcg4j.core.view.component.StatisticComponent;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
-import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -45,7 +41,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
-        playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel());
+        playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
@@ -67,35 +63,13 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     private String getTemplateName() {
-        if (getModel().getPlayerCardFieldsModel().getPlayerCardType() == PlayerCardType.Standard) {
-            List<PlayerCardClass> cardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
 
-            if (cardClasses.size() > 1)
-                return "multi";
-            else
-                return cardClasses.get(0).name().toLowerCase();
-        }
+        // special template for story weakness instead of the regular weakness
+        if (playerCardType == PlayerCardType.StoryWeakness)
+            return "story_weakness";
 
-        switch (getModel().getPlayerCardFieldsModel().getPlayerCardType()) {
-            case Neutral:
-                return "neutral";
-
-            case Specialist:
-                return "specialist";
-
-            case Story:
-                return "story";
-
-            case StoryWeakness:
-                return "story_weakness";
-
-            case Weakness:
-            case BasicWeakness:
-                return "weakness";
-
-            default:
-                throw new RuntimeException("Unsupported player card type " + getModel().getPlayerCardFieldsModel().getPlayerCardType().name());
-        }
+        return playerCardFieldsView.getTemplateName();
     }
 
     private boolean canHaveSubtitleTemplate() {
@@ -117,12 +91,12 @@ public class AssetView extends BaseCardFaceView<Asset> {
         createRulesAndPortraitTab(editorContext);
 
         numberingView.createEditors(editorContext);
-        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
+        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext)); // TODO: i18n
     }
 
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
         // title
-        JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
+        JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
 
         playerCardFieldsView.createEditors(editorContext);
@@ -136,11 +110,11 @@ public class AssetView extends BaseCardFaceView<Asset> {
         JPanel statsPanel = new JPanel(playerCardFieldsView.createTwoColumnLayout());
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
-        JPanel mainPanel = MigLayoutUtils.createPanel();
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.getTabbedPane().addTab(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
 
         // layout
 
@@ -175,16 +149,16 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
-        JPanel generalPanel = MigLayoutUtils.createPanel("General"); // TODO: i18n
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = new JPanel(new MigLayout());
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
-        editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
     private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);

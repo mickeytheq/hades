@@ -57,7 +57,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         createTitleAndStatsEditors(editorContext);
         createRulesEditors(editorContext);
 
-        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
+        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
     }
 
     private void createTitleAndStatsEditors(EditorContext editorContext) {
@@ -75,7 +75,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         // layout
 
         // title
-        JPanel titlePanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.TITLE));
+        JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
 
         // stats
@@ -107,11 +107,11 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         statsPanel.add(combatEditor);
         statsPanel.add(agilityEditor);
 
-        JPanel mainPanel = MigLayoutUtils.createPanel();
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.getTabbedPane().addTab(Language.string(InterfaceConstants.INVESTIGATOR) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent(Language.string(InterfaceConstants.INVESTIGATOR) + " - " + "Stats", mainPanel); // TODO: i18n
 
         // bindings
         EditorUtils.bindComboBox(investigatorClassEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setInvestigatorClass(value)));
@@ -135,16 +135,16 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
     }
 
     private void createRulesEditors(EditorContext editorContext) {
-        JPanel generalPanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.GENERAL));
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = new JPanel(new MigLayout());
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
-        editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(96, 22, 414, 54);

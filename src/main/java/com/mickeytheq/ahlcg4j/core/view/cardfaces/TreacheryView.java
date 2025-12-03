@@ -69,7 +69,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
 
-        JPanel generalPanel = MigLayoutUtils.createPanel("General");
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel("General");
 
         commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false);
 
@@ -78,15 +78,15 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, true);
 
-        JPanel mainPanel = new JPanel(new MigLayout());
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
 
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
-        editorContext.getTabbedPane().addTab(getCardFaceSide().name(), mainPanel);
-        editorContext.getTabbedPane().addTab("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
+        editorContext.addDisplayComponent(getCardFaceSide().name(), mainPanel);
+        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext)); // TODO: i18n
     }
 
     public BufferedImage getTemplateImage() {

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class MigLayoutUtils {
     public static void assertMigLayout(Container container) {
@@ -14,31 +15,30 @@ public class MigLayoutUtils {
             throw new RuntimeException("Container '" + container.getName() + "' is required to have MigLayout layout manager but does not");
     }
 
-    public static MigLayout getMigLayout(Container container) {
-        assertMigLayout(container);
-
-        return (MigLayout)container.getLayout();
+    public static LC createDefaultLayoutContraints() {
+        LC lc = new LC();
+        return lc;
     }
 
-    public static JPanel createPanel(LC layoutConstraints) {
-        return createPanel(layoutConstraints, null);
+    public static MigLayout createDefaultMigLayout() {
+        return new MigLayout(createDefaultLayoutContraints());
     }
 
-    public static JPanel createPanel(LC layoutConstraints, @Nullable String title) {
-        JPanel panel = new JPanel(new MigLayout(layoutConstraints));
+    // creates a panel that has a titled border and standard insets/gaps within the panel
+    public static JPanel createTitledPanel(String title) {
+        Objects.requireNonNull(title);
 
-        if (!StringUtils.isEmpty(title))
-            panel.setBorder(BorderFactory.createTitledBorder(title));
+        JPanel panel = new JPanel(createDefaultMigLayout());
+        panel.setBorder(BorderFactory.createTitledBorder(title));
 
         return panel;
     }
 
-    public static JPanel createPanel() {
-        return createPanel(null, null);
-    }
-
-    public static JPanel createPanel(String title) {
-        return createPanel(null, title);
+    // creates a panel that has no visual spacing/border or any other elements and is simply
+    // used as a container/organiser for other elements
+    public static JPanel createEmbeddedPanel() {
+        JPanel panel = new JPanel(new MigLayout(createDefaultLayoutContraints().insets("0")));
+        return panel;
     }
 
     // adds a label followed by a component and wrap to the next row

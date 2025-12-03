@@ -11,6 +11,7 @@ import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.DoubleFunction;
 import java.util.function.Function;
 
 public class MarkupUtils {
@@ -113,19 +114,23 @@ public class MarkupUtils {
     // creates a function that maps input Points to output points. Input points are a ratio (typically 0 to 1) of the
     // width/height of the target draw region. The outputs are the absolute positions within the draw region.
     // for example a region with an X of 100 and a width of 200 would translate a 0.25 input to be 100 + 200 * 0.25 = 150
-    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapper(Rectangle drawRegion, boolean invertX) {
-        if (invertX) {
-            return point2D -> new Point2D.Double(
-                    drawRegion.getX() + drawRegion.getWidth() * (1.0 - point2D.getX()),
-                    drawRegion.getY() + drawRegion.getHeight() * point2D.getY()
-            );
-        }
-        else {
-            return point2D -> new Point2D.Double(
-                    drawRegion.getX() + drawRegion.getWidth() * point2D.getX(),
-                    drawRegion.getY() + drawRegion.getHeight() * point2D.getY()
-            );
-        }
+    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapper(Rectangle drawRegion) {
+        return createRatioIntoDrawRegionMapper(drawRegion, Function.identity());
+    }
+
+    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapperInvertX(Rectangle drawRegion) {
+        return createRatioIntoDrawRegionMapper(drawRegion, aDouble -> 1.0 - aDouble);
+    }
+
+    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapperTranslateX(Rectangle drawRegion, double xShift) {
+        return createRatioIntoDrawRegionMapper(drawRegion, aDouble -> xShift + aDouble);
+    }
+
+    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapper(Rectangle drawRegion, Function<Double, Double> xFunction) {
+        return point2D -> new Point2D.Double(
+                drawRegion.getX() + drawRegion.getWidth() * xFunction.apply(point2D.getX()),
+                drawRegion.getY() + drawRegion.getHeight() * point2D.getY()
+        );
     }
 
     // creates a page shape that follows a path created by joining all the points in the provided lists and completing
@@ -137,7 +142,7 @@ public class MarkupUtils {
 
         Path2D path = new Path2D.Double();
 
-        Function<Point2D, Point2D> mapperFunction = createRatioIntoDrawRegionMapper(drawRegion, false);
+        Function<Point2D, Point2D> mapperFunction = createRatioIntoDrawRegionMapper(drawRegion);
 
         // start the path at the first point
         Point2D firstPoint = mapperFunction.apply(pathPoints.get(0));

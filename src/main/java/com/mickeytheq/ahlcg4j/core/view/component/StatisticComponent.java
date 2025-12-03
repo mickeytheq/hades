@@ -5,6 +5,7 @@ import ca.cgjennings.ui.DocumentEventAdapter;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.ImageUtils;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
@@ -28,7 +29,7 @@ public class StatisticComponent extends JPanel {
         Icon icon = ImageUtilities.createIconForSize(image, 12);
         perInvestigatorButton = new JToggleButton(icon, false);
 
-        setLayout(new MigLayout(new LC().gridGap("0", "0").insets("0")));
+        setLayout(new MigLayout(MigLayoutUtils.createDefaultLayoutContraints().gridGap("0", "0").insets("0")));
 
         add(textField, "growx, pushx");
         add(perInvestigatorButton);

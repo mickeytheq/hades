@@ -1,6 +1,7 @@
 package com.mickeytheq.ahlcg4j.core.view;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.function.Consumer;
 
 /**
@@ -10,8 +11,7 @@ import java.util.function.Consumer;
  * implementations
  */
 public interface EditorContext {
-    // the tabbed pane that sets of controls should be added to
-    JTabbedPane getTabbedPane();
+    void addDisplayComponent(String title, Component component);
 
     //
     // mark changed methods

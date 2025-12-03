@@ -56,7 +56,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     public void createEditors(EditorContext editorContext) {
         portraitWithArtistView.createEditors(editorContext);
 
-        JPanel generalPanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.GENERAL));
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
 
         createSection(editorContext, getModel().getSection1(), 1, generalPanel);
         createSection(editorContext, getModel().getSection2(), 2, generalPanel);
@@ -72,8 +72,8 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         storyEditor.setText(getModel().getStory());
         MigLayoutUtils.addLabelledComponentWrap(generalPanel, Language.string(InterfaceConstants.STORY), storyEditor);
 
-        editorContext.getTabbedPane().addTab("Back - General", generalPanel);
-        editorContext.getTabbedPane().addTab("Back - Portrait", portraitWithArtistView.createStandardArtPanel(editorContext));
+        editorContext.addDisplayComponent( "Back - General", generalPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Back - Portrait", portraitWithArtistView.createStandardArtPanel(editorContext)); // TODO: i18n
     }
 
     private void createSection(EditorContext editorContext, InvestigatorBack.InvestigatorBackSection section, int sectionIndex, JPanel panel) {

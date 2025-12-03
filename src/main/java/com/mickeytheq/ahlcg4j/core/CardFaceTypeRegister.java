@@ -27,6 +27,7 @@ public class CardFaceTypeRegister {
 
         register(Asset.class, AssetView.class);
         register(Event.class, EventView.class);
+        register(Skill.class, SkillView.class);
 
         register(Treachery.class, TreacheryView.class);
 
