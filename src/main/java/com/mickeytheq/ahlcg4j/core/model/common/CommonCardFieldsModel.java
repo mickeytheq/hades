@@ -36,6 +36,11 @@ public class CommonCardFieldsModel {
         this.unique = unique;
     }
 
+    // return true only if the unique is set to true, false if the value is false or null
+    public boolean isUnique() {
+        return Boolean.TRUE.equals(unique);
+    }
+
     @Property("Subtitle")
     public String getSubtitle() {
         return subtitle;

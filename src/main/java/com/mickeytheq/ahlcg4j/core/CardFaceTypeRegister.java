@@ -2,18 +2,10 @@ package com.mickeytheq.ahlcg4j.core;
 
 import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.Model;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
 import com.mickeytheq.ahlcg4j.core.view.View;
-import com.mickeytheq.ahlcg4j.core.view.cardfaces.EncounterCardBackView;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.PlayerCardBack;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
-import com.mickeytheq.ahlcg4j.core.view.cardfaces.EventView;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Treachery;
-import com.mickeytheq.ahlcg4j.core.view.cardfaces.TreacheryView;
+import com.mickeytheq.ahlcg4j.core.view.cardfaces.*;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
-import com.mickeytheq.ahlcg4j.core.view.cardfaces.AssetView;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.EncounterCardBack;
-import com.mickeytheq.ahlcg4j.core.view.cardfaces.PlayerCardBackView;
 import resources.Language;
 
 import java.util.*;
@@ -30,9 +22,13 @@ public class CardFaceTypeRegister {
     }
 
     private CardFaceTypeRegister() {
+        register(Investigator.class, InvestigatorView.class);
+        register(InvestigatorBack.class, InvestigatorBackView.class);
+
         register(Asset.class, AssetView.class);
-        register(Treachery.class, TreacheryView.class);
         register(Event.class, EventView.class);
+
+        register(Treachery.class, TreacheryView.class);
 
         register(EncounterCardBack.class, EncounterCardBackView.class);
         register(PlayerCardBack.class, PlayerCardBackView.class);
@@ -68,7 +64,7 @@ public class CardFaceTypeRegister {
         View view = cardFaceViewClass.getAnnotation(View.class);
 
         if (view == null)
-            throw new RuntimeException("View class '" + cardFaceModelClass.getName() + "' does not have the @View annotation");
+            throw new RuntimeException("View class '" + cardFaceViewClass.getName() + "' does not have the @View annotation");
 
         CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, model.typeCode(), view.interfaceLanguageKey());
 

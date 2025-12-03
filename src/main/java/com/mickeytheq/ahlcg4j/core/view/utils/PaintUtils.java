@@ -1,7 +1,9 @@
 package com.mickeytheq.ahlcg4j.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.font.GlyphVector;
@@ -15,6 +17,142 @@ public class PaintUtils {
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(labelText);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+    }
+
+    public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+
+        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
+
+        if (unique)
+            titleText = "<uni>" + titleText;
+
+        markupRenderer.setMarkupText(titleText);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+    }
+
+    public static void paintSubtitle(PaintContext paintContext, Rectangle drawRegion, String subtitleText) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getSubtitleTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(subtitleText);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+    }
+
+    public static void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion) {
+        paintBodyText(paintContext, bodyText, bodyDrawRegion, PageShape.RECTANGLE_SHAPE);
+    }
+
+    public static void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion, PageShape pageShape) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
+        markupRenderer.setLineTightness(0.6f * 0.9f);
+        markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
+        markupRenderer.setPageShape(pageShape);
+
+        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
+
+        markupRenderer.setMarkupText(bodyText);
+        markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);
+    }
+
+    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 24);
+    private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 6).deriveFont(6.5f);
+
+    private static final Color HEALTH_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
+    private static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
+    private static final Color SANITY_TEXT_COLOUR = HEALTH_TEXT_COLOUR;
+    private static final Color SANITY_TEXT_OUTLINE_COLOUR = new Color(0.25f, 0.33f, 0.44f);
+
+    public static void paintHealth(PaintContext paintContext, Rectangle drawRegion, boolean paintSymbol, String value, boolean perInvestigator) {
+        if (StringUtils.isEmpty(value))
+            return;
+
+        if (paintSymbol)
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), drawRegion);
+
+        if (perInvestigator) {
+            Rectangle healthStatDrawRegion = new Rectangle(drawRegion);
+            healthStatDrawRegion.translate(-15, -5);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    value,
+                    healthStatDrawRegion,
+                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
+                    HEALTH_TEXT_COLOUR,
+                    HEALTH_TEXT_OUTLINE_COLOUR,
+                    0, true);
+
+            Rectangle perInvestigatorDrawRegion = new Rectangle(healthStatDrawRegion);
+            perInvestigatorDrawRegion.translate(30, 0);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    "p",
+                    perInvestigatorDrawRegion,
+                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
+                    HEALTH_TEXT_COLOUR,
+                    HEALTH_TEXT_OUTLINE_COLOUR,
+                    0, true);
+        }
+        else {
+            Rectangle healthStatDrawRegion = new Rectangle(drawRegion);
+            healthStatDrawRegion.translate(-2, -5);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    value,
+                    healthStatDrawRegion,
+                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
+                    HEALTH_TEXT_COLOUR,
+                    HEALTH_TEXT_OUTLINE_COLOUR,
+                    0, true);
+        }
+    }
+
+    public static void paintSanity(PaintContext paintContext, Rectangle drawRegion, boolean paintSymbol, String value, boolean perInvestigator) {
+        if (StringUtils.isEmpty(value))
+            return;
+
+        if (paintSymbol)
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), drawRegion);
+
+        if (perInvestigator) {
+            Rectangle statDrawRegion = new Rectangle(drawRegion);
+            statDrawRegion.translate(-8, -5);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    value,
+                    statDrawRegion,
+                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
+                    SANITY_TEXT_COLOUR,
+                    SANITY_TEXT_OUTLINE_COLOUR,
+                    0, true);
+
+            Rectangle perInvestigatorDrawRegion = new Rectangle(statDrawRegion);
+            perInvestigatorDrawRegion.translate(30, 0);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    "p",
+                    perInvestigatorDrawRegion,
+                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
+                    SANITY_TEXT_COLOUR,
+                    SANITY_TEXT_OUTLINE_COLOUR,
+                    0, true);
+        }
+        else {
+            Rectangle statDrawRegion = new Rectangle(drawRegion);
+            statDrawRegion.translate(-2, -5);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+                    value,
+                    statDrawRegion,
+                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
+                    SANITY_TEXT_COLOUR,
+                    SANITY_TEXT_OUTLINE_COLOUR,
+                    0, true);
+        }
     }
 
     public static void paintBufferedImage(Graphics2D g, BufferedImage image, Rectangle rectangle) {

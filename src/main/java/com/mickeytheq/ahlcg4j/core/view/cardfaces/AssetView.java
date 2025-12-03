@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardClass;
-import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardType;
 import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
@@ -14,9 +13,9 @@ import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
 import com.mickeytheq.ahlcg4j.core.view.common.PlayerCardFieldsView;
+import com.mickeytheq.ahlcg4j.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.ahlcg4j.core.view.component.StatisticComponent;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
-import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -36,6 +35,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
     private PlayerCardFieldsView playerCardFieldsView;
+    private PortraitWithArtistView portraitWithArtistView;
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
@@ -43,9 +43,10 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel());
+        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -110,6 +111,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
 
+        portraitWithArtistView.createEditors(editorContext);
+
         createTitleAndStatisticsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
 
@@ -173,12 +176,12 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
         JPanel generalPanel = MigLayoutUtils.createPanel("General"); // TODO: i18n
-        commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel);
+        commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
         JPanel mainPanel = new JPanel(new MigLayout());
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
-        mainPanel.add(commonCardFieldsView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
         editorContext.getTabbedPane().addTab("Rules / portrait", mainPanel); // TODO: i18n
@@ -195,7 +198,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        commonCardFieldsView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -207,12 +210,14 @@ public class AssetView extends BaseCardFaceView<Asset> {
         // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
         commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
 
-        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
             numberingView.paintEncounterNumbers(paintContext);
             numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
+
+        portraitWithArtistView.paintArtist(paintContext);
 
         numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
@@ -231,8 +236,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
 
         paintSlots(paintContext);
 
-        paintHealth(paintContext);
-        paintSanity(paintContext);
+        PaintUtils.paintHealth(paintContext, HEALTH_BASE_DRAW_REGION, true, getModel().getHealth().getValue(), getModel().getHealth().isPerInvestigator());
+        PaintUtils.paintSanity(paintContext, SANITY_BASE_DRAW_REGION, true, getModel().getSanity().getValue(), getModel().getSanity().isPerInvestigator());
     }
 
     // regions are from right to left
@@ -303,104 +308,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
     private static final Rectangle HEALTH_BASE_DRAW_REGION = new Rectangle(292, 936, 62, 78);
     private static final Rectangle SANITY_BASE_DRAW_REGION = new Rectangle(394, 942, 86, 72);
 
-    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 24);
-    private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 6).deriveFont(6.5f);
-
-    private static final Color HEALTH_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
-    private static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
-    private static final Color SANITY_TEXT_COLOUR = HEALTH_TEXT_COLOUR;
-    private static final Color SANITY_TEXT_OUTLINE_COLOUR = new Color(0.25f, 0.33f, 0.44f);
-
     // TODO: review this painting code in different scenarios particularly the per investigator scenarios
     // TODO: ideally how it should work is draw the value text somewhere, and the per investigator text if present, work out
     // TODO: the total width of those two elements and then place them centred on the health/sanity overlay/icon
-    private void paintHealth(PaintContext paintContext) {
-        String value = getModel().getHealth().getValue();
-
-        if (StringUtils.isEmpty(value))
-            return;
-
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/health_base.png")), HEALTH_BASE_DRAW_REGION);
-
-        if (getModel().getHealth().isPerInvestigator()) {
-            Rectangle healthStatDrawRegion = new Rectangle(HEALTH_BASE_DRAW_REGION);
-            healthStatDrawRegion.translate(-15, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(healthStatDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle healthStatDrawRegion = new Rectangle(HEALTH_BASE_DRAW_REGION);
-            healthStatDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-    }
-
-    private void paintSanity(PaintContext paintContext) {
-        String value = getModel().getSanity().getValue();
-
-        if (StringUtils.isEmpty(value))
-            return;
-
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/sanity_base.png")), SANITY_BASE_DRAW_REGION);
-
-        if (getModel().getSanity().isPerInvestigator()) {
-            Rectangle statDrawRegion = new Rectangle(SANITY_BASE_DRAW_REGION);
-            statDrawRegion.translate(-8, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(statDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle statDrawRegion = new Rectangle(SANITY_BASE_DRAW_REGION);
-            statDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-    }
 }

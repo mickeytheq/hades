@@ -3,6 +3,7 @@ package com.mickeytheq.ahlcg4j.core.model.cardfaces;
 import com.mickeytheq.ahlcg4j.core.model.BaseCardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
+import com.mickeytheq.ahlcg4j.core.model.common.PortraitWithArtistModel;
 import com.mickeytheq.ahlcg4j.core.model.entity.Property;
 import com.mickeytheq.ahlcg4j.core.model.Model;
 import com.mickeytheq.ahlcg4j.core.model.common.WeaknessType;
@@ -13,14 +14,15 @@ public class Treachery extends BaseCardFaceModel {
     private WeaknessType weaknessType;
 
     private final CommonCardFieldsModel commonCardFieldsModel;
-
     private final NumberingModel numberingModel;
+    private final PortraitWithArtistModel portraitWithArtistModel;
 
     public Treachery() {
         weaknessType = WeaknessType.None;
 
         commonCardFieldsModel = new CommonCardFieldsModel();
         numberingModel = new NumberingModel();
+        portraitWithArtistModel = new PortraitWithArtistModel();
     }
 
     @Property("WeaknessType")
@@ -40,5 +42,10 @@ public class Treachery extends BaseCardFaceModel {
     @Property(flatten = true)
     public NumberingModel getNumberingModel() {
         return numberingModel;
+    }
+
+    @Property("ArtPortrait")
+    public PortraitWithArtistModel getPortraitWithArtistModel() {
+        return portraitWithArtistModel;
     }
 }

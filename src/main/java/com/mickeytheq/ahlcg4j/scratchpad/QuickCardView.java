@@ -3,15 +3,13 @@ package com.mickeytheq.ahlcg4j.scratchpad;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.ahlcg4j.core.model.Card;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Treachery;
 import com.mickeytheq.ahlcg4j.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 
@@ -23,17 +21,46 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-public class EditCardScratch {
+public class QuickCardView {
     public static void main(String[] args) {
-        new EditCardScratch().run();
+        new QuickCardView().run();
     }
 
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        asset();
+//        asset();
+        investigator();
 //        event();
 //        treachery();
+    }
+
+    private void investigator() {
+        Investigator model = new Investigator();
+        model.getCommonCardFieldsModel().setTitle("MickeyTheQ");
+
+        model.setWillpower("1");
+        model.setIntellect("2");
+        model.setCombat("3");
+        model.setAgility("4");
+
+        model.setHealth("6");
+        model.setSanity("8");
+
+        InvestigatorBack backModel = new InvestigatorBack();
+        backModel.getSection1().setHeader("<hdr>Deck Size: </hdr>");
+        backModel.getSection1().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
+        backModel.getSection2().setHeader("<hdr>Deck Size: </hdr>");
+        backModel.getSection2().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
+        backModel.getSection3().setHeader("<hdr>Deck Size: </hdr>");
+        backModel.getSection3().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
+        backModel.getSection4().setHeader("<hdr>Deck Size: </hdr>");
+        backModel.getSection4().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
+        backModel.setStory("'Waffle waffle waffle fdsfdsfdsfsd fdskl;fdskfds fdfdsfsd fdsfdsfd sfds fds fsd fds fds fsd fdsf dsf dsf dsf dsf sdfds fsd fsd fds fds fsd fsd fds fds fsd fds fdsf dsdfsfd'");
+
+        Card card = CardFaces.createCardModel(model, backModel);
+
+        displayEditor(card);
     }
 
     private void event() {
@@ -133,7 +160,7 @@ public class EditCardScratch {
             JFrame frame = new JFrame();
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(splitPane);
-            frame.setPreferredSize(new Dimension(1600, 1200));
+            frame.setPreferredSize(new Dimension(2000, 1200));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);

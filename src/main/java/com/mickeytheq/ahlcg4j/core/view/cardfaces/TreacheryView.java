@@ -9,6 +9,7 @@ import com.mickeytheq.ahlcg4j.core.view.BaseCardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.ahlcg4j.core.view.common.NumberingView;
+import com.mickeytheq.ahlcg4j.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
 import com.mickeytheq.ahlcg4j.core.model.common.WeaknessType;
 import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
@@ -29,6 +30,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
+    private PortraitWithArtistView portraitWithArtistView;
 
     // locations to draw portraits
     private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
@@ -47,14 +49,17 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+
     }
 
     @Override
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
         numberingView.createEditors(editorContext);
+        portraitWithArtistView.createEditors(editorContext);
 
         weaknessTypeEditor = new JComboBox<>();
         weaknessTypeEditor.addItem(WeaknessType.None);
@@ -71,13 +76,13 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         generalPanel.add(new JLabel("Weakness type"));
         generalPanel.add(weaknessTypeEditor, "wrap, pushx, growx");
 
-        commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel);
+        commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, true);
 
         JPanel mainPanel = new JPanel(new MigLayout());
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
 
-        mainPanel.add(commonCardFieldsView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
         editorContext.getTabbedPane().addTab(getCardFaceSide().name(), mainPanel);
@@ -97,7 +102,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        commonCardFieldsView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -112,6 +117,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
             paintNonWeaknessContent(paintContext);
         else
             paintWeaknessContent(paintContext);
+
+        portraitWithArtistView.paintArtist(paintContext);
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
@@ -120,7 +127,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
 
-        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -153,7 +160,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), WEAKNESS_SUBTYPE_DRAW_REGION);
 
-        commonCardFieldsView.paintBodyCopyrightArtist(paintContext, BODY_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_WEAKNESS_DRAW_REGION);
 
         numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);

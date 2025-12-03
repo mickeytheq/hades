@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 
 public class EditorUtils {
     public static final String DEFAULT_NULL_COMBO_BOX_DISPLAY = "(None)"; // TODO: i18n
+    public static final String COPY_FRONT = "(Copy front)"; // TODO: i18n
 
     public static JTextField createTextField(int columns) {
         JTextField textFieldEditor = new JTextField(columns);
@@ -24,6 +25,11 @@ public class EditorUtils {
         JTextArea textAreaEditor = new JTextArea(rows, columns);
         applyNoEditorOverride(textAreaEditor);
         return textAreaEditor;
+    }
+
+    public static JSpinner createSpinnerNonNegative(int maximumValue) {
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, maximumValue, 1));
+        return spinner;
     }
 
     public static <E extends Enum> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz) {
@@ -82,6 +88,12 @@ public class EditorUtils {
     public static void bindToggleButton(JToggleButton button, Consumer<Boolean> consumer) {
         button.addActionListener(e -> {
             consumer.accept(button.isSelected());
+        });
+    }
+
+    public static void bindSpinner(JSpinner spinner, Consumer<Integer> consumer) {
+        spinner.addChangeListener(e -> {
+            consumer.accept((Integer)spinner.getValue());
         });
     }
 

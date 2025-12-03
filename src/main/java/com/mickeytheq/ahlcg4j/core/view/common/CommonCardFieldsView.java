@@ -1,14 +1,13 @@
 package com.mickeytheq.ahlcg4j.core.view.common;
 
-import ca.cgjennings.apps.arkham.PortraitPanel;
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
-import net.miginfocom.layout.LC;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -17,7 +16,6 @@ import java.awt.*;
 
 public class CommonCardFieldsView {
     private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(274, 1024, 202, 20);
-    private static final Rectangle ARTIST_DRAW_REGION = new Rectangle(28, 1024, 242, 20);
 
 
     private final CommonCardFieldsModel model;
@@ -30,14 +28,9 @@ public class CommonCardFieldsView {
     private JTextArea rulesEditor;
     private JTextArea flavorTextEditor;
     private JTextArea victoryEditor;
-    private JTextField artistEditor;
 
-    private PortraitView artPortraitView;
-
-    public CommonCardFieldsView(CommonCardFieldsModel model, Dimension artPortraitDimension) {
+    public CommonCardFieldsView(CommonCardFieldsModel model) {
         this.model = model;
-
-        artPortraitView = PortraitView.createWithDefaultImage(getModel().getArtPortraitModel(), artPortraitDimension);
     }
 
     public void createEditors(EditorContext editorContext) {
@@ -51,7 +44,6 @@ public class CommonCardFieldsView {
         flavorTextEditor = EditorUtils.createTextArea(6, 30);
         victoryEditor = EditorUtils.createTextArea(2, 30);
         copyrightEditor = EditorUtils.createTextField(30);
-        artistEditor = EditorUtils.createTextField(30);
 
         EditorUtils.bindTextComponent(titleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTitle));
         EditorUtils.bindTextComponent(subtitleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setSubtitle));
@@ -62,7 +54,6 @@ public class CommonCardFieldsView {
         EditorUtils.bindTextComponent(flavorTextEditor, editorContext.wrapConsumerWithMarkedChanged(model::setFlavourText));
         EditorUtils.bindTextComponent(victoryEditor, editorContext.wrapConsumerWithMarkedChanged(model::setVictory));
         EditorUtils.bindTextComponent(copyrightEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyright));
-        EditorUtils.bindTextComponent(artistEditor, editorContext.wrapConsumerWithMarkedChanged(model::setArtist));
 
         titleEditor.setText(model.getTitle());
         subtitleEditor.setText(model.getSubtitle());
@@ -73,7 +64,6 @@ public class CommonCardFieldsView {
         flavorTextEditor.setText(model.getFlavourText());
         victoryEditor.setText(model.getVictory());
         copyrightEditor.setText(model.getCopyright());
-        artistEditor.setText(model.getArtist());
     }
 
     public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption) {
@@ -90,36 +80,20 @@ public class CommonCardFieldsView {
             MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.SUBTITLE), subtitleEditor);
     }
 
-    public void addNonTitleEditorsToPanel(JPanel panel) {
+    public void addNonTitleEditorsToPanel(JPanel panel, boolean includeVictory) {
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.FLAVOR), flavorTextEditor);
-        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
+
+        if (includeVictory)
+            MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
+
         MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.COPYRIGHT), copyrightEditor);
-    }
-
-    public JPanel createStandardArtPanel(EditorContext editorContext) {
-        JPanel artistWithPortraitPanel = MigLayoutUtils.createPanel(new LC().insets("0"));
-
-        PortraitPanel portraitPanel = artPortraitView.createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
-
-        artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
-
-        JPanel artistPanel = MigLayoutUtils.createPanel(Language.string(InterfaceConstants.ARTIST));
-        MigLayoutUtils.addLabelledComponentWrap(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
-
-        artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
-
-        return artistWithPortraitPanel;
     }
 
     public CommonCardFieldsModel getModel() {
         return model;
-    }
-
-    public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
-        artPortraitView.paint(paintContext, drawRegion, false);
     }
 
     public void paintTitles(PaintContext paintContext, Rectangle titleDrawRegion, Rectangle subtitleDrawRegion) {
@@ -128,35 +102,22 @@ public class CommonCardFieldsView {
     }
 
     public void paintTitle(PaintContext paintContext, Rectangle titleDrawRegion) {
-        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-
-        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
-
-        String titleText = getModel().getTitle();
-
-        if (getModel().getUnique() != null && getModel().getUnique())
-            titleText = "<uni>" + titleText;
-
-        markupRenderer.setMarkupText(titleText);
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), titleDrawRegion);
+        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUnique());
     }
 
     public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {
-        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getSubtitleTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
-        markupRenderer.setMarkupText(getModel().getSubtitle());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), subtitleDrawRegion);
+        PaintUtils.paintSubtitle(paintContext, subtitleDrawRegion, getModel().getSubtitle());
     }
 
-    public void paintBodyCopyrightArtist(PaintContext paintContext, Rectangle bodyDrawRegion) {
+    public void paintBodyAndCopyright(PaintContext paintContext, Rectangle bodyDrawRegion) {
+        paintBodyAndCopyright(paintContext, bodyDrawRegion, PageShape.RECTANGLE_SHAPE);
+    }
+
+    public void paintBodyAndCopyright(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape pageShape) {
         String bodyString = composeBodyString();
-        paintBodyText(paintContext, bodyString, bodyDrawRegion);
+        PaintUtils.paintBodyText(paintContext, bodyString, bodyDrawRegion, pageShape);
 
         paintCopyright(paintContext);
-        paintArtist(paintContext);
     }
 
     private String composeBodyString() {
@@ -221,32 +182,11 @@ public class CommonCardFieldsView {
         return sb.toString();
     }
 
-    private void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion) {
-        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
-        markupRenderer.setLineTightness(0.6f * 0.9f);
-        markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
-
-        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
-
-        markupRenderer.setMarkupText(bodyText);
-        markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);
-    }
-
     public void paintCopyright(PaintContext paintContext) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getCopyrightTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(model.getCopyright());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), COPYRIGHT_DRAW_REGION);
-    }
-
-    public void paintArtist(PaintContext paintContext) {
-        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
-        markupRenderer.setMarkupText(model.getArtist());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), ARTIST_DRAW_REGION);
     }
 }

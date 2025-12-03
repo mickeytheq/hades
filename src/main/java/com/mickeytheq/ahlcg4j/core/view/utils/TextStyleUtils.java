@@ -24,6 +24,7 @@ public class TextStyleUtils {
     private static final TextStyle ARTIST_TEXT_STYLE;
     private static final TextStyle COPYRIGHT_TEXT_STYLE;
     private static final TextStyle HEADER_TEXT_STYLE;
+    private static final TextStyle INVESTIGATOR_SKILL_VALUE_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -97,6 +98,12 @@ public class TextStyleUtils {
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.TRACKING, 0.01);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.WHITE);
 
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE = new TextStyle();
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FAMILY, "Bolton");
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.SIZE, 22.0);
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
         // same as collection
         ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
         ARTIST_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
@@ -164,5 +171,9 @@ public class TextStyleUtils {
 
     public static TextStyle getHeaderTextStyle() {
         return HEADER_TEXT_STYLE;
+    }
+
+    public static TextStyle getInvestigatorSkillValueTextStyle() {
+        return INVESTIGATOR_SKILL_VALUE_TEXT_STYLE;
     }
 }

@@ -1,13 +1,9 @@
 package com.mickeytheq.ahlcg4j.core.model.cardfaces;
 
 import com.mickeytheq.ahlcg4j.core.model.BaseCardFaceModel;
+import com.mickeytheq.ahlcg4j.core.model.common.*;
 import com.mickeytheq.ahlcg4j.core.model.entity.Property;
 import com.mickeytheq.ahlcg4j.core.model.Model;
-import com.mickeytheq.ahlcg4j.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
-import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardFieldsModel;
-import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
-import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,11 +31,13 @@ public class Asset extends BaseCardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final NumberingModel numberingModel;
     private final PlayerCardFieldsModel playerCardFieldsModel;
+    private final PortraitWithArtistModel portraitWithArtistModel;
 
     public Asset() {
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
         numberingModel = new NumberingModel();
+        portraitWithArtistModel = new PortraitWithArtistModel();
 
         health = Statistic.empty();
         sanity = Statistic.empty();
@@ -94,6 +92,11 @@ public class Asset extends BaseCardFaceModel {
     @Property(flatten = true)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
+    }
+
+    @Property("ArtPortrait")
+    public PortraitWithArtistModel getPortraitWithArtistModel() {
+        return portraitWithArtistModel;
     }
 
     public List<AssetSlot> getAssetSlots() {

@@ -14,6 +14,12 @@ public class MigLayoutUtils {
             throw new RuntimeException("Container '" + container.getName() + "' is required to have MigLayout layout manager but does not");
     }
 
+    public static MigLayout getMigLayout(Container container) {
+        assertMigLayout(container);
+
+        return (MigLayout)container.getLayout();
+    }
+
     public static JPanel createPanel(LC layoutConstraints) {
         return createPanel(layoutConstraints, null);
     }

@@ -1,11 +1,17 @@
 package com.mickeytheq.ahlcg4j.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
 import resources.Language;
 
+import java.awt.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class MarkupUtils {
     private static final Map<String, String> BODY_TAG_REPLACEMENT = new HashMap<>();
@@ -102,5 +108,51 @@ public class MarkupUtils {
     // the targeted file is in resources (the actual classpath root) /resources (the above folder)/spacers
     public static String getSpacerMarkup(double horizontalPoints, double verticalPoints) {
         return "<image res://spacers/empty1x1.png " + horizontalPoints + "pt " + verticalPoints + "pt>";
+    }
+
+    // creates a function that maps input Points to output points. Input points are a ratio (typically 0 to 1) of the
+    // width/height of the target draw region. The outputs are the absolute positions within the draw region.
+    // for example a region with an X of 100 and a width of 200 would translate a 0.25 input to be 100 + 200 * 0.25 = 150
+    public static Function<Point2D, Point2D> createRatioIntoDrawRegionMapper(Rectangle drawRegion, boolean invertX) {
+        if (invertX) {
+            return point2D -> new Point2D.Double(
+                    drawRegion.getX() + drawRegion.getWidth() * (1.0 - point2D.getX()),
+                    drawRegion.getY() + drawRegion.getHeight() * point2D.getY()
+            );
+        }
+        else {
+            return point2D -> new Point2D.Double(
+                    drawRegion.getX() + drawRegion.getWidth() * point2D.getX(),
+                    drawRegion.getY() + drawRegion.getHeight() * point2D.getY()
+            );
+        }
+    }
+
+    // creates a page shape that follows a path created by joining all the points in the provided lists and completing
+    // the shape by returning to the first point
+    // points are in the range 0 to 1 and represent a ratio of the total width/height of the given draw region
+    public static PageShape createStraightLinePathingPageShape(Rectangle drawRegion, List<Point2D> pathPoints) {
+        if (pathPoints.isEmpty())
+            throw new IllegalArgumentException("Path must have at least one point");
+
+        Path2D path = new Path2D.Double();
+
+        Function<Point2D, Point2D> mapperFunction = createRatioIntoDrawRegionMapper(drawRegion, false);
+
+        // start the path at the first point
+        Point2D firstPoint = mapperFunction.apply(pathPoints.get(0));
+
+        path.moveTo(firstPoint.getX(), firstPoint.getY());
+
+        // path to each point in the list in order
+        for (int i = 1; i < pathPoints.size(); i++) {
+            Point2D nextPoint = mapperFunction.apply(pathPoints.get(i));
+            path.lineTo(nextPoint.getX(), nextPoint.getY());
+        }
+
+        // return to the first/start point
+        path.lineTo(firstPoint.getX(), firstPoint.getY());
+
+        return new PageShape.GeometricShape(path, drawRegion);
     }
 }
