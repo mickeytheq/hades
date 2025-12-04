@@ -26,7 +26,7 @@ public class Bootstrapper {
         initialise();
     }
 
-    private static void installHydraTheme() {
+    public static void installHydraTheme() {
         Theme theme = new HydraTheme();
 
         theme.modifyManagerDefaults(UIManager.getDefaults());

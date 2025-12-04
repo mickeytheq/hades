@@ -63,6 +63,16 @@ public class SettingsFieldNames {
     // investigator
     public static final String INVESTIGATOR_STORY = "InvStory";
 
+
+    // stats
+    public static final String HEALTH = "Stamina";
+    public static final String SANITY = "Sanity";
+    public static final String WILLPOWER = "Willpower";
+    public static final String INTELLECT = "Intellect";
+    public static final String COMBAT = "Combat";
+    public static final String AGILITY = "Agility";
+
+
     // chaos tokens
     public static final String CHAOS_TOKEN_SKULL = "Skull";
     public static final String CHAOS_TOKEN_CULTIST = "Cultist";
@@ -75,6 +85,8 @@ public class SettingsFieldNames {
     public static final String ENEMY_HORROR = "Horror";
     public static final String ENEMY_COMBAT = "Attack";
     public static final String ENEMY_EVADE = "Evade";
+
+    public static final String CARD_CLASS = "CardClass";
 
     public static final String PER_INVESTIGATOR = "PerInvestigator";
 

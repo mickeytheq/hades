@@ -6,7 +6,11 @@ import com.mickeytheq.ahlcg4j.core.model.Card;
 import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.PlayerCardBack;
+import com.mickeytheq.ahlcg4j.core.view.CardFaceSide;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.AssetMigrator;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.EventMigrator;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.SkillMigrator;
 import com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardGameComponent;
 import org.apache.commons.lang3.StringUtils;
 import resources.ResourceKit;
@@ -46,7 +50,7 @@ public class Migrator {
         private Card migrateCard() {
             String frontTemplateKey = diy.getFrontTemplateKey();
 
-            CardFaceModel frontFaceModel = migrateFace(frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), ""));
+            CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), ""));
             CardFaceModel backFaceModel = null;
 
             if (diy.getFaceStyle() == DIY.FaceStyle.TWO_FACES) {
@@ -54,7 +58,7 @@ public class Migrator {
                 backFaceModel = checkForGenericBack(diy.getSettings());
 
                 if (backFaceModel == null)
-                    backFaceModel = migrateFace(diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back"));
+                    backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back"));
             }
 
             Card card = new Card();
@@ -64,7 +68,7 @@ public class Migrator {
             return card;
         }
 
-        private CardFaceModel migrateFace(String templateKey, SettingsAccessor settingsAccessor) {
+        private CardFaceModel migrateFace(CardFaceSide cardFaceSide, String templateKey, SettingsAccessor settingsAccessor) {
             CardFaceType cardFaceType = getCardFaceTypeForTemplateKey(templateKey);
 
             if (cardFaceType == null)
@@ -72,7 +76,11 @@ public class Migrator {
 
             switch (cardFaceType) {
                 case Asset:
-                    return new AssetBuilder().build(diy, settingsAccessor);
+                    return new AssetMigrator().build(diy, cardFaceSide, settingsAccessor);
+                case Event:
+                    return new EventMigrator().build(diy, cardFaceSide, settingsAccessor);
+                case Skill:
+                    return new SkillMigrator().build(diy, cardFaceSide, settingsAccessor);
                 default:
                     return null;
             }

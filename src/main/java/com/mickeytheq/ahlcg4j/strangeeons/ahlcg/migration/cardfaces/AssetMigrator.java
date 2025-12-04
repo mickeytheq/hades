@@ -1,17 +1,19 @@
-package com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration;
+package com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces;
 
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
+import com.mickeytheq.ahlcg4j.core.view.CardFaceSide;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.MigrationUtils;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.SettingsAccessor;
 
-public class AssetBuilder {
-    public Asset build(DIY diy, SettingsAccessor settingsAccessor) {
+public class AssetMigrator {
+    public Asset build(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor) {
         Asset asset = new Asset();
 
-        MigrationUtils.populateCommonCardFields(settingsAccessor, asset.getCommonCardFieldsModel());
-
+        MigrationUtils.populateCommonCardFields(diy, cardFaceSide, settingsAccessor, asset.getCommonCardFieldsModel());
         MigrationUtils.populatePlayerCardFields(settingsAccessor, asset.getPlayerCardFieldsModel());
-
-        // TODO: encounter/collection/artist + portrait
+        MigrationUtils.populatingNumbering(diy, settingsAccessor, asset.getNumberingModel());
+        MigrationUtils.populateArt(diy, settingsAccessor, asset.getPortraitWithArtistModel());
 
         asset.setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));
         asset.setSanity(MigrationUtils.parseStatistic(settingsAccessor, "Sanity", null));

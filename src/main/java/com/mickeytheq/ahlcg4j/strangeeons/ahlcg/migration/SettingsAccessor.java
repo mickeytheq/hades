@@ -9,5 +9,6 @@ public interface SettingsAccessor {
     // returns an Integer parsed from a settings key, if it is missing or invalid then return null
     Integer getIntegerAllowInvalid(String settingsKey);
 
+    // returns an Enum of the given class from a settings key, if it is missing or invalid then return null
     <T extends Enum<T>> T getEnumAllowInvalid(String settingsKey, Class<T> enumClass);
 }

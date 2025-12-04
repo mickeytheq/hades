@@ -1,11 +1,9 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ui;
 
 import com.mickeytheq.ahlcg4j.core.CardFaceTypeRegister;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Asset;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.EncounterCardBack;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.PlayerCardBack;
-import com.mickeytheq.ahlcg4j.core.model.cardfaces.Treachery;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
+import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
 import net.miginfocom.swing.MigLayout;
 import resources.Language;
 
@@ -21,6 +19,7 @@ public class NewCardDialog extends JDialog {
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> frontFaceOptionEditor;
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> backFaceOptionEditor;
 
+    // TODO: add option to specify title/filename when creating a new card
     // when this dialog is launched from the regular Strange Eons 'new game component' code path it cannot be cancelled
     public NewCardDialog(boolean canCancel) {
         super((Frame) null, "New card", true);
@@ -63,9 +62,21 @@ public class NewCardDialog extends JDialog {
             description.setText(bothFacesOption.getDescription());
         });
 
+        // TODO: i18n
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ASSET), "Asset with player card back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Asset.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(PlayerCardBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.EVENT), "Event with player card back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Event.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(PlayerCardBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.SKILL), "Skill with player card back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Skill.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(PlayerCardBack.class)));
+
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.INVESTIGATOR), "Investigator",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Investigator.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(InvestigatorBack.class)));
+
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.TREACHERY), "Treachery with encounter card back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Treachery.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));

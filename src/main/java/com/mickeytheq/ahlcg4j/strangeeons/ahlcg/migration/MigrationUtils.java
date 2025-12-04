@@ -1,6 +1,8 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration;
 
+import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.ahlcg4j.core.model.common.*;
+import com.mickeytheq.ahlcg4j.core.view.CardFaceSide;
 import org.apache.commons.lang3.StringUtils;
 
 public class MigrationUtils {
@@ -21,13 +23,21 @@ public class MigrationUtils {
         return new Statistic(value, "1".equals(perInvestigator));
     }
 
-    public static void populateCommonCardFields(SettingsAccessor settingsAccessor, CommonCardFieldsModel commonCardFieldsModel) {
+    public static void populateCommonCardFields(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor, CommonCardFieldsModel commonCardFieldsModel) {
+        if (cardFaceSide == CardFaceSide.Front)
+            commonCardFieldsModel.setTitle(diy.getName());
+        else
+            commonCardFieldsModel.setTitle(settingsAccessor.getString(SettingsFieldNames.TITLE_BACK));
+
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
         commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
+        commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
+
+        // TODO: spacing between each field
     }
 
     public static void populatePlayerCardFields(SettingsAccessor settingsAccessor, PlayerCardFieldsModel playerCardFieldsModel) {
@@ -65,17 +75,6 @@ public class MigrationUtils {
         playerCardFieldsModel.setPlayerCardClass3(settingsAccessor.getEnumAllowInvalid("CardClass3", PlayerCardClass.class));
     }
 
-    private static PlayerCardClass parsePlayerCardClass(String cardClass) {
-        if (cardClass == null)
-            return null;
-
-        try {
-            return PlayerCardClass.valueOf(cardClass);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-
     private static PlayerCardSkillIcon parseSkillIcon(String skill) {
         if (StringUtils.isEmpty(skill))
             return null;
@@ -85,5 +84,19 @@ public class MigrationUtils {
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public static void populatingNumbering(DIY diy, SettingsAccessor settingsAccessor, NumberingModel numberingModel) {
+        numberingModel.setCollectionNumber(settingsAccessor.getString(SettingsFieldNames.COLLECTION_NUMBER));
+        numberingModel.setEncounterNumber(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_NUMBER));
+        numberingModel.setEncounterTotal(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_TOTAL));
+
+        // TODO: portraits
+    }
+
+    public static void populateArt(DIY diy, SettingsAccessor settingsAccessor, PortraitWithArtistModel artPortraitWithArtistModel) {
+        artPortraitWithArtistModel.setArtist(settingsAccessor.getString(SettingsFieldNames.ARTIST));
+
+        // TODO: portraits
     }
 }
