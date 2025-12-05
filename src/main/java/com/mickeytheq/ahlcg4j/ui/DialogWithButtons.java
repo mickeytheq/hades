@@ -1,5 +1,6 @@
 package com.mickeytheq.ahlcg4j.ui;
 
+import net.miginfocom.layout.AC;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
@@ -11,6 +12,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class DialogWithButtons extends JDialog {
+    public static final int OK_OPTION = 0;
+    public static final int CANCEL_OPTION = 1;
+
     private final JPanel contentPanel;
     private final boolean trackDialogSizeToContent;
 
@@ -30,7 +34,12 @@ public class DialogWithButtons extends JDialog {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void addDialogClosingButton(String buttonText, int buttonResultCode, Supplier<Boolean> validateSupplier) {
+    public void addOkCancelButtons() {
+        addDialogClosingButton("OK", OK_OPTION, () -> Boolean.TRUE);
+        addDialogClosingButton("Cancel", CANCEL_OPTION, () -> Boolean.TRUE);
+    }
+
+    public JButton addDialogClosingButton(String buttonText, int buttonResultCode, Supplier<Boolean> validateSupplier) {
         JButton button = new JButton(buttonText);
         button.addActionListener(e -> {
             Boolean validated = validateSupplier.get();
@@ -44,12 +53,15 @@ public class DialogWithButtons extends JDialog {
         });
 
         addButton(button);
+        return button;
     }
 
-    public void addButton(String buttonText, ActionListener actionListener) {
+    public JButton addButton(String buttonText, ActionListener actionListener) {
         JButton button = new JButton(buttonText);
         button.addActionListener(actionListener);
         addButton(button);
+
+        return button;
     }
 
     public void addButton(JButton button) {
@@ -58,7 +70,7 @@ public class DialogWithButtons extends JDialog {
 
     public int showDialog() {
         JPanel mainPanel = new JPanel(new MigLayout());
-        mainPanel.add(contentPanel, "wrap");
+        mainPanel.add(contentPanel, "wrap, growx, growy, pushx, pushy");
 
         JPanel buttonPanel = new JPanel(new MigLayout(new LC().insets("0")));
 

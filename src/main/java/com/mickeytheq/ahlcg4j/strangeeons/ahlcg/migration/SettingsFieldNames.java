@@ -32,6 +32,7 @@ public class SettingsFieldNames {
     public static final String VICTORY = "Victory";
     public static final String ARTIST = "Artist";
     public static final String STORY = "Story";
+    public static final String SUBTYPE = "Subtype";
 
     // campaign guide
     public static final String PAGE_NUMBER = "Page";

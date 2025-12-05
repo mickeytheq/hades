@@ -1,5 +1,6 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration;
 
+import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 import com.mickeytheq.ahlcg4j.core.model.Card;
@@ -8,23 +9,43 @@ import com.mickeytheq.ahlcg4j.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.PlayerCardBack;
 import com.mickeytheq.ahlcg4j.core.view.CardFaceSide;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
-import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.AssetMigrator;
-import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.EventMigrator;
-import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.SkillMigrator;
+import com.mickeytheq.ahlcg4j.strangeeons.ahlcg.migration.cardfaces.*;
 import com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardGameComponent;
 import org.apache.commons.lang3.StringUtils;
 import resources.ResourceKit;
 import resources.Settings;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.logging.Logger;
 
 public class Migrator {
-    public static void migrate(File sourceFile, File targetFile) {
-        DIY diy = (DIY)ResourceKit.getGameComponentFromFile(sourceFile);
+    private static final Logger logger = Logger.getLogger(Migrator.class.getName());
+
+    public static void migrate(Path sourceFile, Path targetFile) {
+        logger.fine("Migrating '" + sourceFile + "' to '" + targetFile + "'...");
+
+        if (!sourceFile.getFileName().toString().endsWith(".eon")) {
+            logger.fine("Skipping '" + sourceFile + "' as it is not a .eon file");
+            return;
+        }
+
+        GameComponent gameComponent = ResourceKit.getGameComponentFromFile(sourceFile.toFile());
+
+        if (!(gameComponent instanceof DIY)) {
+            logger.fine("Skipping '" + sourceFile + "' as it is not a DIY component");
+            return;
+        }
+
+        DIY diy = (DIY)gameComponent;
 
         // delegate to the appropriate migration logic to get a Card back
         Card card = new CardMigrator(diy).migrateCard();
+
+        if (card == null) {
+            logger.warning("Skipping '" + sourceFile + "' as that card face/type is not supported");
+            return;
+        }
 
         // wrap the Card in a CardGameComponent
         // we don't need a view as we're not doing anything visual but all this does is basic intialisation
@@ -34,10 +55,12 @@ public class Migrator {
 
         // save the newly migrated CardGameComponent
         try {
-            ResourceKit.writeGameComponentToFile(targetFile, cardGameComponent);
+            ResourceKit.writeGameComponentToFile(targetFile.toFile(), cardGameComponent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        logger.info("Migrated '" + sourceFile + "' to '" + targetFile + "' successfully");
     }
 
     static class CardMigrator {
@@ -51,6 +74,10 @@ public class Migrator {
             String frontTemplateKey = diy.getFrontTemplateKey();
 
             CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), ""));
+
+            if (frontFaceModel == null)
+                return null;
+
             CardFaceModel backFaceModel = null;
 
             if (diy.getFaceStyle() == DIY.FaceStyle.TWO_FACES) {
@@ -81,6 +108,12 @@ public class Migrator {
                     return new EventMigrator().build(diy, cardFaceSide, settingsAccessor);
                 case Skill:
                     return new SkillMigrator().build(diy, cardFaceSide, settingsAccessor);
+                case Investigator:
+                    return new InvestigatorMigrator().build(diy, cardFaceSide, settingsAccessor);
+                case InvestigatorBack:
+                    return new InvestigatorBackMigrator().build(diy, cardFaceSide, settingsAccessor);
+                case Treachery:
+                    return new TreacheryMigrator().build(diy, cardFaceSide, settingsAccessor);
                 default:
                     return null;
             }

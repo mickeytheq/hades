@@ -14,6 +14,6 @@ public interface EntityMetadata {
 
     default PropertyMetadata getProperty(String name) {
         return getProperties().stream().filter(o -> o.getName().equals(name)).findFirst()
-                .orElseThrow(() -> new RuntimeException("No property '" + name + "' present on entity classs '" + getEntityClass() + "'"));
+                .orElseThrow(() -> new RuntimeException("No property '" + name + "' present on entity class '" + getEntityClass() + "'"));
     }
 }

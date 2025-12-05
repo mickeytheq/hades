@@ -133,6 +133,18 @@ public class FontInstallManager {
         }
     }
 
+    public void tryLoadFontsQuietly() {
+        Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+
+        for (Map.Entry<String, Path> entry : requiredFontInfo.entrySet()) {
+            try {
+                FontUtils.loadFont(entry.getValue());
+            } catch (Exception e) {
+                // ignore any exception
+            }
+        }
+    }
+
     public boolean isAllFontsInstalled() {
         Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 

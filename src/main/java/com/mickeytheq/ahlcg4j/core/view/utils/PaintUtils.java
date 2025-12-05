@@ -12,6 +12,9 @@ import java.awt.image.BufferedImage;
 
 public class PaintUtils {
     public static void paintLabel(PaintContext paintContext, Rectangle drawRegion, String labelText) {
+        if (StringUtils.isEmpty(labelText))
+            return;
+
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getLargeLabelTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
@@ -20,6 +23,9 @@ public class PaintUtils {
     }
 
     public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
+        if (StringUtils.isEmpty(titleText))
+            return;
+
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
@@ -34,6 +40,9 @@ public class PaintUtils {
     }
 
     public static void paintSubtitle(PaintContext paintContext, Rectangle drawRegion, String subtitleText) {
+        if (StringUtils.isEmpty(subtitleText))
+            return;
+
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubtitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
@@ -41,11 +50,10 @@ public class PaintUtils {
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
-    public static void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion) {
-        paintBodyText(paintContext, bodyText, bodyDrawRegion, PageShape.RECTANGLE_SHAPE);
-    }
-
     public static void paintBodyText(PaintContext paintContext, String bodyText, Rectangle bodyDrawRegion, PageShape pageShape) {
+        if (StringUtils.isEmpty(bodyText))
+            return;
+
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
@@ -160,6 +168,9 @@ public class PaintUtils {
     }
 
     public static void drawOutlinedTitle(Graphics2D g, double dpi, String text, Rectangle region, Font font, float maxSize, float outlineSize, Paint textColor, Paint outlineColor, int alignment, boolean outlineUnderneath) {
+        if (StringUtils.isEmpty(text))
+            return;
+
         Font f = font.deriveFont(maxSize * (float) dpi / 72f);
         GlyphVector gv = f.createGlyphVector(g.getFontRenderContext(), text);
         Rectangle2D bounds = gv.getLogicalBounds();
