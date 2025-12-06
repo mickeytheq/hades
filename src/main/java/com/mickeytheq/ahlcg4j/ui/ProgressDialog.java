@@ -36,7 +36,7 @@ public class ProgressDialog {
         scrollPane.setPreferredSize(new Dimension(1200, 800));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        JPanel panel = new JPanel(new MigLayout(new LC().debug(500)));
+        JPanel panel = new JPanel(new MigLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Log"));
         panel.add(scrollPane, "wrap, pushx, growx, growy, pushy");
 

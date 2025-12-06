@@ -93,6 +93,7 @@ public class DialogWithButtons extends JDialog {
             buttonPanel.add(button, "sizegroup button");
         }
 
+        // add a gap on the left to take up all the room the buttons don't want
         mainPanel.add(buttonPanel, "gapleft push");
 
         getContentPane().add(mainPanel);
