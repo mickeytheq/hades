@@ -194,10 +194,8 @@ public class AssetView extends BaseCardFaceView<Asset> {
         numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         numberingView.paintCollectionNumber(paintContext);
 
-        // player card icons
         paintClassSymbols(paintContext);
 
-        // weakness labels
         paintWeaknessContent(paintContext);
 
         playerCardFieldsView.paintLevel(paintContext);
