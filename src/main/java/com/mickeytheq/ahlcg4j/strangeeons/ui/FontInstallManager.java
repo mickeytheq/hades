@@ -1,5 +1,6 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ui;
 
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.ui.DialogWithButtons;
 import com.mickeytheq.ahlcg4j.util.FontUtils;
 import net.miginfocom.swing.MigLayout;
@@ -29,7 +30,7 @@ public class FontInstallManager {
         private final JTextArea logTextArea;
 
         public FontSetupDialog() {
-            JPanel panel = new JPanel(new MigLayout());
+            JPanel panel = MigLayoutUtils.createTitledPanel("Required fonts");
 
             for (String fontName : requiredFontInfo.keySet()) {
                 panel.add(new JLabel("Font name: "));

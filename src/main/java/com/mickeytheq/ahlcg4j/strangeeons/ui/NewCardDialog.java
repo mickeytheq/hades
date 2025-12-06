@@ -46,7 +46,7 @@ public class NewCardDialog extends DialogWithButtons {
         bothFacesOptionEditor = new JComboBox<>();
 
         JLabel helpLabel = new JLabel("<html>To create a new card you can either: <br><br>" +
-                "&nbsp;&nbsp;• Select a <b>Card type</b> below and the appropriate default faces will be generated. This is the appropriate option in most cases<br><br>" +
+                "&nbsp;&nbsp;• Select a <b>Card type</b> below and the appropriate default faces will be generated. This is the appropriate option in most cases<br>" +
                 "&nbsp;&nbsp;• Use the <b>Custom</b> settings to select both faces manually. Use this when you need a more unusual face combination<br></html>");
 
         JLabel description = new JLabel();
@@ -82,19 +82,16 @@ public class NewCardDialog extends DialogWithButtons {
         filenameEditor = new JTextField(20);
 
 
-
         // layout
-        JPanel helpPanel = new JPanel(new MigLayout());
+        JPanel helpPanel = MigLayoutUtils.createEmbeddedPanel();
         helpPanel.add(helpLabel);
 
-        JPanel bothFacesPanel = new JPanel(new MigLayout());
-        bothFacesPanel.setBorder(BorderFactory.createTitledBorder("Standard"));
+        JPanel bothFacesPanel = MigLayoutUtils.createTitledPanel("Standard");
         bothFacesPanel.add(new JLabel("Card type: "));
         bothFacesPanel.add(bothFacesOptionEditor);
         bothFacesPanel.add(description, "wrap, width 400:400:");
 
-        JPanel customFacesPanel = new JPanel(new MigLayout());
-        customFacesPanel.setBorder(BorderFactory.createTitledBorder("Custom"));
+        JPanel customFacesPanel = MigLayoutUtils.createTitledPanel("Custom");
         customFacesPanel.add(new JLabel("Front: "));
         customFacesPanel.add(frontFaceOptionEditor, "wrap, pushx, growx");
         customFacesPanel.add(new JLabel("Back: "));
@@ -105,7 +102,7 @@ public class NewCardDialog extends DialogWithButtons {
         detailsPanel.add(filenameEditor, "split, pushx, growx");
         detailsPanel.add(new JLabel(".eon"), "wrap");
 
-        JPanel mainPanel = new JPanel(new MigLayout());
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
         mainPanel.add(helpPanel, "wrap, pushx, growx");
         mainPanel.add(bothFacesPanel, "wrap, pushx, growx");
         mainPanel.add(customFacesPanel, "wrap, pushx, growx");

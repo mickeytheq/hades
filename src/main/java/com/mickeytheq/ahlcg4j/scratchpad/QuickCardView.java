@@ -12,6 +12,7 @@ import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardEditor;
 import com.mickeytheq.ahlcg4j.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 
@@ -170,6 +171,8 @@ public class QuickCardView {
                 cardView.getBackFaceView().createEditors(editorContext);
             }
 
+            cardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
+
             // pane for both
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editTabbedPane, drawTabbedPane);
 
@@ -253,7 +256,7 @@ public class QuickCardView {
         public void addDisplayComponent(String title, Component component) {
             JPanel spacingPanel = MigLayoutUtils.createEmbeddedPanel();
             spacingPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
-            spacingPanel.add(component, "wrap, growx, pushx");
+            spacingPanel.add(component, "wrap, growx, pushx, pushy, growy");
 
             tabbedPane.addTab(title, spacingPanel);
         }

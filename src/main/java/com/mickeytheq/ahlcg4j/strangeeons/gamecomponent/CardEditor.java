@@ -30,7 +30,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             cardGameComponent.getCardView().getBackFaceView().createEditors(editorContext);
         }
 
-        addCommentsTab(new EditorContextImpl(editorTabbedPane, 0));
+        cardGameComponent.getCardView().addCommentsTab(new EditorContextImpl(editorTabbedPane, 0));
 
         // TODO: decide whether to have encounter set info created by the 'card' rather than the face
         // TODO: or delegate to the face. however having different encounter set info on the front and back would be quite whacky although perhaps we should make this possible but not the default
@@ -44,22 +44,6 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         getContentPane().add(splitPane);
 
         pack();
-    }
-
-    private void addCommentsTab(EditorContext editorContext) {
-        JTextArea commentsEditor = new JTextArea();
-        commentsEditor.setLineWrap(true);
-
-        EditorUtils.bindTextComponent(commentsEditor, editorContext.wrapConsumerWithMarkedChanged(s -> cardGameComponent.getCardView().getCard().setComments(s)));
-        commentsEditor.setText(cardGameComponent.getCardView().getCard().getComments());
-
-        JScrollPane scrollPane = new JScrollPane(commentsEditor);
-
-        JPanel panel = new JPanel(new MigLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Comments"));
-        panel.add(scrollPane, "wrap, grow, push");
-
-        editorContext.addDisplayComponent(Language.gstring("Comments"), panel);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.mickeytheq.ahlcg4j.ui;
 
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.util.LoggerUtils;
 import net.miginfocom.layout.AC;
 import net.miginfocom.layout.LC;
@@ -36,8 +37,7 @@ public class ProgressDialog {
         scrollPane.setPreferredSize(new Dimension(1200, 800));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        JPanel panel = new JPanel(new MigLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Log"));
+        JPanel panel = MigLayoutUtils.createTitledPanel("Log");
         panel.add(scrollPane, "wrap, pushx, growx, growy, pushy");
 
         dialogWithButtons = new DialogWithButtons((Frame)null, false);

@@ -9,33 +9,39 @@ import java.awt.*;
 import java.util.Objects;
 
 public class MigLayoutUtils {
+    private static final boolean DEBUG = false;
+
     public static void assertMigLayout(Container container) {
         if (!(container.getLayout() instanceof MigLayout))
             throw new RuntimeException("Container '" + container.getName() + "' is required to have MigLayout layout manager but does not");
     }
 
-    public static LC createDefaultLayoutContraints() {
+    public static LC createDefaultLayoutConstraints() {
         LC lc = new LC();
+
+        if (DEBUG)
+            lc.debug(500);
+
         return lc;
     }
 
-    public static MigLayout createDefaultMigLayout() {
-        return new MigLayout(createDefaultLayoutContraints());
+    public static MigLayout createDialogMigLayout() {
+        return new MigLayout(createDefaultLayoutConstraints().insets("dialog"));
     }
 
     // creates a panel that has a titled border and standard insets/gaps within the panel
     public static JPanel createTitledPanel(String title) {
         Objects.requireNonNull(title);
 
-        JPanel panel = new JPanel(createDefaultMigLayout());
+        JPanel panel = new JPanel(new MigLayout(createDefaultLayoutConstraints()));
         panel.setBorder(BorderFactory.createTitledBorder(title));
 
         return panel;
     }
 
-    // creates a panel that has no visual spacing/border to be used as a container/organiser for other elements
+    // creates a panel that has no visual spacing border/insets to be used as a container/organiser for other elements
     public static JPanel createEmbeddedPanel() {
-        JPanel panel = new JPanel(new MigLayout(createDefaultLayoutContraints().insets("0")));
+        JPanel panel = new JPanel(new MigLayout(createDefaultLayoutConstraints().insets("0")));
         return panel;
     }
 

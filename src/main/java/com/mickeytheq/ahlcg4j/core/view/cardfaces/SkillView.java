@@ -103,7 +103,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = new JPanel(new MigLayout());
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");

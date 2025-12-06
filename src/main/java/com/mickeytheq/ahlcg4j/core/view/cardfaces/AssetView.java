@@ -108,12 +108,6 @@ public class AssetView extends BaseCardFaceView<Asset> {
         JPanel statsPanel = new JPanel(playerCardFieldsView.createTwoColumnLayout());
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
-        mainPanel.add(titlePanel, "wrap, growx, pushx");
-        mainPanel.add(statsPanel, "wrap, growx, pushx");
-
-        editorContext.addDisplayComponent(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
-
         // layout
 
         // first column with additional labels
@@ -144,6 +138,12 @@ public class AssetView extends BaseCardFaceView<Asset> {
         assetSlot2Editor.setSelectedItem(getModel().getAssetSlot2());
         healthEditor.setStatistic(getModel().getHealth());
         sanityEditor.setStatistic(getModel().getSanity());
+
+        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        mainPanel.add(titlePanel, "wrap, growx, pushx");
+        mainPanel.add(statsPanel, "wrap, growx, pushx");
+
+        editorContext.addDisplayComponent(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
