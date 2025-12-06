@@ -9,6 +9,7 @@ import com.mickeytheq.ahlcg4j.core.model.CardFaceModel;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
 import com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.ahlcg4j.strangeeons.ui.NewCardDialog;
+import com.mickeytheq.ahlcg4j.ui.DialogWithButtons;
 
 import java.io.File;
 
@@ -31,9 +32,10 @@ public class NewCard extends BaseTaskAction {
     @Override
     public boolean performOnSelection(Member[] members) {
         // launch the dialog to select config for the new card
-        NewCardDialog newCardDialog = new NewCardDialog(true);
+        NewCardDialog newCardDialog = new NewCardDialog();
         newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
-        newCardDialog.setVisible(true);
+        if (newCardDialog.showDialog() != DialogWithButtons.OK_OPTION)
+            return true;
 
         Class<? extends CardFaceModel> backFaceModelClass = null;
         if (newCardDialog.getSelectedBackFace() != null) {
@@ -65,7 +67,7 @@ public class NewCard extends BaseTaskAction {
         }
 
         // create the new file, attach it to the editor and save it
-        File f = new File(parentMember.getFile(), string("pa-new-comp-name") + ".eon");
+        File f = new File(parentMember.getFile(), newCardDialog.getFilename() + ".eon");
         f = ProjectUtilities.getAvailableFile(f);
         editor.setFile(f);
         editor.save();

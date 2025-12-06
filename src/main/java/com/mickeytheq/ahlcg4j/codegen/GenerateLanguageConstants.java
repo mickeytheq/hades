@@ -60,7 +60,12 @@ public class GenerateLanguageConstants {
     private String generateFileContent(String className, Properties properties) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
-        printWriter.println("package com.mickeytheq.strangeeons.ahlcg4j.codegenerated;");
+
+        String targetPackage = getClass().getPackage().getName();
+        targetPackage = targetPackage.substring(0, targetPackage.lastIndexOf("."));
+        targetPackage = targetPackage + ".codegenerated";
+
+        printWriter.println("package " + targetPackage + ";");
         printWriter.println();
 
         printWriter.println("@SuppressWarnings(\"unused\")");
@@ -106,7 +111,7 @@ public class GenerateLanguageConstants {
 
     private File getTargetDirectory() {
         File userDir = new File(System.getProperty("user.dir"));
-        File targetFile = new File(userDir, "src/main/java/com/mickeytheq/strangeeons/ahlcg4j/codegenerated/");
+        File targetFile = new File(userDir, "src/main/java/com/mickeytheq/ahlcg4j/codegenerated/");
 
         return targetFile;
     }

@@ -852,6 +852,8 @@ public class InterfaceConstants {
     public static final String PREF_STANDARDSETS = "AHLCG4J-Pref-StandardSets";
     // English value: Add collection to list
     public static final String PREF_ADDCOLLECTION = "AHLCG4J-Pref-AddCollection";
+    // English value: Investigator Back
+    public static final String INVESTIGATORBACK = "AHLCG4J-InvestigatorBack";
     // English value: Agenda / Portrait
     public static final String AGENDAPORTRAIT = "AHLCG4J-AgendaPortrait";
     // English value: Mystic

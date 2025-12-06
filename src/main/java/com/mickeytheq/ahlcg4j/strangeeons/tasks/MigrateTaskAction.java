@@ -43,7 +43,7 @@ public class MigrateTaskAction extends BaseTaskAction {
     static class Migration {
         private final Member[] members;
         private ProgressDialog progressDialog;
-//        private MigrationOptions migrationOptions;
+        private MigrationOptions migrationOptions;
 
         public Migration(Member[] members) {
             this.members = members;
@@ -102,7 +102,8 @@ public class MigrateTaskAction extends BaseTaskAction {
             MigLayoutUtils.addLabel(panel, "Target directory: ");
             panel.add(fileChooser);
 
-            DialogWithButtons dialogWithButtons = new DialogWithButtons(panel, true);
+            DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
+            dialogWithButtons.setContent(panel);
             dialogWithButtons.setTitle("Migration options");
             dialogWithButtons.addOkCancelButtons();
 

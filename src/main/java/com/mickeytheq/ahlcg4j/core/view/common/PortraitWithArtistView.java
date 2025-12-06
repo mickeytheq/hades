@@ -9,7 +9,6 @@ import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
-import net.miginfocom.layout.LC;
 import resources.Language;
 
 import javax.swing.*;
@@ -46,7 +45,7 @@ public class PortraitWithArtistView {
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
         JPanel artistPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ARTIST));
-        MigLayoutUtils.addLabelledComponentWrap(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
 
         artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
 

@@ -51,6 +51,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         return ImageUtils.loadImage(getClass().getResource(getTemplateResource()));
     }
 
+    // TODO: story_skill template is missing
     private String getTemplateResource() {
         return "/templates/skill/skill_" + getTemplateName() + ".png";
     }
@@ -89,7 +90,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.addDisplayComponent(Language.string(InterfaceConstants.EVENT) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent(Language.string(InterfaceConstants.SKILL) + " - " + "Stats", mainPanel); // TODO: i18n
 
         // layout
         playerCardFieldsView.layoutFirstColumnLabels(statsPanel);
@@ -132,8 +133,8 @@ public class SkillView extends BaseCardFaceView<Skill> {
         // label
         PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_SKILL).toUpperCase());
 
-        // title
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        // title - skill titles are left aligned
+        PaintUtils.paintTitleLeftAlign(paintContext, TITLE_DRAW_REGION, getModel().getCommonCardFieldsModel().getTitle(), getModel().getCommonCardFieldsModel().isUnique());
 
         Rectangle bodyDrawRegion = getBodyDrawRegion();
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);

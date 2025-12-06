@@ -11,10 +11,6 @@ import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.view.View;
 import com.mickeytheq.ahlcg4j.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
-import net.miginfocom.layout.LC;
-import net.miginfocom.layout.PlatformDefaults;
-import net.miginfocom.layout.UnitValue;
-import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -25,7 +21,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-@View(interfaceLanguageKey = "Investigator Back") // TODO: i18n
+@View(interfaceLanguageKey = InterfaceConstants.INVESTIGATORBACK)
 public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     private PortraitWithArtistView portraitWithArtistView;
 
@@ -70,7 +66,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         JTextArea storyEditor = EditorUtils.createTextArea(8, 30);
         EditorUtils.bindTextComponent(storyEditor, editorContext.wrapConsumerWithMarkedChanged(s -> getModel().setStory(s)));
         storyEditor.setText(getModel().getStory());
-        MigLayoutUtils.addLabelledComponentWrap(generalPanel, Language.string(InterfaceConstants.STORY), storyEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(generalPanel, Language.string(InterfaceConstants.STORY), storyEditor);
 
         editorContext.addDisplayComponent( "Back - General", generalPanel); // TODO: i18n
         editorContext.addDisplayComponent("Back - Portrait", portraitWithArtistView.createStandardArtPanel(editorContext)); // TODO: i18n
@@ -89,9 +85,9 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         textEditor.setText(section.getText());
         afterSpaceEditor.setValue(section.getAfterSpacing());
 
-        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.SECTION) + sectionIndex, headerEditor);
-        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.TEXT), textEditor);
-        MigLayoutUtils.addLabelledComponentWrap(panel, Language.string(InterfaceConstants.SPACING), afterSpaceEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SECTION) + sectionIndex, headerEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TEXT), textEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterSpaceEditor);
     }
 
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(496, 18, 492, 58);

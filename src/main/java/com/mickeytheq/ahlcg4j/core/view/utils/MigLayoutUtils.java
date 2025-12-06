@@ -4,7 +4,6 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -34,15 +33,14 @@ public class MigLayoutUtils {
         return panel;
     }
 
-    // creates a panel that has no visual spacing/border or any other elements and is simply
-    // used as a container/organiser for other elements
+    // creates a panel that has no visual spacing/border to be used as a container/organiser for other elements
     public static JPanel createEmbeddedPanel() {
         JPanel panel = new JPanel(new MigLayout(createDefaultLayoutContraints().insets("0")));
         return panel;
     }
 
     // adds a label followed by a component and wrap to the next row
-    public static void addLabelledComponentWrap(JPanel panel, String labelText, Component component) {
+    public static void addLabelledComponentWrapGrowPush(JPanel panel, String labelText, Component component) {
         assertMigLayout(panel);
 
         addLabel(panel, labelText);
@@ -50,12 +48,12 @@ public class MigLayoutUtils {
         panel.add(component, "wrap, growx, pushx");
     }
 
-    public static void addLabelledComponent(JPanel panel, String labelText, Component component) {
+    public static void addLabelledComponent(JPanel panel, String labelText, Component component, String constraints) {
         assertMigLayout(panel);
 
         addLabel(panel, labelText);
 
-        panel.add(component, "growx, pushx");
+        panel.add(component, constraints);
     }
 
     public static void addLabel(JPanel panel, String labelText) {

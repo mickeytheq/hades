@@ -31,13 +31,15 @@ public class MigrationUtils {
 
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
+        commonCardFieldsModel.setAfterTraitsSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.TRAITS + "Spacing"));
         commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
+        commonCardFieldsModel.setAfterKeywordsSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.KEYWORDS + "Spacing"));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
+        commonCardFieldsModel.setAfterRulesSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.GAME_TEXT + "Spacing"));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
+        commonCardFieldsModel.setAfterFlavourTextSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.FLAVOR + "Spacing"));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
         commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
-
-        // TODO: spacing between each field
     }
 
     public static void populatePlayerCardFields(SettingsAccessor settingsAccessor, PlayerCardFieldsModel playerCardFieldsModel) {

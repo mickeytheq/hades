@@ -60,7 +60,8 @@ public class FontInstallManager {
             panel.add(scrollPane, "span, growx, wrap");
 
             // dialog
-            dialogWithButtons = new DialogWithButtons(panel, false);
+            dialogWithButtons = new DialogWithButtons((Frame)null, false);
+            dialogWithButtons.setContent(panel);
             dialogWithButtons.setTitle("Font setup");
             dialogWithButtons.setResizable(false);
 

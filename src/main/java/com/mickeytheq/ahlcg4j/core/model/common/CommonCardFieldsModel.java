@@ -7,9 +7,13 @@ public class CommonCardFieldsModel {
     private String subtitle;
     private Boolean unique;
     private String traits;
+    private Integer afterTraitsSpace = 0;
     private String keywords;
+    private Integer afterKeywordsSpace = 0;
     private String rules;
+    private Integer afterRulesSpace = 0;
     private String flavourText;
+    private Integer afterFlavourTextSpace = 0;
     private String victory;
     private String copyright;
 
@@ -98,5 +102,41 @@ public class CommonCardFieldsModel {
 
     public void setCopyright(String copyright) {
         this.copyright = copyright;
+    }
+
+    @Property("AfterTraitsSpace")
+    public Integer getAfterTraitsSpace() {
+        return afterTraitsSpace;
+    }
+
+    public void setAfterTraitsSpace(Integer afterTraitsSpace) {
+        this.afterTraitsSpace = afterTraitsSpace;
+    }
+
+    @Property("AfterKeywordsSpace")
+    public Integer getAfterKeywordsSpace() {
+        return afterKeywordsSpace;
+    }
+
+    public void setAfterKeywordsSpace(Integer afterKeywordsSpace) {
+        this.afterKeywordsSpace = afterKeywordsSpace;
+    }
+
+    @Property("AfterRulesSpace")
+    public Integer getAfterRulesSpace() {
+        return afterRulesSpace;
+    }
+
+    public void setAfterRulesSpace(Integer afterRulesSpace) {
+        this.afterRulesSpace = afterRulesSpace;
+    }
+
+    @Property("AfterFlavourTextSpace")
+    public Integer getAfterFlavourTextSpace() {
+        return afterFlavourTextSpace;
+    }
+
+    public void setAfterFlavourTextSpace(Integer afterFlavourTextSpace) {
+        this.afterFlavourTextSpace = afterFlavourTextSpace;
     }
 }

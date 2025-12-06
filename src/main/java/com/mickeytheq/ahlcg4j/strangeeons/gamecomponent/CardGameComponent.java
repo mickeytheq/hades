@@ -3,6 +3,7 @@ package com.mickeytheq.ahlcg4j.strangeeons.gamecomponent;
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
 import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.component.GameComponent;
+import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import ca.cgjennings.io.NewerVersionException;
@@ -15,16 +16,22 @@ import com.mickeytheq.ahlcg4j.core.view.CardFaceView;
 import com.mickeytheq.ahlcg4j.core.view.CardView;
 import com.mickeytheq.ahlcg4j.serialise.JsonCardSerialiser;
 import com.mickeytheq.ahlcg4j.core.view.PaintContext;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import resources.Settings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.logging.Logger;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
 // and the AHLCG4J Card/CardView and associated face model/views
 public class CardGameComponent extends AbstractGameComponent {
+    static final long serialVersionUID = -6_569_100_078_755_650_503L;
+
+    private static final Logger logger = Logger.getLogger(CardGameComponent.class.getName());
+
     private static final int CURRENT_VERSION = 1;
 
     private CardView cardView;
@@ -55,8 +62,7 @@ public class CardGameComponent extends AbstractGameComponent {
         if (cardView.hasBack()) {
             Sheet backSheet = new CardSheet(this, cardView.getBackFaceView());
             sheets = new Sheet[]{frontSheet, backSheet};
-        }
-        else {
+        } else {
             sheets = new Sheet[]{frontSheet};
         }
 
@@ -67,7 +73,13 @@ public class CardGameComponent extends AbstractGameComponent {
 
     @Override
     public AbstractGameComponentEditor<CardGameComponent> createDefaultEditor() {
-        return new CardEditor(this);
+        try {
+            return new CardEditor(this);
+        } catch (Exception e) {
+            ErrorDialog.displayError("Error creating editor", e);
+            logger.severe(e.getMessage() + ": " + ExceptionUtils.getStackTrace(e));
+            throw e;
+        }
     }
 
     private class CardSheet extends Sheet<CardGameComponent> {
@@ -105,6 +117,10 @@ public class CardGameComponent extends AbstractGameComponent {
                 PaintContext paintContext = new PaintContextImpl(g, renderTarget, this);
 
                 cardFaceView.paint(paintContext);
+            } catch (Exception e) {
+                ErrorDialog.displayError("Error painting sheet for card face", e);
+                logger.severe(e.getMessage() + ": " + ExceptionUtils.getStackTrace(e));
+                throw e;
             } finally {
                 g.dispose();
             }
@@ -171,7 +187,7 @@ public class CardGameComponent extends AbstractGameComponent {
         // TODO: changes to individual card/faces should be handled later
 
         String jsonString = in.readUTF();
-        ObjectNode objectNode = (ObjectNode)createSerialisationObjectMapper().readTree(new StringReader(jsonString));
+        ObjectNode objectNode = (ObjectNode) createSerialisationObjectMapper().readTree(new StringReader(jsonString));
         Card card = JsonCardSerialiser.deserialiseCard(objectNode);
 
         cardView = CardFaces.createCardView(card);

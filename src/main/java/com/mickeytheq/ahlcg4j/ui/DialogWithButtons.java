@@ -15,23 +15,38 @@ public class DialogWithButtons extends JDialog {
     public static final int OK_OPTION = 0;
     public static final int CANCEL_OPTION = 1;
 
-    private final JPanel contentPanel;
     private final boolean trackDialogSizeToContent;
+    private Component content;
 
     private final List<JButton> buttons = new ArrayList<>();
 
     private int dialogResultCode = -1;
 
-    public DialogWithButtons(JPanel contentPanel, boolean trackDialogSizeToContent) {
-        super((Frame) null, true);
+    public DialogWithButtons(Dialog parent, boolean trackDialogSizeToContent) {
+        super(parent, true);
 
-        this.contentPanel = contentPanel;
         this.trackDialogSizeToContent = trackDialogSizeToContent;
 
+        initialise();
+    }
+
+    public DialogWithButtons(Frame parent, boolean trackDialogSizeToContent) {
+        super(parent, true);
+
+        this.trackDialogSizeToContent = trackDialogSizeToContent;
+
+        initialise();
+    }
+
+    private void initialise() {
         if (trackDialogSizeToContent)
             setResizable(false);
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public void setContent(Component content) {
+        this.content = content;
     }
 
     public void addOkCancelButtons() {
@@ -70,7 +85,7 @@ public class DialogWithButtons extends JDialog {
 
     public int showDialog() {
         JPanel mainPanel = new JPanel(new MigLayout());
-        mainPanel.add(contentPanel, "wrap, growx, growy, pushx, pushy");
+        mainPanel.add(content, "wrap, growx, growy, pushx, pushy");
 
         JPanel buttonPanel = new JPanel(new MigLayout(new LC().insets("0")));
 
@@ -83,7 +98,7 @@ public class DialogWithButtons extends JDialog {
         getContentPane().add(mainPanel);
 
         if (trackDialogSizeToContent) {
-            contentPanel.addComponentListener(new ComponentAdapter() {
+            content.addComponentListener(new ComponentAdapter() {
                 @Override
                 public void componentResized(ComponentEvent e) {
                     pack();

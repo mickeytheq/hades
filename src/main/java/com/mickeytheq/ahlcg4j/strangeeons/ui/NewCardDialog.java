@@ -1,36 +1,34 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ui;
 
+import ca.cgjennings.apps.arkham.StrangeEons;
+import ca.cgjennings.ui.DocumentEventAdapter;
+import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.CardFaceTypeRegister;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
-import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
+import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.ahlcg4j.ui.DialogWithButtons;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
 import java.awt.*;
 
-public class NewCardDialog extends JDialog {
-    private final boolean canCancel;
-
-    private boolean cancelled;
-
+public class NewCardDialog extends DialogWithButtons {
     private JComboBox<BothFacesOption> bothFacesOptionEditor;
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> frontFaceOptionEditor;
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> backFaceOptionEditor;
 
+    private JTextField filenameEditor;
+
     // TODO: add option to specify title/filename when creating a new card
     // when this dialog is launched from the regular Strange Eons 'new game component' code path it cannot be cancelled
-    public NewCardDialog(boolean canCancel) {
-        super((Frame) null, "New card", true);
-
-        this.canCancel = canCancel;
+    public NewCardDialog() {
+        super(StrangeEons.getWindow(), true);
 
         initialise();
-    }
-
-    public boolean cancelled() {
-        return cancelled;
     }
 
     private void initialise() {
@@ -62,7 +60,7 @@ public class NewCardDialog extends JDialog {
             description.setText(bothFacesOption.getDescription());
         });
 
-        // TODO: i18n
+        // TODO: i18n for descriptions
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ASSET), "Asset with player card back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Asset.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(PlayerCardBack.class)));
@@ -81,22 +79,8 @@ public class NewCardDialog extends JDialog {
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Treachery.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
 
-        // buttons
-        JButton createButton = new JButton("Create");
-        createButton.addActionListener(e -> {
-            // TODO: validate the front and back are the same size (mix of portrait and landscape should be allowed)
-            cancelled = false;
+        filenameEditor = new JTextField(20);
 
-            this.setVisible(false);
-            this.dispose();
-        });
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> {
-            cancelled = true;
-            this.setVisible(false);
-            this.dispose();
-        });
 
 
         // layout
@@ -116,22 +100,29 @@ public class NewCardDialog extends JDialog {
         customFacesPanel.add(new JLabel("Back: "));
         customFacesPanel.add(backFaceOptionEditor, "wrap, pushx, growx");
 
-        JPanel buttonPanel = new JPanel(new MigLayout());
-        buttonPanel.add(new JPanel(), "pushx, growx"); // spacer panel
-        buttonPanel.add(createButton);
-
-        if (canCancel)
-            buttonPanel.add(cancelButton);
+        JPanel detailsPanel = MigLayoutUtils.createTitledPanel("Details");
+        MigLayoutUtils.addLabel(detailsPanel, "Filename");
+        detailsPanel.add(filenameEditor, "split, pushx, growx");
+        detailsPanel.add(new JLabel(".eon"), "wrap");
 
         JPanel mainPanel = new JPanel(new MigLayout());
         mainPanel.add(helpPanel, "wrap, pushx, growx");
         mainPanel.add(bothFacesPanel, "wrap, pushx, growx");
         mainPanel.add(customFacesPanel, "wrap, pushx, growx");
-        mainPanel.add(buttonPanel, "wrap, pushx, growx");
+        mainPanel.add(detailsPanel, "wrap, pushx, growx");
 
-        getContentPane().add(mainPanel);
+        setContent(mainPanel);
 
-        setResizable(false);
+        addDialogClosingButton("Create", DialogWithButtons.OK_OPTION, () -> {
+            if (StringUtils.isEmpty(filenameEditor.getText())) {
+                JOptionPane.showMessageDialog(this, "Please specify a filename", "No filename", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+            return true;
+        });
+
+        addDialogClosingButton("Cancel", DialogWithButtons.CANCEL_OPTION, () -> Boolean.TRUE);
 
         pack();
     }
@@ -142,6 +133,10 @@ public class NewCardDialog extends JDialog {
 
     public CardFaceTypeRegister.CardFaceInfo getSelectedBackFace() {
         return (CardFaceTypeRegister.CardFaceInfo) backFaceOptionEditor.getSelectedItem();
+    }
+
+    public String getFilename() {
+        return filenameEditor.getText();
     }
 
     private static class BothFacesOption {

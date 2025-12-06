@@ -40,7 +40,8 @@ public class ProgressDialog {
         panel.setBorder(BorderFactory.createTitledBorder("Log"));
         panel.add(scrollPane, "wrap, pushx, growx, growy, pushy");
 
-        dialogWithButtons = new DialogWithButtons(panel,false);
+        dialogWithButtons = new DialogWithButtons((Frame)null, false);
+        dialogWithButtons.setContent(panel);
         dialogWithButtons.setTitle("Progress");
 
         closeButton = dialogWithButtons.addDialogClosingButton("Close", 0, () -> Boolean.TRUE);

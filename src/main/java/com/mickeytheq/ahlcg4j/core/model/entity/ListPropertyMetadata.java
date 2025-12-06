@@ -1,5 +1,6 @@
 package com.mickeytheq.ahlcg4j.core.model.entity;
 
+// TODO: do we need support for lists? If not remove this and the isList() method and any associated logic
 public interface ListPropertyMetadata extends PropertyMetadata {
     @Override
     default boolean isValue() {

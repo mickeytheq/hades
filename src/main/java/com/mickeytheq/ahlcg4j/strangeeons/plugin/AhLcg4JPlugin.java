@@ -24,7 +24,7 @@ public class AhLcg4JPlugin extends AbstractPlugin {
             return false;
 
         //        Game.register("AHLCG4J", "Arkham Horror: LCG");
-        ClassMap.add("/AHLCG.classmap");
+//        ClassMap.add("/AHLCG.classmap");
 
         Bootstrapper.initialise();
 

@@ -39,8 +39,7 @@ public class Migrator {
 
         DIY diy = (DIY)gameComponent;
 
-        // delegate to the appropriate migration logic to get a Card back
-        Card card = new CardMigrator(diy).migrateCard();
+        Card card = migrateCard(diy);
 
         if (card == null) {
             logger.warning("Skipping '" + sourceFile + "' as that card face/type is not supported");
@@ -61,6 +60,10 @@ public class Migrator {
         }
 
         logger.info("Migrated '" + sourceFile + "' to '" + targetFile + "' successfully");
+    }
+
+    public static Card migrateCard(DIY diy) {
+        return new CardMigrator(diy).migrateCard();
     }
 
     static class CardMigrator {
@@ -87,6 +90,8 @@ public class Migrator {
                 if (backFaceModel == null)
                     backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back"));
             }
+
+            // TODO: log out any settings that are not accessed to detect properties that are not picked up
 
             Card card = new Card();
             card.setFrontFaceModel(frontFaceModel);

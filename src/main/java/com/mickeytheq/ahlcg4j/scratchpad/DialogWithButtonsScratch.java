@@ -5,6 +5,7 @@ import com.mickeytheq.ahlcg4j.ui.DialogWithButtons;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Random;
 
 public class DialogWithButtonsScratch {
@@ -25,7 +26,8 @@ public class DialogWithButtonsScratch {
         panel.add(panel1);
         panel.add(panel2);
 
-        DialogWithButtons dialogWithButtons = new DialogWithButtons(panel, true);
+        DialogWithButtons dialogWithButtons = new DialogWithButtons((Frame)null, true);
+        dialogWithButtons.setContent(panel);
         dialogWithButtons.addDialogClosingButton("OK", 1, () -> Boolean.TRUE);
         dialogWithButtons.addDialogClosingButton("Cancel", 2, () -> Boolean.TRUE);
         dialogWithButtons.addButton("Help", e -> { JOptionPane.showMessageDialog(dialogWithButtons, "Help!"); } );

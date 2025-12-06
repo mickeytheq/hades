@@ -22,13 +22,21 @@ public class PaintUtils {
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
+    public static void paintTitleLeftAlign(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
+        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
+    }
+
     public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
+        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+    }
+
+    private static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment) {
         if (StringUtils.isEmpty(titleText))
             return;
 
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setAlignment(alignment);
 
         MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
 

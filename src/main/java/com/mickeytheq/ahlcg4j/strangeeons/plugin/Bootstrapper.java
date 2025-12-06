@@ -56,10 +56,10 @@ public class Bootstrapper {
     private static void loadFonts() {
         // TODO: not allowed to embed Arno Pro so instead check for and fail to start if Arno Pro isn't present
         // TODO: and provide (a link to) clear instructions to download the fonts and where to put them (plugin folder maybe?)
-        loadFont("/fonts/arnopro-regular.otf");
-        loadFont("/fonts/arnopro-bold.otf");
-        loadFont("/fonts/arnopro-italic.otf");
-        loadFont("/fonts/arnopro-bolditalic.otf");
+//        loadFont("/fonts/arnopro-regular.otf");
+//        loadFont("/fonts/arnopro-bold.otf");
+//        loadFont("/fonts/arnopro-italic.otf");
+//        loadFont("/fonts/arnopro-bolditalic.otf");
 
 
         loadFont("/fonts/AHLCGSymbol.ttf");
