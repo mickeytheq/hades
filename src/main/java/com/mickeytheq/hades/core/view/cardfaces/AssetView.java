@@ -143,7 +143,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.addDisplayComponent(Language.string(InterfaceConstants.ASSET) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Stats", mainPanel); // TODO: i18n
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {

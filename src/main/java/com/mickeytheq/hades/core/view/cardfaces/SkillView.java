@@ -90,7 +90,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.addDisplayComponent(Language.string(InterfaceConstants.SKILL) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Stats", mainPanel); // TODO: i18n
 
         // layout
         playerCardFieldsView.layoutFirstColumnLabels(statsPanel);
