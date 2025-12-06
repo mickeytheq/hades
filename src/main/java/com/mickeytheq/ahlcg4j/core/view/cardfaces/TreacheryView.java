@@ -13,7 +13,6 @@ import com.mickeytheq.ahlcg4j.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.ahlcg4j.core.view.utils.*;
 import com.mickeytheq.ahlcg4j.core.model.common.WeaknessType;
 import com.mickeytheq.ahlcg4j.codegenerated.GameConstants;
-import net.miginfocom.swing.MigLayout;
 import resources.Language;
 
 import javax.swing.*;
@@ -78,7 +77,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, true);
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
 

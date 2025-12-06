@@ -139,7 +139,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
         healthEditor.setStatistic(getModel().getHealth());
         sanityEditor.setStatistic(getModel().getSanity());
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
@@ -150,7 +150,7 @@ public class AssetView extends BaseCardFaceView<Asset> {
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");

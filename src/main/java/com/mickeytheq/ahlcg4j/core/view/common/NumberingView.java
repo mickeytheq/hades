@@ -9,9 +9,7 @@ import com.mickeytheq.ahlcg4j.core.model.common.NumberingModel;
 import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.TextStyleUtils;
-import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
-import org.mozilla.javascript.tools.debugger.Dim;
 import resources.Language;
 
 import javax.swing.*;
@@ -74,7 +72,7 @@ public class NumberingView {
         encounterDetailPanel.add(encounterTotalEditor, "split, wrap");
 
         // merge collection and encounter into a single tab
-        JPanel collectionEncounterPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel collectionEncounterPanel = MigLayoutUtils.createOrganiserPanel();
         collectionEncounterPanel.add(collectionDetailPanel, "wrap, pushx, growx");
         collectionEncounterPanel.add(collectionPortraitPanel, "wrap, pushx, growx");
         collectionEncounterPanel.add(encounterDetailPanel, "wrap, pushx, growx");

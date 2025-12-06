@@ -38,7 +38,7 @@ public class PortraitWithArtistView {
 
     public JPanel createStandardArtPanel(EditorContext editorContext) {
         // have a zero inset as to avoid a double-spaced margin as this panel is usually embedded within other panels
-        JPanel artistWithPortraitPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel artistWithPortraitPanel = MigLayoutUtils.createOrganiserPanel();
 
         PortraitPanel portraitPanel = portraitView.createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
 

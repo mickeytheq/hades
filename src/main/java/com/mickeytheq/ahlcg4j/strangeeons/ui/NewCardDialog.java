@@ -1,20 +1,16 @@
 package com.mickeytheq.ahlcg4j.strangeeons.ui;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
-import ca.cgjennings.ui.DocumentEventAdapter;
 import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.CardFaceTypeRegister;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.*;
 import com.mickeytheq.ahlcg4j.core.model.cardfaces.Event;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.ahlcg4j.ui.DialogWithButtons;
-import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import java.awt.*;
 
 public class NewCardDialog extends DialogWithButtons {
     private JComboBox<BothFacesOption> bothFacesOptionEditor;
@@ -83,7 +79,7 @@ public class NewCardDialog extends DialogWithButtons {
 
 
         // layout
-        JPanel helpPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel helpPanel = MigLayoutUtils.createOrganiserPanel();
         helpPanel.add(helpLabel);
 
         JPanel bothFacesPanel = MigLayoutUtils.createTitledPanel("Standard");
@@ -102,7 +98,7 @@ public class NewCardDialog extends DialogWithButtons {
         detailsPanel.add(filenameEditor, "split, pushx, growx");
         detailsPanel.add(new JLabel(".eon"), "wrap");
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(helpPanel, "wrap, pushx, growx");
         mainPanel.add(bothFacesPanel, "wrap, pushx, growx");
         mainPanel.add(customFacesPanel, "wrap, pushx, growx");

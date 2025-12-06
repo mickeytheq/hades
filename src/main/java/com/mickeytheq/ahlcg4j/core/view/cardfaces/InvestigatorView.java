@@ -107,7 +107,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         statsPanel.add(combatEditor);
         statsPanel.add(agilityEditor);
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
@@ -138,7 +138,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");

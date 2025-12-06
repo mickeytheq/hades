@@ -12,7 +12,6 @@ import com.mickeytheq.ahlcg4j.core.view.PaintContext;
 import com.mickeytheq.ahlcg4j.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.ahlcg4j.core.model.common.Statistic;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.ahlcg4j.strangeeons.gamecomponent.CardEditor;
 import com.mickeytheq.ahlcg4j.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.ahlcg4j.core.CardFaces;
 
@@ -254,7 +253,7 @@ public class QuickCardView {
 
         @Override
         public void addDisplayComponent(String title, Component component) {
-            JPanel spacingPanel = MigLayoutUtils.createEmbeddedPanel();
+            JPanel spacingPanel = MigLayoutUtils.createOrganiserPanel();
             spacingPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
             spacingPanel.add(component, "wrap, growx, pushx, pushy, growy");
 

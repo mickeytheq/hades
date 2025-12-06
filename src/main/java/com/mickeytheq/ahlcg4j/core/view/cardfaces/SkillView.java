@@ -86,7 +86,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         JPanel statsPanel = new JPanel(migLayout);
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
@@ -103,7 +103,7 @@ public class SkillView extends BaseCardFaceView<Skill> {
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");

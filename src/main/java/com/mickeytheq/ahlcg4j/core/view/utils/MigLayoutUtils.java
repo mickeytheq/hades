@@ -25,6 +25,7 @@ public class MigLayoutUtils {
         return lc;
     }
 
+    // create a layout suitable for use with a top level panel/container inside a dialog
     public static MigLayout createDialogMigLayout() {
         return new MigLayout(createDefaultLayoutConstraints().insets("dialog"));
     }
@@ -40,7 +41,7 @@ public class MigLayoutUtils {
     }
 
     // creates a panel that has no visual spacing border/insets to be used as a container/organiser for other elements
-    public static JPanel createEmbeddedPanel() {
+    public static JPanel createOrganiserPanel() {
         JPanel panel = new JPanel(new MigLayout(createDefaultLayoutConstraints().insets("0")));
         return panel;
     }

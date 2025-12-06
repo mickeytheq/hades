@@ -1,12 +1,8 @@
 package com.mickeytheq.ahlcg4j.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
-import com.mickeytheq.ahlcg4j.codegenerated.InterfaceConstants;
 import com.mickeytheq.ahlcg4j.core.view.EditorContext;
-import com.mickeytheq.ahlcg4j.core.view.utils.EditorUtils;
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import net.miginfocom.swing.MigLayout;
-import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +58,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public void addDisplayComponent(String title, Component component) {
-            JPanel spacingPanel = MigLayoutUtils.createEmbeddedPanel();
+            JPanel spacingPanel = MigLayoutUtils.createOrganiserPanel();
             spacingPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
             spacingPanel.add(component, "wrap, grow, push");
 

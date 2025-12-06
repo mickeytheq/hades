@@ -1,9 +1,6 @@
 package com.mickeytheq.ahlcg4j.ui;
 
 import com.mickeytheq.ahlcg4j.core.view.utils.MigLayoutUtils;
-import net.miginfocom.layout.AC;
-import net.miginfocom.layout.LC;
-import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,7 +85,7 @@ public class DialogWithButtons extends JDialog {
         JPanel mainPanel = new JPanel(MigLayoutUtils.createDialogMigLayout());
         mainPanel.add(content, "wrap, growx, growy, pushx, pushy");
 
-        JPanel buttonPanel = MigLayoutUtils.createEmbeddedPanel();
+        JPanel buttonPanel = MigLayoutUtils.createOrganiserPanel();
 
         for (JButton button : buttons) {
             buttonPanel.add(button, "sizegroup button");
