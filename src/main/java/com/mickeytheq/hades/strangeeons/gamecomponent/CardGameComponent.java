@@ -15,6 +15,7 @@ import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import resources.Settings;
 
@@ -198,7 +199,6 @@ public class CardGameComponent extends AbstractGameComponent {
     }
 
     private ObjectMapper createSerialisationObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper;
+        return JsonUtils.createDefaultObjectMapper();
     }
 }

@@ -10,6 +10,7 @@ import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
+import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
@@ -24,7 +25,7 @@ public class JsonCardSerialiser {
 
     // TODO: version?
     public static ObjectNode serialiseCard(Card card) {
-        ObjectMapper objectMapper = createObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
         ObjectNode cardNode = objectMapper.createObjectNode();
 
         ObjectNode frontFaceNode = cardNode.putObject(FRONT_FACE_FIELD_NAME);
@@ -49,7 +50,7 @@ public class JsonCardSerialiser {
     }
 
     public static Card deserialiseCard(ObjectNode objectNode) {
-        ObjectMapper objectMapper = createObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
 
         Card card = new Card();
 
@@ -85,11 +86,6 @@ public class JsonCardSerialiser {
         new Deserialiser(objectMapper).deserialise(faceNode, cardFaceModel);
 
         return cardFaceModel;
-    }
-
-    private static ObjectMapper createObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper;
     }
 
     private static class Serialiser {

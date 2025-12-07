@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.serialise.JsonCardSerialiser;
+import com.mickeytheq.hades.util.JsonUtils;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -32,7 +33,7 @@ public class SerialiseScratch {
         Card card = CardFaces.createCardModel(model, null);
         ObjectNode objectNode = JsonCardSerialiser.serialiseCard(card);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         StringWriter stringWriter = new StringWriter();
         objectMapper.writeValue(stringWriter, objectNode);

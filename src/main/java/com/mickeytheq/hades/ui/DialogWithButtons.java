@@ -20,16 +20,8 @@ public class DialogWithButtons extends JDialog {
 
     private int dialogResultCode = -1;
 
-    public DialogWithButtons(Dialog parent, boolean trackDialogSizeToContent) {
-        super(parent, true);
-
-        this.trackDialogSizeToContent = trackDialogSizeToContent;
-
-        initialise();
-    }
-
-    public DialogWithButtons(Frame parent, boolean trackDialogSizeToContent) {
-        super(parent, true);
+    public DialogWithButtons(Frame frame, boolean trackDialogSizeToContent) {
+        super(frame, true);
 
         this.trackDialogSizeToContent = trackDialogSizeToContent;
 
@@ -43,12 +35,17 @@ public class DialogWithButtons extends JDialog {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public void setContent(Component content) {
+    public void setContentComponent(Component content) {
         this.content = content;
     }
 
     public void addOkCancelButtons() {
         addDialogClosingButton("OK", OK_OPTION, () -> Boolean.TRUE);
+        addDialogClosingButton("Cancel", CANCEL_OPTION, () -> Boolean.TRUE);
+    }
+
+    public void addOkCancelButtons(Supplier<Boolean> okValidator) {
+        addDialogClosingButton("OK", OK_OPTION, okValidator);
         addDialogClosingButton("Cancel", CANCEL_OPTION, () -> Boolean.TRUE);
     }
 
@@ -82,7 +79,7 @@ public class DialogWithButtons extends JDialog {
     }
 
     public int showDialog() {
-        JPanel mainPanel = new JPanel(MigLayoutUtils.createDialogMigLayout());
+        JPanel mainPanel = new JPanel(MigLayoutUtils.createTopLevelLayout());
         mainPanel.add(content, "wrap, growx, growy, pushx, pushy");
 
         JPanel buttonPanel = MigLayoutUtils.createOrganiserPanel();
@@ -106,6 +103,11 @@ public class DialogWithButtons extends JDialog {
         }
 
         pack();
+
+        Container parent = getParent();
+
+        if (parent != null)
+            setLocationRelativeTo(parent);
 
         setVisible(true);
         dispose();

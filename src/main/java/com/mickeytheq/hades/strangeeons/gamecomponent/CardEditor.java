@@ -65,7 +65,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public void addDisplayComponent(String title, Component component) {
-            JPanel spacingPanel = new JPanel(MigLayoutUtils.createDialogMigLayout());
+            JPanel spacingPanel = new JPanel(MigLayoutUtils.createTopLevelLayout());
             spacingPanel.add(component, "wrap, grow, push");
 
             String tabTitle = title;

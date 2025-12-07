@@ -61,7 +61,7 @@ public class FontInstallManager {
 
             // dialog
             dialogWithButtons = new DialogWithButtons((Frame)null, false);
-            dialogWithButtons.setContent(panel);
+            dialogWithButtons.setContentComponent(panel);
             dialogWithButtons.setTitle("Font setup");
             dialogWithButtons.setResizable(false);
 

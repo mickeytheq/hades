@@ -27,7 +27,7 @@ public class DialogWithButtonsScratch {
         panel.add(panel2);
 
         DialogWithButtons dialogWithButtons = new DialogWithButtons((Frame)null, true);
-        dialogWithButtons.setContent(panel);
+        dialogWithButtons.setContentComponent(panel);
         dialogWithButtons.addDialogClosingButton("OK", 1, () -> Boolean.TRUE);
         dialogWithButtons.addDialogClosingButton("Cancel", 2, () -> Boolean.TRUE);
         dialogWithButtons.addButton("Help", e -> { JOptionPane.showMessageDialog(dialogWithButtons, "Help!"); } );

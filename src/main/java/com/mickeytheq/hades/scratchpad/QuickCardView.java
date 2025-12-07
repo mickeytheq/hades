@@ -253,7 +253,7 @@ public class QuickCardView {
 
         @Override
         public void addDisplayComponent(String title, Component component) {
-            JPanel spacingPanel = new JPanel(MigLayoutUtils.createDialogMigLayout());
+            JPanel spacingPanel = new JPanel(MigLayoutUtils.createTopLevelLayout());
             spacingPanel.add(component, "wrap, growx, pushx, pushy, growy");
 
             tabbedPane.addTab(title, spacingPanel);

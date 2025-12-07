@@ -26,8 +26,12 @@ public class MigLayoutUtils {
     }
 
     // create a layout suitable for use with a top level panel/container inside a dialog
-    public static MigLayout createDialogMigLayout() {
+    public static MigLayout createTopLevelLayout() {
         return new MigLayout(createDefaultLayoutConstraints().insets("dialog"));
+    }
+
+    public static JPanel createDialogPanel() {
+        return new JPanel(createTopLevelLayout());
     }
 
     // creates a panel that has a titled border and standard insets/gaps within the panel
@@ -40,10 +44,13 @@ public class MigLayoutUtils {
         return panel;
     }
 
+    public static MigLayout createOrganiserLayout() {
+        return new MigLayout(createDefaultLayoutConstraints().insets("0"));
+    }
+
     // creates a panel that has no visual spacing border/insets to be used as a container/organiser for other elements
     public static JPanel createOrganiserPanel() {
-        JPanel panel = new JPanel(new MigLayout(createDefaultLayoutConstraints().insets("0")));
-        return panel;
+        return new JPanel(createOrganiserLayout());
     }
 
     // adds a label followed by a component and wrap to the next row

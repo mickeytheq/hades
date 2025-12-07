@@ -36,7 +36,7 @@ public class ProgressDialog {
         panel.add(scrollPane, "wrap, pushx, growx, growy, pushy");
 
         dialogWithButtons = new DialogWithButtons((Frame)null, false);
-        dialogWithButtons.setContent(panel);
+        dialogWithButtons.setContentComponent(panel);
         dialogWithButtons.setTitle("Progress");
 
         closeButton = dialogWithButtons.addDialogClosingButton("Close", 0, () -> Boolean.TRUE);

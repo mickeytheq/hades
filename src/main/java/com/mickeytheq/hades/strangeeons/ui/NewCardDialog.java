@@ -104,7 +104,7 @@ public class NewCardDialog extends DialogWithButtons {
         mainPanel.add(customFacesPanel, "wrap, pushx, growx");
         mainPanel.add(detailsPanel, "wrap, pushx, growx");
 
-        setContent(mainPanel);
+        setContentComponent(mainPanel);
 
         addDialogClosingButton("Create", DialogWithButtons.OK_OPTION, () -> {
             if (StringUtils.isEmpty(filenameEditor.getText())) {

@@ -5,6 +5,7 @@ import ca.cgjennings.apps.arkham.project.TaskActionTree;
 public class HadesActionTree extends TaskActionTree {
     public HadesActionTree() {
         add(new NewCard());
+        add(new OpenProjectConfiguration());
         add(new MigrateTaskAction());
         add(new PerformanceSuite());
         add(new LoadGameComponentPerformanceTest());

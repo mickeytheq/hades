@@ -99,7 +99,7 @@ public class MigrateTaskAction extends BaseTaskAction {
             panel.add(fileChooser);
 
             DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
-            dialogWithButtons.setContent(panel);
+            dialogWithButtons.setContentComponent(panel);
             dialogWithButtons.setTitle("Migration options");
             dialogWithButtons.addOkCancelButtons();
 
