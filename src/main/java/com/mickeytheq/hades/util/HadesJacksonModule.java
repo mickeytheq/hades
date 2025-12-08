@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -26,9 +24,7 @@ public class HadesJacksonModule extends SimpleModule {
 
         @Override
         public void serialize(BufferedImage value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(value, "png", byteArrayOutputStream);
-            byte[] data = byteArrayOutputStream.toByteArray();
+            byte[] data = JsonUtils.serialiseBufferedImage(value);
             gen.writeBinary(data);
         }
     }
@@ -42,7 +38,8 @@ public class HadesJacksonModule extends SimpleModule {
         public BufferedImage deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             p.readBinaryValue(byteArrayOutputStream);
-            return ImageIO.read(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()));
+
+            return JsonUtils.deserialiseBufferedImage(byteArrayOutputStream.toByteArray());
         }
     }
 }

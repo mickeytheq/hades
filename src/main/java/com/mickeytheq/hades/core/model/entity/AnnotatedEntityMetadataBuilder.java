@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.model.entity;
 
+import java.awt.image.BufferedImage;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -183,6 +184,9 @@ public class AnnotatedEntityMetadataBuilder {
             return true;
 
         if (Boolean.class.isAssignableFrom(propertyType))
+            return true;
+
+        if (BufferedImage.class.isAssignableFrom(propertyType))
             return true;
 
         return false;

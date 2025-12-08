@@ -9,6 +9,7 @@ import ca.cgjennings.io.NewerVersionException;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Charsets;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -168,10 +169,13 @@ public class CardGameComponent extends AbstractGameComponent {
         out.writeInt(CURRENT_VERSION);
 
         ObjectNode objectNode = JsonCardSerialiser.serialiseCard(cardView.getCard());
-        StringWriter stringWriter = new StringWriter();
-        createSerialisationObjectMapper().writeValue(stringWriter, objectNode);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream, Charsets.UTF_8));
+        createSerialisationObjectMapper().writeValue(writer, objectNode);
 
-        out.writeUTF(stringWriter.toString());
+        byte[] data = byteArrayOutputStream.toByteArray();
+        out.writeInt(data.length);
+        out.write(data);
 
         // must remember to call this otherwise the file will show as unsaved in the Strange Eons UI
         markSaved();
@@ -186,8 +190,12 @@ public class CardGameComponent extends AbstractGameComponent {
         // TODO: this should only pertain to major structural changes, e.g. if the content was previously encoded as JSON and we were switching to YAML
         // TODO: changes to individual card/faces should be handled later
 
-        String jsonString = in.readUTF();
-        ObjectNode objectNode = (ObjectNode) createSerialisationObjectMapper().readTree(new StringReader(jsonString));
+        int length = in.readInt();
+        byte[] buffer = new byte[length];
+        in.readFully(buffer);
+
+        Reader reader = new InputStreamReader(new ByteArrayInputStream(buffer), Charsets.UTF_8);
+        ObjectNode objectNode = (ObjectNode) createSerialisationObjectMapper().readTree(reader);
         Card card = JsonCardSerialiser.deserialiseCard(objectNode);
 
         cardView = CardFaces.createCardView(card);

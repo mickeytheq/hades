@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 
+import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class PortraitModel {
@@ -10,7 +11,7 @@ public class PortraitModel {
     private double scale = 1.0;
     private double rotation = 0;
 
-    private URL source;
+    private BufferedImage image;
 
     @Property("PanX")
     public double getPanX() {
@@ -48,12 +49,12 @@ public class PortraitModel {
         this.rotation = rotation;
     }
 
-    @Property("Source")
-    public URL getSource() {
-        return source;
+    @Property("Image")
+    public BufferedImage getImage() {
+        return image;
     }
 
-    public void setSource(URL source) {
-        this.source = source;
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 }

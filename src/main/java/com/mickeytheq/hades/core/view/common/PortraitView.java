@@ -34,6 +34,8 @@ public class PortraitView {
 
     private final URL defaultImageResource;
 
+    // the local transient image - ideally we would always rely on the model's image but when using a default
+    // image we don't want to put that in the model so a local copy is maintained here
     private BufferedImage image;
 
     // private to ensure that a defaultImageResource is always provided, even if just an empty image
@@ -49,29 +51,42 @@ public class PortraitView {
         this.portraitDrawDimension = portraitDrawDimension;
         this.defaultImageResource = defaultImageResource;
 
-        if (portraitModel.getSource() != null) {
-            image = ImageUtils.loadImage(portraitModel.getSource());
+        if (portraitModel.getImage() != null) {
+            image = portraitModel.getImage();
         }
         else {
-            setImageAndCalculateDefaults(ImageUtils.loadImage(defaultImageResource));
+            installDefaultImage();
         }
     }
 
-    // create a new PortraitView with the given model and draw region which defaults to a blank image when
+    // create a new PortraitView with the given model and draw dimension which defaults to a blank image when
     // no source is provided by the model
     public static PortraitView createWithBlankImage(PortraitModel portraitModel, Dimension portraitDrawDimension) {
         return new PortraitView(portraitModel, portraitDrawDimension, BLANK_PORTRAIT_IMAGE_RESOURCE);
     }
 
-    // create a new PortraitView with the given model and draw region which defaults to a standard/default image when
+    // create a new PortraitView with the given model and draw dimension which defaults to a standard/default image when
     // no source is provided by the model
     public static PortraitView createWithDefaultImage(PortraitModel portraitModel, Dimension portraitDrawDimension) {
         return new PortraitView(portraitModel, portraitDrawDimension, DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
-    private void setImageAndCalculateDefaults(BufferedImage image) {
-        this.image = image;
+    private void installDefaultImage() {
+        // install the default image
+        // note that we do not set the model's image when installing a default as default images are not persisted
+        image = ImageUtils.loadImage(defaultImageResource);
+        calculateImageDefaults();
+    }
 
+    private void installImage(BufferedImage image) {
+        // set a user-specified image by updating the model and the local image view
+        portraitModel.setImage(image);
+        this.image = image;
+        calculateImageDefaults();
+    }
+
+    private void calculateImageDefaults() {
+        // set pan/scale/rotation to sensible defaults
         portraitModel.setPanX(0);
         portraitModel.setPanY(0);
         portraitModel.setScale(computeDefaultImageScale(image));
@@ -193,20 +208,13 @@ public class PortraitView {
         public void setSource(String newSource) {
             URL sourceUrl = urlFromSource(newSource);
 
-            // nothing changed - skip any update
-            if (Objects.equals(portraitModel.getSource(), sourceUrl))
-                return;
-
             // if the source is null then reset the image to the default
             if (sourceUrl == null) {
-                installDefault();
+                installDefaultImage();
                 return;
             }
 
-            // on loading a new image set all the pan/scale/rotation values to appropriate defaults for that image
-            setImageAndCalculateDefaults(ImageUtils.loadImage(sourceUrl));
-
-            portraitModel.setSource(sourceUrl);
+            installImage(ImageUtils.loadImage(sourceUrl));
 
             changeListener.run();
         }
@@ -234,20 +242,14 @@ public class PortraitView {
 
         @Override
         public void installDefault() {
-            // install the default image and set pan/scale/rotation to sensible defaults
-            setImageAndCalculateDefaults(ImageUtils.loadImage(defaultImageResource));
+            installDefaultImage();
 
             changeListener.run();
         }
 
         @Override
         public String getSource() {
-            URL sourceURl = portraitModel.getSource();
-
-            if (sourceURl == null)
-                return null;
-
-            return sourceURl.toExternalForm();
+            return null;
         }
 
         @Override

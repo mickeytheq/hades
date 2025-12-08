@@ -13,6 +13,8 @@ import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -152,6 +154,15 @@ public class JsonCardSerialiser {
                 return;
             }
 
+            if (value instanceof BufferedImage) {
+                try {
+                    currentNode.put(fieldName, JsonUtils.serialiseBufferedImage((BufferedImage)value));
+                } catch (IOException e) {
+                    throw new RuntimeException("Error serialising BufferedImage  from property '" + fieldName + "' ", e);
+                }
+                return;
+            }
+
             throw new RuntimeException("Value type '" + value.toString() + "' of class '" + value.getClass().getName() + "' from property '" + fieldName + "' is not supported");
         }
     }
@@ -231,12 +242,23 @@ public class JsonCardSerialiser {
                 try {
                     propertyMetadata.setPropertyValue(entity, new URL(text));
                 } catch (MalformedURLException e) {
-                    throw new RuntimeException("Error parsing URL from string '" + text + "' to property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
+                    throw new RuntimeException("Error parsing URL from string '" + text + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
                 }
                 return;
             }
 
-            throw new RuntimeException("Failed to deserialise raw JSON value '" + valueNode.asText() + "' to property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");
+            if (propertyMetadata.getPropertyClass().equals(BufferedImage.class)) {
+                try {
+                    byte[] value = valueNode.binaryValue();
+                    BufferedImage image = JsonUtils.deserialiseBufferedImage(value);
+                    propertyMetadata.setPropertyValue(entity, image);
+                } catch (IOException e) {
+                    throw new RuntimeException("Error parsing buffered image from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
+                }
+                return;
+            }
+
+            throw new RuntimeException("Failed to deserialise raw JSON value '" + valueNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");
         }
     }
 }
