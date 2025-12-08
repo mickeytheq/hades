@@ -17,6 +17,7 @@ public class ProjectSettingsDialog extends DialogWithButtons {
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Encounter sets", new EncounterSetsPanel(projectConfiguration));
+        tabbedPane.addTab("Collections", new CollectionsPanel(projectConfiguration));
 
         setContentComponent(tabbedPane);
 
