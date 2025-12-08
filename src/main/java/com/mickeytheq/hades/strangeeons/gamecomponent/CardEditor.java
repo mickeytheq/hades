@@ -55,6 +55,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     }
 
     private void updateTitle() {
+        // set the title of the card to the front face's title
         String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
 
         if (StringUtils.isEmpty(title)) {
@@ -96,6 +97,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public void markChanged() {
+            // check if the title needs updating
             updateTitle();
 
             cardGameComponent.markChanged(sheetIndex);

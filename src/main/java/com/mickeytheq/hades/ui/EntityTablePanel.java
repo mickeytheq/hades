@@ -57,6 +57,9 @@ public abstract class EntityTablePanel<T> extends JPanel {
         add(editButton);
         add(deleteButton);
 
+        // refresh when the component is shown
+        // as we are in the constructor any sub-class that is assigning to a member variable in the constructor
+        // won't have done that yet so information may be missing. solve by just refreshing the table when this becomes visible
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
