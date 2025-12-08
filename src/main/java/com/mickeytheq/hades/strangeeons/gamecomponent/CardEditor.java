@@ -5,10 +5,12 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     private final CardGameComponent cardGameComponent;
@@ -17,6 +19,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         this.cardGameComponent = cardGameComponent;
 
         setGameComponent(cardGameComponent);
+
+        updateTitle();
 
         // delegate to the individual card faces to create editor controls to go in the editor
         JTabbedPane editorTabbedPane = new JTabbedPane();
@@ -50,6 +54,17 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     }
 
+    private void updateTitle() {
+        String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
+
+        if (StringUtils.isEmpty(title)) {
+            title = "(No title)";
+        }
+
+        if (!Objects.equals(getTitle(), title))
+            setTitle(title);
+    }
+
     private class EditorContextImpl implements EditorContext {
         private final JTabbedPane tabbedPane;
         private final CardFaceSide cardFaceSide;
@@ -81,6 +96,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public void markChanged() {
+            updateTitle();
+
             cardGameComponent.markChanged(sheetIndex);
         }
     }

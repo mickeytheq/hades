@@ -54,6 +54,9 @@ public class PaintUtils {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubtitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+
+        MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
+
         markupRenderer.setMarkupText(subtitleText);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
