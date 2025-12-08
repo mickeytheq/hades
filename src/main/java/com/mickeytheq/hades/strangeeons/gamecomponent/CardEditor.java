@@ -58,7 +58,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
 
         if (StringUtils.isEmpty(title)) {
-            title = "(No title)";
+            title = "(No title)"; // TODO: i18n
         }
 
         if (!Objects.equals(getTitle(), title))

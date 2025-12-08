@@ -7,10 +7,8 @@ import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.DialogWithButtons;
-import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.util.SwingUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.mozilla.javascript.tools.debugger.Dim;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +17,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class EncounterSetsPanel extends JPanel {
     private final JTable table;
