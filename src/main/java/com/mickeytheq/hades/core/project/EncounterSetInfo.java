@@ -42,4 +42,8 @@ public class EncounterSetInfo {
 
     // TODO: listener support for open cards to listen for changes to their encounter set
     // TODO: also consider how to handle additions and deletions
+
+    public String toString() {
+        return displayName;
+    }
 }

@@ -18,7 +18,7 @@ public class OpenProjectConfiguration extends BaseTaskAction {
 
     @Override
     public boolean performOnSelection(Member[] members) {
-        ProjectConfiguration projectConfiguration = ProjectConfiguration.load(StrangeEons.getOpenProject().getFile().toPath().resolve("hades-project.json"));
+        ProjectConfiguration projectConfiguration = ProjectConfiguration.get();
         ProjectSettingsDialog.openDialog(StrangeEons.getWindow(), projectConfiguration);
 
         return true;

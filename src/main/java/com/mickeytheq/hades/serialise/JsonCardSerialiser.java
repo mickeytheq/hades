@@ -10,6 +10,9 @@ import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
+import com.mickeytheq.hades.core.project.CollectionInfo;
+import com.mickeytheq.hades.core.project.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -124,6 +127,7 @@ public class JsonCardSerialiser {
         }
 
         private void serialiseValue(Object value, String fieldName, ObjectNode currentNode) {
+            // TODO: replace all this hardcoding with plug-in serialisers for each class/type
             if (value instanceof String) {
                 currentNode.put(fieldName, (String)value);
                 return;
@@ -160,6 +164,16 @@ public class JsonCardSerialiser {
                 } catch (IOException e) {
                     throw new RuntimeException("Error serialising BufferedImage  from property '" + fieldName + "' ", e);
                 }
+                return;
+            }
+
+            if (value instanceof EncounterSetInfo) {
+                currentNode.put(fieldName, ((EncounterSetInfo)value).getKey());
+                return;
+            }
+
+            if (value instanceof CollectionInfo) {
+                currentNode.put(fieldName, ((CollectionInfo)value).getKey());
                 return;
             }
 
@@ -255,6 +269,26 @@ public class JsonCardSerialiser {
                 } catch (IOException e) {
                     throw new RuntimeException("Error parsing buffered image from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
                 }
+                return;
+            }
+
+            if (propertyMetadata.getPropertyClass().equals(EncounterSetInfo.class)) {
+                String encounterSetKey = valueNode.asText();
+
+                ProjectConfiguration.get().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
+                    propertyMetadata.setPropertyValue(entity, encounterSetInfo);
+                });
+
+                return;
+            }
+
+            if (propertyMetadata.getPropertyClass().equals(CollectionInfo.class)) {
+                String collectionKey = valueNode.asText();
+
+                ProjectConfiguration.get().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
+                    propertyMetadata.setPropertyValue(entity, collectionInfo);
+                });
+
                 return;
             }
 

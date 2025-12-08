@@ -3,16 +3,16 @@ package com.mickeytheq.hades.core.project;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mickeytheq.hades.util.JsonUtils;
+import org.apache.commons.lang3.concurrent.ConcurrentException;
+import org.apache.commons.lang3.concurrent.LazyInitializer;
+import org.apache.commons.lang3.concurrent.Memoizer;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class ProjectConfiguration {
-    private static ProjectConfiguration INSTANCE;
-
-    private static Path pathToProjectFile;
-
     @JsonProperty("EncounterSets")
     private EncounterSetConfiguration encounterSetConfiguration = new EncounterSetConfiguration();
 
@@ -27,42 +27,32 @@ public class ProjectConfiguration {
         return collectionConfiguration;
     }
 
-    public static ProjectConfiguration get() {
-        return ProjectConfiguration.INSTANCE;
+    private static ProjectConfigurationProvider provider;
+
+    private static final LazyInitializer<ProjectConfiguration> INSTANCE = new LazyInitializer<ProjectConfiguration>() {
+        @Override
+        protected ProjectConfiguration initialize() {
+            if (provider == null)
+                throw new RuntimeException("ProjectConfigurationProvider not specified");
+
+            return provider.load();
+        }
+    };
+
+    public static void setProvider(ProjectConfigurationProvider provider) {
+        ProjectConfiguration.provider = provider;
     }
 
-    public static ProjectConfiguration load(Path pathToProjectFile) {
-        ProjectConfiguration.pathToProjectFile = pathToProjectFile;
-
-        ObjectMapper objectMapper = createObjectMapper();
-
-        // create an empty default project file if nothing exists
-        if (!Files.exists(pathToProjectFile)) {
-            ProjectConfiguration projectConfiguration = new ProjectConfiguration();
-            projectConfiguration.save();
-        }
-
+    // this needs to be a lazy compute
+    public static ProjectConfiguration get() {
         try {
-            ProjectConfiguration projectConfiguration = objectMapper.readValue(pathToProjectFile.toFile(), ProjectConfiguration.class);
-            INSTANCE = projectConfiguration;
-            return projectConfiguration;
-        } catch (IOException e) {
+            return INSTANCE.get();
+        } catch (ConcurrentException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void save() {
-        if (pathToProjectFile == null)
-            throw new RuntimeException("No project file path set");
-
-        try {
-            createObjectMapper().writeValue(pathToProjectFile.toFile(), this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static ObjectMapper createObjectMapper() {
-        return JsonUtils.createDefaultObjectMapper(true);
+        provider.save(this);
     }
 }

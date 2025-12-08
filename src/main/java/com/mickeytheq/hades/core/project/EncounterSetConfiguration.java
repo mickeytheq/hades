@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EncounterSetConfiguration {
     @JsonProperty("SetInfos")
@@ -15,5 +16,11 @@ public class EncounterSetConfiguration {
 
     public void setEncounterSetInfos(List<EncounterSetInfo> encounterSetInfos) {
         this.encounterSetInfos = encounterSetInfos;
+    }
+
+    public Optional<EncounterSetInfo> findEncounterSetInfo(String key) {
+        return encounterSetInfos.stream()
+                .filter(o -> o.getKey().equals(key))
+                .findAny();
     }
 }

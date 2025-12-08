@@ -1,14 +1,14 @@
 package com.mickeytheq.hades.scratchpad;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
-import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
+import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ProjectConfigurationProviderStatic;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
-import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
@@ -24,6 +24,8 @@ public class QuickCardView {
 
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
+
+        ProjectConfiguration.setProvider(new ProjectConfigurationProviderStatic(new ProjectConfiguration()));
 
 //        asset();
 //        investigator();

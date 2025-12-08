@@ -1,13 +1,15 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.CollectionInfo;
+import com.mickeytheq.hades.core.project.EncounterSetInfo;
 
 public class NumberingModel {
+    private EncounterSetInfo encounterSet;
     private String encounterNumber;
     private String encounterTotal;
+    private CollectionInfo collection;
     private String collectionNumber;
-    private PortraitModel collectionPortraitModel = new PortraitModel();
-    private PortraitModel encounterPortraitModel = new PortraitModel();
 
     @Property("EncounterNumber")
     public String getEncounterNumber() {
@@ -36,21 +38,21 @@ public class NumberingModel {
         this.collectionNumber = collectionNumber;
     }
 
-    @Property("CollectionPortrait")
-    public PortraitModel getCollectionPortraitModel() {
-        return collectionPortraitModel;
+    @Property("EncounterSet")
+    public EncounterSetInfo getEncounterSet() {
+        return encounterSet;
     }
 
-    public void setCollectionPortraitModel(PortraitModel collectionPortraitModel) {
-        this.collectionPortraitModel = collectionPortraitModel;
+    public void setEncounterSet(EncounterSetInfo encounterSet) {
+        this.encounterSet = encounterSet;
     }
 
-    @Property("EncounterPortrait")
-    public PortraitModel getEncounterPortraitModel() {
-        return encounterPortraitModel;
+    @Property("Collection")
+    public CollectionInfo getCollection() {
+        return collection;
     }
 
-    public void setEncounterPortraitModel(PortraitModel encounterPortraitModel) {
-        this.encounterPortraitModel = encounterPortraitModel;
+    public void setCollection(CollectionInfo collection) {
+        this.collection = collection;
     }
 }

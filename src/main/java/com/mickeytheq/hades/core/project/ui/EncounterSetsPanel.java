@@ -157,21 +157,13 @@ public class EncounterSetsPanel extends JPanel {
     }
 
     static class EditEncounterSetInfoPanel extends JPanel {
-        private EncounterSetInfo encounterSetInfo;
-
-        private JTextField keyEditor;
-        private JTextField displayNameEditor;
-        private JButton selectImageButton;
-        private JLabel imageEditor;
-
         public EditEncounterSetInfoPanel(EncounterSetInfo encounterSetInfo) {
-            this.encounterSetInfo = encounterSetInfo;
 
-            keyEditor = new JTextField(10);
-            displayNameEditor = new JTextField(10);
-            selectImageButton = new JButton("Select image");
+            JTextField keyEditor = new JTextField(10);
+            JTextField displayNameEditor = new JTextField(10);
+            JButton selectImageButton = new JButton("Select image");
 
-            imageEditor = new JLabel();
+            JLabel imageEditor = new JLabel();
 
             EditorUtils.bindTextComponent(keyEditor, encounterSetInfo::setKey);
             EditorUtils.bindTextComponent(displayNameEditor, encounterSetInfo::setDisplayName);
