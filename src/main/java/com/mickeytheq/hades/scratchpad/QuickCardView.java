@@ -5,12 +5,10 @@ import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
-import com.mickeytheq.hades.core.view.CardFaceView;
-import com.mickeytheq.hades.core.view.CardView;
-import com.mickeytheq.hades.core.view.EditorContext;
-import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
+import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
@@ -144,12 +142,12 @@ public class QuickCardView {
         public void display() {
             // draw/renderer
             JTabbedPane drawTabbedPane = new JTabbedPane();
-            Renderer frontRenderer = new Renderer(cardView.getFrontFaceView());
+            Renderer frontRenderer = new Renderer(cardView, cardView.getFrontFaceView());
             drawTabbedPane.addTab("Front", frontRenderer);
 
             Renderer backRenderer = null;
             if (cardView.hasBack()) {
-                backRenderer = new Renderer(cardView.getBackFaceView());
+                backRenderer = new Renderer(cardView, cardView.getBackFaceView());
                 drawTabbedPane.addTab("Back", backRenderer);
             }
 
@@ -185,10 +183,12 @@ public class QuickCardView {
         }
     }
 
-    private static class Renderer extends JPanel {
+    static class Renderer extends JPanel {
+        private final CardView cardView;
         private final CardFaceView cardFaceView;
 
-        public Renderer(CardFaceView cardFaceView) {
+        public Renderer(CardView cardView, CardFaceView cardFaceView) {
+            this.cardView = cardView;
             this.cardFaceView = cardFaceView;
         }
 
@@ -197,7 +197,7 @@ public class QuickCardView {
             Graphics2D g = (Graphics2D)graphics;
 
             BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
-            cardFaceView.paint(new PaintContextImpl(bufferedImage));
+            cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardView, bufferedImage));
 
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -207,11 +207,12 @@ public class QuickCardView {
         }
     }
 
-    private static class PaintContextImpl implements PaintContext {
+    private static class PaintContextImpl extends BasePaintContext {
         private final BufferedImage bufferedImage;
         private final double dpi = 150;
 
-        public PaintContextImpl(BufferedImage bufferedImage) {
+        public PaintContextImpl(RenderTarget renderTarget, CardView cardView, BufferedImage bufferedImage) {
+            super(renderTarget, cardView);
             this.bufferedImage = bufferedImage;
         }
 
@@ -227,18 +228,8 @@ public class QuickCardView {
         }
 
         @Override
-        public RenderTarget getRenderTarget() {
-            return RenderTarget.PREVIEW;
-        }
-
-        @Override
         public double getRenderingDpi() {
             return dpi;
-        }
-
-        @Override
-        public MarkupRenderer createMarkupRenderer() {
-            return new MarkupRenderer(dpi);
         }
     }
 

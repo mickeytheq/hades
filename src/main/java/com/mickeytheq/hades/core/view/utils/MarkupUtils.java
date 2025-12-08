@@ -88,7 +88,6 @@ public class MarkupUtils {
     }
 
     public static void applyTagMarkupConfiguration(MarkupRenderer markupRenderer) {
-
         BODY_TAG_REPLACEMENT.forEach(markupRenderer::setReplacementForTag);
 
         markupRenderer.setStyleForTag("ahf", TextStyleUtils.getArkhamHorrorFontTextStyle());

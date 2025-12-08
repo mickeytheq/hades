@@ -17,6 +17,7 @@ import com.mickeytheq.hades.core.model.common.PlayerCardType;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import net.miginfocom.swing.MigLayout;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
@@ -45,6 +46,11 @@ public class EventView extends BaseCardFaceView<Event> {
         numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
+
+    @Override
+    public String getTitle() {
+        return StringUtils.defaultIfEmpty(commonCardFieldsView.getModel().getTitle(), null);
     }
 
     @Override

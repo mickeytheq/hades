@@ -13,6 +13,11 @@ import java.awt.image.BufferedImage;
 @View(interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
 public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
     @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
     public BufferedImage getTemplateImage() {
         return ImageUtils.loadImage(getClass().getResource("/templates/AHLCG-EncounterBack.jp2"));
     }

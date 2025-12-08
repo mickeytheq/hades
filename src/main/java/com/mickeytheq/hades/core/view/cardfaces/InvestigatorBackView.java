@@ -37,6 +37,11 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
+    @Override
+    public String getTitle() {
+        return null;
+    }
+
     private InvestigatorView getInvestigatorFront() {
         return (InvestigatorView) getCardView().getFrontFaceView();
     }

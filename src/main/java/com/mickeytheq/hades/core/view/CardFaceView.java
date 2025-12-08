@@ -26,6 +26,11 @@ public interface CardFaceView {
     void initialiseView(CardView cardView, CardFaceSide cardFaceSide, CardFaceModel cardFaceModel);
 
     /**
+     * Gets the title of the card face. May return null if the title is not set or the card face doesn't support a title
+     */
+    String getTitle();
+
+    /**
      * Returns the dimension of the card face being drawn
      */
     Dimension getDimension();

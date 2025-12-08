@@ -44,6 +44,11 @@ public class AssetView extends BaseCardFaceView<Asset> {
     }
 
     @Override
+    public String getTitle() {
+        return StringUtils.defaultIfEmpty(commonCardFieldsView.getModel().getTitle(), null);
+    }
+
+    @Override
     public BufferedImage getTemplateImage() {
         return ImageUtils.loadImage(getClass().getResource(getTemplateResource()));
     }

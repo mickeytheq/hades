@@ -4,6 +4,7 @@ import ca.cgjennings.imageio.JPEG2000;
 import ca.cgjennings.io.protocols.MappedURLHandler;
 import ca.cgjennings.ui.theme.HydraTheme;
 import ca.cgjennings.ui.theme.Theme;
+import com.mickeytheq.hades.util.FontUtils;
 import resources.Language;
 
 import javax.swing.*;
@@ -22,6 +23,11 @@ public class Bootstrapper {
         Language.setInterfaceLocale(Locale.ENGLISH);
         MappedURLHandler.install();
         installHydraTheme();
+
+        FontUtils.loadFont("/fonts/arnopro-regular.otf");
+        FontUtils.loadFont("/fonts/arnopro-bold.otf");
+        FontUtils.loadFont("/fonts/arnopro-italic.otf");
+        FontUtils.loadFont("/fonts/arnopro-bolditalic.otf");
 
         initialise();
     }
@@ -54,41 +60,18 @@ public class Bootstrapper {
     }
 
     private static void loadFonts() {
-        // TODO: not allowed to embed Arno Pro so instead check for and fail to start if Arno Pro isn't present
-        // TODO: and provide (a link to) clear instructions to download the fonts and where to put them (plugin folder maybe?)
-//        loadFont("/fonts/arnopro-regular.otf");
-//        loadFont("/fonts/arnopro-bold.otf");
-//        loadFont("/fonts/arnopro-italic.otf");
-//        loadFont("/fonts/arnopro-bolditalic.otf");
+        FontUtils.loadFont("/fonts/AHLCGSymbol.ttf");
+        FontUtils.loadFont("/fonts/Arkhamic.ttf");
 
+        FontUtils.loadFont("/fonts/Bolton.ttf");
 
-        loadFont("/fonts/AHLCGSymbol.ttf");
-        loadFont("/fonts/Arkhamic.ttf");
+        FontUtils.loadFont("/fonts/BoltonBold.ttf");
+        FontUtils.loadFont("/fonts/BoltonElongated.ttf");
+        FontUtils.loadFont("/fonts/BoltonOutline.ttf");
 
-        loadFont("/fonts/Bolton.ttf");
-
-        loadFont("/fonts/BoltonBold.ttf");
-        loadFont("/fonts/BoltonElongated.ttf");
-        loadFont("/fonts/BoltonOutline.ttf");
-
-        loadFont("/fonts/BoltonTitling.ttf");
-        loadFont("/fonts/BoltonTitlingBold.ttf");
-        loadFont("/fonts/BoltonTitlingOutline.ttf");
-    }
-
-    private static void loadFont(String resourcePath) {
-        try (InputStream inputStream = Bootstrapper.class.getResourceAsStream(resourcePath)) {
-            if (inputStream == null)
-                throw new RuntimeException("Font file not found at resource path '" + resourcePath + "'");
-
-            Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading from font file '" + resourcePath + "'", e);
-        } catch (FontFormatException e) {
-            throw new RuntimeException("Format error loading font file '" + resourcePath + "'", e);
-        }
+        FontUtils.loadFont("/fonts/BoltonTitling.ttf");
+        FontUtils.loadFont("/fonts/BoltonTitlingBold.ttf");
+        FontUtils.loadFont("/fonts/BoltonTitlingOutline.ttf");
     }
 
     private static void loadLanguageFiles() {

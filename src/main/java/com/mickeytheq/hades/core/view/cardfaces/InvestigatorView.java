@@ -46,6 +46,11 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
+    @Override
+    public String getTitle() {
+        return StringUtils.defaultIfEmpty(getModel().getCommonCardFieldsModel().getTitle(), null);
+    }
+
     // TODO: story template image is half-resolution
     @Override
     protected BufferedImage getTemplateImage() {

@@ -13,6 +13,7 @@ import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.codegenerated.GameConstants;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
@@ -51,7 +52,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
 
+    @Override
+    public String getTitle() {
+        return StringUtils.defaultIfEmpty(getModel().getCommonCardFieldsModel().getTitle(), null);
     }
 
     @Override

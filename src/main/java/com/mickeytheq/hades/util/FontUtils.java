@@ -10,7 +10,7 @@ import java.nio.file.Path;
 
 public class FontUtils {
     public static void loadFont(String resourcePath) {
-        try (InputStream inputStream = Bootstrapper.class.getResourceAsStream(resourcePath)) {
+        try (InputStream inputStream = FontUtils.class.getResourceAsStream(resourcePath)) {
             if (inputStream == null)
                 throw new RuntimeException("Font file not found at resource path '" + resourcePath + "'");
 

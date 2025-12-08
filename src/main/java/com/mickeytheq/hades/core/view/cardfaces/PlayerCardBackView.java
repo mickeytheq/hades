@@ -13,6 +13,11 @@ import java.awt.image.BufferedImage;
 @View(interfaceLanguageKey = InterfaceConstants.BACK_PLAYER)
 public class PlayerCardBackView extends BaseCardFaceView<PlayerCardBack> {
     @Override
+    public String getTitle() {
+        return null;
+    }
+
+    @Override
     public BufferedImage getTemplateImage() {
         return ImageUtils.loadImage(getClass().getResource("/templates/AHLCG-PlayerBack.jp2"));
     }

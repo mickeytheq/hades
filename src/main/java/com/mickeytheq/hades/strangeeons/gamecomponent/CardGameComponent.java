@@ -12,11 +12,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Charsets;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.view.BasePaintContext;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.util.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import resources.Settings;
 
@@ -115,7 +117,7 @@ public class CardGameComponent extends AbstractGameComponent {
                 // so we have to clear it first to paint onto a blank canvas
                 g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
 
-                PaintContext paintContext = new PaintContextImpl(g, renderTarget, this);
+                PaintContext paintContext = new PaintContextImpl(g, renderTarget, getCardView(), this);
 
                 cardFaceView.paint(paintContext);
             } catch (Exception e) {
@@ -128,14 +130,13 @@ public class CardGameComponent extends AbstractGameComponent {
         }
     }
 
-    static class PaintContextImpl implements PaintContext {
+    static class PaintContextImpl extends BasePaintContext {
         private final Graphics2D g;
-        private final RenderTarget renderTarget;
         private final Sheet<CardGameComponent> sheet;
 
-        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, Sheet<CardGameComponent> sheet) {
+        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardView cardView, Sheet<CardGameComponent> sheet) {
+            super(renderTarget, cardView);
             this.g = g;
-            this.renderTarget = renderTarget;
             this.sheet = sheet;
         }
 
@@ -145,23 +146,8 @@ public class CardGameComponent extends AbstractGameComponent {
         }
 
         @Override
-        public RenderTarget getRenderTarget() {
-            return renderTarget;
-        }
-
-        @Override
         public double getRenderingDpi() {
             return sheet.getTemplateResolution();
-        }
-
-        @Override
-        public MarkupRenderer createMarkupRenderer() {
-            MarkupRenderer markupRenderer = new MarkupRenderer(sheet.getTemplateResolution());
-
-            // TODO: need to set tag values for <title> to this face's title
-            // TODO: need to set tag values for <fullname> and <fullnameb> for the front/back titles
-
-            return markupRenderer;
         }
     }
 
