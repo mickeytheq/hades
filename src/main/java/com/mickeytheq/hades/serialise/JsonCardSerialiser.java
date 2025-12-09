@@ -12,7 +12,6 @@ import com.mickeytheq.hades.core.model.entity.EntityMetadata;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.project.CollectionInfo;
 import com.mickeytheq.hades.core.project.EncounterSetInfo;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -169,12 +168,12 @@ public class JsonCardSerialiser {
             }
 
             if (value instanceof EncounterSetInfo) {
-                currentNode.put(fieldName, ((EncounterSetInfo)value).getKey());
+                currentNode.put(fieldName, ((EncounterSetInfo)value).getTag());
                 return;
             }
 
             if (value instanceof CollectionInfo) {
-                currentNode.put(fieldName, ((CollectionInfo)value).getKey());
+                currentNode.put(fieldName, ((CollectionInfo)value).getTag());
                 return;
             }
 

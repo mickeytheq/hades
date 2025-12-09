@@ -9,11 +9,7 @@ import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
 
-import javax.sound.sampled.Port;
-import java.awt.image.BufferedImage;
-import java.util.Collection;
 import java.util.Optional;
 
 public class MigrationUtils {
@@ -149,7 +145,7 @@ public class MigrationUtils {
             }
 
             CollectionInfo collectionInfo = new CollectionInfo();
-            collectionInfo.setKey(tag);
+            collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
             collectionInfo.setImage(portrait.getImage());
 
@@ -175,7 +171,7 @@ public class MigrationUtils {
             DefaultPortrait portrait = PortraitUtils.getCollectionPortrait(context.getDIY());
 
             CollectionInfo collectionInfo = new CollectionInfo();
-            collectionInfo.setKey(tag);
+            collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
             collectionInfo.setImage(portrait.getImage());
 
@@ -211,7 +207,7 @@ public class MigrationUtils {
             }
 
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
-            encounterSetInfo.setKey(tag);
+            encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
             encounterSetInfo.setImage(portrait.getImage());
 
@@ -237,7 +233,7 @@ public class MigrationUtils {
             DefaultPortrait portrait = PortraitUtils.getEncounterSetPortrait(context.getDIY());
 
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
-            encounterSetInfo.setKey(tag);
+            encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
             encounterSetInfo.setImage(portrait.getImage());
 

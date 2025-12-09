@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.awt.image.BufferedImage;
 
-public class KeyedImageInfo {
-    @JsonProperty("Key")
-    private String key;
+public class TaggedImageInfo {
+    @JsonProperty("Tag")
+    private String tag;
 
     @JsonProperty("DisplayName")
     private String displayName;
@@ -14,12 +14,12 @@ public class KeyedImageInfo {
     @JsonProperty("Image")
     private BufferedImage image;
 
-    public String getKey() {
-        return key;
+    public String getTag() {
+        return tag;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getDisplayName() {

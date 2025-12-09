@@ -20,7 +20,7 @@ public class EncounterSetConfiguration {
 
     public Optional<EncounterSetInfo> findEncounterSetInfo(String key) {
         return encounterSetInfos.stream()
-                .filter(o -> o.getKey().equals(key))
+                .filter(o -> o.getTag().equals(key))
                 .findAny();
     }
 }

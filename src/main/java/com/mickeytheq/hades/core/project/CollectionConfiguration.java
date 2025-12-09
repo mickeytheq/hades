@@ -16,7 +16,7 @@ public class CollectionConfiguration {
 
     public Optional<CollectionInfo> findCollectionInfo(String key) {
         return collectionInfos.stream()
-                .filter(o -> o.getKey().equals(key))
+                .filter(o -> o.getTag().equals(key))
                 .findAny();
     }
 }
