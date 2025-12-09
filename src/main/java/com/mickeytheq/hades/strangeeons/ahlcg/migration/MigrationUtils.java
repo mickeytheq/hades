@@ -44,13 +44,13 @@ public class MigrationUtils {
 
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
-        commonCardFieldsModel.setAfterTraitsSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.TRAITS + "Spacing"));
+        commonCardFieldsModel.setAfterTraitsSpace(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS));
         commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
-        commonCardFieldsModel.setAfterKeywordsSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.KEYWORDS + "Spacing"));
+        commonCardFieldsModel.setAfterKeywordsSpace(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
-        commonCardFieldsModel.setAfterRulesSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.GAME_TEXT + "Spacing"));
+        commonCardFieldsModel.setAfterRulesSpace(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
-        commonCardFieldsModel.setAfterFlavourTextSpace(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.FLAVOR + "Spacing"));
+        commonCardFieldsModel.setAfterFlavourTextSpace(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
         commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
     }

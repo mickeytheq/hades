@@ -283,9 +283,9 @@ public class Migrator {
 
         @Override
         public String getString(String settingsKey) {
-            String mappedSettingsKey = settingsKey + settingsKeySuffix;
+            String fullSettingsKey = getFullSettingsKey(settingsKey);
 
-            String value = settings.get(mappedSettingsKey);
+            String value = getRawSettingsValue(fullSettingsKey);
 
             if (StringUtils.isEmpty(value))
                 return null;
@@ -322,6 +322,16 @@ public class Migrator {
             } catch (IllegalArgumentException e) {
                 return null;
             }
+        }
+
+        @Override
+        public String getFullSettingsKey(String settingsKey) {
+            return settingsKey + settingsKeySuffix;
+        }
+
+        @Override
+        public String getRawSettingsValue(String fullSettingsKey) {
+            return settings.get(fullSettingsKey);
         }
     }
 }

@@ -7,6 +7,7 @@ import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
+import org.apache.commons.lang3.Strings;
 
 public class InvestigatorBackMigrator {
     public InvestigatorBack build(CardFaceMigrationContext context) {
@@ -34,9 +35,15 @@ public class InvestigatorBackMigrator {
         InvestigatorBack.InvestigatorBackSection backSection = new InvestigatorBack.InvestigatorBackSection();
 
         // Back is always present at the end of the keys but the SettingsAccessor will add this
-        backSection.setHeader(settingsAccessor.getString("Text" + index + "Name"));
-        backSection.setText(settingsAccessor.getString("Text" + index ));
-        // TODO: spacing
+
+        // change from AHLCG - AHLCG auto-includes the <hdr> and : formatting during rendering. change this to be in the field itself
+        String header = settingsAccessor.getString("Text" + index + "Name");
+        header = Strings.CS.prependIfMissing(header, "<hdr>");
+        header = Strings.CS.appendIfMissing(header, "</hdr>: ");
+
+        backSection.setHeader(header);
+        backSection.setText(settingsAccessor.getString("Text" + index));
+        backSection.setAfterSpacing(settingsAccessor.getSpacingValue("Text" + index));
 
         return backSection;
     }
