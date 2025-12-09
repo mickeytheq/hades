@@ -252,11 +252,18 @@ public class MigrationUtils {
         DefaultPortrait defaultPortrait = PortraitUtils.getArtPortrait(context.getDIY(), context.getCardFaceSide());
 
         if (defaultPortrait != null) {
-            artPortraitWithArtistModel.getPortraitModel().setImage(defaultPortrait.getImage());
-            artPortraitWithArtistModel.getPortraitModel().setPanX(defaultPortrait.getPanX());
-            artPortraitWithArtistModel.getPortraitModel().setPanY(defaultPortrait.getPanY());
-            artPortraitWithArtistModel.getPortraitModel().setRotation(defaultPortrait.getRotation());
-            artPortraitWithArtistModel.getPortraitModel().setScale(defaultPortrait.getScale() * PORTRAIT_SCALE_ADJUST_FACTOR);
+            PortraitModel portraitModel = artPortraitWithArtistModel.getPortraitModel();
+
+            // an empty source means its a default image (like a 1x1 placeholder) stored in the file which we don't want to persist in ours
+            if (StringUtils.isEmpty(defaultPortrait.getSource()))
+                portraitModel.setImage(null);
+            else
+                portraitModel.setImage(defaultPortrait.getImage());
+            
+            portraitModel.setPanX(defaultPortrait.getPanX());
+            portraitModel.setPanY(defaultPortrait.getPanY());
+            portraitModel.setRotation(defaultPortrait.getRotation());
+            portraitModel.setScale(defaultPortrait.getScale() * PORTRAIT_SCALE_ADJUST_FACTOR);
         }
     }
 }
