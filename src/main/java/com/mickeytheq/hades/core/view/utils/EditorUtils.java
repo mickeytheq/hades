@@ -23,6 +23,8 @@ public class EditorUtils {
 
     public static JTextArea createTextArea(int rows, int columns) {
         JTextArea textAreaEditor = new JTextArea(rows, columns);
+        textAreaEditor.setLineWrap(true);
+        textAreaEditor.setWrapStyleWord(true);
         applyNoEditorOverride(textAreaEditor);
         return textAreaEditor;
     }

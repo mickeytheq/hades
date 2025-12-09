@@ -77,6 +77,7 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
     static class EditTaggedImageInfoPanel extends JPanel {
         public EditTaggedImageInfoPanel(TaggedImageInfo taggedImageInfo) {
 
+            // TODO: should tag be read only on an existing item?
             JTextField tagEditor = new JTextField(10);
             JTextField displayNameEditor = new JTextField(10);
             JButton selectImageButton = new JButton("Select image");

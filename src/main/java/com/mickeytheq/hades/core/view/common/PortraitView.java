@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -73,8 +74,10 @@ public class PortraitView {
 
     private void installDefaultImage() {
         // install the default image
-        // note that we do not set the model's image when installing a default as default images are not persisted
+        // note that we do not set the model's image to this when installing a default as default images are not persisted
+        // instead we set the model image to null
         image = ImageUtils.loadImage(defaultImageResource);
+        portraitModel.setImage(null);
         calculateImageDefaults();
     }
 
@@ -208,7 +211,7 @@ public class PortraitView {
         public void setSource(String newSource) {
             URL sourceUrl = urlFromSource(newSource);
 
-            // if the source is null then reset the image to the default
+            // if the source is null then reset the image to the default and clear the model's image
             if (sourceUrl == null) {
                 installDefaultImage();
                 return;
@@ -221,7 +224,7 @@ public class PortraitView {
 
         // source can be a URL or a file path so handle either
         private URL urlFromSource(String source) {
-            if (source == null)
+            if (StringUtils.isEmpty(source))
                 return null;
 
             try {

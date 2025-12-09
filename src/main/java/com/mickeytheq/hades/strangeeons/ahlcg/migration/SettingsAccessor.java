@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.strangeeons.ahlcg.migration;
 
 public interface SettingsAccessor {
-    // returns a settings value, if missing or set to a 'not set' default then return null
+    // returns a settings value, if missing, empty string or set to a 'not set' default then return null
     String getString(String settingsKey);
 
     // returns an Integer parsed from a settings key, if it is missing or invalid then return null

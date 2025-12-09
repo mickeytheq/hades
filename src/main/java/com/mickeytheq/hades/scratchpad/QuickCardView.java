@@ -29,9 +29,9 @@ public class QuickCardView {
         ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderStatic(new ProjectConfiguration()));
 
 //        asset();
-//        investigator();
+        investigator();
 //        event();
-        skill();
+//        skill();
 //        treachery();
     }
 

@@ -166,13 +166,12 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
 
     @Override
     public void paint(PaintContext paintContext) {
-        // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
-
-        // draw the template
+        // draw the template - unlike most other card types do this first as the template has the background
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
-        // title
+        // TODO: consult AHLCG plugin - there is some fading/masking going on here
+        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+
         commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);

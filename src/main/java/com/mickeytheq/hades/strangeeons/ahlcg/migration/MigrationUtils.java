@@ -249,9 +249,7 @@ public class MigrationUtils {
 
         artPortraitWithArtistModel.setArtist(settingsAccessor.getString(SettingsFieldNames.ARTIST));
 
-        String portraitSuffix = context.getCardFaceSide() == CardFaceSide.Front ? PortraitUtils.PORTRAIT_SUFFIX : PortraitUtils.BACK_PORTRAIT_SUFFIX;
-
-        DefaultPortrait defaultPortrait = PortraitUtils.getDefaultPortrait(context.getDIY(), portraitSuffix);
+        DefaultPortrait defaultPortrait = PortraitUtils.getArtPortrait(context.getDIY(), context.getCardFaceSide());
 
         if (defaultPortrait != null) {
             artPortraitWithArtistModel.getPortraitModel().setImage(defaultPortrait.getImage());
