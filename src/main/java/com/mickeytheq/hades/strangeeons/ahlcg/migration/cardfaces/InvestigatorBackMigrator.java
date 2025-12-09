@@ -3,15 +3,18 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.InvestigatorBack;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
 
 public class InvestigatorBackMigrator {
-    public InvestigatorBack build(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor) {
+    public InvestigatorBack build(CardFaceMigrationContext context) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
         InvestigatorBack investigatorBack = new InvestigatorBack();
 
-        MigrationUtils.populateArt(diy, settingsAccessor, investigatorBack.getPortraitWithArtistModel());
+        MigrationUtils.populateArt(context, investigatorBack.getPortraitWithArtistModel());
 
         investigatorBack.setSection1(createSection(settingsAccessor, 1));
         investigatorBack.setSection2(createSection(settingsAccessor, 2));

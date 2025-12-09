@@ -7,6 +7,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.project.CollectionInfo;
 import com.mickeytheq.hades.core.project.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.model.common.NumberingModel;
@@ -40,7 +41,7 @@ public class NumberingView {
     }
 
     public void createEditors(EditorContext editorContext) {
-        ProjectConfiguration projectConfiguration = ProjectConfiguration.get();
+        ProjectConfiguration projectConfiguration = ProjectConfigurations.get();
 
         // collection
         collectionEditor = EditorUtils.createNullableComboBox();

@@ -5,6 +5,7 @@ public class ProjectConfigurationProviderStatic implements ProjectConfigurationP
 
     public ProjectConfigurationProviderStatic(ProjectConfiguration projectConfiguration) {
         this.projectConfiguration = projectConfiguration;
+        this.projectConfiguration.setProvider(this);
     }
 
     @Override

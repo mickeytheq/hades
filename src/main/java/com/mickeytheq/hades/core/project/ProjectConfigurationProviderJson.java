@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.function.Supplier;
 
 public class ProjectConfigurationProviderJson implements ProjectConfigurationProvider {
+    public static final String DEFAULT_FILENAME = "hades-project.json";
     private final Supplier<Path> pathSupplier;
 
     public ProjectConfigurationProviderJson(Supplier<Path> pathSupplier) {
@@ -24,11 +25,13 @@ public class ProjectConfigurationProviderJson implements ProjectConfigurationPro
         // create an empty default project file if nothing exists
         if (!Files.exists(pathToProjectFile)) {
             ProjectConfiguration projectConfiguration = new ProjectConfiguration();
+            projectConfiguration.setProvider(this);
             projectConfiguration.save();
         }
 
         try {
             ProjectConfiguration projectConfiguration = objectMapper.readValue(pathToProjectFile.toFile(), ProjectConfiguration.class);
+            projectConfiguration.setProvider(this);
             return projectConfiguration;
         } catch (IOException e) {
             throw new RuntimeException(e);

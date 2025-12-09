@@ -2,6 +2,8 @@ package com.mickeytheq.hades.strangeeons.tasks;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
+import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.Migrator;
 import com.mickeytheq.hades.ui.DialogWithButtons;
@@ -46,9 +48,9 @@ public class MigrateTaskAction extends BaseTaskAction {
         }
 
         public void run() {
-//            migrationOptions = new MigrationOptions();
-//            if (!migrationOptions.showDialog(StrangeEons.getOpenProject().getFile()))
-//                return;
+            migrationOptions = new MigrationOptions();
+            if (!migrationOptions.showDialog(StrangeEons.getOpenProject().getFile()))
+                return;
 
             progressDialog = new ProgressDialog(LoggingLevel.Debug);
 
@@ -60,7 +62,11 @@ public class MigrateTaskAction extends BaseTaskAction {
 
         private void doMigration(Member[] members) {
             Path projectRoot = StrangeEons.getOpenProject().getFile().toPath();
-            Path migrationRootDirectory = projectRoot.resolve("Hades-Migrated");
+            Path migrationRootDirectory = migrationOptions.getFileChooser().getSelectedFile().toPath();
+
+            ProjectConfiguration projectConfiguration = new ProjectConfigurationProviderJson(() -> migrationRootDirectory.resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)).load();
+
+            Migrator migrator = new Migrator(projectConfiguration);
 
             for (Member member : members) {
                 if (member.isFolder())
@@ -77,7 +83,7 @@ public class MigrateTaskAction extends BaseTaskAction {
                 }
 
                 try {
-                    Migrator.migrate(sourceFile, targetFile);
+                    migrator.migrate(sourceFile, targetFile);
                 } catch (Exception e) {
                     logger.severe(LoggerUtils.toLoggable("Migration of '" + sourceFile + "' to '" + targetFile + "' failed", e));
                 }

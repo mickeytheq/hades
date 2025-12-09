@@ -7,6 +7,7 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
+import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces.*;
@@ -19,10 +20,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+// migrates AHLCG plugin files to Hades
 public class Migrator {
     private static final Logger logger = Logger.getLogger(Migrator.class.getName());
 
-    public static void migrate(Path sourceFile, Path targetFile) {
+    private final ProjectConfiguration projectConfiguration;
+
+    public Migrator(ProjectConfiguration projectConfiguration) {
+        this.projectConfiguration = projectConfiguration;
+    }
+
+    public void migrate(Path sourceFile, Path targetFile) {
         logger.fine("Migrating '" + sourceFile + "' to '" + targetFile + "'...");
 
         if (!sourceFile.getFileName().toString().endsWith(".eon")) {
@@ -62,11 +70,11 @@ public class Migrator {
         logger.info("Migrated '" + sourceFile + "' to '" + targetFile + "' successfully");
     }
 
-    public static Card migrateCard(DIY diy) {
+    public Card migrateCard(DIY diy) {
         return new CardMigrator(diy).migrateCard();
     }
 
-    static class CardMigrator {
+    class CardMigrator {
         private final DIY diy;
 
         public CardMigrator(DIY diy) {
@@ -105,20 +113,22 @@ public class Migrator {
 
             if (cardFaceType == null)
                 return null;
+            
+            CardFaceMigrationContext context = new CardFaceMigrationContextImpl(diy, settingsAccessor, cardFaceSide, projectConfiguration);
 
             switch (cardFaceType) {
                 case Asset:
-                    return new AssetMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new AssetMigrator().build(context);
                 case Event:
-                    return new EventMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new EventMigrator().build(context);
                 case Skill:
-                    return new SkillMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new SkillMigrator().build(context);
                 case Investigator:
-                    return new InvestigatorMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new InvestigatorMigrator().build(context);
                 case InvestigatorBack:
-                    return new InvestigatorBackMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new InvestigatorBackMigrator().build(context);
                 case Treachery:
-                    return new TreacheryMigrator().build(diy, cardFaceSide, settingsAccessor);
+                    return new TreacheryMigrator().build(context);
                 default:
                     return null;
             }
@@ -163,7 +173,7 @@ public class Migrator {
             return null;
         }
 
-        public static CardFaceType getCardFaceTypeForTemplateKey(String templateKey) {
+        public CardFaceType getCardFaceTypeForTemplateKey(String templateKey) {
             // back side of cards
             if (templateKey.equals("AHLCG-Guide75-Default"))
                 return CardFaceType.CampaignGuide_75_By_75;
@@ -225,6 +235,40 @@ public class Migrator {
                 return CardFaceType.Key;
 
             return null;
+        }
+    }
+
+    static class CardFaceMigrationContextImpl implements CardFaceMigrationContext {
+        private final DIY diy;
+        private final SettingsAccessor settingsAccessor;
+        private final CardFaceSide cardFaceSide;
+        private final ProjectConfiguration projectConfiguration;
+
+        public CardFaceMigrationContextImpl(DIY diy, SettingsAccessor settingsAccessor, CardFaceSide cardFaceSide, ProjectConfiguration projectConfiguration) {
+            this.diy = diy;
+            this.settingsAccessor = settingsAccessor;
+            this.cardFaceSide = cardFaceSide;
+            this.projectConfiguration = projectConfiguration;
+        }
+
+        @Override
+        public DIY getDIY() {
+            return diy;
+        }
+
+        @Override
+        public CardFaceSide getCardFaceSide() {
+            return cardFaceSide;
+        }
+
+        @Override
+        public ProjectConfiguration getProjectConfiguration() {
+            return projectConfiguration;
+        }
+
+        @Override
+        public SettingsAccessor getSettingsAccessor() {
+            return settingsAccessor;
         }
     }
 

@@ -3,17 +3,20 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.Asset;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 
 public class AssetMigrator {
-    public Asset build(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor) {
+    public Asset build(CardFaceMigrationContext context) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
         Asset asset = new Asset();
 
-        MigrationUtils.populateCommonCardFields(diy, cardFaceSide, settingsAccessor, asset.getCommonCardFieldsModel());
-        MigrationUtils.populatePlayerCardFields(settingsAccessor, asset.getPlayerCardFieldsModel());
-        MigrationUtils.populatingNumbering(diy, settingsAccessor, asset.getNumberingModel());
-        MigrationUtils.populateArt(diy, settingsAccessor, asset.getPortraitWithArtistModel());
+        MigrationUtils.populateCommonCardFields(context, asset.getCommonCardFieldsModel());
+        MigrationUtils.populatePlayerCardFields(context, asset.getPlayerCardFieldsModel());
+        MigrationUtils.populatingNumbering(context, asset.getNumberingModel());
+        MigrationUtils.populateArt(context, asset.getPortraitWithArtistModel());
 
         asset.setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));
         asset.setSanity(MigrationUtils.parseStatistic(settingsAccessor, "Sanity", null));

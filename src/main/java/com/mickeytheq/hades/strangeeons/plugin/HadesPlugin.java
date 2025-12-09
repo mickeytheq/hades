@@ -7,6 +7,7 @@ import ca.cgjennings.apps.arkham.plugins.PluginContext;
 import ca.cgjennings.apps.arkham.project.Actions;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
+import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 
@@ -31,7 +32,7 @@ public class HadesPlugin extends AbstractPlugin {
 
         // StrangeEons.getOpenProject is not resolvable until after the plugin has finished loading and StrangeEons has
         // finished starting. Therefore we use a Supplier of the Path so the loading of the config and path resolution can be deferred to first access
-        ProjectConfiguration.setProvider(new ProjectConfigurationProviderJson(() -> StrangeEons.getOpenProject().getFile().toPath().resolve("hades-project.json")));
+        ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderJson(() -> StrangeEons.getOpenProject().getFile().toPath().resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)));
 
         Actions.register(new HadesActionTree(), Actions.PRIORITY_IMPORT_EXPORT);
 

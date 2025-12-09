@@ -4,17 +4,20 @@ import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
 
 public class InvestigatorMigrator {
-    public Investigator build(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor) {
+    public Investigator build(CardFaceMigrationContext context) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
         Investigator investigator = new Investigator();
 
-        MigrationUtils.populateCommonCardFields(diy, cardFaceSide, settingsAccessor, investigator.getCommonCardFieldsModel());
-        MigrationUtils.populatingNumbering(diy, settingsAccessor, investigator.getNumberingModel());
-        MigrationUtils.populateArt(diy, settingsAccessor, investigator.getPortraitWithArtistModel());
+        MigrationUtils.populateCommonCardFields(context, investigator.getCommonCardFieldsModel());
+        MigrationUtils.populatingNumbering(context, investigator.getNumberingModel());
+        MigrationUtils.populateArt(context, investigator.getPortraitWithArtistModel());
 
         investigator.setHealth(settingsAccessor.getString(SettingsFieldNames.HEALTH));
         investigator.setSanity(settingsAccessor.getString(SettingsFieldNames.SANITY));

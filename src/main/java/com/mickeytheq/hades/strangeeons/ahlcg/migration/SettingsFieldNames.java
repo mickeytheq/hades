@@ -94,4 +94,22 @@ public class SettingsFieldNames {
     public static final String SPECIALIST_CLASS_NAME = "Specialist";
     public static final String STORY_CLASS_NAME = "Story";
     public static final String STORY_WEAKNESS_CLASS_NAME = "StoryWeakness";
+
+    // user collection
+    public static final String USER_COLLECTION_PREFIX = "AHLCG-UserCollection";
+    public static final String USER_COLLECTION_COUNT = USER_COLLECTION_PREFIX + "Count";
+    
+    // these are suffixed with a number which is the COLLECTION_TYPE stored against the card when the COLLECTION_TYPE is > 0
+    public static final String USER_COLLECTION_ICON_PREFIX = USER_COLLECTION_PREFIX + "Icon";
+    public static final String USER_COLLECTION_NAME_PREFIX = USER_COLLECTION_PREFIX + "Name";
+    public static final String USER_COLLECTION_TAG_PREFIX = USER_COLLECTION_PREFIX + "Tag";
+
+    // user encounter set
+    public static final String USER_ENCOUNTER_SET_PREFIX = "AHLCG-UserEncounter";
+    public static final String USER_ENCOUNTER_SET_COUNT = USER_ENCOUNTER_SET_PREFIX + "Count";
+
+    // these are suffixed with a number which is the ENCOUNTER_SET_TYPE stored against the card when the ENCOUNTER_SET_TYPE is > 0
+    public static final String USER_ENCOUNTER_SET_ICON_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Icon";
+    public static final String USER_ENCOUNTER_SET_NAME_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Name";
+    public static final String USER_ENCOUNTER_SET_TAG_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Tag";
 }

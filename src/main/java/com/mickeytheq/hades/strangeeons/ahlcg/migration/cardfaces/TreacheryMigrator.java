@@ -4,18 +4,21 @@ import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
 import org.apache.commons.lang3.StringUtils;
 
 public class TreacheryMigrator {
-    public Treachery build(DIY diy, CardFaceSide cardFaceSide, SettingsAccessor settingsAccessor) {
+    public Treachery build(CardFaceMigrationContext context) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
         Treachery treachery = new Treachery();
 
-        MigrationUtils.populateCommonCardFields(diy, cardFaceSide, settingsAccessor, treachery.getCommonCardFieldsModel());
-        MigrationUtils.populatingNumbering(diy, settingsAccessor, treachery.getNumberingModel());
-        MigrationUtils.populateArt(diy, settingsAccessor, treachery.getPortraitWithArtistModel());
+        MigrationUtils.populateCommonCardFields(context, treachery.getCommonCardFieldsModel());
+        MigrationUtils.populatingNumbering(context, treachery.getNumberingModel());
+        MigrationUtils.populateArt(context, treachery.getPortraitWithArtistModel());
 
         treachery.setWeaknessType(WeaknessType.None);
 

@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ProjectConfigurationProviderStatic;
+import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
@@ -25,7 +26,7 @@ public class QuickCardView {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        ProjectConfiguration.setProvider(new ProjectConfigurationProviderStatic(new ProjectConfiguration()));
+        ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderStatic(new ProjectConfiguration()));
 
 //        asset();
 //        investigator();

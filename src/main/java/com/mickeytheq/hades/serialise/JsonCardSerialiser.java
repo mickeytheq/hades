@@ -13,6 +13,7 @@ import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.project.CollectionInfo;
 import com.mickeytheq.hades.core.project.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -275,7 +276,7 @@ public class JsonCardSerialiser {
             if (propertyMetadata.getPropertyClass().equals(EncounterSetInfo.class)) {
                 String encounterSetKey = valueNode.asText();
 
-                ProjectConfiguration.get().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
+                ProjectConfigurations.get().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
                     propertyMetadata.setPropertyValue(entity, encounterSetInfo);
                 });
 
@@ -285,7 +286,7 @@ public class JsonCardSerialiser {
             if (propertyMetadata.getPropertyClass().equals(CollectionInfo.class)) {
                 String collectionKey = valueNode.asText();
 
-                ProjectConfiguration.get().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
+                ProjectConfigurations.get().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
                     propertyMetadata.setPropertyValue(entity, collectionInfo);
                 });
 
