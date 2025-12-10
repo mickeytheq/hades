@@ -19,7 +19,7 @@ The status columns indicates the current development state
 - Missing - not yet built
 
 | Hades card type | Restrictions | AHLCG plugin card types | Status |
------------------------------------------------------------
+| ------ | -------- | --------- | ---- |
 | Asset | None | Asset, Asset/Asset, Story Asset | Alpha |
 | Event | None | Event | Alpha |
 | Skill | None |Skill | Alpha |
