@@ -18,7 +18,7 @@ Features in _italic_ are either not yet available or partially complete. Click t
 - High-resolution templates - Produces high quality images
 - Card combinations - Hades supports (almost) any combination of card front and backs of the available [card faces](feature/cardfaces.md). See [creating a new card](ui/newcard.md)
 - Arno Pro enforced - The preferred font for AHLCG cards is Arno Pro which is required. See [font setup](ui/fontsetup.md)
-- _Project settings_ - A centralised place to specify (project configuration)[ui/projectconfiguration.md] such as encounter sets and collections instead of the current options of global and per-card
+- _Project settings_ - A centralised place to specify [project configuration](ui/projectconfiguration.md) such as encounter sets and collections instead of the current options of global and per-card
 - _Comprehensive card types_ - The card types have been simplified. For example Story Assets are just an Asset. More information on [card faces](feature/cardfaces.md)
 - _Migration from the existing AHLCG plugin_ - Easy [migration](migration/ahlcgplugin.md) of projects built using the existing plugin to Hades
 - _Feature parity with the existing AHLCG plugin_ - This will naturally be delivered as support for all card types and providing a migration logic
