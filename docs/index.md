@@ -11,9 +11,9 @@ I am also the author of [Zoop](https://mickeytheq.github.io/ZoopDocs/) a plugin 
 # Features
 
 - Performance - Hades performance is approximately 5-10 times faster than the existing AHLCG plugin. See [performance](feature/performance.md) for more details
-- Card combinations - Hades supports (almost) any combination of card front and backs. See [creating a new card](ui/newcard.md)
+- Card combinations - Hades supports (almost) any combination of card front and backs of the available [card faces](feature/cardfaces.md). See [creating a new card](ui/newcard.md)
 - Arno Pro enforced - The preferred font for AHLCG cards is Arno Pro which is required. See [font setup](ui/fontsetup.md)
-- Simplified card types - The card types have been simplified. For example Story Assets are just an Asset. More information on [card types](feature/cardtypes.md)
+- Simplified card types - The card types have been simplified. For example Story Assets are just an Asset. More information on [card faces](feature/cardfaces.md)
 - Project settings - A centralised place to specify (project configuration)[ui/projectconfiguration.md] such as encounter sets and collections instead of the current options of global and per-card
 - Migration from the existing AHLCG plugin - Easy [migration](migration/ahlcgplugin.md) of projects built using the existing plugin to Hades
 - Supported by Zoop - Allowing the existing key functions of Zoop such as TTS export, print and play and arkham.build
