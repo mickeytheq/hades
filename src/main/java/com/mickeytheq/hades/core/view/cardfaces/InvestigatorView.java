@@ -1,9 +1,11 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
+import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
+import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.BaseCardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
@@ -169,8 +171,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         // draw the template - unlike most other card types do this first as the template has the background
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
-        // TODO: consult AHLCG plugin - there is some fading/masking going on here
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        // special handling for fading
+        paintArtPortrait(paintContext);
 
         commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
 
@@ -209,5 +211,63 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(text);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+    }
+
+    // copied from AHLCG plugin - this does the usual portrait scaling/drawing but mixes in a masking step
+    // that creates a faded/integrated look of the source image on to the investigator template to make it look
+    // more like official cards
+    private void paintArtPortrait(PaintContext paintContext) {
+        PortraitModel portraitModel = getModel().getPortraitWithArtistModel().getPortraitModel();
+
+        BufferedImage portraitImage = portraitModel.getImage();
+
+        if (portraitImage == null)
+            return;
+
+        double scale = portraitModel.getScale();
+
+        double cx = portraitImage.getWidth() / 2.0 - portraitModel.getPanX();
+        double cy = portraitImage.getHeight() / 2.0 - portraitModel.getPanY();
+
+        double sizeX = ART_PORTRAIT_DRAW_REGION.getWidth() / scale;
+        double sizeY = ART_PORTRAIT_DRAW_REGION.getHeight() / scale;
+
+        BufferedImage croppedImage = crop(portraitImage, (int)(cx - sizeX / 2.0), (int)(cy - sizeY / 2.0), (int)sizeX, (int)sizeY);
+        croppedImage = createStencilImage(croppedImage);
+
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), croppedImage, ART_PORTRAIT_DRAW_REGION);
+    }
+
+    private BufferedImage crop(BufferedImage image, int x, int y, int width, int height) {
+        if (width < 1)
+            width = image.getWidth() - x;
+        if (height < 1)
+            height = image.getHeight() - y;
+
+        BufferedImage dest = ImageUtilities.createCompatibleIntRGBFormat(image, width, height);
+        Graphics2D g = dest.createGraphics();
+        try {
+            g.drawImage(image, -x, -y, null);
+        } finally {
+            g.dispose();
+        }
+        return dest;
+    }
+
+    private BufferedImage createStencilImage(BufferedImage source) {
+        BufferedImage stencilImage = ImageUtilities.resample(ImageUtils.loadImage("/overlays/investigator_mask.png"), source.getWidth(), source.getHeight());
+
+        BufferedImage destinationImage = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g = destinationImage.createGraphics();
+        try {
+            g.drawImage(stencilImage, 0, 0, null);
+            g.setComposite(AlphaComposite.SrcIn);
+            g.drawImage(source, 0, 0, null);
+        } finally {
+            g.dispose();
+        }
+
+        return destinationImage;
     }
 }

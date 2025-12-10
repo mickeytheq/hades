@@ -14,6 +14,8 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 
+// TODO: is this still necessary, maybe just collapse it back onto a portrait view and artist on the CommonFieldsModel/View?
+// TODO: or add an artist field to the PortraitModel?
 public class PortraitWithArtistView {
     private final PortraitWithArtistModel model;
 

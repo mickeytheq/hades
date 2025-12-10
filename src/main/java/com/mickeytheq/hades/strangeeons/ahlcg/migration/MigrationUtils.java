@@ -254,12 +254,12 @@ public class MigrationUtils {
         if (defaultPortrait != null) {
             PortraitModel portraitModel = artPortraitWithArtistModel.getPortraitModel();
 
-            // an empty source means its a default image (like a 1x1 placeholder) stored in the file which we don't want to persist in ours
+            // an empty source means it's a default image (like a 1x1 placeholder) stored in the file which we don't want to persist in ours
             if (StringUtils.isEmpty(defaultPortrait.getSource()))
                 portraitModel.setImage(null);
             else
                 portraitModel.setImage(defaultPortrait.getImage());
-            
+
             portraitModel.setPanX(defaultPortrait.getPanX());
             portraitModel.setPanY(defaultPortrait.getPanY());
             portraitModel.setRotation(defaultPortrait.getRotation());
