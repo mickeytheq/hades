@@ -16,7 +16,7 @@ The status columns indicates the current development state
 - <span style="color:black">Ready</span> - ready for real use
 - <span style="color:green">Beta</span> - complete and in final testing/feedback cycle
 - <span style="color:blue">Alpha</span> - built but needs review testing
-- <span style="color:red">Missing</span> - not yet built
+- $${\color{red}Missing}$$ - not yet built
 
 | Hades card type | Restrictions | AHLCG plugin card types | Status |
 | ------ | -------- | --------- | ---- |
