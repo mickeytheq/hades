@@ -13,14 +13,14 @@ Hades supports the following card faces. Some are different to the AHLCG plugin 
 
 The status columns indicates the current development state
 
-- <span style="color:black">Ready</span> - ready for real use
-- <span style="color:green">Beta</span> - complete and in final testing/feedback cycle
-- <span style="color:blue">Alpha</span> - built but needs review testing
+- $${\color{black}Ready}$$ - ready for real use
+- $${\color{green}Beta}$$ - complete and in final testing/feedback cycle
+- $${\color{blue}Alpha}$$ - built but needs review testing
 - $${\color{red}Missing}$$ - not yet built
 
 | Hades card type | Restrictions | AHLCG plugin card types | Status |
 | ------ | -------- | --------- | ---- |
-| Asset | None | Asset, Asset/Asset, Story Asset | <span style="color:blue">Alpha</span> |
+| Asset | None | Asset, Asset/Asset, Story Asset | $${\color{blue}Alpha}$$ |
 | Event | None | Event | <span style="color:blue">Alpha</span> |
 | Skill | None |Skill | <span style="color:blue">Alpha</span> |
 | Customizable Upgrade | None | Customizable Upgrades | <span style="color:red">Missing</span> |
