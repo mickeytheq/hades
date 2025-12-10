@@ -9,6 +9,7 @@ import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 public class TreacheryMigrator {
     public Treachery build(CardFaceMigrationContext context) {
@@ -20,16 +21,22 @@ public class TreacheryMigrator {
         MigrationUtils.populatingNumbering(context, treachery.getNumberingModel());
         MigrationUtils.populateArt(context, treachery.getPortraitWithArtistModel());
 
-        treachery.setWeaknessType(WeaknessType.None);
-
         String subType = settingsAccessor.getString(SettingsFieldNames.SUBTYPE);
 
-        if (!StringUtils.isEmpty(subType)) {
-            String weaknessTypeStr = StringUtils.removeEnd(subType, "Weakness");
-
-            treachery.setWeaknessType(WeaknessType.valueOf(weaknessTypeStr));
-        }
+        treachery.setWeaknessType(getWeaknessType(subType));
 
         return treachery;
+    }
+
+    private WeaknessType getWeaknessType(String subType) {
+        if (StringUtils.isEmpty(subType))
+            return WeaknessType.None;
+
+        if (subType.equals("Weakness"))
+            return WeaknessType.Investigator;
+
+        String weaknessType = Strings.CS.removeEnd(subType, "Weakness");
+
+        return WeaknessType.valueOf(weaknessType);
     }
 }

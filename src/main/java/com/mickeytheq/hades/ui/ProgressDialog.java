@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -50,8 +51,7 @@ public class ProgressDialog {
         dialogWithButtons.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-                T result = execute(callable);
-                reference.set(result);
+                execute(callable, reference::set);
             }
         });
 
@@ -99,7 +99,7 @@ public class ProgressDialog {
         Logger.getLogger("").addHandler(logHandler);
         try {
             // show the dialog which will make the componentShown event above trigger and start the work
-            // we want done within the dialog
+            // we want done within the dialog - this will block here until the dialog is closed
             dialogWithButtons.showDialog();
         } finally {
             Logger.getLogger("").removeHandler(logHandler);
@@ -111,30 +111,30 @@ public class ProgressDialog {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private <T> T execute(Callable<T> callable) {
+    private <T> void execute(Callable<T> callable, Consumer<T> resultConsumer) {
         // invoke the work in a separate thread
         // we may be on the Swing UI thread. we want to fork off from that to allow
         // UI processing to continue
-        Future<T> future = executorService.submit(callable);
-        try {
-            return future.get();
-        } catch (InterruptedException e) {
-            addLine(LoggerUtils.toLoggable("Interrupted exception", e.getCause()));
-            return null;
-        } catch (ExecutionException e) {
-            addLine(LoggerUtils.toLoggable("Unexpected/uncaught exception", e.getCause()));
-            return null;
-        }
-        finally {
-            // always call complete to enable the progress dialog to be closed
-            completed();
-        }
+        executorService.submit(() -> {
+            try {
+                T result = callable.call();
+                resultConsumer.accept(result);
+            } catch (Exception e) {
+                addLine(LoggerUtils.toLoggable("Unexpected/uncaught exception", e.getCause()));
+            }
+            finally {
+                completed();
+            }
+        });
+        executorService.shutdown();
     }
 
     private void completed() {
         addLine("Process completed. Click close button when ready");
 
-        closeButton.setEnabled(true);
+        SwingUtilities.invokeLater(() -> {
+            closeButton.setEnabled(true);
+        });
     }
 
     public void addLine(String line) {
