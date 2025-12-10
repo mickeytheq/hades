@@ -13,19 +13,19 @@ Hades supports the following card faces. Some are different to the AHLCG plugin 
 
 The status columns indicates the current development state
 
-- Ready - ready for real use
-- Beta - complete and in final testing/feedback cycle
-- Alpha - built but needs review testing
-- Missing - not yet built
+- <span style="color:black">Ready</span> - ready for real use
+- <span style="color:green">Beta</span> - complete and in final testing/feedback cycle
+- <span style="color:blue">Alpha</span> - built but needs review testing
+- <span style="color:red">Missing</span> - not yet built
 
 | Hades card type | Restrictions | AHLCG plugin card types | Status |
 | ------ | -------- | --------- | ---- |
-| Asset | None | Asset, Asset/Asset, Story Asset | Alpha |
-| Event | None | Event | Alpha |
-| Skill | None |Skill | Alpha |
-| Customizable Upgrade | None | Customizable Upgrades | Missing |
-| Investigator | None | Investiator, Story investigator | Alpha |
-| Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Alpha |
+| Asset | None | Asset, Asset/Asset, Story Asset | <span style="color:blue">Alpha</span> |
+| Event | None | Event | <span style="color:blue">Alpha</span> |
+| Skill | None |Skill | <span style="color:blue">Alpha</span> |
+| Customizable Upgrade | None | Customizable Upgrades | <span style="color:red">Missing</span> |
+| Investigator | None | Investiator, Story investigator | <span style="color:blue">Alpha</span> |
+| Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | <span style="color:blue">Alpha</span> |
 | Minicard | None | Mini Investigator Marker | Missing |
 | Scenario | None | Scenario | Missing |
 | Agenda | None | Agenda, numerous variants | Missing |
@@ -33,7 +33,7 @@ The status columns indicates the current development state
 | Act | None | Act, numerous variants | Missing |
 | Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Missing |
 | Location | None (however 'copy front' options are only available with a front location | Location, Location/Location | Missing |
-| Treachery | None | Treachery, Treachery (weakness) | Alpha |
+| Treachery | None | Treachery, Treachery (weakness) | <span style="color:blue">Alpha</span> |
 | Enemy | None | Enemy, Enemy (weakness) | Missing |
 | Treachery Location | None | TreacheryLocation | Missing |
 | Story | None | Story, numerous variants | Missing |
@@ -41,3 +41,7 @@ The status columns indicates the current development state
 | Portrait | None | Potrait | Missing |
 | Concealed | None | Concealed | Missing |
 | Rules | None | Campaign Rules | Missing |
+| Player card back | None | (the default back on many cards) | <span style="color:blue">Alpha</span> |
+| Encounter card back | None | (the default back on many cards) | <span style="color:blue">Alpha</span> |
+| Purple player card back | None | (the default back on customizable upgrade cards) | Missing |
+| Concealed card back | None | (the default back on customizable upgrade cards) | Missing |
