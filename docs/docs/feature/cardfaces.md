@@ -36,7 +36,7 @@ The status columns indicates the current development state
 | Treachery | None | Treachery, Treachery (weakness) | Alpha |
 | Enemy | None | Enemy, Enemy (weakness) | Missing |
 | Treachery Location | None | TreacheryLocation | Missing |
-| Story | None | Story | Missing |
+| Story | None | Story, numerous variants | Missing |
 | Key | None | Key | Missing |
 | Portrait | None | Potrait | Missing |
 | Concealed | None | Concealed | Missing |
