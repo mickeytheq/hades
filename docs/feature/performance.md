@@ -12,8 +12,8 @@ The following conditions were used
 
 - A neutral Asset card
 - Each test was run 5 times
+- Each test ran 100 iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
-- 100 iterations (times below are for all iterations)
 
 AHLCG plugin - 11.09, 10.84, 10.78, 10.70, 10.71 seconds
 Hades - 2.46, 2.27, 2.24, 2.24, 2.23 seconds
@@ -24,7 +24,17 @@ Hades - 2.46, 2.27, 2.24, 2.24, 2.23 seconds
 
 This test measures the time to create the editor interface (controls and preview panel)
 
-**TBD** - earlier tests showed ~10x performance improvement
+The following conditions were used
+
+- A neutral Asset card
+- Each test was run 5 times
+- Each test ran 100 iterations (times below are for all iterations)
+- Results are in seconds (lower is better)
+
+AHLCG plugin - 236.84 seconds
+Hades - 12.25, 11.99, 12.34, 12.07, 12.20 seconds
+
+**Summary - Hades is ~19-20 times faster**
 
 ## Card rendering
 
@@ -34,8 +44,8 @@ The following conditions were used
 
 - A neutral Asset card
 - Each test was run 5 times
+- Each test ran 100 iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
-- 100 iterations (times below are for all iterations)
 
 AHLCG plugin - 238.25, 237.90, 241.87, 240.59, 236.83
 Hades - 25.20, 24.71, 24.93, 25.00, 24.78
