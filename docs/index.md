@@ -35,11 +35,11 @@ The current plan is
 
 ### 1.0
 
-- Deliver all player cards - Investigator, Asset, Event, Skill, maybe Treachery and Enemy to support signatures/weaknesses
-- Hi-res templates
-- Arno Pro enforced
-- Migration from the AHLCG plugin of the above
-- Within the scope above, feature parity/compatibility with AHLCG plugin
+- Deliver all player cards - Investigator, Asset, Event, Skill, maybe Treachery and Enemy to support signatures/weaknesses - **in progress**
+- Hi-res templates - **in progress**
+- Arno Pro enforced - **complete**
+- Migration from the AHLCG plugin of the above - **in progress**
+- Within the scope above, feature parity/compatibility with AHLCG plugin - **in progress**
 - Fix any critical bugs, crashes
 - Finalise key technical decisions such as storage formats of content (anything that will be expensive to change later)
 
