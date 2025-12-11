@@ -209,7 +209,7 @@ public class JsonCardSerialiser {
                     Object propertyValue = propertyMetadata.getPropertyValue(entity);
 
                     if (propertyValue == null) {
-                        // TODO: construct?
+                        // TODO: construct a new instance or fail?
                     }
 
                     deserialiseEntity(propertyMetadata.asEntity(), (ObjectNode)fieldValueJsonNode, propertyValue);

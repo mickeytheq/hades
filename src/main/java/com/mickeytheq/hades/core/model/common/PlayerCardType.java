@@ -3,7 +3,6 @@ package com.mickeytheq.hades.core.model.common;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import resources.Language;
 
-// TODO: enums like this need a parameter for a language key to be used in toString() for UI display when used in comboboxes
 public enum PlayerCardType {
     Standard(InterfaceConstants.STANDARD, false, false),
     Neutral(InterfaceConstants.CLASS_NEUTRAL, false, false),

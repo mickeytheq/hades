@@ -2,36 +2,62 @@ package com.mickeytheq.hades.strangeeons.ui;
 
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.LoggingLevel;
+import com.mickeytheq.hades.ui.ProgressDialog;
 import com.mickeytheq.hades.util.FontUtils;
+import com.mickeytheq.hades.util.UrlUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 public class FontInstallManager {
-    private static final int CANCEL_CODE = 0;
+    private final List<FontSourceInfo> requiredFontInfo = new ArrayList<>();
 
-    private final Map<String, Path> requiredFontInfo = new LinkedHashMap<>();
+    // default implementation to look for the required Arno Pro fonts in the user's home directory
+    public static boolean checkAndLaunchSetupIfRequired() {
+        Path userHomePath = Paths.get(System.getProperty("user.home"));
 
-    public void addRequiredFontInfo(String fontName, Path expectedPath) {
-        requiredFontInfo.put(fontName, expectedPath);
+        FontInstallManager fontInstallManager = new FontInstallManager();
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Regular", userHomePath.resolve("arnopro-regular.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-regular-font/f64439.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Bold", userHomePath.resolve("arnopro-bold.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-font/f64426.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Italic", userHomePath.resolve("arnopro-italic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-italic-font/f64432.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-BoldItalic", userHomePath.resolve("arnopro-bolditalic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-italic-font/f64427.htm"));
+
+        fontInstallManager.tryLoadFontsQuietly();
+
+        if (fontInstallManager.isAllFontsInstalled())
+            return true;
+
+        return fontInstallManager.showFontSetupDialog();
+    }
+
+    public void addRequiredFontInfo(String fontName, Path expectedPath, URL downloadLocation) {
+        requiredFontInfo.add(new FontSourceInfo(fontName, expectedPath, downloadLocation));
     }
 
     // return true if the dialog was completed successfully
     public boolean showFontSetupDialog() {
-        return new FontSetupDialog().showDialog() != CANCEL_CODE;
+        return new FontSetupDialog().showDialog() != DialogWithButtons.CANCEL_OPTION;
     }
 
     class FontSetupDialog {
-        private final Map<String, JTextField> fontNameStatusMap = new HashMap<>();
+        private final Map<FontSourceInfo, JTextField> fontNameStatusMap = new HashMap<>();
         private final DialogWithButtons dialogWithButtons;
-        private final JTextArea logTextArea;
-
         public FontSetupDialog() {
             JPanel panel = MigLayoutUtils.createTitledPanel("Required fonts");
 
-            for (String fontName : requiredFontInfo.keySet()) {
+            for (FontSourceInfo fontSourceInfo : requiredFontInfo) {
+                String fontName = fontSourceInfo.getFontName();
+                Path expectedPath = fontSourceInfo.getExpectedPath();
+                URL downloadLocation = fontSourceInfo.getDownloadLocation();
+
                 panel.add(new JLabel("Font name: "));
                 JTextField fontNameTextField = new JTextField(fontName, 20);
                 panel.add(fontNameTextField);
@@ -39,25 +65,48 @@ public class FontInstallManager {
                 panel.add(new JLabel("Expected location: "));
                 JTextField locationTextField = new JTextField(40);
                 locationTextField.setEditable(false);
-                locationTextField.setText(requiredFontInfo.get(fontName).toString());
+                locationTextField.setText(expectedPath.toString());
                 panel.add(locationTextField, "growx");
 
                 panel.add(new JLabel("Status: "));
                 JTextField statusTextField = new JTextField(20);
                 statusTextField.setEditable(false);
 
-                fontNameStatusMap.put(fontName, statusTextField);
-                panel.add(statusTextField, "wrap, growx");
+                fontNameStatusMap.put(fontSourceInfo, statusTextField);
+                panel.add(statusTextField, "growx");
+
+                JButton openFolderButton = new JButton("Open install location");
+                openFolderButton.addActionListener(e -> {
+                    try {
+                        Desktop.getDesktop().open(expectedPath.getParent().toFile());
+                    } catch (IOException ex) {
+                        // TODO: do something more user friendly here?
+                        throw new RuntimeException(ex);
+                    }
+                });
+
+                panel.add(openFolderButton);
+
+                if (downloadLocation != null) {
+                    JButton openDownloadLocation = new JButton("Download location");
+                    openDownloadLocation.addActionListener(e -> {
+                        try {
+                            Desktop.getDesktop().browse(downloadLocation.toURI());
+                        } catch (IOException | URISyntaxException ex) {
+                            // TODO: do something more user friendly here?
+                            throw new RuntimeException(ex);
+                        }
+                    });
+
+                    panel.add(openDownloadLocation, "wrap");
+                }
+                else {
+                    // empty cell to wrap to next line
+                    panel.add(new JPanel(), "wrap");
+                }
             }
 
             // TODO: have buttons to open the target folder and navigate to the download page
-
-            logTextArea = new JTextArea();
-            JScrollPane scrollPane = new JScrollPane(logTextArea);
-            scrollPane.setPreferredSize(new Dimension(600, 400));
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-            panel.add(scrollPane, "span, growx, wrap");
 
             // dialog
             dialogWithButtons = new DialogWithButtons((Frame)null, false);
@@ -78,7 +127,7 @@ public class FontInstallManager {
                 return true;
             });
 
-            dialogWithButtons.addDialogClosingButton("Cancel", CANCEL_CODE, () -> true);
+            dialogWithButtons.addDialogClosingButton("Cancel", DialogWithButtons.CANCEL_OPTION, () -> true);
 
             updateFontStatus();
         }
@@ -88,58 +137,59 @@ public class FontInstallManager {
         }
 
         public void updateFontStatus() {
-            Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+            ProgressDialog progressDialog = new ProgressDialog(LoggingLevel.Normal);
+            progressDialog.runWithinProgressDialog(() -> {
+                Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
-            boolean allInstalled = true;
+                boolean allInstalled = true;
 
-            for (Map.Entry<String, JTextField> entry : fontNameStatusMap.entrySet()) {
-                String fontName = entry.getKey();
-                JTextField textField = entry.getValue();
+                for (Map.Entry<FontSourceInfo, JTextField> entry : fontNameStatusMap.entrySet()) {
+                    FontSourceInfo fontSourceInfo = entry.getKey();
+                    JTextField textField = entry.getValue();
 
-                boolean installed = isFontInstalled(installedFonts, fontName);
+                    String fontName = fontSourceInfo.getFontName();
 
-                if (!installed) {
-                    // try and load the font
-                    try {
-                        Path fontPath = requiredFontInfo.get(fontName);
+                    boolean installed = isFontInstalled(installedFonts, fontName);
 
-                        FontUtils.loadFont(fontPath);
+                    if (!installed) {
+                        // try and load the font
+                        try {
+                            Path fontPath = fontSourceInfo.getExpectedPath();
 
-                        logTextArea.append("Loaded font '" + fontName + "' successfully");
-                        logTextArea.append(System.lineSeparator());
-                        installed = true;
-                    } catch (Exception e) {
-                        logTextArea.append("Failed to load font '" + fontName + "'" + e.getMessage());
-                        logTextArea.append(System.lineSeparator());
+                            FontUtils.loadFont(fontPath);
+
+                            progressDialog.addLine("Loaded font '" + fontName + "' successfully");
+                            installed = true;
+                        } catch (Exception e) {
+                            progressDialog.addLine("Failed to load font '" + fontName + "'" + e.getMessage());
+                        }
+                    }
+
+                    if (installed) {
+                        textField.setText("Installed");
+                    }
+                    else {
+                        allInstalled = false;
+                        textField.setText("Not installed");
                     }
                 }
 
-                if (installed) {
-                    textField.setText("Installed");
+                if (allInstalled) {
+                    progressDialog.addLine("All fonts loaded successfully");
                 }
                 else {
-                    allInstalled = false;
-                    textField.setText("Not installed");
+                    progressDialog.addLine("One or more fonts are missing. See above for details");
                 }
-            }
 
-            if (allInstalled) {
-                logTextArea.append("All fonts loaded successfully");
-                logTextArea.append(System.lineSeparator());
-            }
-            else {
-                logTextArea.append("One or more fonts are missing. See above for details");
-                logTextArea.append(System.lineSeparator());
-            }
+                return null;
+            });
         }
     }
 
     public void tryLoadFontsQuietly() {
-        Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
-
-        for (Map.Entry<String, Path> entry : requiredFontInfo.entrySet()) {
+        for (FontSourceInfo fontSourceInfo : requiredFontInfo) {
             try {
-                FontUtils.loadFont(entry.getValue());
+                FontUtils.loadFont(fontSourceInfo.getExpectedPath());
             } catch (Exception e) {
                 // ignore any exception
             }
@@ -149,8 +199,8 @@ public class FontInstallManager {
     public boolean isAllFontsInstalled() {
         Font[] installedFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
-        for (String requiredFontName : requiredFontInfo.keySet()) {
-            if (!isFontInstalled(installedFonts, requiredFontName))
+        for (FontSourceInfo fontSourceInfo : requiredFontInfo) {
+            if (!isFontInstalled(installedFonts, fontSourceInfo.getFontName()))
                 return false;
         }
 
@@ -163,5 +213,29 @@ public class FontInstallManager {
                 .findFirst();
 
         return matchedFont.isPresent();
+    }
+
+    static class FontSourceInfo {
+        private final String fontName;
+        private final Path expectedPath;
+        private final URL downloadLocation;
+
+        public FontSourceInfo(String fontName, Path expectedPath, URL downloadLocation) {
+            this.fontName = fontName;
+            this.expectedPath = expectedPath;
+            this.downloadLocation = downloadLocation;
+        }
+
+        public String getFontName() {
+            return fontName;
+        }
+
+        public Path getExpectedPath() {
+            return expectedPath;
+        }
+
+        public URL getDownloadLocation() {
+            return downloadLocation;
+        }
     }
 }

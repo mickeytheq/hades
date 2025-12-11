@@ -1,6 +1,8 @@
 package com.mickeytheq.hades.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
+import ca.cgjennings.apps.arkham.SheetViewer;
+import ca.cgjennings.apps.arkham.sheet.Sheet;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
@@ -54,6 +56,28 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     }
 
+    @Override
+    protected void createTimer(int updatePeriod) {
+        // SE has a heartbeat mechanic beats on a timer and on each beat checks if anything needs redrawing
+        // this results in delays between pressing a key and the card being redrawn
+        // Hades rendering is fast enough that keystrokes can result in an immediate repaint
+        //
+        // therefore we override this method to intercept and stop the heartbeat timer from being created
+        // in conjunction with rerenderSheetViewers below this gives us much better response times in the UI
+    }
+
+    private void rerenderSheetViewers() {
+        // effectively a re-implementation of SheetViewer.rerenderImage but that's package private
+        if (viewers == null)
+            return;
+
+        for (SheetViewer viewer : viewers) {
+            if (viewer.isShowing()) {
+                viewer.repaint();
+            }
+        }
+    }
+
     private void updateTitle() {
         // set the title of the card to the front face's title
         String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
@@ -101,6 +125,9 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             updateTitle();
 
             cardGameComponent.markChanged(sheetIndex);
+
+            // on any change tell the sheets to repaint
+            rerenderSheetViewers();
         }
     }
 }

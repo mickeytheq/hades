@@ -140,7 +140,6 @@ public class EventView extends BaseCardFaceView<Event> {
         PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_EVENT).toUpperCase());
 
         // title
-        // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
         commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
 
         Rectangle bodyDrawRegion = getBodyDrawRegion();

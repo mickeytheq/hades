@@ -25,7 +25,6 @@ public class PerformanceTests {
 
     public static StopWatch performEditorTest(File file, int iterations) {
         GameComponent gameComponent = ResourceKit.getGameComponentFromFile(file, true);
-
         StopWatch stopWatch = StopWatch.createStarted();
 
         for (int i = 0; i < iterations; i++) {

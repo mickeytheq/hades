@@ -145,8 +145,6 @@ public class CommonCardFieldsView {
     }
 
     private String composeBodyString() {
-        // TODO: optional spacing parameters
-
         StringBuilder sb = new StringBuilder();
 
         if (StringUtils.isEmpty(model.getTraits())) {

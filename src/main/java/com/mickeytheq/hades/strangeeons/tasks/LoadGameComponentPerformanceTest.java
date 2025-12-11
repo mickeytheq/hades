@@ -6,6 +6,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.project.Project;
 import ca.cgjennings.apps.arkham.project.Task;
 import ca.cgjennings.apps.arkham.project.TaskAction;
+import com.google.common.base.Stopwatch;
 import org.apache.commons.lang3.time.StopWatch;
 import resources.ResourceKit;
 
@@ -20,14 +21,7 @@ public class LoadGameComponentPerformanceTest extends TaskAction {
     @Override
     public boolean perform(Project project, Task task, Member member) {
         int iterations = 100;
-
-        StopWatch stopWatch = StopWatch.createStarted();
-
-        for (int i = 0; i < iterations; i++) {
-            GameComponent gameComponent = ResourceKit.getGameComponentFromFile(member.getFile(), true);
-        }
-
-        stopWatch.stop();
+        StopWatch stopWatch = PerformanceTests.performGameComponentLoadTest(member.getFile(), iterations);
 
         JOptionPane.showMessageDialog(StrangeEons.getWindow(), "Ran " + iterations + " iterations of test '" + member.getFile().getAbsolutePath() + "' in " + stopWatch.formatTime());
 

@@ -258,7 +258,7 @@ public class PlayerCardFieldsView {
     );
 
     // TODO: at the moment there's a list of box regions and icon regions
-    // TODO: which when tweaked is easy to mess up the consistent box spacing and icon positioning within a box
+    // which when tweaked is easy to mess up the consistent box spacing and icon positioning within a box
     // instead could an algorithm that paints based on a smaller number of configs
     // - specify the position of the first box
     // - specify a gap between boxes

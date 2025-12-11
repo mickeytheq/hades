@@ -4,7 +4,7 @@ import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ProjectConfigurations;
-import com.mickeytheq.hades.core.project.ui.ProjectSettingsDialog;
+import com.mickeytheq.hades.core.project.ui.ProjectConfigurationDialog;
 
 public class OpenProjectConfiguration extends BaseTaskAction {
     @Override
@@ -20,7 +20,7 @@ public class OpenProjectConfiguration extends BaseTaskAction {
     @Override
     public boolean performOnSelection(Member[] members) {
         ProjectConfiguration projectConfiguration = ProjectConfigurations.get();
-        ProjectSettingsDialog.openDialog(StrangeEons.getWindow(), projectConfiguration);
+        ProjectConfigurationDialog.openDialog(StrangeEons.getWindow(), projectConfiguration);
 
         return true;
     }

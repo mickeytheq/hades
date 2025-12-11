@@ -1,8 +1,5 @@
 package com.mickeytheq.hades.core.model;
 
-// TODO: do we still need this or is the annotation sufficient?
-// TODO: keeping it does allow generic type-checking
-
 /**
  * Base interface for a card face model. It is paired with a {@link com.mickeytheq.hades.core.view.CardFaceView} in a 1-to-1 relationship.
  *
