@@ -7,6 +7,7 @@ public class HadesActionTree extends TaskActionTree {
         add(new NewCard());
         add(new OpenProjectConfiguration());
         add(new MigrateTaskAction());
+        add(new ViewLog());
         add(new PerformanceSuite());
         add(new LoadGameComponentPerformanceTest());
         add(new LoadEditorPerformanceTest());

@@ -1,0 +1,21 @@
+{
+  "Configuration": {
+    "Appenders": {
+      "GlobalMemoryAppender": {
+        "name": "HadesGlobalLog"
+      }
+    },
+    "Loggers": {
+      "Root": {
+        "level": "INFO"
+      },
+      "Logger": {
+        "name": "com.mickeytheq.hades",
+        "level": "INFO",
+        "AppenderRef": {
+          "ref": "HadesGlobalLog"
+        }
+      }
+    }
+  }
+}

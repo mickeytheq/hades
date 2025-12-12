@@ -59,6 +59,18 @@ public class CardView {
         JPanel panel = MigLayoutUtils.createTitledPanel("Comments");
         panel.add(scrollPane, "wrap, grow, push");
 
-        editorContext.addDisplayComponent(Language.gstring("Comments"), panel);
+        editorContext.addDisplayComponent("Comments", panel);
+    }
+
+    public String getBriefDisplayString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Front: " + getFrontFaceView().getTitle() + " (type: " + getFrontFaceView().getClass().getSimpleName() + ")");
+
+        if (hasBack())
+            sb.append(", Back: " + getBackFaceView().getTitle() + " (type: " + getBackFaceView().getClass().getSimpleName() + ")");
+        else
+            sb.append(", Back: (None)");
+
+        return sb.toString();
     }
 }

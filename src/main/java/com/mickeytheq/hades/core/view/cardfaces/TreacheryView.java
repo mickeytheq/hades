@@ -65,13 +65,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
         numberingView.createEditors(editorContext);
         portraitWithArtistView.createEditors(editorContext);
 
-        weaknessTypeEditor = new JComboBox<>();
-        weaknessTypeEditor.addItem(WeaknessType.None);
-        weaknessTypeEditor.addItem(WeaknessType.Basic);
-        weaknessTypeEditor.addItem(WeaknessType.Investigator);
-        weaknessTypeEditor.addItem(WeaknessType.Story);
+        weaknessTypeEditor = EditorUtils.createEnumComboBox(WeaknessType.class);
 
         EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
+
+        weaknessTypeEditor.setSelectedItem(getModel().getWeaknessType());
 
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General");
 

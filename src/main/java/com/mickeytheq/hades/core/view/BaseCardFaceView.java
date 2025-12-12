@@ -51,4 +51,9 @@ public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardF
     }
 
     protected abstract BufferedImage getTemplateImage();
+
+    @Override
+    public String getBriefDisplayString() {
+        return getCardFaceSide().name() + " - " + getTitle() + " (type: " + getClass().getSimpleName() + ")";
+    }
 }

@@ -10,7 +10,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 
 import java.awt.image.BufferedImage;
 
-@View(interfaceLanguageKey = InterfaceConstants.BACK_ENCOUNTER)
+@View(interfaceLanguageKey = "Encounter Back")
 public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
     @Override
     public String getTitle() {

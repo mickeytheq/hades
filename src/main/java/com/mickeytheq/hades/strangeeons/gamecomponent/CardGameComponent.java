@@ -18,14 +18,15 @@ import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.util.JsonUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import resources.Settings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.logging.Logger;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
 public class CardGameComponent extends AbstractGameComponent {
     static final long serialVersionUID = -6_569_100_078_755_650_503L;
 
-    private static final Logger logger = Logger.getLogger(CardGameComponent.class.getName());
+    private static final Logger logger = LogManager.getLogger(CardGameComponent.class);
 
     private static final int CURRENT_VERSION = 1;
 
@@ -77,10 +78,18 @@ public class CardGameComponent extends AbstractGameComponent {
     @Override
     public AbstractGameComponentEditor<CardGameComponent> createDefaultEditor() {
         try {
-            return new CardEditor(this);
+            StopWatch stopWatch = StopWatch.createStarted();
+
+            CardEditor cardEditor = new CardEditor(this);
+
+            if (logger.isTraceEnabled()) {
+                logger.trace("Opening of card editor: " + cardView.getBriefDisplayString() + " completed in " + stopWatch.getTime() + "ms");
+            }
+
+            return cardEditor;
         } catch (Exception e) {
             ErrorDialog.displayError("Error creating editor", e);
-            logger.severe(e.getMessage() + ": " + ExceptionUtils.getStackTrace(e));
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -111,6 +120,8 @@ public class CardGameComponent extends AbstractGameComponent {
 
         @Override
         protected void paintSheet(RenderTarget renderTarget) {
+            StopWatch stopWatch = StopWatch.createStarted();
+
             Graphics2D g = createGraphics();
             try {
                 // the graphics object created is on top of the existing image
@@ -120,9 +131,13 @@ public class CardGameComponent extends AbstractGameComponent {
                 PaintContext paintContext = new PaintContextImpl(g, renderTarget, getCardView(), this);
 
                 cardFaceView.paint(paintContext);
+
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Painting of card face " + cardFaceView.getBriefDisplayString() + " completed in " + stopWatch.getTime() + "ms");
+                }
             } catch (Exception e) {
                 ErrorDialog.displayError("Error painting sheet for card face", e);
-                logger.severe(e.getMessage() + ": " + ExceptionUtils.getStackTrace(e));
+                logger.error(e.getMessage(), e);
                 throw e;
             } finally {
                 g.dispose();

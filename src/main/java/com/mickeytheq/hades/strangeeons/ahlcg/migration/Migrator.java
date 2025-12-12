@@ -13,16 +13,17 @@ import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces.*;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import resources.ResourceKit;
 import resources.Settings;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.logging.Logger;
 
 // migrates AHLCG plugin files to Hades
 public class Migrator {
-    private static final Logger logger = Logger.getLogger(Migrator.class.getName());
+    private static final Logger logger = LogManager.getLogger(Migrator.class);
 
     private final ProjectConfiguration projectConfiguration;
 
@@ -31,17 +32,17 @@ public class Migrator {
     }
 
     public void migrate(Path sourceFile, Path targetFile) {
-        logger.fine("Migrating '" + sourceFile + "' to '" + targetFile + "'...");
+        logger.debug("Migrating '" + sourceFile + "' to '" + targetFile + "'...");
 
         if (!sourceFile.getFileName().toString().endsWith(".eon")) {
-            logger.fine("Skipping '" + sourceFile + "' as it is not a .eon file");
+            logger.debug("Skipping '" + sourceFile + "' as it is not a .eon file");
             return;
         }
 
         GameComponent gameComponent = ResourceKit.getGameComponentFromFile(sourceFile.toFile());
 
         if (!(gameComponent instanceof DIY)) {
-            logger.fine("Skipping '" + sourceFile + "' as it is not a DIY component");
+            logger.debug("Skipping '" + sourceFile + "' as it is not a DIY component");
             return;
         }
 
@@ -50,7 +51,7 @@ public class Migrator {
         Card card = migrateCard(diy);
 
         if (card == null) {
-            logger.warning("Skipping '" + sourceFile + "' as that card face/type is not supported");
+            logger.warn("Skipping '" + sourceFile + "' as that card face/type is not supported");
             return;
         }
 

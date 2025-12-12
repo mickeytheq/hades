@@ -60,6 +60,7 @@ public class DialogWithButtons extends JDialog {
             dialogResultCode = buttonResultCode;
 
             setVisible(false);
+            dispose();
         });
 
         addButton(button);
@@ -110,7 +111,6 @@ public class DialogWithButtons extends JDialog {
             setLocationRelativeTo(parent);
 
         setVisible(true);
-        dispose();
 
         return dialogResultCode;
     }

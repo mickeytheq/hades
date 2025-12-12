@@ -14,6 +14,8 @@ import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
 import com.mickeytheq.hades.util.LoggerUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.BufferedWriter;
@@ -23,11 +25,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class MigrateTaskAction extends BaseTaskAction {
-    private final static Logger logger = Logger.getLogger(MigrateTaskAction.class.getName());
+    private static final Logger logger = LogManager.getLogger(MigrateTaskAction.class);
 
     @Override
     public String getLabel() {
@@ -99,7 +100,7 @@ public class MigrateTaskAction extends BaseTaskAction {
                 try {
                     migrator.migrate(sourceFile, targetFile);
                 } catch (Exception e) {
-                    logger.severe(LoggerUtils.toLoggable("Migration of '" + sourceFile + "' to '" + targetFile + "' failed", e));
+                    logger.error(LoggerUtils.toLoggable("Migration of '" + sourceFile + "' to '" + targetFile + "' failed", e));
                 }
             }
         }

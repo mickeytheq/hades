@@ -48,4 +48,9 @@ public interface CardFaceView {
      * Typically called after a change is made to an editor control (when a user is editing) or when exporting a card image
      */
     void paint(PaintContext paintContext);
+
+    /**
+     * Returns a brief string describing this CardFaceView for user facing purposes, e.g. logging
+     */
+    String getBriefDisplayString();
 }

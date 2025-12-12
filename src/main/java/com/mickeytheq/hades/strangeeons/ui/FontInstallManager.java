@@ -1,11 +1,16 @@
 package com.mickeytheq.hades.strangeeons.ui;
 
+import ca.cgjennings.apps.arkham.StrangeEons;
+import ca.cgjennings.apps.arkham.plugins.BundleInstaller;
+import ca.cgjennings.apps.arkham.plugins.PluginBundle;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.DialogWithButtons;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
 import com.mickeytheq.hades.util.FontUtils;
 import com.mickeytheq.hades.util.UrlUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,22 +23,26 @@ import java.util.*;
 import java.util.List;
 
 public class FontInstallManager {
+    private static final Logger logger = LogManager.getLogger(FontInstallManager.class);
+
     private final List<FontSourceInfo> requiredFontInfo = new ArrayList<>();
 
     // default implementation to look for the required Arno Pro fonts in the user's home directory
     public static boolean checkAndLaunchSetupIfRequired() {
-        Path userHomePath = Paths.get(System.getProperty("user.home"));
+        Path fontInstallDirectory = BundleInstaller.PLUGIN_FOLDER.toPath();
 
         FontInstallManager fontInstallManager = new FontInstallManager();
-        fontInstallManager.addRequiredFontInfo("ArnoPro-Regular", userHomePath.resolve("arnopro-regular.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-regular-font/f64439.htm"));
-        fontInstallManager.addRequiredFontInfo("ArnoPro-Bold", userHomePath.resolve("arnopro-bold.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-font/f64426.htm"));
-        fontInstallManager.addRequiredFontInfo("ArnoPro-Italic", userHomePath.resolve("arnopro-italic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-italic-font/f64432.htm"));
-        fontInstallManager.addRequiredFontInfo("ArnoPro-BoldItalic", userHomePath.resolve("arnopro-bolditalic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-italic-font/f64427.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Regular", fontInstallDirectory.resolve("arnopro-regular.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-regular-font/f64439.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Bold", fontInstallDirectory.resolve("arnopro-bold.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-font/f64426.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-Italic", fontInstallDirectory.resolve("arnopro-italic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-italic-font/f64432.htm"));
+        fontInstallManager.addRequiredFontInfo("ArnoPro-BoldItalic", fontInstallDirectory.resolve("arnopro-bolditalic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-italic-font/f64427.htm"));
 
         fontInstallManager.tryLoadFontsQuietly();
 
-        if (fontInstallManager.isAllFontsInstalled())
+        if (fontInstallManager.isAllFontsInstalled()) {
+            logger.debug("All required fonts detected as installed");
             return true;
+        }
 
         return fontInstallManager.showFontSetupDialog();
     }
@@ -118,16 +127,17 @@ public class FontInstallManager {
                 updateFontStatus();
             });
 
-            dialogWithButtons.addDialogClosingButton("Continue", 1, () -> {
+            dialogWithButtons.addDialogClosingButton("Continue", DialogWithButtons.OK_OPTION, () -> {
                 if (!isAllFontsInstalled()) {
-                    JOptionPane.showMessageDialog(dialogWithButtons, "Not all fonts are installed");
-                    return false;
+                    // if fonts aren't ready make sure the user is happy to continue
+                    return JOptionPane.showConfirmDialog(dialogWithButtons,
+                            "Not all fonts are installed and Hades will not function correctly. Are you sure you wish to continue?",
+                            "Fonts not installed",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
                 }
 
                 return true;
             });
-
-            dialogWithButtons.addDialogClosingButton("Cancel", DialogWithButtons.CANCEL_OPTION, () -> true);
 
             updateFontStatus();
         }
@@ -190,8 +200,9 @@ public class FontInstallManager {
         for (FontSourceInfo fontSourceInfo : requiredFontInfo) {
             try {
                 FontUtils.loadFont(fontSourceInfo.getExpectedPath());
+                logger.debug("Successfully loaded font with name " + fontSourceInfo.getFontName() + " from path " + fontSourceInfo.getExpectedPath());
             } catch (Exception e) {
-                // ignore any exception
+                logger.warn("Failed to load font with name " + fontSourceInfo.getFontName() + " from path " + fontSourceInfo.getExpectedPath(), e);
             }
         }
     }

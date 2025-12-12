@@ -2,6 +2,9 @@ package com.mickeytheq.hades.ui;
 
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.util.LoggerUtils;
+import com.mickeytheq.hades.util.log4j.Log4JUtils;
+import com.mickeytheq.hades.util.log4j.MemoryAppender;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +13,8 @@ import java.awt.event.ComponentEvent;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 public class ProgressDialog {
-    private DialogWithButtons dialog;
-
     private LoggingLevel loggingLevel;
 
     private JTextArea logTextArea;
@@ -55,55 +52,16 @@ public class ProgressDialog {
             }
         });
 
-        // install a new logging handler
-        Handler logHandler = new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                // only log things coming from our classes
-                if (!record.getLoggerName().startsWith("com.mickeytheq"))
-                    return;
-
-                boolean shouldLog;
-                switch (loggingLevel) {
-                    case Debug:
-                        shouldLog = true;
-                        break;
-                    case Verbose:
-                        shouldLog = record.getLevel().intValue() >= Level.FINE.intValue();
-                        break;
-                    case Normal:
-                        shouldLog = record.getLevel().intValue() >= Level.INFO.intValue();
-                        break;
-                    default:
-                        shouldLog = true;
-                        break;
-                }
-
-                // log everything to the progress dialog if verbose has been selected, otherwise only log info level or higher
-                if (shouldLog)
-                    addLine(record.getMessage());
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-        };
-
         // route logging messages to the progress dialog
-        Logger.getLogger("").addHandler(logHandler);
-        try {
-            // show the dialog which will make the componentShown event above trigger and start the work
-            // we want done within the dialog - this will block here until the dialog is closed
-            dialogWithButtons.showDialog();
-        } finally {
-            Logger.getLogger("").removeHandler(logHandler);
-        }
+        Log4JUtils.withAppender(
+                new MemoryAppender("ProgressDialog", null, PatternLayout.createDefaultLayout(), true, null, this::addText),
+                loggingLevel.getLog4JLevel(),
+                null,
+                () -> {
+                    // show the dialog which will make the componentShown event above trigger and start the work
+                    // we want done within the dialog - this will block here until the dialog is closed
+                    dialogWithButtons.showDialog();
+                });
 
         // return the result
         return reference.get();
@@ -137,7 +95,11 @@ public class ProgressDialog {
         });
     }
 
+    public void addText(String text) {
+        SwingUtilities.invokeLater(() -> logTextArea.append(text));
+    }
+
     public void addLine(String line) {
-        SwingUtilities.invokeLater(() -> logTextArea.append(line + System.lineSeparator()));
+        addText(line + System.lineSeparator());
     }
 }
