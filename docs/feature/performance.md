@@ -12,12 +12,13 @@ The following conditions were used
 
 - A neutral Asset card
 - Each test was run 5 times
-- Each test ran 100 iterations (times below are for all iterations)
+- Each test ran **100** iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
 
-AHLCG plugin - 11.09, 10.84, 10.78, 10.70, 10.71 seconds
-
-Hades - 2.46, 2.27, 2.24, 2.24, 2.23 seconds
+| Plugin | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
+| --- | ----- | ----- | ---- | ----- | ----- | 
+| AHLCG plugin | 11.09 | 10.84 | 10.78 | 10.70 | 10.71 |
+|Hades | 2.46 | 2.27 | 2.24 | 2.24 | 2.23 |
 
 **Summary - Hades is ~4-5 times faster**
 
@@ -29,12 +30,13 @@ The following conditions were used
 
 - A neutral Asset card
 - Each test was run 5 times
-- Each test ran 100 iterations (times below are for all iterations)
+- Each test ran **100** iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
 
-AHLCG plugin - 236.84 seconds
-
-Hades - 12.25, 11.99, 12.34, 12.07, 12.20 seconds
+| Plugin | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
+| --- | ----- | ----- | ---- | ----- | ----- | 
+| AHLCG plugin | 236.84 | Out of memory |  |  |  |
+|Hades | 12.25 | 11.99 | 12.34 | 12.07 | 12.20 |
 
 **Summary - Hades is ~19-20 times faster**
 
@@ -46,7 +48,7 @@ The following conditions were used
 
 - A neutral Asset card
 - Each test was run 5 times
-- Each test ran 100 iterations (times below are for all iterations)
+- Each test ran **100** iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
 
 AHLCG plugin - 238.25, 237.90, 241.87, 240.59, 236.83
