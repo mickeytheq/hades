@@ -57,7 +57,11 @@ public class MigrateTaskAction extends BaseTaskAction {
 
         public void run() {
             migrationOptions = new MigrationOptions();
-            if (!migrationOptions.showDialog(StrangeEons.getOpenProject().getFile()))
+
+            Path projectPath = StrangeEons.getOpenProject().getFile().toPath();
+            Path migrateToPath = projectPath.getParent().resolve(projectPath.getFileName() + "-Hades");
+
+            if (!migrationOptions.showDialog(migrateToPath))
                 return;
 
             progressDialog = new ProgressDialog(LoggingLevel.Debug);
@@ -76,6 +80,12 @@ public class MigrateTaskAction extends BaseTaskAction {
         private void doMigration(List<Member> members) {
             Path projectRoot = StrangeEons.getOpenProject().getFile().toPath();
             Path migrationRootDirectory = migrationOptions.getFileChooser().getSelectedFile().toPath();
+
+            try {
+                Files.createDirectories(migrationRootDirectory);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create migration root directory " + migrationRootDirectory, e);
+            }
 
             createSeProject(migrationRootDirectory);
 
@@ -124,9 +134,9 @@ public class MigrateTaskAction extends BaseTaskAction {
     static class MigrationOptions {
         private FileChooser fileChooser;
 
-        public boolean showDialog(File startDirectory) {
+        public boolean showDialog(Path suggestedMigrationTargetPath) {
             fileChooser = new FileChooser();
-            fileChooser.setSelectedFile(startDirectory);
+            fileChooser.setSelectedFile(suggestedMigrationTargetPath.toFile());
             fileChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fileChooser.getTextField().setEnabled(false);
 

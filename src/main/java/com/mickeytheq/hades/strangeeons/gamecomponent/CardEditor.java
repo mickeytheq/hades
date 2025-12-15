@@ -58,7 +58,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     @Override
     protected void createTimer(int updatePeriod) {
-        // SE has a heartbeat mechanic beats on a timer and on each beat checks if anything needs redrawing
+        // SE has a heartbeat mechanic that beats on a timer and on each beat checks if anything needs redrawing
         // this results in delays between pressing a key and the card being redrawn
         // Hades rendering is fast enough that keystrokes can result in an immediate repaint
         //
@@ -79,7 +79,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     }
 
     private void updateTitle() {
-        // set the title of the card to the front face's title
+        // update the title that shows in the UI tab for the card to the front face's title
         String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
 
         if (StringUtils.isEmpty(title)) {
@@ -108,6 +108,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             JPanel spacingPanel = new JPanel(MigLayoutUtils.createTopLevelLayout());
             spacingPanel.add(component, "wrap, grow, push");
 
+            // when a display component is added, create a new tab in the tabbed pane and set the title
+            // to the given title with Front/Back prefixed
             String tabTitle = title;
             if (cardFaceSide == CardFaceSide.Front) {
                 tabTitle = Language.string(InterfaceConstants.FRONT) + " - " + tabTitle;
@@ -124,9 +126,11 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             // check if the title needs updating
             updateTitle();
 
+            // this will mark the sheet as needing repainting the next time a repaint check is done and also
+            // tell the SE framework that the content has changed so it will show as un-saved in the UI
             cardGameComponent.markChanged(sheetIndex);
 
-            // on any change tell the sheets to repaint
+            // on any change tell the sheet(s) to repaint
             rerenderSheetViewers();
         }
     }

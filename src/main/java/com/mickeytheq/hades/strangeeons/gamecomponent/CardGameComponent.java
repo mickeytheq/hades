@@ -30,7 +30,7 @@ import java.io.*;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
-// and the Card/CardView and associated face model/views
+// and the Hades Card/CardView and associated face model/views
 public class CardGameComponent extends AbstractGameComponent {
     static final long serialVersionUID = -6_569_100_078_755_650_503L;
 
@@ -130,6 +130,7 @@ public class CardGameComponent extends AbstractGameComponent {
 
                 PaintContext paintContext = new PaintContextImpl(g, renderTarget, getCardView(), this);
 
+                // delegate to the card view to do the painting
                 cardFaceView.paint(paintContext);
 
                 if (logger.isTraceEnabled()) {
@@ -169,6 +170,7 @@ public class CardGameComponent extends AbstractGameComponent {
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeInt(CURRENT_VERSION);
 
+        // the
         ObjectNode objectNode = JsonCardSerialiser.serialiseCard(cardView.getCard());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream, Charsets.UTF_8));

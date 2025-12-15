@@ -27,11 +27,15 @@ public class JsonCardSerialiser {
     private static final String BACK_FACE_FIELD_NAME = "Back";
     private static final String CARD_FACE_TYPE_FIELD_NAME = "Type";
     private static final String COMMENTS_FIELD_NAME = "Comments";
+    private static final String VERSION_FIELD_NAME = "Version";
 
-    // TODO: version?
+    private static final int CURRENT_CARD_VERSION = 1;
+
     public static ObjectNode serialiseCard(Card card) {
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
         ObjectNode cardNode = objectMapper.createObjectNode();
+
+        cardNode.put(VERSION_FIELD_NAME, CURRENT_CARD_VERSION);
 
         ObjectNode frontFaceNode = cardNode.putObject(FRONT_FACE_FIELD_NAME);
         serialiseCardFace(card.getFrontFaceModel(), objectMapper, frontFaceNode);
@@ -55,6 +59,8 @@ public class JsonCardSerialiser {
     }
 
     public static Card deserialiseCard(ObjectNode objectNode) {
+        checkCardVersion(objectNode);
+
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
 
         Card card = new Card();
@@ -77,6 +83,28 @@ public class JsonCardSerialiser {
             card.setComments(commentsNode.asText());
 
         return card;
+    }
+
+    private static void checkCardVersion(ObjectNode objectNode) {
+        JsonNode jsonNode = objectNode.get(VERSION_FIELD_NAME);
+
+        if (jsonNode == null)
+            throw new RuntimeException("No version field found in Card JSON object");
+
+        if (!jsonNode.isIntegralNumber())
+            throw new RuntimeException("Version field in Card JSON object is not an integer");
+
+        int cardVersion = jsonNode.asInt();
+
+        if (cardVersion > CURRENT_CARD_VERSION)
+            throw new RuntimeException("Card was created with a newer version of Hades");
+
+        if (cardVersion < CURRENT_CARD_VERSION) {
+            // TODO: execute an upgrade from cardVersion to CURRENT_CARD_VERSION
+            throw new UnsupportedOperationException("Upgrades not implemented");
+        }
+
+        // same version, nothing to do
     }
 
     private static CardFaceModel deserialiseCardFace(ObjectMapper objectMapper, ObjectNode faceNode) {
