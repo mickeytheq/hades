@@ -6,13 +6,13 @@ Hades is inspired by and uses some elements of the [AHLCG plugin](https://github
 
 I am also the author of [Zoop](https://mickeytheq.github.io/ZoopDocs/) a plugin built on top of the existing AHLCG plugin.
 
-See the [features](#features) for why you may wish to try it out.
+See the [features](#features) for more information.
 
 # Getting started
 
 Firstly install the Hades plugin
 
-1. Firstly download the Hades plugin file [here]().
+1. Firstly download the Hades plugin file [here](https://www.dropbox.com/scl/fi/ukumf5tgtyfxuecugrfck/hades-0.1.seext?rlkey=s9lbp0rn5rm1my4c9t51fw6jb&st=ruzs25mq&dl=0).
 2. Find the Strange Eons plugin folder. If you don't already know where this is you can open Strange Eons, go to the `Toolbox` menu, select `Manage Plug-ins` and click `Open Plug-in Folder`
 3. Copy the Hades plugin file into the plugin folder
 4. Restart Strange Eons
@@ -72,6 +72,10 @@ In some order TBD. These are musings rather than a firm roadmap
 - Improvements - add more high value options, e.g. more sophisticated layering of card art - based on user feedback
 - Port some Zoop utilities into the plugin, e.g. collection numbering
 - Performance - continue to look for performance gains
+
+# Feedback
+
+All feedback [welcome](feedback.md)
 
 # Thanks to
 
