@@ -73,6 +73,10 @@ In some order TBD. These are musings rather than a firm roadmap
 - Port some Zoop utilities into the plugin, e.g. collection numbering
 - Performance - continue to look for performance gains
 
+# Feedback
+
+All feedback [welcome](feedback.md)
+
 # Thanks to
 
 - Tokeeto for maintaining the AHLCG plugin
