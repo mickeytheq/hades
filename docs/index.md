@@ -64,7 +64,7 @@ The current plan is
 
 ### Next
 
-In some order TBD
+In some order TBD. These are musings rather than a firm roadmap
 
 - Deliver the rest of the card types in some order
 - Usability - user feedback on making it more pleasent to use
