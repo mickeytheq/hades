@@ -51,8 +51,9 @@ The following conditions were used
 - Each test ran **100** iterations (times below are for all iterations)
 - Results are in seconds (lower is better)
 
-AHLCG plugin - 238.25, 237.90, 241.87, 240.59, 236.83
-
-Hades - 25.20, 24.71, 24.93, 25.00, 24.78
+| Plugin | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
+| --- | ----- | ----- | ---- | ----- | ----- | 
+| AHLCG plugin | 238.25 | 237.90 | 241.87 | 240.59 | 236.83 |
+| Hades | 25.20 | 24.71 | 24.93 | 25.00 | 24.78 |
 
 **Summary - Hades is ~9-10 times faster**
