@@ -6,6 +6,8 @@ Hades is inspired by and uses some elements of the [AHLCG plugin](https://github
 
 I am also the author of [Zoop](https://mickeytheq.github.io/ZoopDocs/) a plugin built on top of the existing AHLCG plugin.
 
+See the [features](#features) for why you may wish to try it out.
+
 # Getting started
 
 Firstly install the Hades plugin
@@ -27,17 +29,16 @@ Hades can migrate projects in from the existing plugin format. See [migration](m
 
 # Features
 
-Features in _italic_ are either not yet available or partially complete. Click through the respective links for more information and see Status below
+Hades is intended to have feature parity with the existing AHLCG plugin and feel familiar to that plugin. However it aims to improve in the following ways
 
 - Performance - Hades performance is approximately 5-10 times faster than the existing AHLCG plugin. Ancedotally it is much snappier when opening/closing/editing/exporting files. See [performance](feature/performance.md) for more details
 - High-resolution templates - Produces high quality images
 - Card combinations - Hades supports (almost) any combination of card front and backs of the available [card faces](feature/cardfaces.md) instead of fixed pairing of front and back faces. See [creating a new card](#creating-a-new-card)
 - Arno Pro enforced - The preferred font for AHLCG cards is Arno Pro which is required. See [font setup](ui/fontsetup.md)
-- _Project settings_ - A centralised place to specify [project configuration](ui/projectconfiguration.md) such as encounter sets and collections instead of the current options of global and per-card
-- _Comprehensive card types_ - The card types have been simplified. For example Story Assets are just an Asset. More information on [card faces](feature/cardfaces.md)
-- _Migration from the existing AHLCG plugin_ - Easy [migration](migration/ahlcgplugin.md) of projects built using the existing plugin to Hades
-- _Feature parity with the existing AHLCG plugin_ - This will naturally be delivered as support for all card types and providing migration logic
-- _Supported by Zoop_ - (Typically a future feature of Zoop) Supporting the existing key functions of Zoop such as TTS export, print and play and arkham.build with Hades created content
+- Project settings - A centralised place to specify [project configuration](ui/projectconfiguration.md) such as encounter sets and collections instead of the current options of global and per-card
+- Comprehensive card types - The card types have been simplified. For example Story Assets are just an Asset. More information on [card faces](feature/cardfaces.md)
+- Migration from the existing AHLCG plugin - Easy [migration](migration/ahlcgplugin.md) of projects built using the existing plugin to Hades
+- Supported by Zoop - (Not started yet) Supporting the existing key functions of Zoop such as TTS export, print and play and arkham.build with Hades created content
 
 # Status
 
@@ -50,7 +51,7 @@ Hades is **not** ready for real-world use yet. Feel free to try it out by creati
 
 ## Objectives
 
-The current plan is
+The current plan is below
 
 ### 1.0
 
