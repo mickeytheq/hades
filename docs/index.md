@@ -2,9 +2,28 @@
 
 Hades is a plugin for [Strange Eons](https://cgjennings.ca/eons/). It allows users to create custom content for Arkham Horror: LCG.
 
-Hades is inspired by and uses some elements of the [AHLCG plugin](https://github.com/tokeeto/StrangeEonsAHLCG/) created by Pilute23/JaqenZann and maintained by tokeeto. Initially, it is intended to be a re-implementation existing plugin with some key changes.
+Hades is inspired by and uses some elements of the [AHLCG plugin](https://github.com/tokeeto/StrangeEonsAHLCG/) created by Pilute23/JaqenZann and maintained by tokeeto. Initially, it is intended to be a re-implementation of the existing plugin with some key changes.
 
 I am also the author of [Zoop](https://mickeytheq.github.io/ZoopDocs/) a plugin built on top of the existing AHLCG plugin.
+
+# Getting started
+
+Firstly install the Hades plugin
+
+1. Firstly download the Hades plugin file [here]().
+2. Find the Strange Eons plugin folder. If you don't already know where this is you can open Strange Eons, go to the `Toolbox` menu, select `Manage Plug-ins` and click `Open Plug-in Folder`
+3. Copy the Hades plugin file into the plugin folder
+4. Restart Strange Eons
+5. At this point Hades may prompt you to install the Arno Pro font files. Follow the instructions in [font setup](ui/fontsetup.md)
+6. To confirm setup is complete either create a new project or open an existing project and r-click on any directory, project or file and you should see the `Hades` option in the context menu
+
+## Creating a new card
+
+Most Hades functionality is accessed via the r-click menu under `Hades`. To create a new card do r-click `Hades -> New card`. Hades cards are not created via the normal Strange Eons `New Game Component` option as that mechanism is not compatible with the flexibility Hades offers on creating cards. See [card faces](feature/cardfaces.md)
+
+## Migrating existing AHLCG projects
+
+Hades can migrate projects in from the existing plugin format. See [migration](migration/ahlcgplugin.md) for more details.
 
 # Features
 
@@ -12,7 +31,7 @@ Features in _italic_ are either not yet available or partially complete. Click t
 
 - Performance - Hades performance is approximately 5-10 times faster than the existing AHLCG plugin. Ancedotally it is much snappier when opening/closing/editing/exporting files. See [performance](feature/performance.md) for more details
 - High-resolution templates - Produces high quality images
-- Card combinations - Hades supports (almost) any combination of card front and backs of the available [card faces](feature/cardfaces.md) instead of fixed pairing of front and back faces. See [creating a new card](ui/newcard.md)
+- Card combinations - Hades supports (almost) any combination of card front and backs of the available [card faces](feature/cardfaces.md) instead of fixed pairing of front and back faces. See [creating a new card](#creating-a-new-card)
 - Arno Pro enforced - The preferred font for AHLCG cards is Arno Pro which is required. See [font setup](ui/fontsetup.md)
 - _Project settings_ - A centralised place to specify [project configuration](ui/projectconfiguration.md) such as encounter sets and collections instead of the current options of global and per-card
 - _Comprehensive card types_ - The card types have been simplified. For example Story Assets are just an Asset. More information on [card faces](feature/cardfaces.md)
