@@ -19,7 +19,7 @@ Firstly install the Hades plugin
 
 ## Creating a new card
 
-Most Hades functionality is accessed via the r-click menu under `Hades`. To create a new card do r-click `Hades -> New card`. Hades cards are not created via the normal Strange Eons `New Game Component` option as that mechanism is not compatible with the flexibility Hades offers on creating cards. See [card faces](feature/cardfaces.md)
+Most Hades functionality is accessed via the r-click menu under `Hades`. To create a new card do r-click `Hades -> New card`. Hades cards are not created via the normal Strange Eons `New Game Component` option as that mechanism is not compatible with the flexibility Hades offers on creating cards. See [card faces](feature/cardfaces.md) for more information.
 
 ## Migrating existing AHLCG projects
 
