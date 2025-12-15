@@ -13,7 +13,7 @@ sed --in-place=.backup -r "s/(id = CATALOGUEID\{.*:).*(})/\1%date%-%time%\2/" %~
 
 CALL build.bat
 
-copy c:\Users\micha\AppData\Roaming\StrangeEons3\plug-ins\hades.seplugin "D:\Dropbox\Games\Arkham horror LCG\Hades\hades-%1.seplugin"
+copy c:\Users\micha\AppData\Roaming\StrangeEons3\plug-ins\hades-dev.seext "D:\Dropbox\Games\Arkham horror LCG\Hades\hades-%1.seext"
 
 GOTO :End
 
