@@ -32,7 +32,7 @@ The status columns indicates the current development state
 | Agenda Back | Only supported as the back face paired with an Agenda front face | (back of agenda card) | Missing |
 | Act | None | Act, numerous variants | Missing |
 | Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Missing |
-| Location | None (however 'copy front' options are only available with a front location | Location, Location/Location | Missing |
+| Location | None (however 'copy front' options are only available with a front location) | Location, Location/Location | Missing |
 | Treachery | None | Treachery, Treachery (weakness) | Alpha |
 | Enemy | None | Enemy, Enemy (weakness) | Missing |
 | Treachery Location | None | TreacheryLocation | Missing |
