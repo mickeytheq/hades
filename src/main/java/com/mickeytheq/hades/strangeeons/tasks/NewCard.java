@@ -67,7 +67,7 @@ public class NewCard extends BaseTaskAction {
         }
 
         // create the new file, attach it to the editor and save it
-        File f = new File(parentMember.getFile(), newCardDialog.getFilename() + ".eon");
+        File f = new File(parentMember.getFile(), newCardDialog.getFilename() + ".hades");
         f = ProjectUtilities.getAvailableFile(f);
         editor.setFile(f);
         editor.save();

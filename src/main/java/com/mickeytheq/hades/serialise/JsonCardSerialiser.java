@@ -22,6 +22,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
+/**
+ * Handles converting a generic JSON object tree from/to a Card entity
+ */
 public class JsonCardSerialiser {
     private static final String FRONT_FACE_FIELD_NAME = "Front";
     private static final String BACK_FACE_FIELD_NAME = "Back";

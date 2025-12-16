@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.Migrator;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.DialogWithButtons;
@@ -14,6 +15,7 @@ import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
 import com.mickeytheq.hades.util.LoggerUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -100,6 +102,13 @@ public class MigrateTaskAction extends BaseTaskAction {
                 Path sourceFile = member.getFile().toPath();
                 Path targetFile = migrationRootDirectory.resolve(projectRoot.relativize(sourceFile));
                 Path targetDirectory = targetFile.getParent();
+
+                // change the extension to hades
+                String filename = targetFile.getFileName().toString();
+                filename = FilenameUtils.removeExtension(filename);
+                filename = filename + "." + CardIO.HADES_FILE_EXTENSION;
+
+                targetFile = targetDirectory.resolve(filename);
 
                 try {
                     Files.createDirectories(targetDirectory);

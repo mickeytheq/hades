@@ -1,18 +1,33 @@
 package com.mickeytheq.hades.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
+import ca.cgjennings.apps.arkham.RecentFiles;
 import ca.cgjennings.apps.arkham.SheetViewer;
+import ca.cgjennings.apps.arkham.StrangeEons;
+import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
+import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.serialise.JsonCardSerialiser;
+import com.mickeytheq.hades.serialise.RawJsonSerialiser;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
+
+import static resources.Language.string;
 
 public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     private final CardGameComponent cardGameComponent;
@@ -49,6 +64,21 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         getContentPane().add(splitPane);
 
         pack();
+    }
+
+    @Override
+    public void save() {
+        Path path = getFile().toPath();
+
+        CardIO.writeCard(path, cardGameComponent.getCardView().getCard());
+        cardGameComponent.markSaved();
+
+        RecentFiles.addRecentDocument(getFile());
+
+        // tell the project view to repaint this member (to un-bold it)
+        Member member = StrangeEons.getOpenProject().findMember(getFile());
+        if (member != null)
+            StrangeEons.getWindow().getOpenProjectView().repaint(member);
     }
 
     @Override

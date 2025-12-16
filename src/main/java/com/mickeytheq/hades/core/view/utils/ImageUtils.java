@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -13,9 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ImageUtils {
-    public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
-    public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");
-
     private static final LoadingCache<URL, BufferedImage> IMAGE_CACHE;
 
     static {
@@ -23,6 +21,10 @@ public class ImageUtils {
                 .softValues()
                 .build(CacheLoader.from(ImageUtils::loadImageWithNoCaching));
     }
+
+    public static final Icon HADES_PURPLE_H_ICON = new ImageIcon(ImageUtils.loadImage("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH));
+    public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
+    public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");
 
     public static BufferedImage loadImage(String absoluteResourcePath) {
         URL resourceUrl = ImageUtils.class.getResource(absoluteResourcePath);

@@ -32,19 +32,10 @@ import java.io.*;
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
 // and the Hades Card/CardView and associated face model/views
 public class CardGameComponent extends AbstractGameComponent {
-    static final long serialVersionUID = -6_569_100_078_755_650_503L;
-
     private static final Logger logger = LogManager.getLogger(CardGameComponent.class);
-
-    private static final int CURRENT_VERSION = 1;
 
     private CardView cardView;
 
-    // deserialisation constructor
-    public CardGameComponent() {
-    }
-
-    // regular constructor
     public CardGameComponent(CardView cardView) {
         this.cardView = cardView;
 
@@ -165,51 +156,5 @@ public class CardGameComponent extends AbstractGameComponent {
         public double getRenderingDpi() {
             return sheet.getTemplateResolution();
         }
-    }
-
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeInt(CURRENT_VERSION);
-
-        // the
-        ObjectNode objectNode = JsonCardSerialiser.serialiseCard(cardView.getCard());
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(byteArrayOutputStream, Charsets.UTF_8));
-        createSerialisationObjectMapper().writeValue(writer, objectNode);
-
-        byte[] data = byteArrayOutputStream.toByteArray();
-        out.writeInt(data.length);
-        out.write(data);
-
-        // must remember to call this otherwise the file will show as unsaved in the Strange Eons UI
-        markSaved();
-    }
-
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        int version = in.readInt();
-
-        NewerVersionException.check(CURRENT_VERSION, version);
-
-        // TODO: if the CURRENT_VERSION > version then do an upgrade
-        // TODO: this should only pertain to major structural changes, e.g. if the content was previously encoded as JSON and we were switching to YAML
-        // TODO: changes to individual card/faces should be handled later
-
-        int length = in.readInt();
-        byte[] buffer = new byte[length];
-        in.readFully(buffer);
-
-        Reader reader = new InputStreamReader(new ByteArrayInputStream(buffer), Charsets.UTF_8);
-        ObjectNode objectNode = (ObjectNode) createSerialisationObjectMapper().readTree(reader);
-        Card card = JsonCardSerialiser.deserialiseCard(objectNode);
-
-        cardView = CardFaces.createCardView(card);
-
-        // Strange Eons loves to interact with the settings all the time (even if it finds nothing)
-        // create an empty one to avoid a bunch of null pointers
-        privateSettings = new Settings();
-        setNameImpl("Card");
-    }
-
-    private ObjectMapper createSerialisationObjectMapper() {
-        return JsonUtils.createDefaultObjectMapper();
     }
 }

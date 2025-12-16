@@ -4,6 +4,7 @@ import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.hades.strangeeons.util.GameComponentUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import resources.ResourceKit;
 
@@ -16,7 +17,7 @@ public class PerformanceTests {
         StopWatch stopWatch = StopWatch.createStarted();
 
         for (int i = 0; i < iterations; i++) {
-            GameComponent gameComponent = ResourceKit.getGameComponentFromFile(file, true);
+            GameComponent gameComponent = GameComponentUtils.loadGameComponent(file.toPath());
         }
 
         stopWatch.stop();
@@ -25,7 +26,7 @@ public class PerformanceTests {
     }
 
     public static StopWatch performEditorTest(File file, int iterations) {
-        GameComponent gameComponent = ResourceKit.getGameComponentFromFile(file, true);
+        GameComponent gameComponent = GameComponentUtils.loadGameComponent(file.toPath());
         StopWatch stopWatch = StopWatch.createStarted();
 
         for (int i = 0; i < iterations; i++) {
@@ -39,7 +40,7 @@ public class PerformanceTests {
     }
 
     public static StopWatch performPaintTest(File file, int iterations) {
-        GameComponent gameComponent = ResourceKit.getGameComponentFromFile(file, true);
+        GameComponent gameComponent = GameComponentUtils.loadGameComponent(file.toPath());
 
         StopWatch stopWatch = StopWatch.createStarted();
 

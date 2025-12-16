@@ -10,6 +10,7 @@ import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
 import com.mickeytheq.hades.core.project.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces.*;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import org.apache.commons.lang3.StringUtils;
@@ -55,18 +56,7 @@ public class Migrator {
             return;
         }
 
-        // wrap the Card in a CardGameComponent
-        // we don't need a view as we're not doing anything visual but all this does is basic intialisation
-        // and is required to complete the CardGameComponent
-        CardView cardView = CardFaces.createCardView(card);
-        CardGameComponent cardGameComponent = new CardGameComponent(cardView);
-
-        // save the newly migrated CardGameComponent
-        try {
-            ResourceKit.writeGameComponentToFile(targetFile.toFile(), cardGameComponent);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        CardIO.writeCard(targetFile, card);
 
         logger.info("Migrated '" + sourceFile + "' to '" + targetFile + "' successfully");
     }
