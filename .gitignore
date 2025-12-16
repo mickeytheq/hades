@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 out/
 /dependency-reduced-pom.xml
+eons-plugin.backup
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
