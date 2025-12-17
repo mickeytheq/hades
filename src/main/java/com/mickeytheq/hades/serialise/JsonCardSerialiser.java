@@ -32,6 +32,8 @@ public class JsonCardSerialiser {
     private static final String FRONT_FACE_FIELD_NAME = "Front";
     private static final String BACK_FACE_FIELD_NAME = "Back";
     private static final String CARD_FACE_TYPE_FIELD_NAME = "Type";
+
+    private static final String UNIQUE_ID_FIELD_NAME = "UniqueId";
     private static final String COMMENTS_FIELD_NAME = "Comments";
     private static final String VERSION_FIELD_NAME = "Version";
     private static final String METADATA_FIELD_NAME = "Metadata";
@@ -57,6 +59,8 @@ public class JsonCardSerialiser {
         }
 
         // general fields
+        cardNode.put(UNIQUE_ID_FIELD_NAME, card.getId());
+
         if (!StringUtils.isEmpty(card.getComments()))
             cardNode.put(COMMENTS_FIELD_NAME, card.getComments());
 
@@ -82,6 +86,14 @@ public class JsonCardSerialiser {
 
         Card card = new Card();
 
+        // general fields
+        card.setId(objectNode.get(UNIQUE_ID_FIELD_NAME).asText());
+
+        JsonNode commentsNode = objectNode.get(COMMENTS_FIELD_NAME);
+
+        if (commentsNode != null)
+            card.setComments(commentsNode.asText());
+
         ObjectNode frontFaceNode = (ObjectNode)objectNode.get(FRONT_FACE_FIELD_NAME);
 
         CardFaceModel frontFaceModel = deserialiseCardFace(objectMapper, frontFaceNode);
@@ -93,11 +105,6 @@ public class JsonCardSerialiser {
             CardFaceModel backFaceModel = deserialiseCardFace(objectMapper, backFaceNode);
             card.setBackFaceModel(backFaceModel);
         }
-
-        JsonNode commentsNode = objectNode.get(COMMENTS_FIELD_NAME);
-
-        if (commentsNode != null)
-            card.setComments(commentsNode.asText());
 
         return card;
     }

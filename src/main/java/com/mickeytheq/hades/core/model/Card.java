@@ -1,14 +1,25 @@
 package com.mickeytheq.hades.core.model;
 
+import java.util.UUID;
+
 /**
  * Card model that contains a front and optional back face plus any fields that are not face specific.
  *
  * In the majority of cases the interesting information is in the {@link CardFaceModel} implementations.
  */
 public class Card {
+    private String id = UUID.randomUUID().toString();
     private CardFaceModel frontFaceModel;
     private CardFaceModel backFaceModel;
     private String comments;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public CardFaceModel getFrontFaceModel() {
         return frontFaceModel;
