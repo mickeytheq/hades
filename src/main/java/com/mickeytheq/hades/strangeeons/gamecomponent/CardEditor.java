@@ -1,9 +1,6 @@
 package com.mickeytheq.hades.strangeeons.gamecomponent;
 
-import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
-import ca.cgjennings.apps.arkham.RecentFiles;
-import ca.cgjennings.apps.arkham.SheetViewer;
-import ca.cgjennings.apps.arkham.StrangeEons;
+import ca.cgjennings.apps.arkham.*;
 import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
@@ -20,9 +17,11 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -84,6 +83,48 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     @Override
     protected void populateComponentFromDelayedFields() {
 
+    }
+
+    // Strange Eons has a memory leak where in AbstractGameComponentEditor there is the following line in the constructor
+    //
+    // AppFrame.getApp().addPropertyChangeListener(StrangeEonsAppWindow.VIEW_BACKDROP_PROPERTY, pcl);
+    //
+    // there is no corresponding line in the dispose() method to remove this listener. there is this line in dispose()
+    //
+    // AppFrame.getApp().removePropertyChangeListener(StrangeEonsAppWindow.VIEW_QUALITY_PROPERTY, pcl);
+    //
+    // so it might be that the remove line above has a typo and it should be specifying VIEW_BACKDROP_PROPERTY instead of VIEW_QUALITY_PROPERTY
+    //
+    // this results in the main StrangeEons app window holding a reference to the property change listener which in turn
+    // keeps the editor class and all of its children (UI controls, components, layout managers etc) alive and unavailable for garbage collection
+    //
+    // after enough editors are opened and closed without these references being clean up, SE runs out of memory
+    //
+    // the fix is override dispose() here, reflectively access the 'pcl' field (PropertyChangeListener) in AbstractGameComponentEditor
+    // and remove that listener from the StrangeEons app window, basically reversing the line mentioned above in the constructor of AbstractGameComponentEditor
+    private static Field pclField;
+
+    static {
+        try {
+            pclField = AbstractGameComponentEditor.class.getDeclaredField("pcl");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("No 'pcl' field found on AbstractGameComponentEditor", e);
+        }
+        pclField.setAccessible(true);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        PropertyChangeListener propertyChangeListener;
+        try {
+            propertyChangeListener = (PropertyChangeListener) pclField.get(this);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Error retrieving PropertyChangeListener from pcl private field via reflection", e);
+        }
+
+        StrangeEons.getWindow().removePropertyChangeListener(StrangeEonsAppWindow.VIEW_BACKDROP_PROPERTY, propertyChangeListener);
     }
 
     @Override
