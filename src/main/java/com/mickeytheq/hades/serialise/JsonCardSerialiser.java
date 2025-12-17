@@ -14,12 +14,15 @@ import com.mickeytheq.hades.core.project.CollectionInfo;
 import com.mickeytheq.hades.core.project.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.util.JsonUtils;
+import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
 /**
@@ -31,6 +34,9 @@ public class JsonCardSerialiser {
     private static final String CARD_FACE_TYPE_FIELD_NAME = "Type";
     private static final String COMMENTS_FIELD_NAME = "Comments";
     private static final String VERSION_FIELD_NAME = "Version";
+    private static final String METADATA_FIELD_NAME = "Metadata";
+    private static final String LAST_MODIFIED_FIELD_NAME = "LastModified";
+    private static final String HADES_SOFTWARE_VERSION = "HadesSoftwareVersion";
 
     private static final int CURRENT_CARD_VERSION = 1;
 
@@ -40,16 +46,24 @@ public class JsonCardSerialiser {
 
         cardNode.put(VERSION_FIELD_NAME, CURRENT_CARD_VERSION);
 
+        // front face
         ObjectNode frontFaceNode = cardNode.putObject(FRONT_FACE_FIELD_NAME);
         serialiseCardFace(card.getFrontFaceModel(), objectMapper, frontFaceNode);
 
+        // back face
         if (card.hasBack()) {
             ObjectNode backFaceNode = cardNode.putObject(BACK_FACE_FIELD_NAME);
             serialiseCardFace(card.getBackFaceModel(), objectMapper, backFaceNode);
         }
 
+        // general fields
         if (!StringUtils.isEmpty(card.getComments()))
             cardNode.put(COMMENTS_FIELD_NAME, card.getComments());
+
+        // metadata block
+        ObjectNode metadataObjectNode = cardNode.putObject(METADATA_FIELD_NAME);
+        metadataObjectNode.put(LAST_MODIFIED_FIELD_NAME, ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        metadataObjectNode.put(HADES_SOFTWARE_VERSION, VersionUtils.getVersion());
 
         return cardNode;
     }

@@ -21,6 +21,7 @@ import com.mickeytheq.hades.serialise.RawJsonSerialiser;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
+import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,33 +38,8 @@ import java.util.Properties;
 public class HadesPlugin extends AbstractPlugin {
     private static final Logger logger = LogManager.getLogger(HadesPlugin.class);
 
-    private static final float VERSION;
-
-    static {
-        VERSION = loadVersion();
-    }
-
     public static float getVersion() {
-        return VERSION;
-    }
-
-    private static float loadVersion() {
-        try (InputStream inputStream = HadesPlugin.class.getResourceAsStream("/hades-metadata")) {
-            if (inputStream == null)
-                throw new RuntimeException("No hades-metadata resource/file found in classpath root");
-
-            Properties properties = new Properties();
-            properties.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
-            String versionStr = properties.getProperty("version");
-
-            if (versionStr == null)
-                throw new RuntimeException("No version found in metadata file");
-
-            return Float.parseFloat(properties.getProperty("version"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return VersionUtils.getVersion();
     }
 
     @Override
