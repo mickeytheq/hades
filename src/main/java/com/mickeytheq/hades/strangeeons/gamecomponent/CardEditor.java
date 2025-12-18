@@ -102,7 +102,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     //
     // the fix is override dispose() here, reflectively access the 'pcl' field (PropertyChangeListener) in AbstractGameComponentEditor
     // and remove that listener from the StrangeEons app window, basically reversing the line mentioned above in the constructor of AbstractGameComponentEditor
-    private static Field pclField;
+    private static final Field pclField;
 
     static {
         try {

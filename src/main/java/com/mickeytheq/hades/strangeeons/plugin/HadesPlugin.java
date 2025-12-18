@@ -4,13 +4,11 @@ import ca.cgjennings.apps.arkham.*;
 import ca.cgjennings.apps.arkham.plugins.AbstractPlugin;
 import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
-import ca.cgjennings.apps.arkham.project.Actions;
-import ca.cgjennings.apps.arkham.project.Member;
-import ca.cgjennings.apps.arkham.project.MetadataSource;
-import ca.cgjennings.apps.arkham.project.Open;
+import ca.cgjennings.apps.arkham.project.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.model.image.SharedDirectoryImagePersister;
 import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
 import com.mickeytheq.hades.core.project.ProjectConfigurations;
 import com.mickeytheq.hades.core.view.CardView;
@@ -62,9 +60,7 @@ public class HadesPlugin extends AbstractPlugin {
 
             forceViewQualityToHighWithNoAutomaticChanging();
 
-            // StrangeEons.getOpenProject is not resolvable until after the plugin has finished loading and StrangeEons has
-            // finished starting. Therefore we use a Supplier of the Path so the loading of the config and path resolution can be deferred to first access
-            ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderJson(() -> StrangeEons.getOpenProject().getFile().toPath().resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)));
+            installProjectConfiguration();
 
             Actions.register(new HadesActionTree(), Actions.PRIORITY_IMPORT_EXPORT);
 
@@ -174,6 +170,21 @@ public class HadesPlugin extends AbstractPlugin {
                 CardView cardView = CardFaces.createCardView(card);
 
                 return new CardGameComponent(cardView);
+            }
+        });
+    }
+
+    private void installProjectConfiguration() {
+        // when the Strange Eons project changes, update where the project configuration should come from
+        StrangeEons.getWindow().addProjectEventListener(new StrangeEonsAppWindow.ProjectEventListener() {
+            @Override
+            public void projectOpened(Project project) {
+                ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderJson(project.getFile().toPath().resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)));
+            }
+
+            @Override
+            public void projectClosing(Project project) {
+                ProjectConfigurations.setDefaultProvider(null);
             }
         });
     }

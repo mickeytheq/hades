@@ -91,7 +91,7 @@ public class MigrateTaskAction extends BaseTaskAction {
 
             createSeProject(migrationRootDirectory);
 
-            ProjectConfiguration projectConfiguration = new ProjectConfigurationProviderJson(() -> migrationRootDirectory.resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)).load();
+            ProjectConfiguration projectConfiguration = new ProjectConfigurationProviderJson(migrationRootDirectory.resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)).load();
 
             Migrator migrator = new Migrator(projectConfiguration);
 

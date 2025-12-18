@@ -10,27 +10,25 @@ import java.util.function.Supplier;
 
 public class ProjectConfigurationProviderJson implements ProjectConfigurationProvider {
     public static final String DEFAULT_FILENAME = "hades-project.json";
-    private final Supplier<Path> pathSupplier;
+    private final Path projectFilePath;
 
-    public ProjectConfigurationProviderJson(Supplier<Path> pathSupplier) {
-        this.pathSupplier = pathSupplier;
+    public ProjectConfigurationProviderJson(Path projectFilePath) {
+        this.projectFilePath = projectFilePath;
     }
 
     @Override
     public ProjectConfiguration load() {
-        Path pathToProjectFile = pathSupplier.get();
-
         ObjectMapper objectMapper = createObjectMapper();
 
         // create an empty default project file if nothing exists
-        if (!Files.exists(pathToProjectFile)) {
+        if (!Files.exists(projectFilePath)) {
             ProjectConfiguration projectConfiguration = new ProjectConfiguration();
             projectConfiguration.setProvider(this);
             projectConfiguration.save();
         }
 
         try {
-            ProjectConfiguration projectConfiguration = objectMapper.readValue(pathToProjectFile.toFile(), ProjectConfiguration.class);
+            ProjectConfiguration projectConfiguration = objectMapper.readValue(projectFilePath.toFile(), ProjectConfiguration.class);
             projectConfiguration.setProvider(this);
             return projectConfiguration;
         } catch (IOException e) {
@@ -41,7 +39,7 @@ public class ProjectConfigurationProviderJson implements ProjectConfigurationPro
     @Override
     public void save(ProjectConfiguration projectConfiguration) {
         try {
-            createObjectMapper().writeValue(pathSupplier.get().toFile(), projectConfiguration);
+            createObjectMapper().writeValue(projectFilePath.toFile(), projectConfiguration);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

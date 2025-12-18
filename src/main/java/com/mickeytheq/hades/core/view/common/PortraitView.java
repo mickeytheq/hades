@@ -40,7 +40,7 @@ public class PortraitView {
     private BufferedImage image;
 
     // private to ensure that a defaultImageResource is always provided, even if just an empty image
-    // the default is used whenever the model's source is null
+    // the default is used whenever the model's image is null
     //
     // we have to know the Dimension of the draw area at this stage as it is used by the portrait editor control
     // to show an overlay of what part of image will be visible or not when adjusting the pan/scale settings. it also
