@@ -3,9 +3,9 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration;
 import ca.cgjennings.apps.arkham.component.DefaultPortrait;
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.common.*;
-import com.mickeytheq.hades.core.project.CollectionInfo;
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -147,7 +147,7 @@ public class MigrationUtils {
             CollectionInfo collectionInfo = new CollectionInfo();
             collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
-            collectionInfo.setImage(portrait.getImage());
+            collectionInfo.getImage().set(portrait.getImage());
 
             projectConfiguration.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
             projectConfiguration.save();
@@ -173,7 +173,7 @@ public class MigrationUtils {
             CollectionInfo collectionInfo = new CollectionInfo();
             collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
-            collectionInfo.setImage(portrait.getImage());
+            collectionInfo.getImage().set(portrait.getImage());
 
             projectConfiguration.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
             projectConfiguration.save();
@@ -209,7 +209,7 @@ public class MigrationUtils {
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
             encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
-            encounterSetInfo.setImage(portrait.getImage());
+            encounterSetInfo.getImage().set(portrait.getImage());
 
             projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
             projectConfiguration.save();
@@ -235,7 +235,7 @@ public class MigrationUtils {
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
             encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
-            encounterSetInfo.setImage(portrait.getImage());
+            encounterSetInfo.getImage().set(portrait.getImage());
 
             projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
             projectConfiguration.save();
@@ -256,9 +256,9 @@ public class MigrationUtils {
 
             // an empty source means it's a default image (like a 1x1 placeholder) stored in the file which we don't want to persist in ours
             if (StringUtils.isEmpty(defaultPortrait.getSource()))
-                portraitModel.setImage(null);
+                portraitModel.getImage().set(null);
             else
-                portraitModel.setImage(defaultPortrait.getImage());
+                portraitModel.getImage().set(defaultPortrait.getImage());
 
             portraitModel.setPanX(defaultPortrait.getPanX());
             portraitModel.setPanY(defaultPortrait.getPanY());

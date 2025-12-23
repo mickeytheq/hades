@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.core.project;
+package com.mickeytheq.hades.core.project.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mickeytheq.hades.util.JsonUtils;
@@ -6,10 +6,8 @@ import com.mickeytheq.hades.util.JsonUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Supplier;
 
 public class ProjectConfigurationProviderJson implements ProjectConfigurationProvider {
-    public static final String DEFAULT_FILENAME = "hades-project.json";
     private final Path projectFilePath;
 
     public ProjectConfigurationProviderJson(Path projectFilePath) {

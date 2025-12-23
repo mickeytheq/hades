@@ -1,6 +1,6 @@
 package com.mickeytheq.hades.core.project.ui;
 
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.ui.DialogWithButtons;
 
 import javax.swing.*;

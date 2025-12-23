@@ -1,7 +1,8 @@
 package com.mickeytheq.hades.core.model.entity;
 
-import com.mickeytheq.hades.core.project.CollectionInfo;
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
+import com.mickeytheq.hades.core.model.image.ImageProxy;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 
 import java.awt.image.BufferedImage;
 import java.beans.BeanInfo;
@@ -189,7 +190,7 @@ public class AnnotatedEntityMetadataBuilder {
         if (Boolean.class.isAssignableFrom(propertyType))
             return true;
 
-        if (BufferedImage.class.isAssignableFrom(propertyType))
+        if (ImageProxy.class.isAssignableFrom(propertyType))
             return true;
 
         if (EncounterSetInfo.class.isAssignableFrom(propertyType))

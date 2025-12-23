@@ -52,8 +52,8 @@ public class PortraitView {
         this.portraitDrawDimension = portraitDrawDimension;
         this.defaultImageResource = defaultImageResource;
 
-        if (portraitModel.getImage() != null) {
-            image = portraitModel.getImage();
+        if (!portraitModel.getImage().isEmpty()) {
+            image = portraitModel.getImage().get();
         }
         else {
             installDefaultImage();
@@ -77,13 +77,13 @@ public class PortraitView {
         // note that we do not set the model's image to this when installing a default as default images are not persisted
         // instead we set the model image to null
         image = ImageUtils.loadImage(defaultImageResource);
-        portraitModel.setImage(null);
+        portraitModel.getImage().set(null);
         calculateImageDefaults();
     }
 
     private void installImage(BufferedImage image) {
         // set a user-specified image by updating the model and the local image view
-        portraitModel.setImage(image);
+        portraitModel.getImage().set(image);
         this.image = image;
         calculateImageDefaults();
     }

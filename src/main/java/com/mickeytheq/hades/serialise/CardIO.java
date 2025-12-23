@@ -1,8 +1,11 @@
 package com.mickeytheq.hades.serialise;
 
+import ca.cgjennings.apps.arkham.project.Project;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 
@@ -31,29 +34,33 @@ import java.nio.file.Path;
 public class CardIO {
     public static final String HADES_FILE_EXTENSION = "hades";
 
-    public static Card readCard(Path path) {
-        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-            ObjectNode cardObjectNode = RawJsonSerialiser.readRawCardJson(reader);
+    public static Card readCard(Path path, ProjectContext projectContext) {
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+                ObjectNode cardObjectNode = RawJsonSerialiser.readRawCardJson(reader);
 
-            // TODO: perform version detection and automated upgrades
-            // TODO: do this here or in the JsonCardSerialiser
-            // TODO: do we want versions on the Card the CardFaces or both?
+                // TODO: perform version detection and automated upgrades
+                // TODO: do this here or in the JsonCardSerialiser
+                // TODO: do we want versions on the Card the CardFaces or both?
 
-            Card card = JsonCardSerialiser.deserialiseCard(cardObjectNode);
+                Card card = JsonCardSerialiser.deserialiseCard(cardObjectNode);
 
-            return card;
-        } catch (IOException e) {
-            throw new RuntimeException("Error opening/reading card from path '" + path + "'", e);
-        }
+                return card;
+            } catch (IOException e) {
+                throw new RuntimeException("Error opening/reading card from path '" + path + "'", e);
+            }
+        });
     }
 
-    public static void writeCard(Path path, Card card) {
-        ObjectNode cardObjectNode = JsonCardSerialiser.serialiseCard(card);
+    public static void writeCard(Path path, Card card, ProjectContext projectContext) {
+        ProjectContexts.withContext(projectContext, () -> {
+            ObjectNode cardObjectNode = JsonCardSerialiser.serialiseCard(card);
 
-        try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-            RawJsonSerialiser.writeRawCardJson(writer, cardObjectNode);
-        } catch (IOException e) {
-            throw new RuntimeException("Error saving/writing card to path '" + path + "'", e);
-        }
+            try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+                RawJsonSerialiser.writeRawCardJson(writer, cardObjectNode);
+            } catch (IOException e) {
+                throw new RuntimeException("Error saving/writing card to path '" + path + "'", e);
+            }
+        });
     }
 }

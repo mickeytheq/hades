@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.project.ui;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
-import com.mickeytheq.hades.core.project.TaggedImageInfo;
+import com.mickeytheq.hades.core.project.configuration.TaggedImageInfo;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.DialogWithButtons;
@@ -92,9 +92,9 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                     try {
-                        BufferedImage image = ImageIO.read(fileChooser.getSelectedFile());
-                        imageEditor.setIcon(new ImageIcon(image));
-                        taggedImageInfo.setImage(image);
+                        BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile());
+                        imageEditor.setIcon(new ImageIcon(bufferedImage));
+                        taggedImageInfo.getImage().set(bufferedImage);
                     } catch (IOException ex) {
                         ErrorDialog.displayError("Not a valid image file", ex);
                         imageEditor.setIcon(new ImageIcon());
@@ -105,8 +105,8 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
             tagEditor.setText(taggedImageInfo.getTag());
             displayNameEditor.setText(taggedImageInfo.getDisplayName());
 
-            if (taggedImageInfo.getImage() != null)
-                imageEditor.setIcon(new ImageIcon(taggedImageInfo.getImage()));
+            if (!taggedImageInfo.getImage().isEmpty())
+                imageEditor.setIcon(new ImageIcon(taggedImageInfo.getImage().get()));
 
             // layout
             setLayout(MigLayoutUtils.createOrganiserLayout());

@@ -1,5 +1,8 @@
 package com.mickeytheq.hades.core.view;
 
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+
 import java.awt.*;
 import java.util.function.Consumer;
 
@@ -11,6 +14,9 @@ import java.util.function.Consumer;
  */
 public interface EditorContext {
     void addDisplayComponent(String title, Component component);
+
+    // gets the ProjectContext
+    ProjectContext getProjectContext();
 
     //
     // mark changed methods

@@ -5,28 +5,17 @@ import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
-import ca.cgjennings.io.NewerVersionException;
-import ca.cgjennings.layout.MarkupRenderer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Charsets;
-import com.mickeytheq.hades.core.CardFaces;
-import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.BasePaintContext;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.CardView;
-import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.util.JsonUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import resources.Settings;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
@@ -34,10 +23,12 @@ import java.io.*;
 public class CardGameComponent extends AbstractGameComponent {
     private static final Logger logger = LogManager.getLogger(CardGameComponent.class);
 
-    private CardView cardView;
+    private final CardView cardView;
+    private final ProjectContext projectContext;
 
-    public CardGameComponent(CardView cardView) {
+    public CardGameComponent(CardView cardView, ProjectContext projectContext) {
         this.cardView = cardView;
+        this.projectContext = projectContext;
 
         // TODO: name should be the actual title?
         setNameImpl("Card");
@@ -45,6 +36,10 @@ public class CardGameComponent extends AbstractGameComponent {
 
     public CardView getCardView() {
         return cardView;
+    }
+
+    public ProjectContext getProjectContext() {
+        return projectContext;
     }
 
     @Override
@@ -137,7 +132,7 @@ public class CardGameComponent extends AbstractGameComponent {
         }
     }
 
-    static class PaintContextImpl extends BasePaintContext {
+    class PaintContextImpl extends BasePaintContext {
         private final Graphics2D g;
         private final Sheet<CardGameComponent> sheet;
 
@@ -155,6 +150,11 @@ public class CardGameComponent extends AbstractGameComponent {
         @Override
         public double getRenderingDpi() {
             return sheet.getTemplateResolution();
+        }
+
+        @Override
+        public ProjectContext getProjectContext() {
+            return projectContext;
         }
     }
 }

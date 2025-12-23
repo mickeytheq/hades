@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.core.project;
+package com.mickeytheq.hades.core.project.configuration;
 
 public interface ProjectConfigurationProvider {
     ProjectConfiguration load();

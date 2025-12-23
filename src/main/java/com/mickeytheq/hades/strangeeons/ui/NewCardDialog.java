@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
+import java.util.Optional;
 
 public class NewCardDialog extends DialogWithButtons {
     private JComboBox<BothFacesOption> bothFacesOptionEditor;
@@ -124,8 +125,8 @@ public class NewCardDialog extends DialogWithButtons {
         return (CardFaceTypeRegister.CardFaceInfo) frontFaceOptionEditor.getSelectedItem();
     }
 
-    public CardFaceTypeRegister.CardFaceInfo getSelectedBackFace() {
-        return (CardFaceTypeRegister.CardFaceInfo) backFaceOptionEditor.getSelectedItem();
+    public Optional<CardFaceTypeRegister.CardFaceInfo> getSelectedBackFace() {
+        return Optional.ofNullable((CardFaceTypeRegister.CardFaceInfo) backFaceOptionEditor.getSelectedItem());
     }
 
     public String getFilename() {

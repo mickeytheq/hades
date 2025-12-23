@@ -6,6 +6,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
+import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
@@ -69,7 +70,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     public void save() {
         Path path = getFile().toPath();
 
-        CardIO.writeCard(path, cardGameComponent.getCardView().getCard());
+        CardIO.writeCard(path, cardGameComponent.getCardView().getCard(), cardGameComponent.getProjectContext());
         cardGameComponent.markSaved();
 
         RecentFiles.addRecentDocument(getFile());
@@ -190,6 +191,11 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             }
 
             tabbedPane.addTab(tabTitle, spacingPanel);
+        }
+
+        @Override
+        public ProjectContext getProjectContext() {
+            return cardGameComponent.getProjectContext();
         }
 
         @Override

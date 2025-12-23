@@ -4,8 +4,8 @@ import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
-import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.Migrator;
@@ -20,8 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -91,9 +89,9 @@ public class MigrateTaskAction extends BaseTaskAction {
 
             createSeProject(migrationRootDirectory);
 
-            ProjectConfiguration projectConfiguration = new ProjectConfigurationProviderJson(migrationRootDirectory.resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)).load();
+            ProjectContext projectContext = StandardProjectContext.createContextForStrangeEonsRoot(migrationRootDirectory);
 
-            Migrator migrator = new Migrator(projectConfiguration);
+            Migrator migrator = new Migrator(projectContext);
 
             for (Member member : members) {
                 if (member.isFolder())

@@ -4,9 +4,11 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
-import com.mickeytheq.hades.core.project.ProjectConfigurationProviderStatic;
-import com.mickeytheq.hades.core.project.ProjectConfigurations;
+import com.mickeytheq.hades.core.model.image.ImagePersister;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
@@ -23,16 +25,20 @@ public class QuickCardView {
         new QuickCardView().run();
     }
 
+    private ProjectContext projectContext;
+
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderStatic(new ProjectConfiguration()));
+        projectContext = new StandardProjectContext(new ProjectConfiguration(), new NothingImagePersister());
 
+        ProjectContexts.withContext(projectContext, () -> {
 //        asset();
-        investigator();
+            investigator();
 //        event();
 //        skill();
 //        treachery();
+        });
     }
 
     private void investigator() {
@@ -130,12 +136,12 @@ public class QuickCardView {
         displayEditor(card);
     }
 
-    private static void displayEditor(Card card) {
+    private void displayEditor(Card card) {
         CardView cardView = CardFaces.createCardView(card);
         new Editor(cardView).display();
     }
 
-    private static class Editor {
+    private class Editor {
         private final CardView cardView;
 
         public Editor(CardView cardView) {
@@ -186,10 +192,9 @@ public class QuickCardView {
         }
     }
 
-    static class Renderer extends JPanel {
+    class Renderer extends JPanel {
         private final CardView cardView;
         private final CardFaceView cardFaceView;
-
         public Renderer(CardView cardView, CardFaceView cardFaceView) {
             this.cardView = cardView;
             this.cardFaceView = cardFaceView;
@@ -210,7 +215,19 @@ public class QuickCardView {
         }
     }
 
-    private static class PaintContextImpl extends BasePaintContext {
+    private static class NothingImagePersister implements ImagePersister {
+        @Override
+        public BufferedImage load(String identifier) {
+            return null;
+        }
+
+        @Override
+        public String save(BufferedImage image, String existingIdentifier) {
+            throw new UnsupportedOperationException("Save not supported");
+        }
+    }
+
+    private class PaintContextImpl extends BasePaintContext {
         private final BufferedImage bufferedImage;
         private final double dpi = 150;
 
@@ -234,9 +251,14 @@ public class QuickCardView {
         public double getRenderingDpi() {
             return dpi;
         }
+
+        @Override
+        public ProjectContext getProjectContext() {
+            return projectContext;
+        }
     }
 
-    static class EditorContextImpl implements EditorContext {
+    class EditorContextImpl implements EditorContext {
         private final JTabbedPane tabbedPane;
         private final Runnable markChanged;
 
@@ -256,6 +278,11 @@ public class QuickCardView {
         @Override
         public void markChanged() {
             markChanged.run();
+        }
+
+        @Override
+        public ProjectContext getProjectContext() {
+            return projectContext;
         }
     }
 }

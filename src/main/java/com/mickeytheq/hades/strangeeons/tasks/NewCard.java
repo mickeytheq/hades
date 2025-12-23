@@ -3,9 +3,13 @@ package com.mickeytheq.hades.strangeeons.tasks;
 import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.*;
+import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.ui.NewCardDialog;
@@ -37,17 +41,22 @@ public class NewCard extends BaseTaskAction {
         if (newCardDialog.showDialog() != DialogWithButtons.OK_OPTION)
             return true;
 
-        Class<? extends CardFaceModel> backFaceModelClass = null;
-        if (newCardDialog.getSelectedBackFace() != null) {
-            backFaceModelClass = newCardDialog.getSelectedBackFace().getCardFaceModelClass();
-        }
+        Class<? extends CardFaceModel> backFaceModelClass = newCardDialog.getSelectedBackFace()
+                .map(CardFaceTypeRegister.CardFaceInfo::getCardFaceModelClass)
+                .orElse(null);
+
+        // when creating a new card there may not be a hades project directory in the strange eons root
+        // so give the opportunity to create it if required
+        ProjectContext projectContext = StandardProjectContext.createContextForStrangeEonsRoot(StrangeEons.getOpenProject().getFile().toPath());
 
         // create the card model and view
-        Card card = CardFaces.createCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass);
+        Card card = ProjectContexts.withContextReturn(projectContext,
+                () -> CardFaces.createCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass));
+
         CardView cardView = CardFaces.createCardView(card);
 
         // create the game component and its editor and attach the editor to the Strange Eons window
-        CardGameComponent cardGameComponent = new CardGameComponent(cardView);
+        CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
         AbstractGameComponentEditor<CardGameComponent> editor = cardGameComponent.createDefaultEditor();
         StrangeEons.getWindow().addEditor(editor);
 

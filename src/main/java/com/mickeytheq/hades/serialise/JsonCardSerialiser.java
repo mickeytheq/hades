@@ -10,15 +10,15 @@ import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
-import com.mickeytheq.hades.core.project.CollectionInfo;
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
-import com.mickeytheq.hades.core.project.ProjectConfigurations;
+import com.mickeytheq.hades.core.model.image.ImageProxy;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
@@ -210,12 +210,12 @@ public class JsonCardSerialiser {
                 return;
             }
 
-            if (value instanceof BufferedImage) {
-                try {
-                    currentNode.put(fieldName, JsonUtils.serialiseBufferedImage((BufferedImage)value));
-                } catch (IOException e) {
-                    throw new RuntimeException("Error serialising BufferedImage  from property '" + fieldName + "' ", e);
-                }
+            if (value instanceof ImageProxy) {
+                ImageProxy imageProxy = (ImageProxy)value;
+
+                imageProxy.save();
+                currentNode.put(fieldName, imageProxy.getIdentifier());
+
                 return;
             }
 
@@ -235,9 +235,11 @@ public class JsonCardSerialiser {
 
     private static class Deserialiser {
         private final ObjectMapper objectMapper;
+        private final ProjectContext projectContext;
 
         public Deserialiser(ObjectMapper objectMapper) {
             this.objectMapper = objectMapper;
+            projectContext = ProjectContexts.getCurrentContext();
         }
 
         public void deserialise(ObjectNode faceNode, CardFaceModel cardFaceModel) {
@@ -313,21 +315,17 @@ public class JsonCardSerialiser {
                 return;
             }
 
-            if (propertyMetadata.getPropertyClass().equals(BufferedImage.class)) {
-                try {
-                    byte[] value = valueNode.binaryValue();
-                    BufferedImage image = JsonUtils.deserialiseBufferedImage(value);
-                    propertyMetadata.setPropertyValue(entity, image);
-                } catch (IOException e) {
-                    throw new RuntimeException("Error parsing buffered image from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
-                }
+            if (propertyMetadata.getPropertyClass().equals(ImageProxy.class)) {
+                String imageIdentifier = valueNode.asText();
+                ImageProxy imageProxy = ImageProxy.createFor(imageIdentifier);
+                propertyMetadata.setPropertyValue(entity, imageProxy);
                 return;
             }
 
             if (propertyMetadata.getPropertyClass().equals(EncounterSetInfo.class)) {
                 String encounterSetKey = valueNode.asText();
 
-                ProjectConfigurations.get().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
+                projectContext.getProjectConfiguration().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
                     propertyMetadata.setPropertyValue(entity, encounterSetInfo);
                 });
 
@@ -337,7 +335,7 @@ public class JsonCardSerialiser {
             if (propertyMetadata.getPropertyClass().equals(CollectionInfo.class)) {
                 String collectionKey = valueNode.asText();
 
-                ProjectConfigurations.get().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
+                projectContext.getProjectConfiguration().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
                     propertyMetadata.setPropertyValue(entity, collectionInfo);
                 });
 

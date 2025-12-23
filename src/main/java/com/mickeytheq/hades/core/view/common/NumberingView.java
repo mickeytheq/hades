@@ -1,13 +1,11 @@
 package com.mickeytheq.hades.core.view.common;
 
-import ca.cgjennings.apps.arkham.PortraitPanel;
 import ca.cgjennings.graphics.filters.InversionFilter;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.project.CollectionInfo;
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
-import com.mickeytheq.hades.core.project.ProjectConfigurations;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.model.common.NumberingModel;
@@ -22,7 +20,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
-import java.util.Optional;
 
 public class NumberingView {
     private static final Rectangle COLLECTION_NUMBER_DRAW_REGION = new Rectangle(636, 1024, 74, 20);
@@ -41,7 +38,7 @@ public class NumberingView {
     }
 
     public void createEditors(EditorContext editorContext) {
-        ProjectConfiguration projectConfiguration = ProjectConfigurations.get();
+        ProjectConfiguration projectConfiguration = editorContext.getProjectContext().getProjectConfiguration();
 
         // collection
         collectionEditor = EditorUtils.createNullableComboBox();
@@ -101,7 +98,7 @@ public class NumberingView {
         if (model.getEncounterSet() == null)
             return;
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), model.getEncounterSet().getImage(), encounterPortraitDrawRegion);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), model.getEncounterSet().getImage().get(), encounterPortraitDrawRegion);
     }
 
     public void paintCollectionPortrait(PaintContext paintContext, Rectangle collectionPortraitDrawRegion, boolean paintInverted) {
@@ -111,7 +108,7 @@ public class NumberingView {
         // collection icon sometimes needs inverting
         // the source icon is always black but the background on most cards is black as well therefore we want the icon inverted to white
         // this isn't always the case therefore it is at the discretion of the owning card face to decide
-        BufferedImage collectionImage = model.getCollection().getImage();
+        BufferedImage collectionImage = model.getCollection().getImage().get();
 
         if (paintInverted) {
             BufferedImageOp inversionOp = new InversionFilter();

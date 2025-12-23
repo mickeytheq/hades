@@ -5,17 +5,13 @@ import ca.cgjennings.apps.arkham.plugins.AbstractPlugin;
 import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
 import ca.cgjennings.apps.arkham.project.*;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
-import com.mickeytheq.hades.core.model.image.SharedDirectoryImagePersister;
-import com.mickeytheq.hades.core.project.ProjectConfigurationProviderJson;
-import com.mickeytheq.hades.core.project.ProjectConfigurations;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.serialise.JsonCardSerialiser;
-import com.mickeytheq.hades.serialise.RawJsonSerialiser;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
@@ -25,13 +21,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Properties;
 
 public class HadesPlugin extends AbstractPlugin {
     private static final Logger logger = LogManager.getLogger(HadesPlugin.class);
@@ -59,8 +52,6 @@ public class HadesPlugin extends AbstractPlugin {
             installHadesFileType();
 
             forceViewQualityToHighWithNoAutomaticChanging();
-
-            installProjectConfiguration();
 
             Actions.register(new HadesActionTree(), Actions.PRIORITY_IMPORT_EXPORT);
 
@@ -165,26 +156,13 @@ public class HadesPlugin extends AbstractPlugin {
             }
 
             private CardGameComponent readCardGameComponent(Path path) {
-                Card card = CardIO.readCard(path);
+                ProjectContext projectContext = StandardProjectContext.getContextForContentPath(path);
+
+                Card card = CardIO.readCard(path, projectContext);
 
                 CardView cardView = CardFaces.createCardView(card);
 
-                return new CardGameComponent(cardView);
-            }
-        });
-    }
-
-    private void installProjectConfiguration() {
-        // when the Strange Eons project changes, update where the project configuration should come from
-        StrangeEons.getWindow().addProjectEventListener(new StrangeEonsAppWindow.ProjectEventListener() {
-            @Override
-            public void projectOpened(Project project) {
-                ProjectConfigurations.setDefaultProvider(new ProjectConfigurationProviderJson(project.getFile().toPath().resolve(ProjectConfigurationProviderJson.DEFAULT_FILENAME)));
-            }
-
-            @Override
-            public void projectClosing(Project project) {
-                ProjectConfigurations.setDefaultProvider(null);
+                return new CardGameComponent(cardView, projectContext);
             }
         });
     }

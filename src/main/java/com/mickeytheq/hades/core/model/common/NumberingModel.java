@@ -1,8 +1,8 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.core.project.CollectionInfo;
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 
 public class NumberingModel {
     private EncounterSetInfo encounterSet;

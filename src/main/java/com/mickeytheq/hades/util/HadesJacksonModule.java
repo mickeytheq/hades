@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
+import com.mickeytheq.hades.core.model.image.ImageProxy;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -13,33 +14,32 @@ import java.io.IOException;
 
 public class HadesJacksonModule extends SimpleModule {
     public HadesJacksonModule() {
-        addSerializer(BufferedImage.class, new BufferedImageSerialiser());
-        addDeserializer(BufferedImage.class, new BufferedImageDeserialiser());
+        addSerializer(ImageProxy.class, new ImageSerialiser());
+        addDeserializer(ImageProxy.class, new ImageDeserialiser());
     }
 
-    static class BufferedImageSerialiser extends StdScalarSerializer<BufferedImage> {
-        protected BufferedImageSerialiser() {
-            super(BufferedImage.class);
+    static class ImageSerialiser extends StdScalarSerializer<ImageProxy> {
+        protected ImageSerialiser() {
+            super(ImageProxy.class);
         }
 
         @Override
-        public void serialize(BufferedImage value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            byte[] data = JsonUtils.serialiseBufferedImage(value);
-            gen.writeBinary(data);
+        public void serialize(ImageProxy value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            value.save();
+            gen.writeString(value.getIdentifier());
         }
     }
 
-    static class BufferedImageDeserialiser extends StdScalarDeserializer<BufferedImage> {
-        protected BufferedImageDeserialiser() {
-            super(BufferedImage.class);
+    static class ImageDeserialiser extends StdScalarDeserializer<ImageProxy> {
+        protected ImageDeserialiser() {
+            super(ImageProxy.class);
         }
 
         @Override
-        public BufferedImage deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            p.readBinaryValue(byteArrayOutputStream);
+        public ImageProxy deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            String identifier = p.getValueAsString();
 
-            return JsonUtils.deserialiseBufferedImage(byteArrayOutputStream.toByteArray());
+            return ImageProxy.createFor(identifier);
         }
     }
 }

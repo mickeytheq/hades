@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.core.project.ui;
 
-import com.mickeytheq.hades.core.project.EncounterSetInfo;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 
 import javax.swing.*;
 import java.util.List;

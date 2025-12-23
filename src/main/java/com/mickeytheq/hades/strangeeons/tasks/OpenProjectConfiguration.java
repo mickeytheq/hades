@@ -2,8 +2,9 @@ package com.mickeytheq.hades.strangeeons.tasks;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
-import com.mickeytheq.hades.core.project.ProjectConfigurations;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ui.ProjectConfigurationDialog;
 
 public class OpenProjectConfiguration extends BaseTaskAction {
@@ -19,7 +20,8 @@ public class OpenProjectConfiguration extends BaseTaskAction {
 
     @Override
     public boolean performOnSelection(Member[] members) {
-        ProjectConfiguration projectConfiguration = ProjectConfigurations.get();
+        ProjectContext projectContext = StandardProjectContext.getContextForContentPath(StrangeEons.getOpenProject().getFile().toPath());
+        ProjectConfiguration projectConfiguration = projectContext.getProjectConfiguration();
         ProjectConfigurationDialog.openDialog(StrangeEons.getWindow(), projectConfiguration);
 
         return true;

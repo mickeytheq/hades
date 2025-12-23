@@ -2,34 +2,32 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration;
 
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.diy.DIY;
-import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
-import com.mickeytheq.hades.core.project.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
-import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces.*;
-import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import resources.ResourceKit;
 import resources.Settings;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 // migrates AHLCG plugin files to Hades
 public class Migrator {
     private static final Logger logger = LogManager.getLogger(Migrator.class);
 
-    private final ProjectConfiguration projectConfiguration;
+    private final ProjectContext projectContext;
 
-    public Migrator(ProjectConfiguration projectConfiguration) {
-        this.projectConfiguration = projectConfiguration;
+    public Migrator(ProjectContext projectContext) {
+        this.projectContext = projectContext;
     }
 
     public void migrate(Path sourceFile, Path targetFile) {
@@ -49,14 +47,14 @@ public class Migrator {
 
         DIY diy = (DIY)gameComponent;
 
-        Card card = migrateCard(diy);
+        Card card = ProjectContexts.withContextReturn(projectContext, () -> migrateCard(diy));
 
         if (card == null) {
             logger.warn("Skipping '" + sourceFile + "' as that card face/type is not supported");
             return;
         }
 
-        CardIO.writeCard(targetFile, card);
+        CardIO.writeCard(targetFile, card, projectContext);
 
         logger.info("Migrated '" + sourceFile + "' to '" + targetFile + "' successfully");
     }
@@ -105,7 +103,7 @@ public class Migrator {
             if (cardFaceType == null)
                 return null;
             
-            CardFaceMigrationContext context = new CardFaceMigrationContextImpl(diy, settingsAccessor, cardFaceSide, projectConfiguration);
+            CardFaceMigrationContext context = new CardFaceMigrationContextImpl(diy, settingsAccessor, cardFaceSide, projectContext.getProjectConfiguration());
 
             switch (cardFaceType) {
                 case Asset:

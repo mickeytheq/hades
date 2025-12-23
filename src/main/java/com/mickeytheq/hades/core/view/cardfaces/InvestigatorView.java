@@ -118,7 +118,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
         mainPanel.add(titlePanel, "wrap, growx, pushx");
         mainPanel.add(statsPanel, "wrap, growx, pushx");
 
-        editorContext.addDisplayComponent(Language.string(InterfaceConstants.INVESTIGATOR) + " - " + "Stats", mainPanel); // TODO: i18n
+        editorContext.addDisplayComponent("Stats", mainPanel); // TODO: i18n
 
         // bindings
         EditorUtils.bindComboBox(investigatorClassEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setInvestigatorClass(value)));
@@ -219,7 +219,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
     private void paintArtPortrait(PaintContext paintContext) {
         PortraitModel portraitModel = getModel().getPortraitWithArtistModel().getPortraitModel();
 
-        BufferedImage portraitImage = portraitModel.getImage();
+        BufferedImage portraitImage = portraitModel.getImage().get();
 
         if (portraitImage == null)
             return;

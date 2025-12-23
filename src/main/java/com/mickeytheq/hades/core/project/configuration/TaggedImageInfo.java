@@ -1,6 +1,7 @@
-package com.mickeytheq.hades.core.project;
+package com.mickeytheq.hades.core.project.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mickeytheq.hades.core.model.image.ImageProxy;
 
 import java.awt.image.BufferedImage;
 
@@ -12,7 +13,7 @@ public class TaggedImageInfo {
     private String displayName;
 
     @JsonProperty("Image")
-    private BufferedImage image;
+    private ImageProxy image = ImageProxy.createEmpty();
 
     public String getTag() {
         return tag;
@@ -30,11 +31,11 @@ public class TaggedImageInfo {
         this.displayName = displayName;
     }
 
-    public BufferedImage getImage() {
+    public ImageProxy getImage() {
         return image;
     }
 
-    public void setImage(BufferedImage image) {
+    public void setImage(ImageProxy image) {
         this.image = image;
     }
 

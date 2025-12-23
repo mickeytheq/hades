@@ -1,8 +1,6 @@
-package com.mickeytheq.hades.core.project;
+package com.mickeytheq.hades.core.project.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.concurrent.ConcurrentException;
-import org.apache.commons.lang3.concurrent.LazyInitializer;
 
 public class ProjectConfiguration {
     @JsonProperty("EncounterSets")

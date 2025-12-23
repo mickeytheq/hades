@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core;
 
 import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -10,16 +11,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class CardFaces {
-    public static Card createCardModel(String frontFaceTypeCode, String backFaceTypeCode) {
-        CardFaceModel frontFaceModel = createFaceModelForTypeCode(frontFaceTypeCode);
-
-        CardFaceModel backFaceModel = null;
-        if (backFaceTypeCode != null)
-            backFaceModel = createFaceModelForTypeCode(backFaceTypeCode);
-
-        return createCardModel(frontFaceModel, backFaceModel);
-    }
-
     public static Card createCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass) {
         CardFaceModel frontFaceModel = createModelForClass(frontFaceModelClass);
 
