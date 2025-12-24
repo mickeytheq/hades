@@ -35,11 +35,19 @@ public class NewCard extends BaseTaskAction {
 
     @Override
     public boolean performOnSelection(Member[] members) {
+        Member member = members.length == 0 ? null : members[0];
+
+        newCard(member);
+
+        return true;
+    }
+
+    public static void newCard(Member member) {
         // launch the dialog to select config for the new card
         NewCardDialog newCardDialog = new NewCardDialog();
         newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
         if (newCardDialog.showDialog() != DialogWithButtons.OK_OPTION)
-            return true;
+            return;
 
         Class<? extends CardFaceModel> backFaceModelClass = newCardDialog.getSelectedBackFace()
                 .map(CardFaceTypeRegister.CardFaceInfo::getCardFaceModelClass)
@@ -64,12 +72,12 @@ public class NewCard extends BaseTaskAction {
         Member parentMember;
 
         // if there was no selection put it in the root
-        if (members.length == 0) {
+        if (member == null) {
             parentMember = StrangeEons.getOpenProject();
         }
         else {
             // otherwise find the first folder above the selected member
-            parentMember = members[0];
+            parentMember = member;
 
             while (!parentMember.isFolder())
                 parentMember = parentMember.getParent();
@@ -90,7 +98,5 @@ public class NewCard extends BaseTaskAction {
         if (m != null) {
             view.select(m);
         }
-
-        return true;
     }
 }

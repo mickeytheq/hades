@@ -14,6 +14,7 @@ import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
+import com.mickeytheq.hades.strangeeons.tasks.NewCard;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -21,6 +22,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -50,6 +56,8 @@ public class HadesPlugin extends AbstractPlugin {
                 return false;
 
             installHadesFileType();
+
+            installKeyboardShortcuts();
 
             forceViewQualityToHighWithNoAutomaticChanging();
 
@@ -163,6 +171,32 @@ public class HadesPlugin extends AbstractPlugin {
                 CardView cardView = CardFaces.createCardView(card);
 
                 return new CardGameComponent(cardView, projectContext);
+            }
+        });
+    }
+
+    private static final String HADES_NEW_CARD_ACTION = "HadesNewCard";
+
+    private void installKeyboardShortcuts() {
+        StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
+
+        KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK);
+
+        appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, HADES_NEW_CARD_ACTION);
+        appWindow.getRootPane().getActionMap().put(HADES_NEW_CARD_ACTION, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Project project = StrangeEons.getOpenProject();
+
+                if (project == null)
+                    return;
+
+                Member[] selectedMembers = appWindow.getOpenProjectView().getSelectedMembers();
+
+                if (selectedMembers.length > 1)
+                    return;
+
+                NewCard.newCard(selectedMembers.length == 0 ? null : selectedMembers[0]);
             }
         });
     }
