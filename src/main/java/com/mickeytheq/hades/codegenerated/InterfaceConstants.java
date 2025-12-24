@@ -206,6 +206,8 @@ public class InterfaceConstants {
     public static final String ICEANDDEATH = "Hades-IceAndDeath";
     // English value: Bottom right, corner
     public static final String GUIDE_BOTTOMRIGHTCORNER = "Hades-Guide-BottomRightCorner";
+    // English value: Encounter card back
+    public static final String ENCOUNTERCARDBACK = "Hades-EncounterCardBack";
     // English value: Enemy / Enemy
     public static final String ENEMYENEMY = "Hades-EnemyEnemy";
     // English value: Reversed
@@ -506,6 +508,8 @@ public class InterfaceConstants {
     public static final String STORYCHAOS = "Hades-StoryChaos";
     // English value: Stirring in the Deep
     public static final String STIRRINGINTHEDEEP = "Hades-StirringInTheDeep";
+    // English value: Copy other face
+    public static final String COPY_OTHER_FACE = "Hades-Copy-Other-Face";
     // English value: Echoes of the Past
     public static final String ECHOESOFTHEPAST = "Hades-EchoesOfThePast";
     // English value: Cultist
@@ -860,6 +864,8 @@ public class InterfaceConstants {
     public static final String RETURNTOTHENIGHTOFTHEZEALOT = "Hades-ReturnToTheNightOfTheZealot";
     // English value: Header/Victory font
     public static final String PREF_VICTORYFONT = "Hades-Pref-VictoryFont";
+    // English value: Weakness type
+    public static final String WEAKNESS_TYPE = "Hades-Weakness-Type";
     // English value: Forgotten Ruins
     public static final String FORGOTTENRUINS = "Hades-ForgottenRuins";
     // English value: Whispers of Hypnos
@@ -972,6 +978,8 @@ public class InterfaceConstants {
     public static final String TRAITS = "Hades-Traits";
     // English value: Top, half page
     public static final String GUIDE_TOPHALF = "Hades-Guide-TopHalf";
+    // English value: Player card back
+    public static final String PLAYERCARDBACK = "Hades-PlayerCardBack";
     // English value: Beast-thralls
     public static final String BEASTTHRALLS = "Hades-BeastThralls";
     // English value: Uncheck selected sets

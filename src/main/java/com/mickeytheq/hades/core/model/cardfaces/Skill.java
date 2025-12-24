@@ -7,6 +7,8 @@ import com.mickeytheq.hades.core.model.common.NumberingModel;
 import com.mickeytheq.hades.core.model.common.PlayerCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Skill")
 public class Skill extends BaseCardFaceModel {
@@ -20,6 +22,11 @@ public class Skill extends BaseCardFaceModel {
         commonCardFieldsModel = new CommonCardFieldsModel();
         numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
+    }
+
+    @Override
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        numberingModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(flatten = true)

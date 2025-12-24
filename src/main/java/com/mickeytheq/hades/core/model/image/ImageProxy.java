@@ -22,10 +22,6 @@ public class ImageProxy {
             loaded = true;
     }
 
-    public String getIdentifier() {
-        return identifier;
-    }
-
     public BufferedImage get() {
         if (!loaded)
             load();
@@ -54,11 +50,13 @@ public class ImageProxy {
         loaded = true;
     }
 
-    public void save() {
+    public String save() {
         if (!dirty)
-            return;
+            return identifier;
 
         identifier = imagePersister.save(image, identifier);
+
+        return identifier;
     }
 
     public static ImageProxy createEmpty() {

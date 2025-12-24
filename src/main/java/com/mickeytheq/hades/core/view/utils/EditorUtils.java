@@ -58,6 +58,27 @@ public class EditorUtils {
         return comboBox;
     }
 
+    public static <E> JComboBox<E> createNullableComboBox() {
+        return createNullableComboBox(DEFAULT_NULL_COMBO_BOX_DISPLAY);
+    }
+
+    // creates a combo box that inserts a default 'null' value as the first item and
+    // displays the given string when that item is selected
+    public static <E> JComboBox<E> createNullableComboBox(String nullDisplay) {
+        JComboBox<E> comboBox = new JComboBox<>();
+        comboBox.addItem(null);
+
+        // it is better to wrap the existing combobox renderer that has all the look and feel elements completed
+        // and just tinker with the display text
+        comboBox.setRenderer(new NullDisplayRenderer<E>(comboBox.getRenderer(), nullDisplay));
+
+        return comboBox;
+    }
+
+    public static JCheckBox createCheckBox() {
+        return new JCheckBox();
+    }
+
     public static void applyNoEditorOverride(JComponent component) {
         // the font gets changed to an SE 'default' by AppFrame.installTextEditorFont which affects all JTextComponent derived classes
         // which is called shortly after GameComponent.createDefaultEditor()
@@ -97,23 +118,6 @@ public class EditorUtils {
         spinner.addChangeListener(e -> {
             consumer.accept((Integer)spinner.getValue());
         });
-    }
-
-    public static <E> JComboBox<E> createNullableComboBox() {
-        return createNullableComboBox(DEFAULT_NULL_COMBO_BOX_DISPLAY);
-    }
-
-    // creates a combo box that inserts a default 'null' value as the first item and
-    // displays the given string when that item is selected
-    public static <E> JComboBox<E> createNullableComboBox(String nullDisplay) {
-        JComboBox<E> comboBox = new JComboBox<>();
-        comboBox.addItem(null);
-
-        // it is better to wrap the existing combobox renderer that has all the look and feel elements completed
-        // and just tinker with the display text
-        comboBox.setRenderer(new NullDisplayRenderer<E>(comboBox.getRenderer(), nullDisplay));
-
-        return comboBox;
     }
 
     static class NullDisplayRenderer<E> implements ListCellRenderer<E> {

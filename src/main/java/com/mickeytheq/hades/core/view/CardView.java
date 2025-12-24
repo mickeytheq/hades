@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import resources.Language;
 
 import javax.swing.*;
+import java.util.Optional;
 
 /**
  * Container that joins the {@link Card} model and the front and back {@link CardFaceView}
@@ -45,6 +46,16 @@ public class CardView {
 
     public boolean hasBack() {
         return card.hasBack();
+    }
+
+    public Optional<CardFaceView> getOppositeFaceView(CardFaceSide side) {
+        if (side == CardFaceSide.Back)
+            return Optional.of(getFrontFaceView());
+
+        if (!hasBack())
+            return Optional.empty();
+
+        return Optional.of(getBackFaceView());
     }
 
     public void addCommentsTab(EditorContext editorContext) {

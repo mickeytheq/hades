@@ -1,5 +1,8 @@
 package com.mickeytheq.hades.core.model;
 
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
+
 /**
  * Base interface for a card face model. It is paired with a {@link com.mickeytheq.hades.core.view.CardFaceView} in a 1-to-1 relationship.
  *
@@ -24,7 +27,10 @@ package com.mickeytheq.hades.core.model;
  * - have any reference to the owning {@link Card}
  * - have any reference to or visibility of the other {@link CardFaceModel} that may be present on the {@link Card}. For example the front face model should not be interacting
  *   in any way with the back face model. This allows model implementations to be independent of each other
- * - any awareness of whether the face is the front face or the back face on a {@link Card}
  */
 public interface CardFaceModel {
+    /**
+     * Called to set any default values that require context such as the {@link ProjectContext} or the side of the card this model is initially for
+     */
+    void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide);
 }

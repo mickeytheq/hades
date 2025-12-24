@@ -11,12 +11,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class CardFaces {
-    public static Card createCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass) {
+    public static Card createNewCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass, ProjectContext projectContext) {
         CardFaceModel frontFaceModel = createModelForClass(frontFaceModelClass);
+        frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
 
         CardFaceModel backFaceModel = null;
-        if (backFaceModelClass != null)
+        if (backFaceModelClass != null) {
             backFaceModel = createModelForClass(backFaceModelClass);
+            backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
+        }
 
         return createCardModel(frontFaceModel, backFaceModel);
     }

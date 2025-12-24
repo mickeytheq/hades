@@ -4,6 +4,8 @@ import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.Model;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +43,11 @@ public class Asset extends BaseCardFaceModel {
 
         health = Statistic.empty();
         sanity = Statistic.empty();
+    }
+
+    @Override
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        numberingModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("AssetSlot1")

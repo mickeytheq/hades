@@ -51,7 +51,7 @@ public class NewCard extends BaseTaskAction {
 
         // create the card model and view
         Card card = ProjectContexts.withContextReturn(projectContext,
-                () -> CardFaces.createCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass));
+                () -> CardFaces.createNewCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass, projectContext));
 
         CardView cardView = CardFaces.createCardView(card);
 

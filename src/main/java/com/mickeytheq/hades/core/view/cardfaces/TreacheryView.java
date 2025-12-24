@@ -2,11 +2,9 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.view.EditorContext;
-import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.View;
+import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.hades.core.view.common.NumberingView;
 import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
@@ -22,7 +20,7 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
-public class TreacheryView extends BaseCardFaceView<Treachery> {
+public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNumberingView {
     private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
     private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
@@ -50,8 +48,13 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
+
+    @Override
+    public NumberingView getNumberingView() {
+        return numberingView;
     }
 
     @Override
@@ -75,8 +78,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> {
 
         commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false);
 
-        generalPanel.add(new JLabel("Weakness type"));
-        generalPanel.add(weaknessTypeEditor, "wrap, pushx, growx");
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(generalPanel, Language.string(InterfaceConstants.WEAKNESS_TYPE), weaknessTypeEditor);
 
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, true);
 

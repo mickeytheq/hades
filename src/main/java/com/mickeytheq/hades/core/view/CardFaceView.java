@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.view;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 
 import java.awt.*;
+import java.util.Optional;
 
 /**
  * Provides the 'view' on top of a {@link CardFaceModel}
@@ -24,6 +25,16 @@ public interface CardFaceView {
      * and the model used to back this view
      */
     void initialiseView(CardView cardView, CardFaceSide cardFaceSide, CardFaceModel cardFaceModel);
+
+    /**
+     * Gets the {@link CardView} that owns this CardFaceView
+     */
+    CardView getCardView();
+
+    /**
+     * Gets whether this face is the front or back of the card
+     */
+    CardFaceSide getCardFaceSide();
 
     /**
      * Gets the title of the card face. May return null if the title is not set or the card face doesn't support a title
@@ -53,4 +64,8 @@ public interface CardFaceView {
      * Returns a brief string describing this CardFaceView for user facing purposes, e.g. logging
      */
     String getBriefDisplayString();
+
+    default Optional<CardFaceView> getOtherFaceView() {
+        return getCardView().getOppositeFaceView(getCardFaceSide());
+    }
 }

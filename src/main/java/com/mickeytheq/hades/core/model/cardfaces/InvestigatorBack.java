@@ -4,6 +4,8 @@ import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +57,11 @@ public class InvestigatorBack implements CardFaceModel {
     private InvestigatorBackSection section7 = new InvestigatorBackSection();
     private InvestigatorBackSection section8 = new InvestigatorBackSection();
     private final PortraitWithArtistModel portraitWithArtistModel;
+
+    @Override
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        // do nothing
+    }
 
     public InvestigatorBack() {
         portraitWithArtistModel = new PortraitWithArtistModel();

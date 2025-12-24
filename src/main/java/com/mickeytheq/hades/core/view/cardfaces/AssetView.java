@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ASSET)
-public class AssetView extends BaseCardFaceView<Asset> {
+public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingView {
     private JComboBox<Asset.AssetSlot> assetSlot1Editor;
     private JComboBox<Asset.AssetSlot> assetSlot2Editor;
     private StatisticComponent healthEditor;
@@ -38,9 +38,14 @@ public class AssetView extends BaseCardFaceView<Asset> {
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
+
+    @Override
+    public NumberingView getNumberingView() {
+        return numberingView;
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Treachery")
 public class Treachery extends BaseCardFaceModel {
@@ -22,6 +24,11 @@ public class Treachery extends BaseCardFaceModel {
         commonCardFieldsModel = new CommonCardFieldsModel();
         numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
+    }
+
+    @Override
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        numberingModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("WeaknessType")

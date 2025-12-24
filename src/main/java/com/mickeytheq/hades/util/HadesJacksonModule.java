@@ -25,8 +25,12 @@ public class HadesJacksonModule extends SimpleModule {
 
         @Override
         public void serialize(ImageProxy value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            value.save();
-            gen.writeString(value.getIdentifier());
+            String identifier = value.save();
+
+            if (identifier == null)
+                return;
+
+            gen.writeString(identifier);
         }
     }
 

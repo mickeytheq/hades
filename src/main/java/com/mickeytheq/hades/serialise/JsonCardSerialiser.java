@@ -213,8 +213,10 @@ public class JsonCardSerialiser {
             if (value instanceof ImageProxy) {
                 ImageProxy imageProxy = (ImageProxy)value;
 
-                imageProxy.save();
-                currentNode.put(fieldName, imageProxy.getIdentifier());
+                String identifier = imageProxy.save();
+
+                if (identifier != null)
+                    currentNode.put(fieldName, identifier);
 
                 return;
             }

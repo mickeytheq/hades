@@ -1,15 +1,36 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 public class NumberingModel {
+    private boolean encounterUseOtherFace;
     private EncounterSetInfo encounterSet;
     private String encounterNumber;
     private String encounterTotal;
+    private boolean collectionUseOtherFace;
     private CollectionInfo collection;
     private String collectionNumber;
+
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        // default the use other options to true for the back face
+        boolean isBackFace = cardFaceSide == CardFaceSide.Back;
+
+        encounterUseOtherFace = isBackFace;
+        collectionUseOtherFace = isBackFace;
+    }
+
+    @Property("EncounterUseOtherFace")
+    public boolean isEncounterUseOtherFace() {
+        return encounterUseOtherFace;
+    }
+
+    public void setEncounterUseOtherFace(boolean encounterUseOtherFace) {
+        this.encounterUseOtherFace = encounterUseOtherFace;
+    }
 
     @Property("EncounterNumber")
     public String getEncounterNumber() {
@@ -27,6 +48,15 @@ public class NumberingModel {
 
     public void setEncounterTotal(String encounterTotal) {
         this.encounterTotal = encounterTotal;
+    }
+
+    @Property("CollectionUseOtherFace")
+    public boolean isCollectionUseOtherFace() {
+        return collectionUseOtherFace;
+    }
+
+    public void setCollectionUseOtherFace(boolean collectionUseOtherFace) {
+        this.collectionUseOtherFace = collectionUseOtherFace;
     }
 
     @Property("CollectionNumber")

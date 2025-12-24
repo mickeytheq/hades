@@ -6,10 +6,8 @@ import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Skill;
 import com.mickeytheq.hades.core.model.common.PlayerCardType;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MarkupUtils;
@@ -29,7 +27,7 @@ import java.util.ListIterator;
 import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.SKILL)
-public class SkillView extends BaseCardFaceView<Skill> {
+public class SkillView extends BaseCardFaceView<Skill> implements HasNumberingView {
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
     private PlayerCardFieldsView playerCardFieldsView;
@@ -42,9 +40,14 @@ public class SkillView extends BaseCardFaceView<Skill> {
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), false);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
+
+    @Override
+    public NumberingView getNumberingView() {
+        return numberingView;
     }
 
     @Override

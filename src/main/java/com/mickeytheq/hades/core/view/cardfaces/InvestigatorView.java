@@ -6,10 +6,8 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.CommonCardFieldsView;
 import com.mickeytheq.hades.core.view.common.NumberingView;
 import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
@@ -24,7 +22,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 @View(interfaceLanguageKey = InterfaceConstants.INVESTIGATOR)
-public class InvestigatorView extends BaseCardFaceView<Investigator> {
+public class InvestigatorView extends BaseCardFaceView<Investigator> implements HasNumberingView {
     private CommonCardFieldsView commonCardFieldsView;
     private NumberingView numberingView;
     private PortraitWithArtistView portraitWithArtistView;
@@ -44,8 +42,13 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> {
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), COLLECTION_PORTRAIT_DRAW_REGION.getSize(), ENCOUNTER_PORTRAIT_DRAW_REGION.getSize());
+        numberingView = new NumberingView(getModel().getNumberingModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+    }
+
+    @Override
+    public NumberingView getNumberingView() {
+        return numberingView;
     }
 
     @Override

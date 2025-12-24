@@ -7,6 +7,8 @@ import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.model.common.NumberingModel;
 import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 // TODO: parallel investigator support
 @Model(typeCode = "Investigator")
@@ -35,6 +37,11 @@ public class Investigator implements CardFaceModel {
         intellect = "3";
         combat = "3";
         agility = "3";
+    }
+
+    @Override
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        numberingModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(flatten = true)

@@ -34,10 +34,10 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //        asset();
-            investigator();
+//            investigator();
 //        event();
 //        skill();
-//        treachery();
+        treacheryTreachery();
         });
     }
 
@@ -126,12 +126,16 @@ public class QuickCardView {
         displayEditor(card);
     }
 
-    private void treachery() {
+    private void treacheryTreachery() {
         Treachery model = new Treachery();
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
 
-        Card card = CardFaces.createCardModel(model, null);
+        Treachery back = new Treachery();
+        model.getCommonCardFieldsModel().setTitle("Back Rat Swarm");
+        model.getCommonCardFieldsModel().setRules("<rev> Back rules.");
+
+        Card card = CardFaces.createCardModel(model, back);
 
         displayEditor(card);
     }

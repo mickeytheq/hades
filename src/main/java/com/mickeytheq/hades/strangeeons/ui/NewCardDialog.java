@@ -97,7 +97,7 @@ public class NewCardDialog extends DialogWithButtons {
         JPanel detailsPanel = MigLayoutUtils.createTitledPanel("Details");
         MigLayoutUtils.addLabel(detailsPanel, "Filename");
         detailsPanel.add(filenameEditor, "split, pushx, growx");
-        detailsPanel.add(new JLabel(".eon"), "wrap");
+        detailsPanel.add(new JLabel(".hades"), "wrap");
 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(helpPanel, "wrap, pushx, growx");
