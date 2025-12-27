@@ -9,9 +9,7 @@ import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,6 +58,18 @@ public class CardIO {
                 RawJsonSerialiser.writeRawCardJson(writer, cardObjectNode);
             } catch (IOException e) {
                 throw new RuntimeException("Error saving/writing card to path '" + path + "'", e);
+            }
+        });
+    }
+
+    public static void writeCard(Writer writer, Card card, ProjectContext projectContext) {
+        ProjectContexts.withContext(projectContext, () -> {
+            ObjectNode cardObjectNode = JsonCardSerialiser.serialiseCard(card);
+
+            try {
+                RawJsonSerialiser.writeRawCardJson(writer, cardObjectNode);
+            } catch (IOException e) {
+                throw new RuntimeException("Error saving/writing card to Writer", e);
             }
         });
     }

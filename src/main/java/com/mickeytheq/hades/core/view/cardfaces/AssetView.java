@@ -157,7 +157,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingVi
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
-        JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();

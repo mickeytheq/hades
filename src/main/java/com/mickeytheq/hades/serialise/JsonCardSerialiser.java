@@ -165,6 +165,12 @@ public class JsonCardSerialiser {
                 if (value == null)
                     continue;
 
+                // check for the NullDiscriminator interface and skip if it identifies this entity as null/empty
+                if (value instanceof NullDiscriminator) {
+                    if (((NullDiscriminator) value).isNull())
+                        continue;
+                }
+
                 if (propertyMetadata.isValue()) {
                     serialiseValue(value, propertyMetadata.getName(), currentNode);
                     continue;

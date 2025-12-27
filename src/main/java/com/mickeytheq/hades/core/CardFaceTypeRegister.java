@@ -31,6 +31,9 @@ public class CardFaceTypeRegister {
 
         register(Treachery.class, TreacheryView.class);
 
+        register(Location.class, LocationView.class);
+        register(LocationBack.class, LocationBackView.class);
+
         register(EncounterCardBack.class, EncounterCardBackView.class);
         register(PlayerCardBack.class, PlayerCardBackView.class);
     }

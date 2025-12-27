@@ -34,11 +34,11 @@ public class EditorUtils {
         return spinner;
     }
 
-    public static <E extends Enum> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz) {
+    public static <E extends Enum<E>> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz) {
         return createEnumComboBoxNullable(clazz, DEFAULT_NULL_COMBO_BOX_DISPLAY);
     }
 
-    public static <E extends Enum> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz, String nullDisplay) {
+    public static <E extends Enum<E>> JComboBox<E> createEnumComboBoxNullable(Class<E> clazz, String nullDisplay) {
         JComboBox<E> comboBox = createNullableComboBox(nullDisplay);
 
         for (E enumConstant : clazz.getEnumConstants()) {
@@ -48,7 +48,7 @@ public class EditorUtils {
         return comboBox;
     }
 
-    public static <E extends Enum> JComboBox<E> createEnumComboBox(Class<E> clazz) {
+    public static <E extends Enum<E>> JComboBox<E> createEnumComboBox(Class<E> clazz) {
         JComboBox<E> comboBox = new JComboBox<>();
 
         for (E enumConstant : clazz.getEnumConstants()) {
@@ -70,7 +70,7 @@ public class EditorUtils {
 
         // it is better to wrap the existing combobox renderer that has all the look and feel elements completed
         // and just tinker with the display text
-        comboBox.setRenderer(new NullDisplayRenderer<E>(comboBox.getRenderer(), nullDisplay));
+        comboBox.setRenderer(new NullDisplayRenderer<>(comboBox.getRenderer(), nullDisplay));
 
         return comboBox;
     }

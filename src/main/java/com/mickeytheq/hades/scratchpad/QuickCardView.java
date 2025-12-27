@@ -13,12 +13,16 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.ui.DialogWithButtons;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.StringWriter;
 
 public class QuickCardView {
     public static void main(String[] args) {
@@ -37,7 +41,8 @@ public class QuickCardView {
 //            investigator();
 //        event();
 //        skill();
-        treacheryTreachery();
+//        treacheryTreachery();
+            location();
         });
     }
 
@@ -140,6 +145,20 @@ public class QuickCardView {
         displayEditor(card);
     }
 
+    private void location() {
+        Location model = new Location();
+        model.getCommonCardFieldsModel().setTitle("Location");
+        model.getCommonCardFieldsModel().setRules("Rules");
+
+        LocationBack back = new LocationBack();
+        back.getCommonCardFieldsModel().setTitle("Back");
+        back.getCommonCardFieldsModel().setRules("Rules back");
+
+        Card card = CardFaces.createCardModel(model, back);
+
+        displayEditor(card);
+    }
+
     private void displayEditor(Card card) {
         CardView cardView = CardFaces.createCardView(card);
         new Editor(cardView).display();
@@ -187,12 +206,47 @@ public class QuickCardView {
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editTabbedPane, drawTabbedPane);
 
             JFrame frame = new JFrame();
+
+            // buttons
+            JPanel buttonPanel = MigLayoutUtils.createDialogPanel();
+            JButton showJsonButton = new JButton("Show JSON");
+            showJsonButton.addActionListener(e -> {
+                StringWriter writer = new StringWriter();
+                CardIO.writeCard(writer, cardView.getCard(), projectContext);
+
+                showJson(frame, writer.toString());
+            });
+
+            buttonPanel.add(showJsonButton);
+
+            JPanel mainPanel = MigLayoutUtils.createDialogPanel();
+            mainPanel.add(splitPane, "wrap, grow, push");
+            mainPanel.add(buttonPanel, "wrap");
+
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
-            frame.getContentPane().add(splitPane);
+            frame.getContentPane().add(mainPanel);
             frame.setPreferredSize(new Dimension(2000, 1200));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
+        }
+
+        private void showJson(JFrame frame, String jsonString) {
+            DialogWithButtons dialog = new DialogWithButtons(frame, false);
+            dialog.setTitle("JSON view");
+            dialog.addDialogClosingButton("Close", 0, () -> Boolean.TRUE);
+
+            JTextArea textArea = new JTextArea(50, 100);
+            textArea.setText(jsonString);
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+            dialog.setContentComponent(scrollPane);
+
+            dialog.setPreferredSize(new Dimension(1000, 800));
+
+            dialog.showDialog();
         }
     }
 

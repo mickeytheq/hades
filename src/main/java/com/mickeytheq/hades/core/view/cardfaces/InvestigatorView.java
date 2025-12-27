@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.CommonCardFieldsView;
+import com.mickeytheq.hades.core.view.common.HasNumberingView;
 import com.mickeytheq.hades.core.view.common.NumberingView;
 import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
 import com.mickeytheq.hades.core.view.utils.*;
