@@ -25,6 +25,9 @@ public class TextStyleUtils {
     private static final TextStyle COPYRIGHT_TEXT_STYLE;
     private static final TextStyle HEADER_TEXT_STYLE;
     private static final TextStyle INVESTIGATOR_SKILL_VALUE_TEXT_STYLE;
+    private static final TextStyle ISS_TEXT_STYLE;
+    private static final TextStyle CSS_TEXT_STYLE;
+    private static final TextStyle GSS_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -104,6 +107,28 @@ public class TextStyleUtils {
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
+        // story text but smaller
+        ISS_TEXT_STYLE = new TextStyle();
+        ISS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        ISS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2 * 0.925);
+        ISS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
+        ISS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+
+        // story text but black
+        CSS_TEXT_STYLE = new TextStyle();
+        CSS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        CSS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        CSS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
+        CSS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        CSS_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
+        // story text - regular
+        GSS_TEXT_STYLE = new TextStyle();
+        GSS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        GSS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        GSS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
+        GSS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+
         // same as collection
         ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
         ARTIST_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
@@ -175,5 +200,17 @@ public class TextStyleUtils {
 
     public static TextStyle getInvestigatorSkillValueTextStyle() {
         return INVESTIGATOR_SKILL_VALUE_TEXT_STYLE;
+    }
+
+    public static TextStyle getIssStoryTextStyle() {
+        return ISS_TEXT_STYLE;
+    }
+
+    public static TextStyle getCssStoryTextStyle() {
+        return CSS_TEXT_STYLE;
+    }
+
+    public static TextStyle getGssStoryTextStyle() {
+        return GSS_TEXT_STYLE;
     }
 }

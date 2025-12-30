@@ -760,6 +760,8 @@ public class InterfaceConstants {
     public static final String PREF_COLLECTIONS = "Hades-Pref-Collections";
     // English value: Creatures of the Underworld
     public static final String CREATURESOFTHEUNDERWORLD = "Hades-CreaturesOfTheUnderworld";
+    // English value: Agenda
+    public static final String AGENDA = "Hades-Agenda";
     // English value: Decay & Filth
     public static final String DECAYANDFILTH = "Hades-DecayAndFilth";
     // English value: None

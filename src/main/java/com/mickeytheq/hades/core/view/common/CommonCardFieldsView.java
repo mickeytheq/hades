@@ -98,23 +98,24 @@ public class CommonCardFieldsView {
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SUBTITLE), subtitleEditor);
     }
 
-    // fix the width of spacing editors
-    private static final String SPACING_EDITOR_CONSTRAINTS = "wrap, width 50:50:50";
-
     public void addNonTitleEditorsToPanel(JPanel panel, boolean includeVictory) {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor, SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterKeywordsSpaceEditor, SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterKeywordsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterRulesSpaceEditor, SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterRulesSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.FLAVOR), flavourTextEditor);
 
         if (includeVictory) {
-            MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor, SPACING_EDITOR_CONSTRAINTS);
+            MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
         }
 
+        addCopyrightEditorToPanel(panel);
+    }
+
+    public void addCopyrightEditorToPanel(JPanel panel) {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.COPYRIGHT), copyrightEditor);
     }
 

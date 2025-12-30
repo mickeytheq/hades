@@ -22,6 +22,13 @@ public class ImageProxy {
             loaded = true;
     }
 
+    public ImageProxy(BufferedImage image) {
+        this.imagePersister = null;
+        this.image = image;
+
+        loaded = true;
+    }
+
     public BufferedImage get() {
         if (!loaded)
             load();
@@ -65,6 +72,10 @@ public class ImageProxy {
 
     public static ImageProxy createFor(String identifier) {
         return new ImageProxy(getImagePersister(), identifier);
+    }
+
+    public static ImageProxy createStatic(BufferedImage image) {
+        return new ImageProxy(image);
     }
 
     private static ImagePersister getImagePersister() {

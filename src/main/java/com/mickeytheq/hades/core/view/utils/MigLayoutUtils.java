@@ -11,6 +11,9 @@ import java.util.Objects;
 public class MigLayoutUtils {
     private static final boolean DEBUG = false;
 
+    // fix the width of spacing editors
+    public static final String SPACING_EDITOR_CONSTRAINTS = "wrap, width 50:50:50";
+
     public static void assertMigLayout(Container container) {
         if (!(container.getLayout() instanceof MigLayout))
             throw new RuntimeException("Container '" + container.getName() + "' is required to have MigLayout layout manager but does not");

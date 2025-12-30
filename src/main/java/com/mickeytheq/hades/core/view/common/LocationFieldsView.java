@@ -2,7 +2,6 @@ package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.graphics.filters.TintFilter;
-import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.LocationFieldsModel;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -17,8 +16,6 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -392,11 +389,8 @@ public class LocationFieldsView {
     private static final Rectangle SHROUD_DRAW_REGION = new Rectangle(70, 534, 0, 42);
     private static final Rectangle CLUES_DRAW_REGION = new Rectangle(681, 534, 0, 42);
 
-    // light colour used for drawing statistic values or outlines
-    private static final Color LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
-
     public void paintShroudAndClues(PaintContext paintContext) {
-        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), LIGHT_TEXT_COLOUR, Color.BLACK);
+        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), PaintUtils.LIGHT_TEXT_COLOUR, Color.BLACK);
     }
 }

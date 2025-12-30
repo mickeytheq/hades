@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import resources.Language;
 
@@ -99,8 +100,11 @@ public class MarkupUtils {
         markupRenderer.setStyleForTag("fla", TextStyleUtils.getFlavorTextStyle());
         markupRenderer.setStyleForTag("sto", TextStyleUtils.getStoryTextStyle());
         markupRenderer.setStyleForTag("bod", TextStyleUtils.getBodyTextStyle());
+        markupRenderer.setStyleForTag("iss", TextStyleUtils.getIssStoryTextStyle());
+        markupRenderer.setStyleForTag("css", TextStyleUtils.getCssStoryTextStyle());
+        markupRenderer.setStyleForTag("gss", TextStyleUtils.getGssStoryTextStyle());
 
-        // TODO: missing tags with styles - iss, css, gss, section, header, boxbullet, suf, sufb
+        // TODO: missing tags with styles - section, header, boxbullet, suf, sufb
     }
 
     // the res:// protocol maps into a 'resources' folder in the root of the classpath which is why

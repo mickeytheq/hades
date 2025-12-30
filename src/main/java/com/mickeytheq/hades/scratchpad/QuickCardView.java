@@ -5,19 +5,23 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.model.image.ImagePersister;
+import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
+import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.ui.DialogWithButtons;
+import org.checkerframework.checker.units.qual.N;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +38,19 @@ public class QuickCardView {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-        projectContext = new StandardProjectContext(new ProjectConfiguration(), new NothingImagePersister());
+        ProjectContext temporaryProjectContext = new StandardProjectContext(null, new NothingImagePersister());
+
+        ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(temporaryProjectContext, () -> {
+            ProjectConfiguration config = new ProjectConfiguration();
+            EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
+            encounterSetInfo.setDisplayName("Rats");
+            encounterSetInfo.setTag("rats");
+            encounterSetInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImage("/test/AHLCG-Rats.png")));
+            config.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+            return config;
+        });
+
+        projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
 
         ProjectContexts.withContext(projectContext, () -> {
 //        asset();
@@ -42,7 +58,8 @@ public class QuickCardView {
 //        event();
 //        skill();
 //        treacheryTreachery();
-            location();
+//            location();
+            agenda();
         });
     }
 
@@ -157,6 +174,20 @@ public class QuickCardView {
         back.getCommonCardFieldsModel().setRules("Rules back");
 
         Card card = CardFaces.createCardModel(model, back);
+
+        displayEditor(card);
+    }
+
+    private void agenda() {
+        Agenda model = new Agenda();
+        model.setDoom(new Statistic("4", false));
+        model.setAgendaNumber("1");
+        model.setDeckId("a");
+        model.getCommonCardFieldsModel().setTitle("Title");
+        model.getAgendaCommonFieldsModel().setStory("Story story");
+        model.getAgendaCommonFieldsModel().setRules("Rules rules");
+
+        Card card = CardFaces.createCardModel(model, null);
 
         displayEditor(card);
     }

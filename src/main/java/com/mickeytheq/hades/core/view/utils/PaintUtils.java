@@ -12,6 +12,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class PaintUtils {
+    // light colour used for drawing statistic values or outlines
+    public static final Color LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
+
     public static void paintLabel(PaintContext paintContext, Rectangle drawRegion, String labelText) {
         if (StringUtils.isEmpty(labelText))
             return;
