@@ -77,6 +77,8 @@ public class LocationFieldsView {
         });
 
         // bindings
+        EditorUtils.bindStatisticComponent(shroudEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setShroud(value)));
+        EditorUtils.bindStatisticComponent(cluesEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setClues(value)));
         EditorUtils.bindToggleButton(copyOtherFaceEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCopyOtherFace(value)));
         EditorUtils.bindComboBox(locationIconEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setLocationIcon(value.getValue())));
         EditorUtils.bindComboBox(connection1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setConnectionIcon1(value.getValue())));
@@ -87,6 +89,8 @@ public class LocationFieldsView {
         EditorUtils.bindComboBox(connection6Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setConnectionIcon6(value.getValue())));
 
         // intialise values
+        shroudEditor.setStatistic(getModel().getShroud());
+        cluesEditor.setStatistic(getModel().getClues());
         copyOtherFaceEditor.setSelected(getModel().isCopyOtherFace());
         locationIconEditor.setSelectedItem(getLocationIconInfoForValue(getModel().getLocationIcon()));
         connection1Editor.setSelectedItem(getLocationIconInfoForValue(getModel().getConnectionIcon1()));
@@ -383,8 +387,17 @@ public class LocationFieldsView {
         PaintUtils.paintBufferedImage(paintContext.getGraphics(), locationIconInfo.getRenderImage(), drawRegion);
     }
 
-    public void paintShroudAndClues(PaintContext paintContext) {
+    // the widths are set to zero as statistic painting uses the height to size the statistic value and per investigator icon
+    // so the x position is the centre-line for the shroud/clue circles and the text is centred on that position
+    private static final Rectangle SHROUD_DRAW_REGION = new Rectangle(70, 534, 0, 42);
+    private static final Rectangle CLUES_DRAW_REGION = new Rectangle(681, 534, 0, 42);
 
+    // light colour used for drawing statistic values or outlines
+    private static final Color LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
+
+    public void paintShroudAndClues(PaintContext paintContext) {
+        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), LIGHT_TEXT_COLOUR, Color.BLACK);
     }
 
     public static PageShape createBodyPageShape(Rectangle drawRegion) {

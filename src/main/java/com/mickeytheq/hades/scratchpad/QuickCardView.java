@@ -149,6 +149,8 @@ public class QuickCardView {
         Location model = new Location();
         model.getCommonCardFieldsModel().setTitle("Location");
         model.getCommonCardFieldsModel().setRules("Rules");
+        model.getLocationFieldsModel().setShroud(new Statistic("2", false));
+        model.getLocationFieldsModel().setClues(new Statistic("2", true));
 
         LocationBack back = new LocationBack();
         back.getCommonCardFieldsModel().setTitle("Back");

@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.PaintContext;
 import org.apache.commons.lang3.StringUtils;
 
@@ -174,6 +175,13 @@ public class PaintUtils {
         }
     }
 
+    public static void paintStatistic(PaintContext paintContext, Rectangle drawRegion, Statistic statistic, Color outlineColour, Color textColour) {
+        if (statistic.isNull())
+            return;
+
+        new StatisticPainter(paintContext, statistic, drawRegion, outlineColour, textColour).paint();
+    }
+
     public static void paintBufferedImage(Graphics2D g, BufferedImage image, Rectangle rectangle) {
         g.drawImage(image, (int)rectangle.getX(), (int)rectangle.getY(), (int)rectangle.getWidth(), (int)rectangle.getHeight(), null);
     }
@@ -223,5 +231,118 @@ public class PaintUtils {
         }
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, oldAA);
+    }
+
+    static class StatisticPainter {
+        private final PaintContext paintContext;
+        private final Statistic statistic;
+        private final Rectangle drawRegion;
+        private final Color outlineColour;
+        private final Color textColour;
+        private Font statisticValueFont = STAT_FONT;
+        private Font perInvestigatorFont = PER_INVESTIGATOR_FONT;
+
+        private GlyphVector statisticValueGlyphVector;
+        private Rectangle2D valueTextBounds;
+        private GlyphVector perInvestigatorGlyphVector;
+        private Rectangle2D perInvestigatorBounds;
+
+        public StatisticPainter(PaintContext paintContext, Statistic statistic, Rectangle drawRegion, Color outlineColour, Color textColour) {
+            this.paintContext = paintContext;
+            this.statistic = statistic;
+            this.drawRegion = drawRegion;
+            this.outlineColour = outlineColour;
+            this.textColour = textColour;
+        }
+
+        public void paint() {
+            if (statistic.isNull())
+                return;
+
+            calculateStatisticValue();
+
+            if (statistic.isPerInvestigator()) {
+                calculatePerInvestigator();
+            }
+
+            drawStatistic();
+        }
+
+        private void calculateStatisticValue() {
+            Graphics2D g = paintContext.getGraphics();
+
+            // figure out the bounds of the statistic value text when drawn when the initial/default font/size
+            statisticValueGlyphVector = statisticValueFont.createGlyphVector(g.getFontRenderContext(), statistic.getValue());
+            valueTextBounds = statisticValueGlyphVector.getLogicalBounds();
+
+            // calculate a new font size based on the desired draw region - use the height as the defining size
+            double scaleAdjust = drawRegion.getHeight() / valueTextBounds.getHeight();
+
+            // recalculate glyph vector and text bounds with the new font size
+            statisticValueFont = statisticValueFont.deriveFont(statisticValueFont.getSize() * (float)scaleAdjust);
+            statisticValueGlyphVector = statisticValueFont.createGlyphVector(g.getFontRenderContext(), statistic.getValue());
+            valueTextBounds = statisticValueGlyphVector.getLogicalBounds();
+        }
+
+        private void calculatePerInvestigator() {
+            Graphics2D g = paintContext.getGraphics();
+
+            // calculate per investigator font/glyph/bounds
+            // scale the per investigator font off the text font so they stay in proportion as the text font changes
+            perInvestigatorFont = perInvestigatorFont.deriveFont(statisticValueFont.getSize() * 0.4f);
+            perInvestigatorGlyphVector = perInvestigatorFont.createGlyphVector(g.getFontRenderContext(), "p");
+            perInvestigatorBounds = perInvestigatorGlyphVector.getLogicalBounds();
+        }
+
+        private void drawStatistic() {
+            double totalWidth = valueTextBounds.getWidth();
+
+            // calculate a total width appropriate for the text and per investigator symbol if present
+            if (statistic.isPerInvestigator()) {
+                totalWidth = totalWidth + perInvestigatorBounds.getWidth();
+
+                // add a small gap for visual separation between the value and the per-investigator icon
+                // make this gap proportional to the per-investigator icon size so it scales if the overall
+                // font sizes are changed
+//                totalWidth = totalWidth + perInvestigatorBounds.getWidth() * 0.2f;
+            }
+
+            // calculate X and Y coordinates to draw that are centred in the draw region
+            // the Y should be ~ the draw region as the font heights are fitted to it earlier in the process
+            float y = drawRegion.y + (float) (drawRegion.height - valueTextBounds.getHeight()) / 2f;
+            float x = (float) (drawRegion.x + (drawRegion.width - totalWidth) / 2f);
+
+            drawStroke(statisticValueFont, statisticValueGlyphVector, x, y);
+
+            if (statistic.isPerInvestigator()) {
+                x = x + (float) valueTextBounds.getWidth();
+
+                // adjust the y position of the per investigator by a factor of the text height to position it
+                // approximately in the vertical-middle of the text
+                y = y + (float)valueTextBounds.getHeight() * 0.5f;
+
+                drawStroke(perInvestigatorFont, perInvestigatorGlyphVector, x, y);
+            }
+        }
+
+        private void drawStroke(Font font, GlyphVector glyphVector, float x, float y) {
+            Graphics2D g = paintContext.getGraphics();
+
+            Shape shape = glyphVector.getOutline(x, y + g.getFontMetrics(font).getAscent());
+            Object oldAA = g.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            Stroke oldStroke = g.getStroke();
+
+            // TODO: configurable stroke width?
+            g.setStroke(new BasicStroke(1.0f * (float) paintContext.getRenderingDpi() / 72f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g.setPaint(outlineColour);
+            g.draw(shape);
+            g.setStroke(oldStroke);
+            g.setPaint(textColour);
+            g.fill(shape);
+
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, oldAA);
+        }
     }
 }
