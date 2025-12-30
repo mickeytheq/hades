@@ -399,42 +399,4 @@ public class LocationFieldsView {
         PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, LIGHT_TEXT_COLOUR);
         PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), LIGHT_TEXT_COLOUR, Color.BLACK);
     }
-
-    public static PageShape createBodyPageShape(Rectangle drawRegion) {
-        Function<Point2D, Point2D> mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapper(drawRegion);
-
-        Path2D path2D = new Path2D.Double();
-
-        Point2D movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.074, 0.0));
-        path2D.moveTo(movePoint.getX(), movePoint.getY());
-
-        Point2D bezierFirstPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.037, 0.153));
-        Point2D bezierSecondPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.107, 0.139));
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.0, 0.174));
-        path2D.curveTo(bezierFirstPoint.getX(), bezierFirstPoint.getY(), bezierSecondPoint.getX(), bezierSecondPoint.getY(), movePoint.getX(), movePoint.getY());
-
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.0, 1.0));
-        path2D.lineTo(movePoint.getX(), movePoint.getY());
-
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(1.0, 1.0));
-        path2D.lineTo(movePoint.getX(), movePoint.getY());
-
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(1.0, 0.319));
-        path2D.lineTo(movePoint.getX(), movePoint.getY());
-
-        bezierFirstPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.991, 0.278));
-        bezierSecondPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.962, 0.167));
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.951, 0.125));
-        path2D.curveTo(bezierFirstPoint.getX(), bezierFirstPoint.getY(), bezierSecondPoint.getX(), bezierSecondPoint.getY(), movePoint.getX(), movePoint.getY());
-
-        bezierFirstPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.936, 0.132));
-        bezierSecondPoint = mapIntoRegionFunction.apply(new Point2D.Double(0.970, 0.174));
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.926, 0.0));
-        path2D.curveTo(bezierFirstPoint.getX(), bezierFirstPoint.getY(), bezierSecondPoint.getX(), bezierSecondPoint.getY(), movePoint.getX(), movePoint.getY());
-
-        movePoint = mapIntoRegionFunction.apply(new Point2D.Double(0.074, 0.0));
-        path2D.lineTo(movePoint.getX(), movePoint.getY());
-
-        return new PageShape.GeometricShape(path2D, drawRegion);
-    }
 }

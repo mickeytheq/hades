@@ -160,4 +160,49 @@ public class MarkupUtils {
 
         return new PageShape.GeometricShape(path, drawRegion);
     }
+
+    public static PageShapeBuilder createPageShapeBuilder(Rectangle drawRegion) {
+        return new PageShapeBuilder(drawRegion);
+    }
+
+    // convenience builder for creating PageShapes for a draw region
+    // all input points are in 'ratio' coordinates, e.g. in the range 0 to 1 where 0 is the left/top and 1 is the right/bottom
+    // inputs points are converted to draw region coordinates when move/line/curve etc operations are called
+    public static class PageShapeBuilder {
+        private final Rectangle drawRegion;
+        private final Function<Point2D, Point2D> mapToDrawRegionCoordinatesFunction;
+
+        private final Path2D path;
+
+        public PageShapeBuilder(Rectangle drawRegion) {
+            this.drawRegion = drawRegion;
+
+            mapToDrawRegionCoordinatesFunction = createRatioIntoDrawRegionMapper(drawRegion);
+
+            path = new Path2D.Double();
+        }
+
+        public void moveTo(Point2D point2D) {
+            Point2D mappedPoint = mapToDrawRegionCoordinatesFunction.apply(point2D);
+            path.moveTo(mappedPoint.getX(), mappedPoint.getY());
+        }
+
+        public void lineTo(Point2D point2D) {
+            Point2D mappedPoint = mapToDrawRegionCoordinatesFunction.apply(point2D);
+            path.lineTo(mappedPoint.getX(), mappedPoint.getY());
+        }
+
+        public void curveTo(Point2D firstBezierPoint, Point2D secondBezierPoint, Point2D point2D) {
+            Point2D mappedFirstBezier = mapToDrawRegionCoordinatesFunction.apply(firstBezierPoint);
+            Point2D mappedSecondBezier = mapToDrawRegionCoordinatesFunction.apply(secondBezierPoint);
+            Point2D mappedPoint = mapToDrawRegionCoordinatesFunction.apply(point2D);
+            path.curveTo(mappedFirstBezier.getX(), mappedFirstBezier.getY(),
+                    mappedSecondBezier.getX(), mappedSecondBezier.getY(),
+                    mappedPoint.getX(), mappedPoint.getY());
+        }
+
+        public PageShape build() {
+            return new PageShape.GeometricShape(path, drawRegion);
+        }
+    }
 }

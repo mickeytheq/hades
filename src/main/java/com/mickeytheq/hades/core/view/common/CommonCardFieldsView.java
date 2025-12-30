@@ -22,7 +22,9 @@ public class CommonCardFieldsView {
     private JTextField titleEditor;
     private JTextField subtitleEditor;
     private JToggleButton uniqueEditor;
+
     private JTextField copyrightEditor;
+
     private JTextField traitsEditor;
     private JSpinner afterTraitsSpaceEditor;
     private JTextArea keywordsEditor;

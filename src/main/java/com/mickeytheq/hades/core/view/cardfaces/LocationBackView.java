@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.LocationBack;
@@ -10,6 +11,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import com.mickeytheq.hades.core.view.utils.MarkupUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +19,10 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
 public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView {
@@ -105,7 +110,15 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(130, 8, 484, 58);
     private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(190, 78, 382, 42);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 600, 672, 286);
-    private static final PageShape BODY_PAGE_SHAPE = LocationFieldsView.createBodyPageShape(BODY_DRAW_REGION);
+    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+            Lists.newArrayList(
+                    new Point2D.Double(0.111, 0.000),
+                    new Point2D.Double(0.0, 0.204),
+                    new Point2D.Double(0.0, 1.0),
+                    new Point2D.Double(1.0, 1.0),
+                    new Point2D.Double(1.0, 0.204),
+                    new Point2D.Double(0.889, 0.0)
+            ));
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 490, 56, 56);
     private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
 

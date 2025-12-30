@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import com.mickeytheq.hades.core.view.utils.MarkupUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,10 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
 public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView {
@@ -107,7 +111,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(130, 8, 484, 58);
     private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(190, 78, 382, 42);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 600, 672, 286);
-    private static final PageShape BODY_PAGE_SHAPE = LocationFieldsView.createBodyPageShape(BODY_DRAW_REGION);
+    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 490, 56, 56);
     private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
 
@@ -134,6 +138,21 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         locationFieldsView.paintLocationIcons(paintContext);
         locationFieldsView.paintShroudAndClues(paintContext);
+    }
+
+    private static PageShape createBodyPageShape(Rectangle drawRegion) {
+        MarkupUtils.PageShapeBuilder pageShapeBuilder = MarkupUtils.createPageShapeBuilder(drawRegion);
+
+        pageShapeBuilder.moveTo(new Point2D.Double(0.074, 0.0));
+        pageShapeBuilder.curveTo(new Point2D.Double(0.037, 0.153), new Point2D.Double(0.107, 0.139), new Point2D.Double(0.0, 0.174));
+        pageShapeBuilder.lineTo(new Point2D.Double(0.0, 1.0));
+        pageShapeBuilder.lineTo(new Point2D.Double(1.0, 1.0));
+        pageShapeBuilder.lineTo(new Point2D.Double(1.0, 0.319));
+        pageShapeBuilder.curveTo(new Point2D.Double(0.991, 0.278), new Point2D.Double(0.962, 0.167), new Point2D.Double(0.951, 0.125));
+        pageShapeBuilder.curveTo(new Point2D.Double(0.936, 0.132), new Point2D.Double(0.970, 0.174), new Point2D.Double(0.926, 0.0));
+        pageShapeBuilder.lineTo(new Point2D.Double(0.074, 0.0));
+
+        return pageShapeBuilder.build();
     }
 }
 
