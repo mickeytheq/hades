@@ -314,7 +314,7 @@ public class QuickCardView {
 
         @Override
         public String save(BufferedImage image, String existingIdentifier) {
-            throw new UnsupportedOperationException("Save not supported");
+            return "<random UUID>";
         }
     }
 

@@ -24,7 +24,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     private JComboBox<InvestigatorClass> investigatorClassEditor;
     private JTextField healthEditor;
@@ -43,7 +43,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
     private void createTitleAndStatsEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         investigatorClassEditor = EditorUtils.createEnumComboBox(InvestigatorClass.class);
         healthEditor = EditorUtils.createTextField(20);
@@ -157,7 +157,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
 
         mainPanel.add(generalPanel, "wrap, pushx, growx");
-        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        mainPanel.add(portraitView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
@@ -195,7 +195,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         collectionView.paintCollectionNumber(paintContext);
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
 
         paintSkills(paintContext);
 
@@ -226,7 +226,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     // that creates a faded/integrated look of the source image on to the investigator template to make it look
     // more like official cards
     private void paintArtPortrait(PaintContext paintContext) {
-        PortraitModel portraitModel = getModel().getPortraitWithArtistModel().getPortraitModel();
+        PortraitModel portraitModel = getModel().getPortraitModel();
 
         BufferedImage portraitImage = portraitModel.getImage().get();
 

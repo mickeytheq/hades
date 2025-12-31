@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.model.common;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.serialise.NullDiscriminator;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -12,6 +13,8 @@ public class PortraitModel implements NullDiscriminator {
     private double panY = 0;
     private double scale = 1.0;
     private double rotation = 0;
+    private String artist;
+
 
     private ImageProxy image = ImageProxy.createEmpty();
 
@@ -60,10 +63,22 @@ public class PortraitModel implements NullDiscriminator {
         this.image = image;
     }
 
+    @Property("Artist")
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
     @Override
     public boolean isNull() {
         // if the image is set then this is not null
         if (!getImage().isEmpty())
+            return false;
+
+        if (StringUtils.isEmpty(artist))
             return false;
 
         // otherwise any pan/scale settings are irrelevant and we can skip the entire entity

@@ -13,12 +13,12 @@ public class Event implements CardFaceModel {
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PlayerCardFieldsModel playerCardFieldsModel;
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
 
     public Event() {
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Event implements CardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 }

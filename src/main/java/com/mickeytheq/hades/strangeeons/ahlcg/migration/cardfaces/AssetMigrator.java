@@ -15,7 +15,7 @@ public class AssetMigrator {
         MigrationUtils.populatePlayerCardFields(context, asset.getPlayerCardFieldsModel());
         MigrationUtils.populateCollection(context, asset.getCollectionModel());
         MigrationUtils.populateEncounterSet(context, asset.getEncounterSetModel());
-        MigrationUtils.populateArt(context, asset.getPortraitWithArtistModel());
+        MigrationUtils.populateArt(context, asset.getPortraitModel());
 
         asset.setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));
         asset.setSanity(MigrationUtils.parseStatistic(settingsAccessor, "Sanity", null));

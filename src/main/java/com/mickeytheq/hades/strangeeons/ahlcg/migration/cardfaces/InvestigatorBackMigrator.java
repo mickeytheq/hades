@@ -15,7 +15,7 @@ public class InvestigatorBackMigrator {
 
         InvestigatorBack investigatorBack = new InvestigatorBack();
 
-        MigrationUtils.populateArt(context, investigatorBack.getPortraitWithArtistModel());
+        MigrationUtils.populateArt(context, investigatorBack.getPortraitModel());
 
         investigatorBack.setSection1(createSection(settingsAccessor, 1));
         investigatorBack.setSection2(createSection(settingsAccessor, 2));

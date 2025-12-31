@@ -27,7 +27,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     // locations to draw portraits
     private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
@@ -49,7 +49,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         commonCardFieldsView.createEditors(editorContext);
         collectionView.createEditors(editorContext);
         encounterSetView.createEditors(editorContext);
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         weaknessTypeEditor = EditorUtils.createEnumComboBox(WeaknessType.class);
 
@@ -90,7 +90,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
                 generalPanel,
-                portraitWithArtistView.createStandardArtPanel(editorContext)
+                portraitView.createStandardArtPanel(editorContext)
         );
 
         // add the panel to the main tab control
@@ -112,7 +112,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -128,7 +128,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         else
             paintWeaknessContent(paintContext);
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {

@@ -13,7 +13,7 @@ public class Investigator implements CardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
     private InvestigatorClass investigatorClass;
     private String health;
     private String sanity;
@@ -24,7 +24,7 @@ public class Investigator implements CardFaceModel {
 
     public Investigator() {
         commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
 
         investigatorClass = InvestigatorClass.Guardian;
         commonCardFieldsModel.setUnique(true);
@@ -58,8 +58,8 @@ public class Investigator implements CardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 
     @Property("InvestigatorClass")

@@ -4,7 +4,6 @@ import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Location;
-import com.mickeytheq.hades.core.model.common.LocationFieldsModel;
 import com.mickeytheq.hades.core.view.BaseCardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
@@ -19,17 +18,15 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
 public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView, HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 84, 750, 550);
@@ -39,7 +36,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
 
@@ -82,7 +79,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
 
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         locationFieldsView.createEditors(editorContext);
 
@@ -101,7 +98,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
                 generalPanel,
-                portraitWithArtistView.createStandardArtPanel(editorContext)
+                portraitView.createStandardArtPanel(editorContext)
         );
 
         // add the panel to the main tab control
@@ -132,7 +129,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
@@ -145,7 +142,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         encounterSetView.paintEncounterNumbers(paintContext);
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
 
         collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         collectionView.paintCollectionNumber(paintContext);

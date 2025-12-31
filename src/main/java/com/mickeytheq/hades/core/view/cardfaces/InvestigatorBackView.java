@@ -9,7 +9,7 @@ import com.mickeytheq.hades.core.view.BaseCardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.View;
-import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
+import com.mickeytheq.hades.core.view.common.PortraitView;
 import com.mickeytheq.hades.core.view.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 @View(interfaceLanguageKey = InterfaceConstants.INVESTIGATORBACK)
 public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(2, 0, 376, 412);
 
@@ -34,7 +34,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
             throw new RuntimeException("Investigator Back card face is only supported when the front is an investigator");
         }
 
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
 
     @Override
     public void createEditors(EditorContext editorContext) {
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
 
@@ -74,7 +74,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(generalPanel, Language.string(InterfaceConstants.STORY), storyEditor);
 
         editorContext.addDisplayComponent("General", generalPanel); // TODO: i18n
-        editorContext.addDisplayComponent("Portrait", portraitWithArtistView.createStandardArtPanel(editorContext)); // TODO: i18n
+        editorContext.addDisplayComponent("Portrait", portraitView.createStandardArtPanel(editorContext)); // TODO: i18n
     }
 
     private void createSection(EditorContext editorContext, InvestigatorBack.InvestigatorBackSection section, int sectionIndex, JPanel panel) {
@@ -102,7 +102,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -116,7 +116,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
 
         PaintUtils.paintBodyText(paintContext, markupText, BODY_DRAW_REGION, BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorClass()));
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
     }
 
     private String composeSectionString() {

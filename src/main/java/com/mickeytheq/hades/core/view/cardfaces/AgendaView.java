@@ -25,7 +25,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     private ActAgendaCommonFieldsView agendaCommonFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     private JTextField agendaNumberEditor;
     private JTextField deckIdEditor;
@@ -41,7 +41,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         agendaCommonFieldsView = new ActAgendaCommonFieldsView(getModel().getAgendaCommonFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         agendaCommonFieldsView.createEditors(editorContext);
         collectionView.createEditors(editorContext);
         encounterSetView.createEditors(editorContext);
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         agendaNumberEditor = EditorUtils.createTextField(20);
         deckIdEditor = EditorUtils.createTextField(20);
@@ -100,7 +100,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
         JPanel rulesPanel = agendaCommonFieldsView.createPanel(false);
 
-        JPanel artPanel = portraitWithArtistView.createStandardArtPanel(editorContext);
+        JPanel artPanel = portraitView.createStandardArtPanel(editorContext);
 
         JPanel copyrightPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.COPYRIGHT));
         commonCardFieldsView.addCopyrightEditorToPanel(copyrightPanel);
@@ -131,7 +131,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -143,7 +143,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         encounterSetView.paintEncounterNumbers(paintContext);
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
 
         collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         collectionView.paintCollectionNumber(paintContext);

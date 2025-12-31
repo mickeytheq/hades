@@ -5,12 +5,19 @@ import ca.cgjennings.apps.arkham.component.AbstractPortrait;
 import ca.cgjennings.apps.arkham.component.Portrait;
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.graphics.filters.InversionFilter;
+import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import org.apache.commons.lang3.StringUtils;
+import resources.Language;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -34,6 +41,8 @@ public class PortraitView {
     private final Dimension portraitDrawDimension;
 
     private final URL defaultImageResource;
+
+    private JTextField artistEditor;
 
     // the local transient image - ideally we would always rely on the model's image but when using a default
     // image we don't want to put that in the model so a local copy is maintained here
@@ -99,6 +108,43 @@ public class PortraitView {
     public Dimension getPortraitDrawDimension() {
         return portraitDrawDimension;
     }
+
+    public void createEditors(EditorContext editorContext) {
+        artistEditor = EditorUtils.createTextField(30);
+        EditorUtils.bindTextComponent(artistEditor, editorContext.wrapConsumerWithMarkedChanged(portraitModel::setArtist));
+        artistEditor.setText(portraitModel.getArtist());
+    }
+
+    public JPanel createStandardArtPanel(EditorContext editorContext) {
+        // have a zero inset as to avoid a double-spaced margin as this panel is usually embedded within other panels
+        JPanel artistWithPortraitPanel = MigLayoutUtils.createOrganiserPanel();
+
+        PortraitPanel portraitPanel = createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
+
+        artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
+
+        JPanel artistPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ARTIST));
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
+
+        artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
+
+        return artistWithPortraitPanel;
+    }
+
+    private static final Rectangle ARTIST_DRAW_REGION = new Rectangle(28, 1024, 242, 20);
+
+    public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
+        paint(paintContext, drawRegion, false);
+    }
+
+    public void paintArtist(PaintContext paintContext) {
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
+        markupRenderer.setMarkupText(portraitModel.getArtist());
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), ARTIST_DRAW_REGION);
+    }
+
 
     // creates a portrait panel hosting this portrait content and passes changed events back through the EditorContext
     public PortraitPanel createPortraitPanel(EditorContext editorContext, String panelTitle) {

@@ -15,7 +15,7 @@ public class SkillMigrator {
         MigrationUtils.populatePlayerCardFields(context, skill.getPlayerCardFieldsModel());
         MigrationUtils.populateCollection(context, skill.getCollectionModel());
         MigrationUtils.populateEncounterSet(context, skill.getEncounterSetModel());
-        MigrationUtils.populateArt(context, skill.getPortraitWithArtistModel());
+        MigrationUtils.populateArt(context, skill.getPortraitModel());
 
         return skill;
     }

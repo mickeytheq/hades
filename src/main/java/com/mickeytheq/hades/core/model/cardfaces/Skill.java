@@ -13,12 +13,12 @@ public class Skill extends BaseCardFaceModel {
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PlayerCardFieldsModel playerCardFieldsModel;
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
 
     public Skill() {
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Skill extends BaseCardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 }

@@ -15,7 +15,7 @@ public class EventMigrator {
         MigrationUtils.populatePlayerCardFields(context, event.getPlayerCardFieldsModel());
         MigrationUtils.populateCollection(context, event.getCollectionModel());
         MigrationUtils.populateEncounterSet(context, event.getEncounterSetModel());
-        MigrationUtils.populateArt(context, event.getPortraitWithArtistModel());
+        MigrationUtils.populateArt(context, event.getPortraitModel());
 
         return event;
     }

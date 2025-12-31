@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
+import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -56,7 +56,7 @@ public class InvestigatorBack implements CardFaceModel {
     private InvestigatorBackSection section6 = new InvestigatorBackSection();
     private InvestigatorBackSection section7 = new InvestigatorBackSection();
     private InvestigatorBackSection section8 = new InvestigatorBackSection();
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
@@ -64,7 +64,7 @@ public class InvestigatorBack implements CardFaceModel {
     }
 
     public InvestigatorBack() {
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
     }
 
     @Property("Section1")
@@ -155,7 +155,7 @@ public class InvestigatorBack implements CardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 }

@@ -17,7 +17,7 @@ public class Agenda extends BaseCardFaceModel {
     private final ActAgendaCommonFieldsModel agendaCommonFieldsModel = new ActAgendaCommonFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitWithArtistModel portraitWithArtistModel = new PortraitWithArtistModel();
+    private final PortraitModel portraitModel = new PortraitModel();
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
@@ -74,7 +74,7 @@ public class Agenda extends BaseCardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 }

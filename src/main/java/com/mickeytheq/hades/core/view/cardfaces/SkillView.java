@@ -32,7 +32,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
     private PlayerCardFieldsView playerCardFieldsView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(28, 80, 696, 596);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 517, 56, 56);
@@ -44,7 +44,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), false);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
 
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         createTitleAndStatisticsEditors(editorContext);
 
@@ -124,7 +124,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
                 generalPanel,
-                portraitWithArtistView.createStandardArtPanel(editorContext)
+                portraitView.createStandardArtPanel(editorContext)
         );
 
         // add the panel to the main tab control
@@ -144,7 +144,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -161,7 +161,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         collectionView.paintCollectionNumber(paintContext);
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
 
         paintEncounterContent(paintContext);
 

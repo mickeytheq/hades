@@ -14,13 +14,13 @@ public class Treachery extends BaseCardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
 
     public Treachery() {
         weaknessType = WeaknessType.None;
 
         commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class Treachery extends BaseCardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 }

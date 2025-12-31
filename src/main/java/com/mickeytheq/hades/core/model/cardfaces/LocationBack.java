@@ -12,12 +12,12 @@ public class LocationBack extends BaseCardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final PortraitModel portraitModel;
     private final LocationFieldsModel locationFieldsModel;
 
     public LocationBack() {
         commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitWithArtistModel = new PortraitWithArtistModel();
+        portraitModel = new PortraitModel();
         locationFieldsModel = new LocationFieldsModel();
     }
 
@@ -46,8 +46,8 @@ public class LocationBack extends BaseCardFaceModel {
     }
 
     @Property("ArtPortrait")
-    public PortraitWithArtistModel getPortraitWithArtistModel() {
-        return portraitWithArtistModel;
+    public PortraitModel getPortraitModel() {
+        return portraitModel;
     }
 
     @Property("Location")

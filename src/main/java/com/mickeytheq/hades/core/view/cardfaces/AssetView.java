@@ -30,7 +30,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
     private PlayerCardFieldsView playerCardFieldsView;
-    private PortraitWithArtistView portraitWithArtistView;
+    private PortraitView portraitView;
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
@@ -42,7 +42,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
-        portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
 
-        portraitWithArtistView.createEditors(editorContext);
+        portraitView.createEditors(editorContext);
 
         createTitleAndStatisticsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
@@ -171,7 +171,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
                 generalPanel,
-                portraitWithArtistView.createStandardArtPanel(editorContext)
+                portraitView.createStandardArtPanel(editorContext)
         );
 
         // add the panel to the main tab control
@@ -189,7 +189,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitWithArtistView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
@@ -208,7 +208,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
             encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
-        portraitWithArtistView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext);
 
         collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
         collectionView.paintCollectionNumber(paintContext);
