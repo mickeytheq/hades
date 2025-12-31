@@ -16,17 +16,21 @@ import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.generator.CardFaceGenerator;
 import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.serialise.JsonCardSerialiser;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.ui.DialogWithButtons;
-import org.checkerframework.checker.units.qual.N;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 
 public class QuickCardView {
     public static void main(String[] args) {
@@ -59,7 +63,7 @@ public class QuickCardView {
 //        skill();
 //        treacheryTreachery();
 //            location();
-            agenda();
+            random();
         });
     }
 
@@ -192,48 +196,102 @@ public class QuickCardView {
         displayEditor(card);
     }
 
+    private void random() {
+        new Editor(new RandomCardIterator()).create();
+    }
+
     private void displayEditor(Card card) {
         CardView cardView = CardFaces.createCardView(card);
-        new Editor(cardView).display();
+        List<CardView> cardViews = Collections.singletonList(cardView);
+        new Editor(cardViews.listIterator()).create();
+    }
+
+    private class RandomCardIterator implements ListIterator<CardView> {
+        private final List<CardView> accumulated = new ArrayList<>();
+        private final CardFaceGenerator generator = new CardFaceGenerator(projectContext);
+
+        private int currentIndex = -1;
+
+        @Override
+        public boolean hasNext() {
+            return true;
+        }
+
+        @Override
+        public CardView next() {
+            currentIndex++;
+
+            if (currentIndex < accumulated.size()) {
+                return accumulated.get(currentIndex);
+            }
+
+            Asset asset = generator.createAsset();
+
+            Card card = CardFaces.createCardModel(asset, null);
+            CardView cardView = CardFaces.createCardView(card);
+            accumulated.add(cardView);
+
+            return cardView;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return currentIndex >= 0;
+        }
+
+        @Override
+        public CardView previous() {
+            CardView cardView = accumulated.get(currentIndex);
+            currentIndex--;
+            return cardView;
+        }
+
+        @Override
+        public int nextIndex() {
+            return currentIndex + 1;
+        }
+
+        @Override
+        public int previousIndex() {
+            return currentIndex;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void set(CardView cardView) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void add(CardView cardView) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private class Editor {
-        private final CardView cardView;
+        private final AlwaysStepIterator<CardView> cardViewIterator;
 
-        public Editor(CardView cardView) {
-            this.cardView = cardView;
+        private CardView currentCardView;
+
+        private JTabbedPane editTabbedPane;
+        private JTabbedPane drawTabbedPane;
+
+        public Editor(ListIterator<CardView> cardViewIterator) {
+            this.cardViewIterator = new AlwaysStepIterator<>(cardViewIterator);
+
+            currentCardView = cardViewIterator.next();
         }
 
-        public void display() {
+        public void create() {
             // draw/renderer
-            JTabbedPane drawTabbedPane = new JTabbedPane();
-            Renderer frontRenderer = new Renderer(cardView, cardView.getFrontFaceView());
-            drawTabbedPane.addTab("Front", frontRenderer);
-
-            Renderer backRenderer = null;
-            if (cardView.hasBack()) {
-                backRenderer = new Renderer(cardView, cardView.getBackFaceView());
-                drawTabbedPane.addTab("Back", backRenderer);
-            }
+            drawTabbedPane = new JTabbedPane();
 
             // editors
-            JTabbedPane editTabbedPane = new JTabbedPane();
-
-            final Renderer backRendererFinal = backRenderer;
-
-            EditorContext editorContext = new EditorContextImpl(editTabbedPane, () -> {
-                frontRenderer.repaint();
-
-                if (backRendererFinal != null)
-                    backRendererFinal.repaint();
-            });
-
-            cardView.getFrontFaceView().createEditors(editorContext);
-            if (cardView.hasBack()) {
-                cardView.getBackFaceView().createEditors(editorContext);
-            }
-
-            cardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
+            editTabbedPane = new JTabbedPane();
 
             // pane for both
             JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editTabbedPane, drawTabbedPane);
@@ -242,15 +300,40 @@ public class QuickCardView {
 
             // buttons
             JPanel buttonPanel = MigLayoutUtils.createDialogPanel();
+
             JButton showJsonButton = new JButton("Show JSON");
             showJsonButton.addActionListener(e -> {
                 StringWriter writer = new StringWriter();
-                CardIO.writeCard(writer, cardView.getCard(), projectContext);
+                CardIO.writeCard(writer, currentCardView.getCard(), projectContext);
 
                 showJson(frame, writer.toString());
             });
 
+            JButton nextButton = new JButton("Next");
+            nextButton.addActionListener(e -> {
+                if (!cardViewIterator.hasNext())
+                    return;
+
+                currentCardView = cardViewIterator.next();
+
+                populateCard();
+            });
+
+            JButton previousButton = new JButton("Previous");
+            previousButton.addActionListener(e -> {
+                if (!cardViewIterator.hasPrevious())
+                    return;
+
+                currentCardView = cardViewIterator.previous();
+
+                populateCard();
+            });
+
             buttonPanel.add(showJsonButton);
+            buttonPanel.add(previousButton);
+            buttonPanel.add(nextButton);
+
+            populateCard();
 
             JPanel mainPanel = MigLayoutUtils.createDialogPanel();
             mainPanel.add(splitPane, "wrap, grow, push");
@@ -262,6 +345,39 @@ public class QuickCardView {
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
+        }
+
+        private void populateCard() {
+            // clear the panes of content
+            drawTabbedPane.removeAll();
+            editTabbedPane.removeAll();
+
+            // create renderers
+            Renderer frontRenderer = new Renderer(currentCardView, currentCardView.getFrontFaceView());
+            drawTabbedPane.addTab("Front", frontRenderer);
+
+            Renderer backRenderer = null;
+            if (currentCardView.hasBack()) {
+                backRenderer = new Renderer(currentCardView, currentCardView.getBackFaceView());
+                drawTabbedPane.addTab("Back", backRenderer);
+            }
+
+            // create editors
+            final Renderer backRendererFinal = backRenderer;
+
+            EditorContext editorContext = new EditorContextImpl(editTabbedPane, () -> {
+                frontRenderer.repaint();
+
+                if (backRendererFinal != null)
+                    backRendererFinal.repaint();
+            });
+
+            currentCardView.getFrontFaceView().createEditors(editorContext);
+            if (currentCardView.hasBack()) {
+                currentCardView.getBackFaceView().createEditors(editorContext);
+            }
+
+            currentCardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
         }
 
         private void showJson(JFrame frame, String jsonString) {
@@ -293,6 +409,8 @@ public class QuickCardView {
 
         @Override
         protected void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+
             Graphics2D g = (Graphics2D)graphics;
 
             BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -375,5 +493,53 @@ public class QuickCardView {
         public ProjectContext getProjectContext() {
             return projectContext;
         }
+    }
+
+    // iterator that always steps to a next/previous element
+    // for example doing next(), next(), previous() will return item 1, item 2, item 1 instead of the ListIterator behaviour
+    // of item 1, item 2, item 2
+    public static class AlwaysStepIterator<T> {
+
+        private final ListIterator<T> listIterator;
+
+        private boolean nextWasCalled = false;
+        private boolean previousWasCalled = false;
+
+        public AlwaysStepIterator(ListIterator<T> listIterator) {
+            this.listIterator = listIterator;
+        }
+
+        public boolean hasNext() {
+            if (previousWasCalled)
+                return true;
+
+            return listIterator.hasNext();
+        }
+
+        public boolean hasPrevious() {
+            if (nextWasCalled)
+                return true;
+
+            return listIterator.hasPrevious();
+        }
+
+        public T next() {
+            nextWasCalled = true;
+            if (previousWasCalled) {
+                previousWasCalled = false;
+                listIterator.next();
+            }
+            return listIterator.next();
+        }
+
+        public T previous() {
+            if (nextWasCalled) {
+                listIterator.previous();
+                nextWasCalled = false;
+            }
+            previousWasCalled = true;
+            return listIterator.previous();
+        }
+
     }
 }

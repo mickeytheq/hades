@@ -136,6 +136,7 @@ public class PlayerCardFieldsModel {
         this.skillIcon6 = skillIcon6;
     }
 
+    // for convenience accessing as a list
     public List<PlayerCardClass> getPlayerCardClasses() {
         List<PlayerCardClass> cardClasses = Stream.of(
                         getPlayerCardClass1(),
@@ -148,6 +149,28 @@ public class PlayerCardFieldsModel {
         return cardClasses;
     }
 
+    // primarily for testing
+    public void setPlayerCardClasses(List<PlayerCardClass> playerCardClasses) {
+        if (playerCardClasses.size() > 3)
+            throw new RuntimeException("Max of 3 player card classes");
+        
+        if (playerCardClasses.isEmpty())
+            return;
+        
+        setPlayerCardClass1(playerCardClasses.get(0));
+
+        if (playerCardClasses.size() < 2)
+            return;
+
+        setPlayerCardClass2(playerCardClasses.get(1));
+
+        if (playerCardClasses.size() < 3)
+            return;
+
+        setPlayerCardClass3(playerCardClasses.get(2));
+    }
+
+    // for convenience accessing as a list
     public List<PlayerCardSkillIcon> getSkillIcons() {
         List<PlayerCardSkillIcon> skillIcons = Stream.of(
                         getSkillIcon1(),
@@ -161,5 +184,41 @@ public class PlayerCardFieldsModel {
                 .collect(Collectors.toList());
 
         return skillIcons;
+    }
+
+    // primarily for testing
+    public void setSkillIcons(List<PlayerCardSkillIcon> skillIcons) {
+        if (skillIcons.size() > 6)
+            throw new RuntimeException("Max of 6 skill icons");
+
+        if (skillIcons.isEmpty())
+            return;
+
+        setSkillIcon1(skillIcons.get(0));
+
+        if (skillIcons.size() < 2)
+            return;
+
+        setSkillIcon2(skillIcons.get(1));
+
+        if (skillIcons.size() < 3)
+            return;
+
+        setSkillIcon3(skillIcons.get(2));
+
+        if (skillIcons.size() < 4)
+            return;
+
+        setSkillIcon3(skillIcons.get(3));
+
+        if (skillIcons.size() < 5)
+            return;
+
+        setSkillIcon3(skillIcons.get(4));
+
+        if (skillIcons.size() < 6)
+            return;
+
+        setSkillIcon3(skillIcons.get(5));
     }
 }
