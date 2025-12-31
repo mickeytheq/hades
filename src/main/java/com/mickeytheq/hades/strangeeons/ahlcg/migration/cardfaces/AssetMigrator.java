@@ -1,8 +1,6 @@
 package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 
-import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.Asset;
-import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
@@ -15,7 +13,8 @@ public class AssetMigrator {
 
         MigrationUtils.populateCommonCardFields(context, asset.getCommonCardFieldsModel());
         MigrationUtils.populatePlayerCardFields(context, asset.getPlayerCardFieldsModel());
-        MigrationUtils.populatingNumbering(context, asset.getNumberingModel());
+        MigrationUtils.populateCollection(context, asset.getCollectionModel());
+        MigrationUtils.populateEncounterSet(context, asset.getEncounterSetModel());
         MigrationUtils.populateArt(context, asset.getPortraitWithArtistModel());
 
         asset.setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));

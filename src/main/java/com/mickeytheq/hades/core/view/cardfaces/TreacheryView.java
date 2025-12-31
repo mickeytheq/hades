@@ -5,10 +5,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.common.CommonCardFieldsView;
-import com.mickeytheq.hades.core.view.common.HasNumberingView;
-import com.mickeytheq.hades.core.view.common.NumberingView;
-import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
+import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.codegenerated.GameConstants;
@@ -21,14 +18,15 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
-public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNumberingView {
+public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
     private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
     private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PortraitWithArtistView portraitWithArtistView;
 
     // locations to draw portraits
@@ -49,13 +47,19 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
-    public NumberingView getNumberingView() {
-        return numberingView;
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -66,7 +70,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
     @Override
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
-        numberingView.createEditors(editorContext);
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
         portraitWithArtistView.createEditors(editorContext);
 
         weaknessTypeEditor = EditorUtils.createEnumComboBox(WeaknessType.class);
@@ -90,8 +95,9 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
         mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
 
         // add the panel to the main tab control
-        editorContext.addDisplayComponent(getCardFaceSide().name(), mainPanel);
-        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext)); // TODO: i18n
+        editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
+
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     public BufferedImage getTemplateImage() {
@@ -127,10 +133,10 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
-        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
-        numberingView.paintEncounterNumbers(paintContext);
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterNumbers(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
     }
@@ -148,8 +154,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
                 ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
             }
             else {
-                numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
-                numberingView.paintEncounterNumbers(paintContext);
+                encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+                encounterSetView.paintEncounterNumbers(paintContext);
             }
         }
 
@@ -167,7 +173,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasNum
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_WEAKNESS_DRAW_REGION);
 
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
     }
 }

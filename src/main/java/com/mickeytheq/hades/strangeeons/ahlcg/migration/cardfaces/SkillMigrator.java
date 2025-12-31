@@ -13,7 +13,8 @@ public class SkillMigrator {
 
         MigrationUtils.populateCommonCardFields(context, skill.getCommonCardFieldsModel());
         MigrationUtils.populatePlayerCardFields(context, skill.getPlayerCardFieldsModel());
-        MigrationUtils.populatingNumbering(context, skill.getNumberingModel());
+        MigrationUtils.populateCollection(context, skill.getCollectionModel());
+        MigrationUtils.populateEncounterSet(context, skill.getEncounterSetModel());
         MigrationUtils.populateArt(context, skill.getPortraitWithArtistModel());
 
         return skill;

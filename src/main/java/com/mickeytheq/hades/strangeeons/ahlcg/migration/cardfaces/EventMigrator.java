@@ -13,7 +13,8 @@ public class EventMigrator {
 
         MigrationUtils.populateCommonCardFields(context, event.getCommonCardFieldsModel());
         MigrationUtils.populatePlayerCardFields(context, event.getPlayerCardFieldsModel());
-        MigrationUtils.populatingNumbering(context, event.getNumberingModel());
+        MigrationUtils.populateCollection(context, event.getCollectionModel());
+        MigrationUtils.populateEncounterSet(context, event.getEncounterSetModel());
         MigrationUtils.populateArt(context, event.getPortraitWithArtistModel());
 
         return event;

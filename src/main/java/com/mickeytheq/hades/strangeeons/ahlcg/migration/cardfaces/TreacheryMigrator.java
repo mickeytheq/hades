@@ -18,7 +18,8 @@ public class TreacheryMigrator {
         Treachery treachery = new Treachery();
 
         MigrationUtils.populateCommonCardFields(context, treachery.getCommonCardFieldsModel());
-        MigrationUtils.populatingNumbering(context, treachery.getNumberingModel());
+        MigrationUtils.populateCollection(context, treachery.getCollectionModel());
+        MigrationUtils.populateEncounterSet(context, treachery.getEncounterSetModel());
         MigrationUtils.populateArt(context, treachery.getPortraitWithArtistModel());
 
         String subType = settingsAccessor.getString(SettingsFieldNames.SUBTYPE);

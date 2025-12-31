@@ -16,7 +16,8 @@ public class InvestigatorMigrator {
         Investigator investigator = new Investigator();
 
         MigrationUtils.populateCommonCardFields(context, investigator.getCommonCardFieldsModel());
-        MigrationUtils.populatingNumbering(context, investigator.getNumberingModel());
+        MigrationUtils.populateCollection(context, investigator.getCollectionModel());
+        MigrationUtils.populateEncounterSet(context, investigator.getEncounterSetModel());
         MigrationUtils.populateArt(context, investigator.getPortraitWithArtistModel());
 
         investigator.setHealth(settingsAccessor.getString(SettingsFieldNames.HEALTH));

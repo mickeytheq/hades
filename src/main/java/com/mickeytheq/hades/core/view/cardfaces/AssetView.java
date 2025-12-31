@@ -20,14 +20,15 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ASSET)
-public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingView {
+public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionView, HasEncounterSetView {
     private JComboBox<Asset.AssetSlot> assetSlot1Editor;
     private JComboBox<Asset.AssetSlot> assetSlot2Editor;
     private StatisticComponent healthEditor;
     private StatisticComponent sanityEditor;
 
     private CommonCardFieldsView commonCardFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitWithArtistView portraitWithArtistView;
 
@@ -38,14 +39,20 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingVi
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
-    public NumberingView getNumberingView() {
-        return numberingView;
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -98,8 +105,10 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingVi
         createTitleAndStatisticsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
 
-        numberingView.createEditors(editorContext);
-        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext)); // TODO: i18n
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
+
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
@@ -195,14 +204,14 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasNumberingVi
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
-            numberingView.paintEncounterNumbers(paintContext);
-            numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+            encounterSetView.paintEncounterNumbers(paintContext);
+            encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
         portraitWithArtistView.paintArtist(paintContext);
 
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         paintClassSymbols(paintContext);
 

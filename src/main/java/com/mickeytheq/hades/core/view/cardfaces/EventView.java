@@ -28,9 +28,10 @@ import java.util.ListIterator;
 import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.EVENT)
-public class EventView extends BaseCardFaceView<Event> implements HasNumberingView {
+public class EventView extends BaseCardFaceView<Event> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitWithArtistView portraitWithArtistView;
 
@@ -41,14 +42,20 @@ public class EventView extends BaseCardFaceView<Event> implements HasNumberingVi
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
-    public NumberingView getNumberingView() {
-        return numberingView;
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -79,8 +86,10 @@ public class EventView extends BaseCardFaceView<Event> implements HasNumberingVi
 
         createRulesAndPortraitTab(editorContext);
 
-        numberingView.createEditors(editorContext);
-        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
+
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
@@ -148,13 +157,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasNumberingVi
         Rectangle bodyDrawRegion = getBodyDrawRegion();
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);
 
-        if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
-            numberingView.paintEncounterNumbers(paintContext);
-            numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
-        }
-
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         portraitWithArtistView.paintArtist(paintContext);
 
@@ -230,7 +234,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasNumberingVi
 
         paintEncounterOrBasicWeaknessOverlay(paintContext);
 
-        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
     }
 
     private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {

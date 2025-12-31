@@ -8,10 +8,7 @@ import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.common.CommonCardFieldsView;
-import com.mickeytheq.hades.core.view.common.HasNumberingView;
-import com.mickeytheq.hades.core.view.common.NumberingView;
-import com.mickeytheq.hades.core.view.common.PortraitWithArtistView;
+import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
@@ -23,9 +20,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 @View(interfaceLanguageKey = InterfaceConstants.INVESTIGATOR)
-public class InvestigatorView extends BaseCardFaceView<Investigator> implements HasNumberingView {
+public class InvestigatorView extends BaseCardFaceView<Investigator> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PortraitWithArtistView portraitWithArtistView;
 
     private JComboBox<InvestigatorClass> investigatorClassEditor;
@@ -43,13 +41,19 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
-    public NumberingView getNumberingView() {
-        return numberingView;
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         createTitleAndStatsEditors(editorContext);
         createRulesEditors(editorContext);
 
-        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext));
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void createTitleAndStatsEditors(EditorContext editorContext) {
@@ -142,7 +146,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         combatEditor.setText(getModel().getCombat());
         agilityEditor.setText(getModel().getAgility());
 
-        numberingView.createEditors(editorContext);
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
     }
 
     private void createRulesEditors(EditorContext editorContext) {
@@ -183,12 +188,12 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
 
         if (getModel().getInvestigatorClass() == InvestigatorClass.Story) {
-            numberingView.paintEncounterNumbers(paintContext);
-            numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+            encounterSetView.paintEncounterNumbers(paintContext);
+            encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         portraitWithArtistView.paintArtist(paintContext);
 

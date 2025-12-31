@@ -1,12 +1,9 @@
 package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
-import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.hades.core.model.common.NumberingModel;
-import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
+import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
@@ -15,20 +12,21 @@ public class Treachery extends BaseCardFaceModel {
     private WeaknessType weaknessType;
 
     private final CommonCardFieldsModel commonCardFieldsModel;
-    private final NumberingModel numberingModel;
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PortraitWithArtistModel portraitWithArtistModel;
 
     public Treachery() {
         weaknessType = WeaknessType.None;
 
         commonCardFieldsModel = new CommonCardFieldsModel();
-        numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
     }
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        numberingModel.initialiseNew(projectContext, cardFaceSide);
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("WeaknessType")
@@ -45,9 +43,14 @@ public class Treachery extends BaseCardFaceModel {
         return commonCardFieldsModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
+    }
+
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property("ArtPortrait")

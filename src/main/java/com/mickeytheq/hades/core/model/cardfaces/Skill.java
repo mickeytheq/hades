@@ -2,10 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.hades.core.model.common.NumberingModel;
-import com.mickeytheq.hades.core.model.common.PlayerCardFieldsModel;
-import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
+import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -13,20 +10,21 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 @Model(typeCode = "Skill")
 public class Skill extends BaseCardFaceModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
-    private final NumberingModel numberingModel;
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PlayerCardFieldsModel playerCardFieldsModel;
     private final PortraitWithArtistModel portraitWithArtistModel;
 
     public Skill() {
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
-        numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
     }
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        numberingModel.initialiseNew(projectContext, cardFaceSide);
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(flatten = true)
@@ -34,9 +32,14 @@ public class Skill extends BaseCardFaceModel {
         return commonCardFieldsModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
+    }
+
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property(flatten = true)

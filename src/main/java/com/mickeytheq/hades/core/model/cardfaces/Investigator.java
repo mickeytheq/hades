@@ -2,10 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.hades.core.model.common.InvestigatorClass;
-import com.mickeytheq.hades.core.model.common.NumberingModel;
-import com.mickeytheq.hades.core.model.common.PortraitWithArtistModel;
+import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -13,9 +10,10 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 // TODO: parallel investigator support
 @Model(typeCode = "Investigator")
 public class Investigator implements CardFaceModel {
-    private CommonCardFieldsModel commonCardFieldsModel;
-    private NumberingModel numberingModel;
-    private PortraitWithArtistModel portraitWithArtistModel;
+    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
+    private final PortraitWithArtistModel portraitWithArtistModel;
     private InvestigatorClass investigatorClass;
     private String health;
     private String sanity;
@@ -26,7 +24,6 @@ public class Investigator implements CardFaceModel {
 
     public Investigator() {
         commonCardFieldsModel = new CommonCardFieldsModel();
-        numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
 
         investigatorClass = InvestigatorClass.Guardian;
@@ -41,7 +38,8 @@ public class Investigator implements CardFaceModel {
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        numberingModel.initialiseNew(projectContext, cardFaceSide);
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(flatten = true)
@@ -49,17 +47,14 @@ public class Investigator implements CardFaceModel {
         return commonCardFieldsModel;
     }
 
-    public void setCommonCardFieldsModel(CommonCardFieldsModel commonCardFieldsModel) {
-        this.commonCardFieldsModel = commonCardFieldsModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
-    }
-
-    public void setNumberingModel(NumberingModel numberingModel) {
-        this.numberingModel = numberingModel;
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property("ArtPortrait")

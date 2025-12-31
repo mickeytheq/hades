@@ -13,10 +13,11 @@ public class Agenda extends BaseCardFaceModel {
     private String deckId;
     private Statistic doom;
 
-    private CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
-    private ActAgendaCommonFieldsModel agendaCommonFieldsModel = new ActAgendaCommonFieldsModel();
-    private NumberingModel numberingModel = new NumberingModel();
-    private PortraitWithArtistModel portraitWithArtistModel = new PortraitWithArtistModel();
+    private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
+    private final ActAgendaCommonFieldsModel agendaCommonFieldsModel = new ActAgendaCommonFieldsModel();
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
+    private final PortraitWithArtistModel portraitWithArtistModel = new PortraitWithArtistModel();
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
@@ -62,9 +63,14 @@ public class Agenda extends BaseCardFaceModel {
         return agendaCommonFieldsModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
+    }
+
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property("ArtPortrait")

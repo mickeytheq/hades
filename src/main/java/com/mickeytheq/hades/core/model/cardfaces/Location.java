@@ -9,21 +9,22 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Location")
 public class Location extends BaseCardFaceModel {
-    private CommonCardFieldsModel commonCardFieldsModel;
-    private NumberingModel numberingModel;
-    private PortraitWithArtistModel portraitWithArtistModel;
-    private LocationFieldsModel locationFieldsModel;
+    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
+    private final PortraitWithArtistModel portraitWithArtistModel;
+    private final LocationFieldsModel locationFieldsModel;
 
     public Location() {
         commonCardFieldsModel = new CommonCardFieldsModel();
-        numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
         locationFieldsModel = new LocationFieldsModel();
     }
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(flatten = true)
@@ -31,17 +32,14 @@ public class Location extends BaseCardFaceModel {
         return commonCardFieldsModel;
     }
 
-    public void setCommonCardFieldsModel(CommonCardFieldsModel commonCardFieldsModel) {
-        this.commonCardFieldsModel = commonCardFieldsModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
-    }
-
-    public void setNumberingModel(NumberingModel numberingModel) {
-        this.numberingModel = numberingModel;
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property("ArtPortrait")
@@ -49,16 +47,8 @@ public class Location extends BaseCardFaceModel {
         return portraitWithArtistModel;
     }
 
-    public void setPortraitWithArtistModel(PortraitWithArtistModel portraitWithArtistModel) {
-        this.portraitWithArtistModel = portraitWithArtistModel;
-    }
-
     @Property("Location")
     public LocationFieldsModel getLocationFieldsModel() {
         return locationFieldsModel;
-    }
-
-    public void setLocationFieldsModel(LocationFieldsModel locationFieldsModel) {
-        this.locationFieldsModel = locationFieldsModel;
     }
 }

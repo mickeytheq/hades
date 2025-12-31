@@ -25,9 +25,10 @@ import java.awt.image.BufferedImage;
 import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
-public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView {
+public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView, HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PortraitWithArtistView portraitWithArtistView;
     private LocationFieldsView locationFieldsView;
 
@@ -36,9 +37,20 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
+    }
+
+    @Override
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -77,8 +89,10 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         layoutTitleAndConnectionsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
 
-        numberingView.createEditors(editorContext);
-        editorContext.addDisplayComponent("Collection / encounter", numberingView.createStandardCollectionEncounterPanel(editorContext)); // TODO: i18n
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
+
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
@@ -128,13 +142,13 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 
-        numberingView.paintEncounterNumbers(paintContext);
-        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
         portraitWithArtistView.paintArtist(paintContext);
 
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         locationFieldsView.paintLocationIcons(paintContext);
         locationFieldsView.paintShroudAndClues(paintContext);

@@ -103,18 +103,23 @@ public class MigrationUtils {
         }
     }
 
-    public static void populatingNumbering(CardFaceMigrationContext context, NumberingModel numberingModel) {
+    public static void populateCollection(CardFaceMigrationContext context, CollectionModel model) {
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
-        numberingModel.setCollectionNumber(settingsAccessor.getString(SettingsFieldNames.COLLECTION_NUMBER));
-        numberingModel.setEncounterNumber(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_NUMBER));
-        numberingModel.setEncounterTotal(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_TOTAL));
+        model.setNumber(settingsAccessor.getString(SettingsFieldNames.COLLECTION_NUMBER));
 
         CollectionInfo collectionInfo = findOrCreateCollection(context);
-        numberingModel.setCollection(collectionInfo);
+        model.setCollection(collectionInfo);
+    }
+
+    public static void populateEncounterSet(CardFaceMigrationContext context, EncounterSetModel model) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
+        model.setNumber(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_NUMBER));
+        model.setTotal(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_TOTAL));
 
         EncounterSetInfo encounterSetInfo = findOrCreateEncounterSet(context);
-        numberingModel.setEncounterSet(encounterSetInfo);
+        model.setEncounterSet(encounterSetInfo);
     }
 
     private static CollectionInfo findOrCreateCollection(CardFaceMigrationContext context) {

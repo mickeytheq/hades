@@ -20,10 +20,11 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 @View(interfaceLanguageKey = InterfaceConstants.AGENDA)
-public class AgendaView extends BaseCardFaceView<Agenda> implements HasNumberingView {
+public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
     private ActAgendaCommonFieldsView agendaCommonFieldsView;
-    private NumberingView numberingView;
+    private EncounterSetView encounterSetView;
+    private CollectionView collectionView;
     private PortraitWithArtistView portraitWithArtistView;
 
     private JTextField agendaNumberEditor;
@@ -38,13 +39,19 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasNumbering
 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         agendaCommonFieldsView = new ActAgendaCommonFieldsView(getModel().getAgendaCommonFieldsModel());
-        numberingView = new NumberingView(getModel().getNumberingModel(), this);
+        collectionView = new CollectionView(getModel().getCollectionModel(), this);
+        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitWithArtistView = new PortraitWithArtistView(getModel().getPortraitWithArtistModel(), ART_PORTRAIT_DRAW_REGION.getSize());
     }
 
     @Override
-    public NumberingView getNumberingView() {
-        return numberingView;
+    public CollectionView getCollectionView() {
+        return collectionView;
+    }
+
+    @Override
+    public EncounterSetView getEncounterSetView() {
+        return encounterSetView;
     }
 
     @Override
@@ -61,7 +68,8 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasNumbering
     public void createEditors(EditorContext editorContext) {
         commonCardFieldsView.createEditors(editorContext);
         agendaCommonFieldsView.createEditors(editorContext);
-        numberingView.createEditors(editorContext);
+        collectionView.createEditors(editorContext);
+        encounterSetView.createEditors(editorContext);
         portraitWithArtistView.createEditors(editorContext);
 
         agendaNumberEditor = EditorUtils.createTextField(20);
@@ -78,8 +86,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasNumbering
 
         layoutMainTab(editorContext);
 
-        JPanel numberingPanel = numberingView.createStandardCollectionEncounterPanel(editorContext);
-        editorContext.addDisplayComponent("Collection / encounter", numberingPanel);
+        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void layoutMainTab(EditorContext editorContext) {
@@ -136,13 +143,13 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasNumbering
         // TODO: title has a two row option
         commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
 
-        numberingView.paintEncounterNumbers(paintContext);
-        numberingView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
         portraitWithArtistView.paintArtist(paintContext);
 
-        numberingView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        numberingView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
+        collectionView.paintCollectionNumber(paintContext);
 
         agendaCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 

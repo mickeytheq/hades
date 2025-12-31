@@ -31,14 +31,14 @@ public class Asset extends BaseCardFaceModel {
     private Statistic sanity;
 
     private final CommonCardFieldsModel commonCardFieldsModel;
-    private final NumberingModel numberingModel;
+    private final CollectionModel collectionModel = new CollectionModel();
+    private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PlayerCardFieldsModel playerCardFieldsModel;
     private final PortraitWithArtistModel portraitWithArtistModel;
 
     public Asset() {
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
-        numberingModel = new NumberingModel();
         portraitWithArtistModel = new PortraitWithArtistModel();
 
         health = Statistic.empty();
@@ -47,7 +47,8 @@ public class Asset extends BaseCardFaceModel {
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        numberingModel.initialiseNew(projectContext, cardFaceSide);
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("AssetSlot1")
@@ -91,9 +92,14 @@ public class Asset extends BaseCardFaceModel {
         return commonCardFieldsModel;
     }
 
-    @Property(flatten = true)
-    public NumberingModel getNumberingModel() {
-        return numberingModel;
+    @Property("Collection")
+    public CollectionModel getCollectionModel() {
+        return collectionModel;
+    }
+
+    @Property("EncounterSet")
+    public EncounterSetModel getEncounterSetModel() {
+        return encounterSetModel;
     }
 
     @Property(flatten = true)
