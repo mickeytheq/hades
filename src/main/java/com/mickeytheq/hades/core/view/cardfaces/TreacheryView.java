@@ -88,11 +88,10 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, true);
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-
-        mainPanel.add(generalPanel, "wrap, pushx, growx");
-
-        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
+                generalPanel,
+                portraitWithArtistView.createStandardArtPanel(editorContext)
+        );
 
         // add the panel to the main tab control
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);

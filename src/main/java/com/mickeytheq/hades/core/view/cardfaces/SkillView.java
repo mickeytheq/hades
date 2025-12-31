@@ -104,9 +104,10 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         JPanel statsPanel = new JPanel(migLayout);
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-        mainPanel.add(titlePanel, "wrap, growx, pushx");
-        mainPanel.add(statsPanel, "wrap, growx, pushx");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
+                titlePanel,
+                statsPanel
+        );
 
         editorContext.addDisplayComponent("Stats", mainPanel); // TODO: i18n
 
@@ -121,10 +122,10 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General"); // TODO: i18n
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-
-        mainPanel.add(generalPanel, "wrap, pushx, growx");
-        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
+                generalPanel,
+                portraitWithArtistView.createStandardArtPanel(editorContext)
+        );
 
         // add the panel to the main tab control
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n

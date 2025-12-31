@@ -105,12 +105,9 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         JPanel copyrightPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.COPYRIGHT));
         commonCardFieldsView.addCopyrightEditorToPanel(copyrightPanel);
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-        mainPanel.add(titlePanel, "growx, pushx, wrap");
-        mainPanel.add(statsPanel, "growx, pushx, wrap");
-        mainPanel.add(rulesPanel, "growx, pushx, wrap");
-        mainPanel.add(artPanel, "growx, pushx, wrap");
-        mainPanel.add(copyrightPanel, "growx, pushx, wrap");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
+                titlePanel, statsPanel, rulesPanel, artPanel, copyrightPanel
+        );
 
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }

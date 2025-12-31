@@ -56,6 +56,19 @@ public class MigLayoutUtils {
         return new JPanel(createOrganiserLayout());
     }
 
+    // creates a populated panel from the list of components where each components are placed in a
+    // vertical flow layout (top to bottom) with growing/pushing on the X axis
+    // typically used for a 'main panel' to layout multiple sub-panels
+    public static JPanel createVerticalFlowOrganiserPanel(Component ... components) {
+        JPanel panel = createOrganiserPanel();
+
+        for (Component component : components) {
+            panel.add(component, "pushx, growx, wrap");
+        }
+
+        return panel;
+    }
+
     // adds a label followed by a component and wrap to the next row
     public static void addLabelledComponentWrapGrowPush(JPanel panel, String labelText, Component component) {
         assertMigLayout(panel);

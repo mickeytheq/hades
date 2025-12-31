@@ -169,10 +169,10 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
         commonCardFieldsView.addNonTitleEditorsToPanel(generalPanel, false);
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-
-        mainPanel.add(generalPanel, "wrap, pushx, growx");
-        mainPanel.add(portraitWithArtistView.createStandardArtPanel(editorContext), "wrap, pushx, growx");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
+                generalPanel,
+                portraitWithArtistView.createStandardArtPanel(editorContext)
+        );
 
         // add the panel to the main tab control
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
