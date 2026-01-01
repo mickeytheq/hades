@@ -27,14 +27,14 @@ public class PaintUtils {
     }
 
     public static void paintTitleLeftAlign(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
-        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
+        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT, false);
     }
 
     public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique) {
-        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER, false);
     }
 
-    private static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment) {
+    public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment, boolean multiline) {
         if (StringUtils.isEmpty(titleText))
             return;
 
@@ -48,7 +48,14 @@ public class PaintUtils {
             titleText = "<uni>" + titleText;
 
         markupRenderer.setMarkupText(titleText);
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+
+        if (multiline) {
+            markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
+            markupRenderer.draw(paintContext.getGraphics(), drawRegion);
+        }
+        else {
+            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+        }
     }
 
     public static void paintSubtitle(PaintContext paintContext, Rectangle drawRegion, String subtitleText) {

@@ -30,7 +30,6 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private PortraitView portraitView;
 
     // locations to draw portraits
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(350, 508, 56, 56);
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(34, 0, 688, 596);
 
@@ -133,9 +132,9 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
-        encounterSetView.paintEncounterNumbers(paintContext);
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
     }
@@ -154,7 +153,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
             }
             else {
                 encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
-                encounterSetView.paintEncounterNumbers(paintContext);
+                encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             }
         }
 
@@ -172,7 +171,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_WEAKNESS_DRAW_REGION);
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
     }
 }

@@ -37,7 +37,6 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 0, 750, 576);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 517, 56, 56);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1016, 26, 26);
 
     @Override
     public void initialiseView() {
@@ -157,8 +156,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         Rectangle bodyDrawRegion = getBodyDrawRegion();
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
         portraitView.paintArtist(paintContext);
 
@@ -234,7 +233,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         paintEncounterOrBasicWeaknessOverlay(paintContext);
 
-        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
     }
 

@@ -5,10 +5,8 @@ import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.LocationBack;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MarkupUtils;
@@ -131,7 +129,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
                     new Point2D.Double(0.889, 0.0)
             ));
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 490, 56, 56);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1020, 26, 26);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -146,13 +143,13 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 
-        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
         portraitView.paintArtist(paintContext);
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
         locationFieldsView.paintLocationIcons(paintContext);
     }

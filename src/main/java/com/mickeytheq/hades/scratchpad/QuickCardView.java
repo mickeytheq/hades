@@ -63,7 +63,8 @@ public class QuickCardView {
 //        skill();
 //        treacheryTreachery();
 //            location();
-            random();
+//            random();
+            agenda();
         });
     }
 

@@ -36,7 +36,6 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 120, 556, 630);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(22, 24, 56, 56);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(952, 720, 26, 26);
 
     @Override
     public void initialiseView() {
@@ -188,12 +187,12 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
 
         if (getModel().getInvestigatorClass() == InvestigatorClass.Story) {
-            encounterSetView.paintEncounterNumbers(paintContext);
+            encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
             encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
         portraitView.paintArtist(paintContext);
 

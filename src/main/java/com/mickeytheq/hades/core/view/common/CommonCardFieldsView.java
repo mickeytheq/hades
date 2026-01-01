@@ -129,7 +129,15 @@ public class CommonCardFieldsView {
     }
 
     public void paintTitle(PaintContext paintContext, Rectangle titleDrawRegion) {
-        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUnique());
+        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUnique(),
+                MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
+                true);
+    }
+
+    public void paintTitleMultiline(PaintContext paintContext, Rectangle titleDrawRegion) {
+        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUnique(),
+                MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
+                true);
     }
 
     public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {

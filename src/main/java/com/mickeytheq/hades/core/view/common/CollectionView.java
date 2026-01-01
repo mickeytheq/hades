@@ -6,6 +6,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CollectionModel;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.view.CardFaceOrientation;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
@@ -23,7 +24,10 @@ import java.awt.image.BufferedImageOp;
 import java.util.Optional;
 
 public class CollectionView {
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION = new Rectangle(636, 1024, 74, 20);
+    private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_PORTRAIT = new Rectangle(640, 1020, 26, 26);
+    private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_LANDSCAPE = new Rectangle(952, 720, 26, 26);
+    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_PORTRAIT = new Rectangle(636, 1024, 74, 20);
+    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE = new Rectangle(944, 720, 74, 20);
     private final CollectionModel model;
     private final CardFaceView cardFaceView;
 
@@ -79,7 +83,18 @@ public class CollectionView {
         return collectionDetailPanel;
     }
 
-    public void paintCollectionPortrait(com.mickeytheq.hades.core.view.PaintContext paintContext, Rectangle collectionPortraitDrawRegion, boolean paintInverted) {
+    public void paintCollectionImage(PaintContext paintContext, CardFaceOrientation orientation, boolean paintInverted) {
+        Rectangle drawRegion;
+
+        if (orientation == CardFaceOrientation.Portrait)
+            drawRegion = COLLECTION_IMAGE_DRAW_REGION_PORTRAIT;
+        else
+            drawRegion = COLLECTION_IMAGE_DRAW_REGION_LANDSCAPE;
+
+        paintCollectionImage(paintContext, drawRegion, paintInverted);
+    }
+
+    public void paintCollectionImage(PaintContext paintContext, Rectangle imageDrawRegion, boolean paintInverted) {
         Optional<CollectionModel> modelOpt = getModel(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -100,10 +115,21 @@ public class CollectionView {
             collectionImage = inversionOp.filter(collectionImage, null);
         }
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), collectionImage, collectionPortraitDrawRegion);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), collectionImage, imageDrawRegion);
     }
 
-    public void paintCollectionNumber(PaintContext paintContext) {
+    public void paintCollectionNumber(PaintContext paintContext, CardFaceOrientation orientation) {
+        Rectangle drawRegion;
+
+        if (orientation == CardFaceOrientation.Portrait)
+            drawRegion = COLLECTION_NUMBER_DRAW_REGION_PORTRAIT;
+        else
+            drawRegion = COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE;
+
+        paintCollectionNumber(paintContext, drawRegion);
+    }
+
+    public void paintCollectionNumber(PaintContext paintContext, Rectangle drawRegion) {
         Optional<CollectionModel> modelOpt = getModel(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -116,7 +142,7 @@ public class CollectionView {
             markupRenderer.setDefaultStyle(TextStyleUtils.getCollectionNumberTextStyle());
             markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
             markupRenderer.setMarkupText(model.getNumber());
-            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), COLLECTION_NUMBER_DRAW_REGION);
+            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
         }
     }
 

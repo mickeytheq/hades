@@ -4,10 +4,8 @@ import ca.cgjennings.layout.PageShape;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Agenda;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
@@ -113,10 +111,9 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     }
 
     private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(510, 110, 500, 88);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(500, 200, 528, 474);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(510, 118, 500, 88);
+    private static final Rectangle BODY_DRAW_REGION = new Rectangle(500, 208, 528, 474);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(728, 59, 64, 64);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(952, 720, 26, 26);
     private static final Rectangle DOOM_DRAW_REGION = new Rectangle(515, 607, 0, 40);
 
     private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION, Lists.newArrayList(
@@ -137,16 +134,15 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // title
-        // TODO: title has a two row option
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitleMultiline(paintContext, TITLE_DRAW_REGION);
 
-        encounterSetView.paintEncounterNumbers(paintContext);
+        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
         encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
 
         portraitView.paintArtist(paintContext);
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
         agendaCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 

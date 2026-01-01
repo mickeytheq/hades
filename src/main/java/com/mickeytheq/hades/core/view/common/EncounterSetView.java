@@ -5,8 +5,10 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.view.CardFaceOrientation;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
@@ -19,7 +21,8 @@ import java.awt.*;
 import java.util.Optional;
 
 public class EncounterSetView {
-    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION = new Rectangle(494, 1024, 110, 20);
+    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_PORTRAIT = new Rectangle(494, 1024, 110, 20);
+    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE = new Rectangle(802, 720, 110, 20);
 
     private final EncounterSetModel model;
     private final CardFaceView cardFaceView;
@@ -84,7 +87,7 @@ public class EncounterSetView {
         return encounterDetailPanel;
     }
 
-    public void paintEncounterPortrait(com.mickeytheq.hades.core.view.PaintContext paintContext, Rectangle encounterPortraitDrawRegion) {
+    public void paintEncounterPortrait(PaintContext paintContext, Rectangle encounterPortraitDrawRegion) {
         Optional<EncounterSetModel> modelOpt = getModelToUse(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -98,7 +101,18 @@ public class EncounterSetView {
         PaintUtils.paintBufferedImage(paintContext.getGraphics(), modelToUse.getEncounterSet().getImage().get(), encounterPortraitDrawRegion);
     }
 
-    public void paintEncounterNumbers(com.mickeytheq.hades.core.view.PaintContext paintContext) {
+    public void paintEncounterNumbers(PaintContext paintContext, CardFaceOrientation orientation) {
+        Rectangle drawRegion;
+
+        if (orientation == CardFaceOrientation.Portrait)
+            drawRegion = ENCOUNTER_NUMBERS_DRAW_REGION_PORTRAIT;
+        else
+            drawRegion = ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE;
+
+        paintEncounterNumbers(paintContext, drawRegion);
+    }
+
+    public void paintEncounterNumbers(PaintContext paintContext, Rectangle drawRegion) {
         Optional<EncounterSetModel> modelOpt = getModelToUse(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -114,7 +128,7 @@ public class EncounterSetView {
             String text = StringUtils.defaultIfEmpty(modelToUse.getNumber(), "") + " / " + StringUtils.defaultIfEmpty(modelToUse.getTotal(), "");
 
             markupRenderer.setMarkupText(text);
-            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), ENCOUNTER_NUMBERS_DRAW_REGION);
+            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
         }
     }
 

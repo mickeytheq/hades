@@ -34,7 +34,6 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
     private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(640, 1016, 26, 26);
 
     @Override
     public void initialiseView() {
@@ -204,14 +203,14 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
-            encounterSetView.paintEncounterNumbers(paintContext);
+            encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
         }
 
         portraitView.paintArtist(paintContext);
 
-        collectionView.paintCollectionPortrait(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, true);
-        collectionView.paintCollectionNumber(paintContext);
+        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
+        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
         paintClassSymbols(paintContext);
 
