@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
 import com.google.common.collect.Lists;
+import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Agenda;
 import com.mickeytheq.hades.core.view.*;
@@ -110,7 +111,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
+    private static final Rectangle SCENARIO_INDEX_DRAW_REGION = new Rectangle(620, 28, 268, 42);
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(510, 118, 500, 88);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(500, 208, 528, 474);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(728, 59, 64, 64);
@@ -147,5 +148,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         agendaCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 
         PaintUtils.paintStatistic(paintContext, DOOM_DRAW_REGION, getModel().getDoom(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
+
+        PaintUtils.paintScenarioIndex(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
     }
 }

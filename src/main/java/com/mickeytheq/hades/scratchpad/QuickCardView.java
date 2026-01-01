@@ -237,7 +237,7 @@ public class QuickCardView {
 
         @Override
         public boolean hasPrevious() {
-            return currentIndex >= 0;
+            return currentIndex > 0;
         }
 
         @Override

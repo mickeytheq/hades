@@ -28,6 +28,8 @@ public class TextStyleUtils {
     private static final TextStyle ISS_TEXT_STYLE;
     private static final TextStyle CSS_TEXT_STYLE;
     private static final TextStyle GSS_TEXT_STYLE;
+    private static final TextStyle SCENARIO_INDEX_TEXT_STYLE;
+    private static final TextStyle SCENARIO_INDEX_BACK_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -129,6 +131,20 @@ public class TextStyleUtils {
         GSS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
         GSS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
+        // for 'Agenda 1a' headers
+        SCENARIO_INDEX_TEXT_STYLE = new TextStyle();
+        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.SIZE, 14.0);
+        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
+        // for 'Agenda 1a' headers on the back of cards (smaller)
+        SCENARIO_INDEX_BACK_TEXT_STYLE = new TextStyle();
+        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.SIZE, 9.8);
+        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
         // same as collection
         ENCOUNTER_NUMBER_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
         ARTIST_TEXT_STYLE = COLLECTION_NUMBER_TEXT_STYLE;
@@ -212,5 +228,13 @@ public class TextStyleUtils {
 
     public static TextStyle getGssStoryTextStyle() {
         return GSS_TEXT_STYLE;
+    }
+
+    public static TextStyle getScenarioIndexTextStyle() {
+        return SCENARIO_INDEX_TEXT_STYLE;
+    }
+
+    public static TextStyle getScenarioIndexBackTextStyle() {
+        return SCENARIO_INDEX_BACK_TEXT_STYLE;
     }
 }

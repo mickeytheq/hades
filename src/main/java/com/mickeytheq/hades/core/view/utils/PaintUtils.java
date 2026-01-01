@@ -192,6 +192,24 @@ public class PaintUtils {
         new StatisticPainter(paintContext, statistic, drawRegion, outlineColour, textColour).paint();
     }
 
+    // for things like act/agenda headers, e.g. Agenda 1a would be typeText = 'Agenda' and indexText = '1a'
+    public static void paintScenarioIndex(PaintContext paintContext, Rectangle drawRegion, String typeText, String number, String deckId) {
+        if (StringUtils.isEmpty(number) && StringUtils.isEmpty(deckId))
+            return;
+
+        // change to empty strings instead of null for concatenation
+        number = StringUtils.defaultIfEmpty(number, "");
+        deckId = StringUtils.defaultIfEmpty(deckId, "");
+
+        String text = typeText + " <suf>" + number + deckId + "</suf>";
+
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getScenarioIndexTextStyle());
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
+        markupRenderer.setMarkupText(text);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+    }
+
     public static void paintBufferedImage(Graphics2D g, BufferedImage image, Rectangle rectangle) {
         g.drawImage(image, (int)rectangle.getX(), (int)rectangle.getY(), (int)rectangle.getWidth(), (int)rectangle.getHeight(), null);
     }
