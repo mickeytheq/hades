@@ -5,6 +5,10 @@ import resources.Settings;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TextStyleUtils {
     public static final String AHLCG_SYMBOL_FONT = "AHLCGSymbol";
@@ -74,21 +78,27 @@ public class TextStyleUtils {
 
         TRAIT_TEXT_STYLE = new TextStyle();
         TRAIT_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        TRAIT_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
         TRAIT_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         TRAIT_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         VICTORY_TEXT_STYLE = new TextStyle();
         VICTORY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        VICTORY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
         VICTORY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        VICTORY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         STORY_TEXT_STYLE = new TextStyle();
         STORY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        STORY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
         STORY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         STORY_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        STORY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         // TODO: flavor is the same as story, just copy?
         FLAVOR_TEXT_STYLE = new TextStyle();
         FLAVOR_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        FLAVOR_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
         FLAVOR_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         FLAVOR_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
@@ -236,5 +246,24 @@ public class TextStyleUtils {
 
     public static TextStyle getScenarioIndexBackTextStyle() {
         return SCENARIO_INDEX_BACK_TEXT_STYLE;
+    }
+
+
+    public static Map<TextAttribute, Object> getAttributes(TextStyle textStyle) {
+        // janky way of getting the attributes out of a style - create a fake string and apply the style to it
+        // and capture all the attributes
+        Map<TextAttribute, Object> attributeValues = new HashMap<>();
+
+        AttributedString attributedString = new AttributedString("") {
+
+            @Override
+            public void addAttribute(AttributedCharacterIterator.Attribute attribute, Object value) {
+                attributeValues.put((TextAttribute) attribute, value);
+            }
+        };
+
+        textStyle.applyStyle(attributedString);
+
+        return attributeValues;
     }
 }

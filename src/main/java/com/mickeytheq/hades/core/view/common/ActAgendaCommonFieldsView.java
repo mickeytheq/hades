@@ -28,6 +28,10 @@ public class ActAgendaCommonFieldsView {
         this.model = model;
     }
 
+    public ActAgendaCommonFieldsModel getModel() {
+        return model;
+    }
+
     public void createEditors(EditorContext editorContext) {
         headerEditor = EditorUtils.createTextArea(2, 30);
         afterHeaderSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);

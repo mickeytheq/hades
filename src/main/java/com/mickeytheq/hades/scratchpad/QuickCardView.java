@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.scratchpad;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
+import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
@@ -9,6 +10,7 @@ import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
@@ -25,6 +27,8 @@ import org.checkerframework.checker.units.qual.C;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -46,11 +50,19 @@ public class QuickCardView {
 
         ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(temporaryProjectContext, () -> {
             ProjectConfiguration config = new ProjectConfiguration();
+
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
             encounterSetInfo.setDisplayName("Rats");
             encounterSetInfo.setTag("rats");
             encounterSetInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImage("/test/AHLCG-Rats.png")));
             config.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+
+            CollectionInfo collectionInfo = new CollectionInfo();
+            collectionInfo.setDisplayName("Rats");
+            collectionInfo.setTag("rats");
+            collectionInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImage("/test/AHLCG-Rats.png")));
+            config.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
+
             return config;
         });
 
@@ -192,7 +204,21 @@ public class QuickCardView {
         model.getAgendaCommonFieldsModel().setStory("Story story");
         model.getAgendaCommonFieldsModel().setRules("Rules rules");
 
-        Card card = CardFaces.createCardModel(model, null);
+        AgendaBack agendaBack = new AgendaBack();
+        agendaBack.setAgendaNumber("1");
+        agendaBack.setDeckId("b");
+        agendaBack.getCommonCardFieldsModel().setTitle("Back title");
+        agendaBack.getSection1().setHeader("Header");
+        agendaBack.getSection1().setRules("Rules rules");
+        agendaBack.getSection1().setStory("Story story");
+        agendaBack.getSection2().setHeader("Header");
+        agendaBack.getSection2().setRules("Rules rules");
+        agendaBack.getSection2().setStory("Story story");
+        agendaBack.getSection3().setHeader("Header");
+        agendaBack.getSection3().setRules("Rules rules");
+        agendaBack.getSection3().setStory("Story story");
+
+        Card card = CardFaces.createCardModel(model, agendaBack);
 
         displayEditor(card);
     }
@@ -330,9 +356,20 @@ public class QuickCardView {
                 populateCard();
             });
 
+            JToggleButton toggleDebug = new JToggleButton("Debug");
+            toggleDebug.addActionListener(e -> {
+                boolean enableDebug = toggleDebug.isSelected();
+
+                MarkupRenderer.DEBUG = enableDebug;
+                MigLayoutUtils.setDebug(enableDebug);
+
+                populateCard();
+            });
+
             buttonPanel.add(showJsonButton);
             buttonPanel.add(previousButton);
             buttonPanel.add(nextButton);
+            buttonPanel.add(toggleDebug);
 
             populateCard();
 

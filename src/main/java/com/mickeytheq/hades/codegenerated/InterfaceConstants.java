@@ -628,6 +628,8 @@ public class InterfaceConstants {
     public static final String KEY = "Hades-Key";
     // English value: Player
     public static final String BACK_PLAYER = "Hades-Back-Player";
+    // English value: Shadow front
+    public static final String SHADOW_FRONT = "Hades-Shadow-Front";
     // English value: Delete selected collections
     public static final String PREF_DELETECOLLECTIONS = "Hades-Pref-DeleteCollections";
     // English value: Sanguine Shadows
@@ -896,6 +898,8 @@ public class InterfaceConstants {
     public static final String PREF_PERMANENTLYREMOVECOLLECTIONS = "Hades-Pref-PermanentlyRemoveCollections";
     // English value: Cost
     public static final String COST = "Hades-Cost";
+    // English value: Agenda Back
+    public static final String AGENDA_BACK = "Hades-Agenda-Back";
     // English value: The Wages of Sin
     public static final String THEWAGESOFSIN = "Hades-TheWagesOfSin";
     // English value: Mysteries Abound

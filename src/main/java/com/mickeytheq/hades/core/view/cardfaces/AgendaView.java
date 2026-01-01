@@ -111,7 +111,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final Rectangle SCENARIO_INDEX_DRAW_REGION = new Rectangle(620, 28, 268, 42);
+    private static final Rectangle SCENARIO_INDEX_DRAW_REGION = new Rectangle(630, 28, 248, 42);
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(510, 118, 500, 88);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(500, 208, 528, 474);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(728, 59, 64, 64);
@@ -119,8 +119,8 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION, Lists.newArrayList(
             new Point2D.Double(0.0, 0.0),
-            new Point2D.Double(0.0, 0.85),
-            new Point2D.Double(0.148, 0.85),
+            new Point2D.Double(0.0, 0.80),
+            new Point2D.Double(0.148, 0.80),
             new Point2D.Double(0.148, 1.0),
             new Point2D.Double(1.0, 1.0),
             new Point2D.Double(1.0, 0.0)

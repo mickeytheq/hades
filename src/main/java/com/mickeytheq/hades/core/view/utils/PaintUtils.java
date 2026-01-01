@@ -2,12 +2,14 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.PaintContext;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -194,6 +196,14 @@ public class PaintUtils {
 
     // for things like act/agenda headers, e.g. Agenda 1a would be typeText = 'Agenda' and indexText = '1a'
     public static void paintScenarioIndex(PaintContext paintContext, Rectangle drawRegion, String typeText, String number, String deckId) {
+        paintScenarioIndex(paintContext, drawRegion, typeText, number, deckId, TextStyleUtils.getScenarioIndexTextStyle());
+    }
+
+    public static void paintScenarioIndexBack(PaintContext paintContext, Rectangle drawRegion, String typeText, String number, String deckId) {
+        paintScenarioIndex(paintContext, drawRegion, typeText, number, deckId, TextStyleUtils.getScenarioIndexBackTextStyle());
+    }
+
+    public static void paintScenarioIndex(PaintContext paintContext, Rectangle drawRegion, String typeText, String number, String deckId, TextStyle textStyle) {
         if (StringUtils.isEmpty(number) && StringUtils.isEmpty(deckId))
             return;
 
@@ -201,10 +211,10 @@ public class PaintUtils {
         number = StringUtils.defaultIfEmpty(number, "");
         deckId = StringUtils.defaultIfEmpty(deckId, "");
 
-        String text = typeText + " <suf>" + number + deckId + "</suf>";
+        String text = typeText + " " + number + deckId;
 
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getScenarioIndexTextStyle());
+        markupRenderer.setDefaultStyle(textStyle);
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(text);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);

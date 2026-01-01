@@ -108,11 +108,15 @@ public class CommonCardFieldsView {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.FLAVOR), flavourTextEditor);
 
         if (includeVictory) {
-            MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
-            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
+            addVictoryEditorsToPanel(panel);
         }
 
         addCopyrightEditorToPanel(panel);
+    }
+
+    public void addVictoryEditorsToPanel(JPanel panel) {
+        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
     }
 
     public void addCopyrightEditorToPanel(JPanel panel) {

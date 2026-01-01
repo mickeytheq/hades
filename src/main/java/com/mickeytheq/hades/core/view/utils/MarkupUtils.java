@@ -103,8 +103,10 @@ public class MarkupUtils {
         markupRenderer.setStyleForTag("iss", TextStyleUtils.getIssStoryTextStyle());
         markupRenderer.setStyleForTag("css", TextStyleUtils.getCssStoryTextStyle());
         markupRenderer.setStyleForTag("gss", TextStyleUtils.getGssStoryTextStyle());
+        markupRenderer.setStyleForTag("suf", TextStyleUtils.getScenarioIndexTextStyle());
+        markupRenderer.setStyleForTag("sufb", TextStyleUtils.getScenarioIndexBackTextStyle());
 
-        // TODO: missing tags with styles - section, header, boxbullet, suf, sufb
+        // TODO: missing tags with styles - section, header, boxbullet
     }
 
     // the res:// protocol maps into a 'resources' folder in the root of the classpath which is why

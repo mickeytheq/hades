@@ -7,12 +7,20 @@ import javax.swing.*;
 
 public class CardFaceViewUtils {
     public static void createEncounterSetCollectionTab(EditorContext editorContext, EncounterSetView encounterSetView, CollectionView collectionView) {
-        JPanel encounterSetPanel = encounterSetView.createStandardEncounterPanel(editorContext);
-        JPanel collectionPanel = collectionView.createStandardCollectionPanel(editorContext);
+        if (encounterSetView == null && collectionView == null)
+            return;
 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-        mainPanel.add(encounterSetPanel, "pushx, growx, wrap");
-        mainPanel.add(collectionPanel, "pushx, growx, wrap");
+
+        if (encounterSetView != null) {
+            JPanel encounterSetPanel = encounterSetView.createStandardEncounterPanel(editorContext);
+            mainPanel.add(encounterSetPanel, "pushx, growx, wrap");
+        }
+
+        if (collectionView != null) {
+            JPanel collectionPanel = collectionView.createStandardCollectionPanel(editorContext);
+            mainPanel.add(collectionPanel, "pushx, growx, wrap");
+        }
 
         editorContext.addDisplayComponent("Collection / encounter", mainPanel);
 
