@@ -13,6 +13,7 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class CommonCardFieldsView {
     private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(274, 1024, 202, 20);
@@ -142,6 +143,25 @@ public class CommonCardFieldsView {
         PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUnique(),
                 MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
                 true);
+    }
+
+    public void paintTitleMultilineRotated(PaintContext paintContext, Rectangle drawRegion) {
+        // the title is drawn vertically from bottom to top
+        // to achieve this we have to create a rotate transform, apply it to the Graphics2D so that the text
+        // drawing transforms and we also have to rotate the draw region as this will also be transformed during the draw
+        // make sure to restore any existing transform afterwards
+        AffineTransform oldTransform = paintContext.getGraphics().getTransform();
+        try {
+            AffineTransform affineTransform = new AffineTransform();
+            affineTransform.rotate(-Math.PI / 2, drawRegion.getCenterX(), drawRegion.getCenterY());
+            Rectangle rotatedDrawRegion = affineTransform.createTransformedShape(drawRegion).getBounds();
+
+            paintContext.getGraphics().setTransform(affineTransform);
+            paintTitleMultiline(paintContext, rotatedDrawRegion);
+        }
+        finally {
+            paintContext.getGraphics().setTransform(oldTransform);
+        }
     }
 
     public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {

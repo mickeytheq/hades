@@ -76,7 +76,8 @@ public class QuickCardView {
 //        treacheryTreachery();
 //            location();
 //            random();
-            agenda();
+//            agenda();
+            act();
         });
     }
 
@@ -219,6 +220,34 @@ public class QuickCardView {
         agendaBack.getSection3().setStory("Story story");
 
         Card card = CardFaces.createCardModel(model, agendaBack);
+
+        displayEditor(card);
+    }
+
+    private void act() {
+        Act frontModel = new Act();
+        frontModel.setClues(new Statistic("4", false));
+        frontModel.setActNumber("1");
+        frontModel.setDeckId("a");
+        frontModel.getCommonCardFieldsModel().setTitle("Title");
+        frontModel.getActCommonFieldsModel().setStory("Story story");
+        frontModel.getActCommonFieldsModel().setRules("Rules rules");
+
+        ActBack backModel = new ActBack();
+        backModel.setActNumber("1");
+        backModel.setDeckId("b");
+        backModel.getCommonCardFieldsModel().setTitle("Back title");
+        backModel.getSection1().setHeader("Header");
+        backModel.getSection1().setRules("Rules rules");
+        backModel.getSection1().setStory("Story story");
+        backModel.getSection2().setHeader("Header");
+        backModel.getSection2().setRules("Rules rules");
+        backModel.getSection2().setStory("Story story");
+        backModel.getSection3().setHeader("Header");
+        backModel.getSection3().setRules("Rules rules");
+        backModel.getSection3().setStory("Story story");
+
+        Card card = CardFaces.createCardModel(frontModel, backModel);
 
         displayEditor(card);
     }

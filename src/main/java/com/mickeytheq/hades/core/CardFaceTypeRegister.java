@@ -33,6 +33,8 @@ public class CardFaceTypeRegister {
 
         register(Agenda.class, AgendaView.class);
         register(AgendaBack.class, AgendaBackView.class);
+        register(Act.class, ActView.class);
+        register(ActBack.class, ActBackView.class);
 
         register(Location.class, LocationView.class);
         register(LocationBack.class, LocationBackView.class);

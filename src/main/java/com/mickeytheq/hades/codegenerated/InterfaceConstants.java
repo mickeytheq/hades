@@ -952,6 +952,8 @@ public class InterfaceConstants {
     public static final String LOCICON_COPYFRONT = "Hades-LocIcon-CopyFront";
     // English value: Circle
     public static final String LOCICON_CIRCLE = "Hades-LocIcon-Circle";
+    // English value: Act Back
+    public static final String ACT_BACK = "Hades-Act-Back";
     // English value: <html>Primarily used for substituting fonts for supporting different languages,<br>but can also allow a font to be used throughout a project without the use of a &lt;family&gt; tag.
     public static final String PREFDEFAULTFONTSTIP = "Hades-PrefDefaultFontsTip";
     // English value: Divider

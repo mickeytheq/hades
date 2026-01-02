@@ -16,6 +16,8 @@ public interface PaintContext {
     //
 
     // draw using this Graphics
+    // implementations should return the same instance each time this is called so that alterations made
+    // by earlier callers will persist to later callers
     Graphics2D getGraphics();
 
     // used to select quality vs speed

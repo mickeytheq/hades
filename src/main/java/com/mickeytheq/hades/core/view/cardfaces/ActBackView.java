@@ -3,10 +3,10 @@ package com.mickeytheq.hades.core.view.cardfaces;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.model.cardfaces.Agenda;
-import com.mickeytheq.hades.core.model.cardfaces.AgendaBack;
-import com.mickeytheq.hades.core.view.*;
+import com.mickeytheq.hades.core.model.cardfaces.Act;
+import com.mickeytheq.hades.core.model.cardfaces.ActBack;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
 import org.apache.commons.lang3.StringUtils;
@@ -17,15 +17,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
 
-@View(interfaceLanguageKey = InterfaceConstants.AGENDA_BACK)
-public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasEncounterSetView {
+@View(interfaceLanguageKey = InterfaceConstants.ACT_BACK)
+public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
     private ActAgendaCommonFieldsView section1View;
     private ActAgendaCommonFieldsView section2View;
     private ActAgendaCommonFieldsView section3View;
     private EncounterSetView encounterSetView;
 
-    private JTextField agendaNumberEditor;
+    private JTextField actNumberEditor;
     private JTextField deckIdEditor;
     private JCheckBox shadowFrontEditor;
 
@@ -47,7 +47,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/act_agenda/agenda_back.png");
+        return ImageUtils.loadImage("/templates/act_agenda/act_back.png");
     }
 
     @Override
@@ -63,22 +63,22 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         section3View.createEditors(editorContext);
         encounterSetView.createEditors(editorContext);
 
-        agendaNumberEditor = EditorUtils.createTextField(20);
+        actNumberEditor = EditorUtils.createTextField(20);
         deckIdEditor = EditorUtils.createTextField(20);
         shadowFrontEditor = EditorUtils.createCheckBox();
 
-        EditorUtils.bindTextComponent(agendaNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setAgendaNumber));
+        EditorUtils.bindTextComponent(actNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setActNumber));
         EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDeckId));
         EditorUtils.bindToggleButton(shadowFrontEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setShadowFront));
 
-        agendaNumberEditor.setText(getModel().getAgendaNumber());
+        actNumberEditor.setText(getModel().getActNumber());
         deckIdEditor.setText(getModel().getDeckId());
         shadowFrontEditor.setSelected(getModel().isShadowFront());
 
         shadowFrontEditor.addChangeListener(e -> {
             boolean shadowing = shadowFrontEditor.isSelected();
 
-            agendaNumberEditor.setEnabled(!shadowing);
+            actNumberEditor.setEnabled(!shadowing);
             deckIdEditor.setEnabled(!shadowing);
         });
 
@@ -91,9 +91,9 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
 
-        JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.AGENDA));
+        JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ACT));
         MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SHADOW_FRONT), shadowFrontEditor);
-        MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.AGENDANUMBER), agendaNumberEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.ACTNUMBER), actNumberEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SCENARIODECKID), deckIdEditor);
 
         JPanel section1Panel = section1View.createPanel(true);
@@ -145,22 +145,22 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
     }
 
     private void paintScenarioIndex(PaintContext paintContext) {
-        // if shadowing the front then look for an Agenda on the other face. if missing do nothing
+        // if shadowing the front then look for an Act on the other face. if missing do nothing
         if (getModel().isShadowFront()) {
-            Optional<Agenda> otherFaceAgenda = getOtherFaceView().filter(o -> o instanceof AgendaView).map(o -> ((AgendaView)o).getModel());
+            Optional<Act> otherFaceModel = getOtherFaceView().filter(o -> o instanceof ActView).map(o -> ((ActView)o).getModel());
 
-            if (otherFaceAgenda.isPresent()) {
-                Agenda agenda = otherFaceAgenda.get();
+            if (otherFaceModel.isPresent()) {
+                Act act = otherFaceModel.get();
 
                 // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
                 // deck id should only be one character in most cases but preserve the rest of the string if there is anything
-                String newDeckId = (char)(agenda.getDeckId().charAt(0) + 1) + StringUtils.substring(agenda.getDeckId(), 1);
-                PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaNumber(), newDeckId);
+                String newDeckId = (char)(act.getDeckId().charAt(0) + 1) + StringUtils.substring(act.getDeckId(), 1);
+                PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_ACT), act.getActNumber(), newDeckId);
             }
 
             return;
         }
 
-        PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
     }
 }
