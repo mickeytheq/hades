@@ -98,7 +98,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
         playerCardFieldsView.createEditors(editorContext);
 
-        MigLayout migLayout = playerCardFieldsView.createTwoColumnLayout();
+        MigLayout migLayout = MigLayoutUtils.createTwoColumnLayout();
 
         JPanel statsPanel = new JPanel(migLayout);
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
@@ -130,7 +130,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(42, 124, 76, 28);
+    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(42, 126, 76, 28);
     private static final Rectangle TITLE_DRAW_REGION = new Rectangle(146, 32, 588, 58);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(74, 702, 602, 290);
     private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(74, 740, 602,250);
@@ -218,45 +218,30 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
                 new Point2D.Double(0.088, 0.600)
         );
 
-        Function<Point2D, Point2D> mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapper(BODY_DRAW_REGION);
+        MarkupUtils.PageShapeBuilder pageShapeBuilder = MarkupUtils.createPageShapeBuilder(BODY_DRAW_REGION);
 
         ListIterator<Point2D> pathPointIterator = pathPoints.listIterator();
         ListIterator<Point2D> bezierPointIterator = bezierPoints.listIterator();
 
-        Path2D path2D = new Path2D.Double();
-
-        Point2D firstPathPoint = mapIntoRegionFunction.apply(pathPointIterator.next());
-
-        path2D.moveTo(firstPathPoint.getX(), firstPathPoint.getY());
+        pageShapeBuilder.moveTo(pathPointIterator.next());
 
         // first draw the curves in one direction
         while (pathPointIterator.hasNext()) {
-            Point2D nextPoint = mapIntoRegionFunction.apply(pathPointIterator.next());
-
-            Point2D firstBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.next());
-            Point2D secondBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.next());
-
-            path2D.curveTo(firstBezierPoint.getX(), firstBezierPoint.getY(), secondBezierPoint.getX(), secondBezierPoint.getY(), nextPoint.getX(), nextPoint.getY());
+            pageShapeBuilder.curveTo(bezierPointIterator.next(), bezierPointIterator.next(), pathPointIterator.next());
         }
 
         // second pass - the skill area is shaped like a scroll. translate the X coordinate to the other side
         // of the body region and repeat the curve there - remember 1.0d is a ratio so this is the entire region's width
-        mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapperTranslateX(BODY_DRAW_REGION, 1.0d);
+        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperTranslateX(BODY_DRAW_REGION, 1.0d));
 
         // move across to the bottom right corner
-        Point2D startSecondPassPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());
-        path2D.lineTo(startSecondPassPoint.getX(), startSecondPassPoint.getY());
+        pageShapeBuilder.lineTo(pathPointIterator.previous());
 
         // draw the curve
         while (pathPointIterator.hasPrevious()) {
-            Point2D nextPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());
-
-            Point2D firstBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.previous());
-            Point2D secondBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.previous());
-
-            path2D.curveTo(firstBezierPoint.getX(), firstBezierPoint.getY(), secondBezierPoint.getX(), secondBezierPoint.getY(), nextPoint.getX(), nextPoint.getY());
+            pageShapeBuilder.curveTo(bezierPointIterator.previous(), bezierPointIterator.previous(), pathPointIterator.previous());
         }
 
-        return new PageShape.GeometricShape(path2D, BODY_DRAW_REGION);
+        return pageShapeBuilder.build();
     }
 }

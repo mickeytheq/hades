@@ -5,6 +5,7 @@ import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
+import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.core.model.image.ImagePersister;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -77,8 +78,30 @@ public class QuickCardView {
 //            location();
 //            random();
 //            agenda();
-            act();
+//            act();
+            enemy();
         });
+    }
+
+    private void enemy() {
+        Enemy model = new Enemy();
+        model.setCombat(new Statistic("3", false));
+        model.setHealth(new Statistic("4", true));
+        model.setEvade(new Statistic("2", false));
+
+        model.setDamage(1);
+        model.setHorror(1);
+
+        model.setWeaknessType(WeaknessType.None);
+
+        model.getCommonCardFieldsModel().setTraits("Monster.");
+        model.getCommonCardFieldsModel().setKeywords("Hunter.");
+        model.getCommonCardFieldsModel().setRules("Rules rules.");
+        model.getCommonCardFieldsModel().setFlavourText("Flava flava.");
+
+        Card card = CardFaces.createCardModel(model, null);
+
+        displayEditor(card);
     }
 
     private void investigator() {

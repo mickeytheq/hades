@@ -123,7 +123,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         healthEditor = new StatisticComponent();
         sanityEditor = new StatisticComponent();
 
-        JPanel statsPanel = new JPanel(playerCardFieldsView.createTwoColumnLayout());
+        JPanel statsPanel = new JPanel(MigLayoutUtils.createTwoColumnLayout());
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
 
         // layout

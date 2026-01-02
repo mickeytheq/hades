@@ -98,7 +98,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         playerCardFieldsView.createEditors(editorContext);
 
-        MigLayout migLayout = playerCardFieldsView.createTwoColumnLayout();
+        MigLayout migLayout = MigLayoutUtils.createTwoColumnLayout();
 
         JPanel statsPanel = new JPanel(migLayout);
         statsPanel.setBorder(BorderFactory.createTitledBorder("Stats")); // TODO: i18n
@@ -270,45 +270,29 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
                 new Point2D.Double(0.047, 0.993)
         );
 
-        Function<Point2D, Point2D> mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapper(BODY_DRAW_REGION);
+        MarkupUtils.PageShapeBuilder pageShapeBuilder = new MarkupUtils.PageShapeBuilder(BODY_DRAW_REGION);
 
         ListIterator<Point2D> pathPointIterator = pathPoints.listIterator();
         ListIterator<Point2D> bezierPointIterator = bezierPoints.listIterator();
 
-        Path2D path2D = new Path2D.Double();
-
-        Point2D firstPathPoint = mapIntoRegionFunction.apply(pathPointIterator.next());
-
-        path2D.moveTo(firstPathPoint.getX(), firstPathPoint.getY());
+        pageShapeBuilder.moveTo(pathPointIterator.next());
 
         // first draw the curves in one direction
         while (pathPointIterator.hasNext()) {
-            Point2D nextPoint = mapIntoRegionFunction.apply(pathPointIterator.next());
-
-            Point2D firstBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.next());
-            Point2D secondBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.next());
-
-            path2D.curveTo(firstBezierPoint.getX(), firstBezierPoint.getY(), secondBezierPoint.getX(), secondBezierPoint.getY(), nextPoint.getX(), nextPoint.getY());
+            pageShapeBuilder.curveTo(bezierPointIterator.next(), bezierPointIterator.next(), pathPointIterator.next());
         }
 
         // second reverse the X-axis on the mapper function and reverse the draw process
         // this has the effect or creating a left/right mirror region
-        mapIntoRegionFunction = MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION);
+        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION));
 
-        // skip the 'last' point in the list as we are already at that point
         // move across to the bottom right corner
-        Point2D startSecondPassPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());
-        path2D.lineTo(startSecondPassPoint.getX(), startSecondPassPoint.getY());
+        pageShapeBuilder.lineTo(pathPointIterator.previous());
 
         while (pathPointIterator.hasPrevious()) {
-            Point2D nextPoint = mapIntoRegionFunction.apply(pathPointIterator.previous());
-
-            Point2D firstBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.previous());
-            Point2D secondBezierPoint = mapIntoRegionFunction.apply(bezierPointIterator.previous());
-
-            path2D.curveTo(firstBezierPoint.getX(), firstBezierPoint.getY(), secondBezierPoint.getX(), secondBezierPoint.getY(), nextPoint.getX(), nextPoint.getY());
+            pageShapeBuilder.curveTo(bezierPointIterator.previous(), bezierPointIterator.previous(), pathPointIterator.previous());
         }
 
-        return new PageShape.GeometricShape(path2D, BODY_DRAW_REGION);
+        return pageShapeBuilder.build();
     }
 }

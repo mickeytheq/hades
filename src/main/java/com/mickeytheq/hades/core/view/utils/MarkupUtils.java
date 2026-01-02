@@ -176,16 +176,20 @@ public class MarkupUtils {
     // inputs points are converted to draw region coordinates when move/line/curve etc operations are called
     public static class PageShapeBuilder {
         private final Rectangle drawRegion;
-        private final Function<Point2D, Point2D> mapToDrawRegionCoordinatesFunction;
+        private Function<Point2D, Point2D> mapToDrawRegionCoordinatesFunction;
 
         private final Path2D path;
 
         public PageShapeBuilder(Rectangle drawRegion) {
             this.drawRegion = drawRegion;
 
-            mapToDrawRegionCoordinatesFunction = createRatioIntoDrawRegionMapper(drawRegion);
+            setMapToDrawRegionCoordinatesFunction(createRatioIntoDrawRegionMapper(drawRegion));
 
             path = new Path2D.Double();
+        }
+
+        public void setMapToDrawRegionCoordinatesFunction(Function<Point2D, Point2D> function) {
+            this.mapToDrawRegionCoordinatesFunction = function;
         }
 
         public void moveTo(Point2D point2D) {

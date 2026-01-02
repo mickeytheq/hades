@@ -1212,6 +1212,8 @@ public class InterfaceConstants {
     public static final String LOCICON_DOUBLESLASHALT = "Hades-LocIcon-DoubleSlashAlt";
     // English value: Death of Stars
     public static final String DEATHOFSTARS = "Hades-DeathOfStars";
+    // English value: Combat
+    public static final String COMBAT = "Hades-Combat";
     // English value: None
     public static final String GUIDE_NONE = "Hades-Guide-None";
     // English value: The Eternal Slumber

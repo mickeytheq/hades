@@ -73,6 +73,23 @@ public class MigLayoutUtils {
         return panel;
     }
 
+    public static MigLayout createTwoColumnLayout() {
+        // create a layout that has two vertical sets of editors e.g. label: editor<gap>label: editor
+        //
+        // use vertical flow layout to aid construction readability as controls are loosely grouped by column
+        // each column of controls will be added/built one after another instead of row by row
+        // we'll use 'newline' constraint on the component at the beginning of a new column
+        MigLayout migLayout = new MigLayout(new LC().flowY());
+
+        // this constraint
+        // - makes the 2 control columns grow/fill all available space
+        // - adds a small visual gap between the two sets of vertical labels/controls
+        // - configure the last column to have a reasonable size
+        migLayout.setColumnConstraints("[][grow, fill]10[][grow, fill, :200:]");
+
+        return migLayout;
+    }
+
     // adds a label followed by a component and wrap to the next row
     public static void addLabelledComponentWrapGrowPush(JPanel panel, String labelText, Component component) {
         assertMigLayout(panel);

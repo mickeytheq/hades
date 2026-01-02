@@ -26,6 +26,8 @@ public class ActBack extends BaseCardFaceModel {
         // this face will almost always be on the back but just in case something is making a weird
         // card combo we only set the shadowing if it is a 'Back'
         shadowFront = cardFaceSide == CardFaceSide.Back;
+
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     public boolean isShadowFront() {

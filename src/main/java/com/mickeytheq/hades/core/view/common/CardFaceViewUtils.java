@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 
+// some utility methods that cards faces want to share but don't strictly belong to another utility class
 public class CardFaceViewUtils {
     public static void createEncounterSetCollectionTab(EditorContext editorContext, EncounterSetView encounterSetView, CollectionView collectionView) {
         if (encounterSetView == null && collectionView == null)

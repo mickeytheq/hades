@@ -24,6 +24,9 @@ public class Act extends BaseCardFaceModel {
         actNumber = "1";
         deckId = "a";
         clues = new Statistic("3", false);
+
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("AgendaNumber")
