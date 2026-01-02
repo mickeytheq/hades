@@ -135,12 +135,18 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // title
+        // the title is drawn vertically from bottom to top
+        // to achieve this we have to create a rotate transform, apply it to the Graphics2D so that the text
+        // drawing transforms and we also have to rotate the draw region as this will also be transformed during the draw
+        // make sure to restore any existing transform afterwards
         AffineTransform oldTransform = paintContext.getGraphics().getTransform();
         try {
             AffineTransform affineTransform = new AffineTransform();
-            affineTransform.rotate(-Math.PI / 2);
+            affineTransform.rotate(-Math.PI / 2, TITLE_DRAW_REGION.getCenterX(), TITLE_DRAW_REGION.getCenterY());
+            Rectangle rotatedDrawRegion = affineTransform.createTransformedShape(TITLE_DRAW_REGION).getBounds();
+
             paintContext.getGraphics().setTransform(affineTransform);
-            commonCardFieldsView.paintTitleMultiline(paintContext, TITLE_DRAW_REGION);
+            commonCardFieldsView.paintTitleMultiline(paintContext, rotatedDrawRegion);
         }
         finally {
             paintContext.getGraphics().setTransform(oldTransform);
@@ -160,7 +166,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
         if (!StringUtils.isEmpty(victory)) {
             multiSectionRenderer.getSections().add(
-                    new MultiSectionRenderer.TextSection(getModel().getCommonCardFieldsModel().getVictory(),
+                    new MultiSectionRenderer.TextSection(victory,
                             TextStyleUtils.getVictoryTextStyle(), MarkupRenderer.LAYOUT_CENTER, paintContext.getRenderingDpi()));
         }
 

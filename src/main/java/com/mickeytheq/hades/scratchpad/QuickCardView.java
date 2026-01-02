@@ -476,22 +476,22 @@ public class QuickCardView {
 
     private class PaintContextImpl extends BasePaintContext {
         private final BufferedImage bufferedImage;
+        private final Graphics2D graphics2D;
         private final double dpi = 150;
 
         public PaintContextImpl(RenderTarget renderTarget, CardView cardView, BufferedImage bufferedImage) {
             super(renderTarget, cardView);
             this.bufferedImage = bufferedImage;
+            this.graphics2D = bufferedImage.createGraphics();
+
+            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         }
 
         @Override
         public Graphics2D getGraphics() {
-            Graphics2D g = bufferedImage.createGraphics();
-
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-            return g;
+            return graphics2D;
         }
 
         @Override
