@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.IntStream;
 
-@View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
+@View(interfaceLanguageKey = InterfaceConstants.ENEMY)
 public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;

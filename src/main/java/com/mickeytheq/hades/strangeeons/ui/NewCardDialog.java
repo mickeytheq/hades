@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.strangeeons.ui;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
+import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.model.cardfaces.*;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class NewCardDialog extends DialogWithButtons {
@@ -34,7 +36,7 @@ public class NewCardDialog extends DialogWithButtons {
 
         CardFaceTypeRegister cardFaceTypeRegister = CardFaceTypeRegister.get();
 
-        cardFaceTypeRegister.getAllCardInformation().forEach(o -> {
+        cardFaceTypeRegister.getAllCardInformation().stream().sorted(Comparator.comparing(info -> Language.string(info.getInterfaceLanguageKey()))).forEach(o -> {
             frontFaceOptionEditor.addItem(o);
             backFaceOptionEditor.addItem(o);
         });

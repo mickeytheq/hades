@@ -20,7 +20,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-@View(interfaceLanguageKey = InterfaceConstants.LOCATION)
+@View(interfaceLanguageKey = InterfaceConstants.LOCATION_BACK)
 public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView, HasEncounterSetView, HasCollectionView {
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;

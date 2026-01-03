@@ -564,6 +564,8 @@ public class InterfaceConstants {
     public static final String GUIDE_LEFTLARGE = "Hades-Guide-LeftLarge";
     // English value: Bottom left, small
     public static final String GUIDE_BOTTOMLEFTSMALL = "Hades-Guide-BottomLeftSmall";
+    // English value: Location back
+    public static final String LOCATION_BACK = "Hades-Location-Back";
     // English value: The Heart of Madness
     public static final String THEHEARTOFMADNESS = "Hades-TheHeartOfMadness";
     // English value: Return to The Secret Name
@@ -898,7 +900,7 @@ public class InterfaceConstants {
     public static final String PREF_PERMANENTLYREMOVECOLLECTIONS = "Hades-Pref-PermanentlyRemoveCollections";
     // English value: Cost
     public static final String COST = "Hades-Cost";
-    // English value: Agenda Back
+    // English value: Agenda back
     public static final String AGENDA_BACK = "Hades-Agenda-Back";
     // English value: The Wages of Sin
     public static final String THEWAGESOFSIN = "Hades-TheWagesOfSin";
@@ -952,7 +954,7 @@ public class InterfaceConstants {
     public static final String LOCICON_COPYFRONT = "Hades-LocIcon-CopyFront";
     // English value: Circle
     public static final String LOCICON_CIRCLE = "Hades-LocIcon-Circle";
-    // English value: Act Back
+    // English value: Act back
     public static final String ACT_BACK = "Hades-Act-Back";
     // English value: <html>Primarily used for substituting fonts for supporting different languages,<br>but can also allow a font to be used throughout a project without the use of a &lt;family&gt; tag.
     public static final String PREFDEFAULTFONTSTIP = "Hades-PrefDefaultFontsTip";
@@ -1218,6 +1220,8 @@ public class InterfaceConstants {
     public static final String GUIDE_NONE = "Hades-Guide-None";
     // English value: The Eternal Slumber
     public static final String THEETERNALSLUMBER = "Hades-TheEternalSlumber";
+    // English value: Enemy
+    public static final String ENEMY = "Hades-Enemy";
     // English value: Options
     public static final String OPTIONS = "Hades-Options";
     // English value: Story Asset / Enemy
