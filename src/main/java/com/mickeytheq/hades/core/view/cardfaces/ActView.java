@@ -148,7 +148,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
         actCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 
-        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
         PaintUtils.paintScenarioIndex(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
     }

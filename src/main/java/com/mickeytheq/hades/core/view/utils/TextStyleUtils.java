@@ -39,7 +39,7 @@ public class TextStyleUtils {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
         LARGE_LABEL_TEXT_STYLE = new TextStyle();
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.SIZE, 11.2);
+        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.SIZE, 5.6);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WIDTH, 1.05);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.TRACKING, 0);
@@ -47,7 +47,7 @@ public class TextStyleUtils {
 
         TITLE_TEXT_STYLE = new TextStyle();
         TITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arkhamic");
-        TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 22.0);
+        TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0);
         TITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         TITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
         TITLE_TEXT_STYLE.add(TextAttribute.TRACKING, 0.015);
@@ -56,21 +56,21 @@ public class TextStyleUtils {
 
         SUBTITLE_TEXT_STYLE = new TextStyle();
         SUBTITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        SUBTITLE_TEXT_STYLE.add(TextAttribute.SIZE, 12.8);
+        SUBTITLE_TEXT_STYLE.add(TextAttribute.SIZE, 6.4);
         SUBTITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         SUBTITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 0.96);
         SUBTITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         SUB_TYPE_TEXT_STYLE = new TextStyle();
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        SUB_TYPE_TEXT_STYLE.add(TextAttribute.SIZE, 12.0);
+        SUB_TYPE_TEXT_STYLE.add(TextAttribute.SIZE, 6.0);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.WIDTH, 1);
         SUB_TYPE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         BODY_TEXT_STYLE = new TextStyle();
         BODY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        BODY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        BODY_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         BODY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         BODY_TEXT_STYLE.add(TextAttribute.WIDTH, 0.98);
         BODY_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
@@ -78,19 +78,19 @@ public class TextStyleUtils {
 
         TRAIT_TEXT_STYLE = new TextStyle();
         TRAIT_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        TRAIT_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        TRAIT_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         TRAIT_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         TRAIT_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         VICTORY_TEXT_STYLE = new TextStyle();
         VICTORY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        VICTORY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        VICTORY_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         VICTORY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         VICTORY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         STORY_TEXT_STYLE = new TextStyle();
         STORY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        STORY_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        STORY_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         STORY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         STORY_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         STORY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
@@ -98,38 +98,38 @@ public class TextStyleUtils {
         // TODO: flavor is the same as story, just copy?
         FLAVOR_TEXT_STYLE = new TextStyle();
         FLAVOR_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        FLAVOR_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        FLAVOR_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         FLAVOR_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         FLAVOR_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         ARKHAM_HORROR_FONT_TEXT_STYLE = new TextStyle();
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, AHLCG_SYMBOL_FONT);
-        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 13.6);
+        ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.SIZE, 6.8);
 
         COLLECTION_NUMBER_TEXT_STYLE = new TextStyle();
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.SIZE, 9.0);
+        COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.SIZE, 4.5);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.TRACKING, 0.01);
         COLLECTION_NUMBER_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.WHITE);
 
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE = new TextStyle();
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FAMILY, "Bolton");
-        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.SIZE, 22.0);
+        INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0);
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         // story text but smaller
         ISS_TEXT_STYLE = new TextStyle();
         ISS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        ISS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2 * 0.925);
+        ISS_TEXT_STYLE.add(TextAttribute.SIZE, 8.6 * 0.925);
         ISS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
         ISS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         // story text but black
         CSS_TEXT_STYLE = new TextStyle();
         CSS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        CSS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        CSS_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         CSS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
         CSS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
         CSS_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
@@ -137,21 +137,21 @@ public class TextStyleUtils {
         // story text - regular
         GSS_TEXT_STYLE = new TextStyle();
         GSS_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        GSS_TEXT_STYLE.add(TextAttribute.SIZE, 17.2);
+        GSS_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         GSS_TEXT_STYLE.add(TextAttribute.TRACKING, -0.01);
         GSS_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         // for 'Agenda 1a' headers
         SCENARIO_INDEX_TEXT_STYLE = new TextStyle();
         SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.SIZE, 14.0);
+        SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.SIZE, 7.0);
         SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         SCENARIO_INDEX_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         // for 'Agenda 1a' headers on the back of cards (smaller)
         SCENARIO_INDEX_BACK_TEXT_STYLE = new TextStyle();
         SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
-        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.SIZE, 9.8);
+        SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.SIZE, 4.9);
         SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         SCENARIO_INDEX_BACK_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 

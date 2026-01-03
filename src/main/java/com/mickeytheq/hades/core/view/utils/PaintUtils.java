@@ -9,14 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class PaintUtils {
-    // light colour used for drawing statistic values or outlines
-    public static final Color LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
-
     public static void paintLabel(PaintContext paintContext, Rectangle drawRegion, String labelText) {
         if (StringUtils.isEmpty(labelText))
             return;
@@ -187,6 +183,9 @@ public class PaintUtils {
         }
     }
 
+    // light colour used for drawing statistic values or outlines
+    public static final Color STATISTIC_LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
+
     public static void paintStatistic(PaintContext paintContext, Rectangle drawRegion, Statistic statistic, Color outlineColour, Color textColour) {
         if (statistic.isNull())
             return;
@@ -271,6 +270,10 @@ public class PaintUtils {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, oldAA);
     }
 
+    // paints statistics
+    // draws an outline around the statistic character
+    // handles positioning of number and optional per investigator icon
+    //
     static class StatisticPainter {
         private final PaintContext paintContext;
         private final Statistic statistic;
@@ -285,6 +288,9 @@ public class PaintUtils {
         private GlyphVector perInvestigatorGlyphVector;
         private Rectangle2D perInvestigatorBounds;
 
+        // the draw region should have a 0 width (it is ignored) as positioning occurs as a centring around the X-position
+        // the width is irrelevant as only the height is used to control the sizing/scale of the rendered text
+        // TODO: this does means a longer statistic (such as 100) might be too large
         public StatisticPainter(PaintContext paintContext, Statistic statistic, Rectangle drawRegion, Color outlineColour, Color textColour) {
             this.paintContext = paintContext;
             this.statistic = statistic;

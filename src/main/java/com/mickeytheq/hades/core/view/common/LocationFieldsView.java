@@ -390,7 +390,7 @@ public class LocationFieldsView {
     private static final Rectangle CLUES_DRAW_REGION = new Rectangle(681, 534, 0, 42);
 
     public void paintShroudAndClues(PaintContext paintContext) {
-        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), PaintUtils.LIGHT_TEXT_COLOUR, Color.BLACK);
+        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR, Color.BLACK);
     }
 }

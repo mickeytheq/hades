@@ -529,7 +529,7 @@ public class QuickCardView {
     private class PaintContextImpl extends BasePaintContext {
         private final BufferedImage bufferedImage;
         private final Graphics2D graphics2D;
-        private final double dpi = 150;
+        private final double dpi = 300;
 
         public PaintContextImpl(RenderTarget renderTarget, CardView cardView, BufferedImage bufferedImage) {
             super(renderTarget, cardView);

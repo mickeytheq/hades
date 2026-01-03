@@ -96,7 +96,7 @@ public class CardGameComponent extends AbstractGameComponent {
             // BUG: strange eons code has a bug in the parameter checking of initializeTemplate where the class variable is checked for null
             // rather than the parameter being passed in. workaround this by setting it first
             setExpansionSymbolKey("dummy");
-            initializeTemplate("dummy", template, "dummy", 150.0, 1.0);
+            initializeTemplate("dummy", template, "dummy", 300.0, 1.0);
         }
 
         @Override

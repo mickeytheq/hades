@@ -147,7 +147,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
         agendaCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
 
-        PaintUtils.paintStatistic(paintContext, DOOM_DRAW_REGION, getModel().getDoom(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, DOOM_DRAW_REGION, getModel().getDoom(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
         PaintUtils.paintScenarioIndex(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
     }

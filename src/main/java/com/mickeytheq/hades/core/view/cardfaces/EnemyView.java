@@ -281,9 +281,9 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     );
 
     private void paintStatistics(PaintContext paintContext) {
-        PaintUtils.paintStatistic(paintContext, COMBAT_DRAW_REGION, getModel().getCombat(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, HEALTH_DRAW_REGION, getModel().getHealth(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, EVADE_DRAW_REGION, getModel().getEvade(), Color.BLACK, PaintUtils.LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, COMBAT_DRAW_REGION, getModel().getCombat(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, HEALTH_DRAW_REGION, getModel().getHealth(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, EVADE_DRAW_REGION, getModel().getEvade(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
         BufferedImage damageIcon = ImageUtils.loadImage("/overlays/damage.png");
         BufferedImage horrorIcon = ImageUtils.loadImage("/overlays/horror.png");
