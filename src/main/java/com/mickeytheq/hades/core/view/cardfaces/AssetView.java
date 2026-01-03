@@ -224,8 +224,11 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         paintSlots(paintContext);
 
-        PaintUtils.paintHealth(paintContext, HEALTH_BASE_DRAW_REGION, true, getModel().getHealth().getValue(), getModel().getHealth().isPerInvestigator());
-        PaintUtils.paintSanity(paintContext, SANITY_BASE_DRAW_REGION, true, getModel().getSanity().getValue(), getModel().getSanity().isPerInvestigator());
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), HEALTH_SYMBOL_DRAW_REGION);
+        PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), SANITY_SYMBOL_DRAW_REGION);
+        PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
     }
 
     // regions are from right to left
@@ -293,10 +296,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         return assetSlot.name().toLowerCase();
     }
 
-    private static final Rectangle HEALTH_BASE_DRAW_REGION = new Rectangle(292, 936, 62, 78);
-    private static final Rectangle SANITY_BASE_DRAW_REGION = new Rectangle(394, 942, 86, 72);
-
-    // TODO: review this painting code in different scenarios particularly the per investigator scenarios
-    // TODO: ideally how it should work is draw the value text somewhere, and the per investigator text if present, work out
-    // TODO: the total width of those two elements and then place them centred on the health/sanity overlay/icon
+    private static final Rectangle HEALTH_SYMBOL_DRAW_REGION = new Rectangle(292, 936, 62, 78);
+    private static final Rectangle HEALTH_STATISTIC_DRAW_REGION = new Rectangle(320, 953, 0, 35);
+    private static final Rectangle SANITY_SYMBOL_DRAW_REGION = new Rectangle(394, 942, 86, 72);
+    private static final Rectangle SANITY_STATISTIC_DRAW_REGION = new Rectangle(438, 953, 0, 35);
 }

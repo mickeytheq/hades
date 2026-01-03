@@ -71,7 +71,7 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //        asset();
-//            investigator();
+            investigator();
 //        event();
 //        skill();
 //        treacheryTreachery();
@@ -79,7 +79,7 @@ public class QuickCardView {
 //            random();
 //            agenda();
 //            act();
-            enemy();
+//            enemy();
         });
     }
 

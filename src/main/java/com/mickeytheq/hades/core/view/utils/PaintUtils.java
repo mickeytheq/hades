@@ -87,101 +87,11 @@ public class PaintUtils {
         markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);
     }
 
-    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 24);
-    private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 6).deriveFont(6.5f);
+    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 12);
+    private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 3).deriveFont(3.25f);
 
-    private static final Color HEALTH_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
-    private static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
-    private static final Color SANITY_TEXT_COLOUR = HEALTH_TEXT_COLOUR;
-    private static final Color SANITY_TEXT_OUTLINE_COLOUR = new Color(0.25f, 0.33f, 0.44f);
-
-    public static void paintHealth(PaintContext paintContext, Rectangle drawRegion, boolean paintSymbol, String value, boolean perInvestigator) {
-        if (StringUtils.isEmpty(value))
-            return;
-
-        if (paintSymbol)
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), drawRegion);
-
-        if (perInvestigator) {
-            Rectangle healthStatDrawRegion = new Rectangle(drawRegion);
-            healthStatDrawRegion.translate(-15, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(healthStatDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle healthStatDrawRegion = new Rectangle(drawRegion);
-            healthStatDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    healthStatDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    HEALTH_TEXT_COLOUR,
-                    HEALTH_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-    }
-
-    public static void paintSanity(PaintContext paintContext, Rectangle drawRegion, boolean paintSymbol, String value, boolean perInvestigator) {
-        if (StringUtils.isEmpty(value))
-            return;
-
-        if (paintSymbol)
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), drawRegion);
-
-        if (perInvestigator) {
-            Rectangle statDrawRegion = new Rectangle(drawRegion);
-            statDrawRegion.translate(-8, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-
-            Rectangle perInvestigatorDrawRegion = new Rectangle(statDrawRegion);
-            perInvestigatorDrawRegion.translate(30, 0);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    "p",
-                    perInvestigatorDrawRegion,
-                    PER_INVESTIGATOR_FONT, PER_INVESTIGATOR_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-        else {
-            Rectangle statDrawRegion = new Rectangle(drawRegion);
-            statDrawRegion.translate(-2, -5);
-
-            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
-                    value,
-                    statDrawRegion,
-                    STAT_FONT, STAT_FONT.getSize(), 3.0f,
-                    SANITY_TEXT_COLOUR,
-                    SANITY_TEXT_OUTLINE_COLOUR,
-                    0, true);
-        }
-    }
+    public static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
+    public static final Color SANITY_TEXT_OUTLINE_COLOUR = new Color(0.25f, 0.33f, 0.44f);
 
     // light colour used for drawing statistic values or outlines
     public static final Color STATISTIC_LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
@@ -288,9 +198,10 @@ public class PaintUtils {
         private GlyphVector perInvestigatorGlyphVector;
         private Rectangle2D perInvestigatorBounds;
 
-        // the draw region should have a 0 width (it is ignored) as positioning occurs as a centring around the X-position
-        // the width is irrelevant as only the height is used to control the sizing/scale of the rendered text
-        // TODO: this does means a longer statistic (such as 100) might be too large
+        // only the height is used to control the sizing/scale of the rendered text so the width is only used in combination
+        // with the X position to determine the horizontal centre for positioning
+        // therefore a 0 width can be specified which will make the given X position of the draw region the centre point
+        // TODO: this does means a longer statistic (such as 100) might be too large as no scaling is performed when the text is wide
         public StatisticPainter(PaintContext paintContext, Statistic statistic, Rectangle drawRegion, Color outlineColour, Color textColour) {
             this.paintContext = paintContext;
             this.statistic = statistic;
@@ -344,11 +255,6 @@ public class PaintUtils {
             // calculate a total width appropriate for the text and per investigator symbol if present
             if (statistic.isPerInvestigator()) {
                 totalWidth = totalWidth + perInvestigatorBounds.getWidth();
-
-                // add a small gap for visual separation between the value and the per-investigator icon
-                // make this gap proportional to the per-investigator icon size so it scales if the overall
-                // font sizes are changed
-//                totalWidth = totalWidth + perInvestigatorBounds.getWidth() * 0.2f;
             }
 
             // calculate X and Y coordinates to draw that are centred in the draw region

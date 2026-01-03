@@ -6,6 +6,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
+import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
@@ -166,8 +167,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(144, 78, 350, 40);
     private static final Rectangle BODY_DRAW_REGION = new Rectangle(614, 160, 400, 436);
 
-    private static final Rectangle HEALTH_DRAW_REGION = new Rectangle(732, 592, 62, 80);
-    private static final Rectangle SANITY_DRAW_REGION = new Rectangle(828, 600, 86, 70);
+    private static final Rectangle HEALTH_STATISTIC_DRAW_REGION = new Rectangle(760, 610, 0, 40);
+    private static final Rectangle SANITY_STATISTIC_DRAW_REGION = new Rectangle(868, 610, 0, 40);
 
     private static final Rectangle WILLPOWER_DRAW_REGION = new Rectangle(582, 38, 32, 44);
     private static final Rectangle INTELLECT_DRAW_REGION = new Rectangle(702, 38, 32, 44);
@@ -198,8 +199,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         paintSkills(paintContext);
 
-        PaintUtils.paintHealth(paintContext, HEALTH_DRAW_REGION, false, getModel().getHealth(), false);
-        PaintUtils.paintSanity(paintContext, SANITY_DRAW_REGION, false, getModel().getSanity(), false);
+        PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, new Statistic(getModel().getHealth(), false), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, new Statistic(getModel().getSanity(), false), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
     }
 
 

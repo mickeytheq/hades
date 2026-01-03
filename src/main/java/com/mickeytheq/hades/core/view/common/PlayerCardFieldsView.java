@@ -206,7 +206,7 @@ public class PlayerCardFieldsView {
         }
     }
 
-    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 30);
+    private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 15);
     private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
 
     public void paintCost(PaintContext paintContext) {
@@ -214,7 +214,7 @@ public class PlayerCardFieldsView {
                 getModel().getCost(),
                 COST_DRAW_REGION,
                 COST_FONT,
-                30.0f, 1.6f,
+                15.0f, 1.6f,
                 Color.WHITE,
                 Color.BLACK,
                 0,
