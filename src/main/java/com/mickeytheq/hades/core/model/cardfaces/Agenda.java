@@ -11,7 +11,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 public class Agenda extends BaseCardFaceModel {
     private String agendaNumber;
     private String deckId;
-    private Statistic doom;
+    private Statistic doom = Statistic.empty();
 
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final ActAgendaCommonFieldsModel agendaCommonFieldsModel = new ActAgendaCommonFieldsModel();

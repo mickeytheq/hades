@@ -79,6 +79,7 @@ public class SettingsFieldNames {
     public static final String CHAOS_TOKEN_CULTIST = "Cultist";
     public static final String CHAOS_TOKEN_TABLET = "Tablet";
     public static final String CHAOS_TOKEN_ELDER_THING = "ElderThing";
+    public static final String CHAOS_TOKEN_MERGE_PREFIX = "Merge";
 
     // statistics
     public static final String ENEMY_HEALTH = "Health";
@@ -112,4 +113,13 @@ public class SettingsFieldNames {
     public static final String USER_ENCOUNTER_SET_ICON_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Icon";
     public static final String USER_ENCOUNTER_SET_NAME_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Name";
     public static final String USER_ENCOUNTER_SET_TAG_PREFIX = USER_ENCOUNTER_SET_PREFIX + "Tag";
+
+    public static final String CLUES = "Clues";
+    public static final String SHROUD = "Shroud";
+    public static final String LOCATION_ICON = "LocationIcon";
+    public static final String CONNECTION_ICON_PREFIX = "ConnectionIcon";
+    public static final String LOCATION_ICON_EMPTY_VALUE = "Empty";
+    public static final String LOCATION_ICON_NONE_VALUE = "None";
+    public static final String LOCATION_ICON_COPY_FRONT_VALUE = COPY_FRONT;
+
 }

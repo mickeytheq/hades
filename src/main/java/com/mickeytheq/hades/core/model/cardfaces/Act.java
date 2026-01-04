@@ -11,7 +11,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 public class Act extends BaseCardFaceModel {
     private String actNumber;
     private String deckId;
-    private Statistic clues;
+    private Statistic clues = Statistic.empty();
 
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final ActAgendaCommonFieldsModel actCommonFieldsModel = new ActAgendaCommonFieldsModel();

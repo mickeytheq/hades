@@ -22,22 +22,8 @@ public class TreacheryMigrator {
         MigrationUtils.populateEncounterSet(context, treachery.getEncounterSetModel());
         MigrationUtils.populateArt(context, treachery.getPortraitModel());
 
-        String subType = settingsAccessor.getString(SettingsFieldNames.SUBTYPE);
-
-        treachery.setWeaknessType(getWeaknessType(subType));
+        treachery.setWeaknessType(MigrationUtils.getWeaknessType(settingsAccessor.getString(SettingsFieldNames.SUBTYPE)));
 
         return treachery;
-    }
-
-    private WeaknessType getWeaknessType(String subType) {
-        if (StringUtils.isEmpty(subType))
-            return WeaknessType.None;
-
-        if (subType.equals("Weakness"))
-            return WeaknessType.Investigator;
-
-        String weaknessType = Strings.CS.removeEnd(subType, "Weakness");
-
-        return WeaknessType.valueOf(weaknessType);
     }
 }

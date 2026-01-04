@@ -17,6 +17,7 @@ public class ScenarioReference extends BaseCardFaceModel {
     public static class SymbolChaosTokenInfo {
         private String rules;
         private SymbolChaosToken combineWith;
+
         @Property("Rules")
         public String getRules() {
             return rules;
@@ -73,10 +74,10 @@ public class ScenarioReference extends BaseCardFaceModel {
     }
 
     private Difficulty difficulty = Difficulty.EasyStandard;
-    private SymbolChaosTokenInfo skull = new SymbolChaosTokenInfo();
-    private SymbolChaosTokenInfo cultist = new SymbolChaosTokenInfo();
-    private SymbolChaosTokenInfo tablet = new SymbolChaosTokenInfo();
-    private SymbolChaosTokenInfo elderThing = new SymbolChaosTokenInfo();
+    private final SymbolChaosTokenInfo skull = new SymbolChaosTokenInfo();
+    private final SymbolChaosTokenInfo cultist = new SymbolChaosTokenInfo();
+    private final SymbolChaosTokenInfo tablet = new SymbolChaosTokenInfo();
+    private final SymbolChaosTokenInfo elderThing = new SymbolChaosTokenInfo();
     private String trackingBox;
 
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();

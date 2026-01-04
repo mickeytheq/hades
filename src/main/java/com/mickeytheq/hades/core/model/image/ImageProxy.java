@@ -37,7 +37,7 @@ public class ImageProxy {
     }
 
     public boolean isEmpty() {
-        return identifier == null;
+        return identifier == null && image == null;
     }
 
     public void set(BufferedImage newImage) {

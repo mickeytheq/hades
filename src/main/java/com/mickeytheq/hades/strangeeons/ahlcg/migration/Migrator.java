@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
+import com.mickeytheq.hades.core.model.cardfaces.ScenarioReference;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
@@ -116,8 +117,24 @@ public class Migrator {
                     return new InvestigatorMigrator().build(context);
                 case InvestigatorBack:
                     return new InvestigatorBackMigrator().build(context);
+                case Location:
+                    return new LocationMigrator().build(context);
+                case LocationBack:
+                    return new LocationBackMigrator().build(context);
                 case Treachery:
                     return new TreacheryMigrator().build(context);
+                case Enemy:
+                    return new EnemyMigrator().build(context);
+                case Act:
+                    return new ActMigrator().build(context);
+                case ActBack:
+                    return new ActBackMigrator().build(context);
+                case Agenda:
+                    return new AgendaMigrator().build(context);
+                case AgendaBack:
+                    return new AgendaBackMigrator().build(context);
+                case Chaos:
+                    return new ScenarioReferenceMigrator().build(context);
                 default:
                     return null;
             }
@@ -186,6 +203,8 @@ public class Migrator {
                 return CardFaceType.Enemy;
             else if (templateKey.contains("Scenario"))
                 return CardFaceType.Scenario;
+            else if (templateKey.contains("LocationBack"))
+                return CardFaceType.LocationBack;
             else if (templateKey.contains("Location"))
                 return CardFaceType.Location;
             else if (templateKey.contains("AgendaFrontPortrait"))

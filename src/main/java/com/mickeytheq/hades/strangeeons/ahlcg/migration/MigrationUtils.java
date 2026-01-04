@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import java.util.Optional;
 
@@ -104,6 +105,12 @@ public class MigrationUtils {
     }
 
     public static void populateCollection(CardFaceMigrationContext context, CollectionModel model) {
+        // existing plugin doesn't allow different numbers on front/back so always copy the front face on the back
+        if (context.getCardFaceSide() == CardFaceSide.Back) {
+            model.setCopyOtherFace(true);
+            return;
+        }
+
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
         model.setNumber(settingsAccessor.getString(SettingsFieldNames.COLLECTION_NUMBER));
@@ -113,6 +120,12 @@ public class MigrationUtils {
     }
 
     public static void populateEncounterSet(CardFaceMigrationContext context, EncounterSetModel model) {
+        // existing plugin doesn't allow different numbers on front/back so always copy the front face on the back
+        if (context.getCardFaceSide() == CardFaceSide.Back) {
+            model.setCopyOtherFace(true);
+            return;
+        }
+
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
         model.setNumber(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_NUMBER));
@@ -268,5 +281,63 @@ public class MigrationUtils {
             portraitModel.setRotation(defaultPortrait.getRotation());
             portraitModel.setScale(defaultPortrait.getScale() * PORTRAIT_SCALE_ADJUST_FACTOR);
         }
+    }
+
+    public static WeaknessType getWeaknessType(String subType) {
+        if (StringUtils.isEmpty(subType))
+            return WeaknessType.None;
+
+        if (subType.equals("Weakness"))
+            return WeaknessType.Investigator;
+
+        String weaknessType = Strings.CS.removeEnd(subType, "Weakness");
+
+        return WeaknessType.valueOf(weaknessType);
+    }
+
+    public static void populateActAgendaCommonFieldsModel(SettingsAccessor settingsAccessor, String settingsCode, ActAgendaCommonFieldsModel model) {
+        String headerKey = SettingsFieldNames.STORY_SECTION_HEADER_PREFIX + settingsCode;
+
+        model.setHeader(settingsAccessor.getString(headerKey));
+        model.setAfterHeaderSpace(settingsAccessor.getSpacingValue(headerKey));
+
+        String storyKey = SettingsFieldNames.STORY_SECTION_STORY_PREFIX + settingsCode;
+        model.setStory(settingsAccessor.getString(storyKey));
+        model.setAfterStorySpace(settingsAccessor.getSpacingValue(storyKey));
+
+        String rulesKey = SettingsFieldNames.GAME_TEXT + settingsCode;
+        model.setRules(settingsAccessor.getString(rulesKey));
+    }
+
+    public static void populateLocationFields(CardFaceMigrationContext context, LocationFieldsModel model) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
+        model.setClues(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.CLUES, SettingsFieldNames.PER_INVESTIGATOR));
+        model.setShroud(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.SHROUD, SettingsFieldNames.SHROUD + SettingsFieldNames.PER_INVESTIGATOR));
+        model.setLocationIcon(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.LOCATION_ICON));
+        model.setConnectionIcon1(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "1"));
+        model.setConnectionIcon2(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "2"));
+        model.setConnectionIcon3(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "3"));
+        model.setConnectionIcon4(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "4"));
+        model.setConnectionIcon5(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "5"));
+        model.setConnectionIcon6(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "6"));
+    }
+
+    public static String parseLocationIcon(SettingsAccessor settingsAccessor, String settingsKey) {
+        String value = settingsAccessor.getString(settingsKey);
+
+        if (StringUtils.isEmpty(value))
+            return null;
+
+        if (value.equals(SettingsFieldNames.LOCATION_ICON_EMPTY_VALUE))
+            return LocationFieldsModel.EMPTY_VALUE;
+
+        if (value.equals(SettingsFieldNames.LOCATION_ICON_NONE_VALUE))
+            return LocationFieldsModel.NONE_VALUE;
+
+        if (value.equals(SettingsFieldNames.LOCATION_ICON_COPY_FRONT_VALUE))
+            return LocationFieldsModel.COPY_OTHER_VALUE;
+
+        return value;
     }
 }

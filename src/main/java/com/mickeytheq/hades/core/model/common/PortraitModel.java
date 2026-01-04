@@ -78,7 +78,7 @@ public class PortraitModel implements NullDiscriminator {
         if (!getImage().isEmpty())
             return false;
 
-        if (StringUtils.isEmpty(artist))
+        if (!StringUtils.isEmpty(artist))
             return false;
 
         // otherwise any pan/scale settings are irrelevant and we can skip the entire entity

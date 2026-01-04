@@ -14,6 +14,7 @@ public enum CardFaceType {
     Enemy,
     Treachery,
     Location,
+    LocationBack,
     Act,
     Agenda,
     ActBack,

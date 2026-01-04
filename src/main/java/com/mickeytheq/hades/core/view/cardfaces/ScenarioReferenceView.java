@@ -307,7 +307,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             if (chaosTokens.size() > 1) {
                 section = new MultiSectionRenderer.DoubleLineInsetTextSection(chaosTokenInfo.getRules(),
                         TextStyleUtils.getBodyTextStyle(), MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT,
-                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight, 10);
+                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight, 15);
             }
             else {
                 section = new MultiSectionRenderer.TextSection(chaosTokenInfo.getRules(),

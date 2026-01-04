@@ -84,6 +84,9 @@ public class NewCardDialog extends DialogWithButtons {
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Treachery.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
 
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.SCENARIO_REFERENCE), "Scenario reference card (chaos tokens effects)",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(ScenarioReference.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(ScenarioReference.class)));
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.AGENDA), "Agenda with a standard agenda back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Agenda.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(AgendaBack.class)));
