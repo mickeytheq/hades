@@ -22,6 +22,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
+    private JComboBox<ScenarioReference.Difficulty> difficultyEditor;
     private SymbolChaosTokenInfoView skullView;
     private SymbolChaosTokenInfoView cultistView;
     private SymbolChaosTokenInfoView tabletView;
@@ -69,8 +70,14 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
 
+        // difficulty
+        difficultyEditor = EditorUtils.createEnumComboBox(ScenarioReference.Difficulty.class);
+        EditorUtils.bindComboBox(difficultyEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDifficulty));
+        difficultyEditor.setSelectedItem(getModel().getDifficulty());
+
         // rules/chaos token effects
         JPanel rulesPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.RULES));
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(rulesPanel, Language.string(InterfaceConstants.DIFFICULTY), difficultyEditor);
         skullView.populatePanel(rulesPanel, editorContext);
         cultistView.populatePanel(rulesPanel, editorContext);
         tabletView.populatePanel(rulesPanel, editorContext);
@@ -80,7 +87,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         JPanel trackingPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TRACKERBOX));
         trackingBoxEditor = EditorUtils.createTextField(30);
         EditorUtils.bindTextComponent(trackingBoxEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setTrackingBox));
-        getModel().setTrackingBox(trackingBoxEditor.getText());
+        trackingBoxEditor.setText(getModel().getTrackingBox());
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(trackingPanel, Language.string(InterfaceConstants.TRACKERBOX), trackingBoxEditor);
 
@@ -97,9 +104,9 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(56, 180, 638, 150);
+    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(56, 185, 638, 100);
     private static final Rectangle DIFFICULTY_DRAW_REGION = new Rectangle(258, 254, 228, 28);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(190, 312, 480, 610);
+    private static final Rectangle BODY_DRAW_REGION = new Rectangle(195, 312, 480, 610);
     private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(345, 124, 64, 64);
     private static final Rectangle TRACKING_BOX_DRAW_REGION = new Rectangle(64, 742, 612, 184);
     private static final Rectangle TRACKING_TITLE_DRAW_REGION = new Rectangle(88, 750, 560, 40);
@@ -110,11 +117,35 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
         // title needs special handling as it is allowed to spill onto a second line
         // set the alignment to the top so a short title will stay on one line
-        double titleEndedAtYPosition = PaintUtils.paintTitle(paintContext, TITLE_DRAW_REGION, getModel().getCommonCardFieldsModel().getTitle(), false,
-                MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP, true);
+        MarkupRenderer titleMarkupRenderer = paintContext.createMarkupRenderer();
+        titleMarkupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
+        titleMarkupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP);
+        titleMarkupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
+        titleMarkupRenderer.setLineTightness(0.5f);
+        MarkupUtils.applyTagMarkupConfiguration(titleMarkupRenderer);
+
+        titleMarkupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getTitle());
+
+        // the MarkupRenderer.draw() is supposed to return the 'next' y position
+        // however when the input text has no whitespace and FIT_SCALE_TEXT is used it follows a different code path
+        // and returns something else (which is 0)
+        // so instead do measure() which returns the height of the text without drawing and use that to caluclate
+        // then draw afterwards
+        double titleEndedAtYPosition = TITLE_DRAW_REGION.getY() + titleMarkupRenderer.measure(paintContext.getGraphics(), TITLE_DRAW_REGION);
+        titleMarkupRenderer.draw(paintContext.getGraphics(), TITLE_DRAW_REGION);
+
+        // trim slightly to tighten the line vertically against the title
+        titleEndedAtYPosition = titleEndedAtYPosition - 5;
+
+        // draw a double line below the title
+        double titleLineWidth = MarkupUtils.getLastLineWidthInPixels(titleMarkupRenderer);
+        double secondLineYPosition = drawTitleUnderlines(paintContext, titleLineWidth, titleEndedAtYPosition);
+
+        // create some vertical space between the lines and the next element
+        double doubleLinesEndedAt = secondLineYPosition + 10;
 
         // if the title overspilled then move everything else down
-        int yDelta = Math.max(0, (int)Math.round(titleEndedAtYPosition - DIFFICULTY_DRAW_REGION.getY()));
+        int yDelta = Math.max(0, (int)Math.round(doubleLinesEndedAt - DIFFICULTY_DRAW_REGION.getY()));
 
         Rectangle difficultyDrawRegion = DIFFICULTY_DRAW_REGION.getBounds();
         difficultyDrawRegion.translate(0, yDelta);
@@ -123,7 +154,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // calculate the body region
         // the Y starts just after the difficulty, which may have moved from its default location above so calculate
         // the Y ends just before the tracking box, if it exists, otherwise the default
-        double bodyYStart = (difficultyDrawRegion.getY() + difficultyDrawRegion.getHeight());
+        double bodyYStart = difficultyDrawRegion.getMaxY() + 20;
         double bodyYEnd = BODY_DRAW_REGION.getMaxY();
 
         if (!StringUtils.isEmpty(getModel().getTrackingBox())) {
@@ -144,10 +175,20 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         commonCardFieldsView.paintCopyright(paintContext);
     }
 
+    private double drawTitleUnderlines(PaintContext paintContext, double lineWidth, double titleEndedAtYPosition) {
+        double lineXPosition = TITLE_DRAW_REGION.getCenterX() - lineWidth * 0.5;
+        Graphics2D lineGraphics = (Graphics2D) paintContext.getGraphics().create();
+        lineGraphics.setStroke(new BasicStroke(2.0f));
+        lineGraphics.setPaint(Color.BLACK);
+        lineGraphics.drawLine((int) lineXPosition, (int) titleEndedAtYPosition, (int) (lineXPosition + lineWidth), (int) titleEndedAtYPosition);
+        double secondLineYPosition = titleEndedAtYPosition + 5;
+        lineGraphics.drawLine((int) lineXPosition, (int) secondLineYPosition, (int) (lineXPosition + lineWidth), (int) secondLineYPosition);
+
+        return secondLineYPosition;
+    }
+
     private Map<ScenarioReference.SymbolChaosTokenInfo, List<ScenarioReference.SymbolChaosToken>> combineTokens() {
         Map<ScenarioReference.SymbolChaosTokenInfo, List<ScenarioReference.SymbolChaosToken>> combinedMap = new LinkedHashMap<>();
-
-        Set<ScenarioReference.SymbolChaosToken> handled = new HashSet<>();
 
         Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosTokenInfo> tokenMap = new LinkedHashMap<>();
         tokenMap.put(ScenarioReference.SymbolChaosToken.Skull, getModel().getSkull());
@@ -155,19 +196,30 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         tokenMap.put(ScenarioReference.SymbolChaosToken.Tablet, getModel().getTablet());
         tokenMap.put(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getElderThing());
 
+        Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosToken> combinedInto = new HashMap<>();
+
         // iterate the possible tokens/info and build a reverse map with combinations resolved
         for (Map.Entry<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosTokenInfo> entry : tokenMap.entrySet()) {
             ScenarioReference.SymbolChaosToken token = entry.getKey();
             ScenarioReference.SymbolChaosTokenInfo tokenInfo = entry.getValue();
 
-            if (!handled.contains(token)) {
-                combinedMap.put(tokenInfo, Lists.newArrayList(token));
+            // find out if this token has already been combined
+            ScenarioReference.SymbolChaosToken alreadyCombinedInto = combinedInto.get(token);
 
-                ScenarioReference.SymbolChaosToken combineWith = tokenInfo.getCombineWith();
-                if (combineWith != null) {
-                    handled.add(combineWith);
-                    combinedMap.get(tokenInfo).add(combineWith);
-                }
+            // if not already combined create an entry for it, otherwise add it to the list of the token it is combining with
+            if (alreadyCombinedInto == null) {
+                combinedMap.put(tokenInfo, Lists.newArrayList(token));
+            }
+            else {
+                combinedMap.get(tokenMap.get(alreadyCombinedInto)).add(token);
+            }
+
+            // if this token is combining with another, token then record that and merge it in when that token is processed
+            // note that the combineWith can effectively be transitive,
+            // e.g. skull combine with cultist and cultist combine with tablet -> skull combined with tablet
+            ScenarioReference.SymbolChaosToken combineWith = tokenInfo.getCombineWith();
+            if (combineWith != null) {
+                combinedInto.put(combineWith, alreadyCombinedInto != null ? alreadyCombinedInto : token);
             }
         }
 
@@ -209,12 +261,6 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             EditorUtils.bindComboBox(combineWithEditor, editorContext.wrapConsumerWithMarkedChanged(symbolChaosTokenInfo::setCombineWith));
             combineWithEditor.setSelectedItem(symbolChaosTokenInfo.getCombineWith());
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.COMBINEWITH), combineWithEditor);
-
-            // spacing
-            JSpinner afterSpacingEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
-            EditorUtils.bindSpinner(afterSpacingEditor, editorContext.wrapConsumerWithMarkedChanged(symbolChaosTokenInfo::setAfterSpacing));
-            afterSpacingEditor.setValue(symbolChaosTokenInfo.getAfterSpacing());
-            MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterSpacingEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
         }
     }
 
@@ -226,6 +272,8 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
+    private static final int CHAOS_TOKEN_X_POSITION = 100;
+
     private void paintBody(PaintContext paintContext, Rectangle drawRegion) {
         // figure out which tokens are grouped together, if any
         // generate an ordered list of text to render with one or more tokens against each
@@ -236,31 +284,96 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // 90 pixels X position
         MultiSectionRenderer renderer = new MultiSectionRenderer(paintContext, drawRegion);
 
+        Map<ScenarioReference.SymbolChaosTokenInfo, MultiSectionRenderer.Section> infoToSectionMap = new LinkedHashMap<>();
+
+        int verticalSpaceBetweenChaosTokensInPixels = 10;
+
+        double totalVerticalSpacerHeight = (combinedTokens.size() - 1) * verticalSpaceBetweenChaosTokensInPixels;
+        double totalHeightAvailable = drawRegion.getHeight() - totalVerticalSpacerHeight;
+        double heightPerChaosToken = totalHeightAvailable / 4;
+
         for (Map.Entry<ScenarioReference.SymbolChaosTokenInfo, List<ScenarioReference.SymbolChaosToken>> entry : combinedTokens.entrySet()) {
             ScenarioReference.SymbolChaosTokenInfo chaosTokenInfo = entry.getKey();
             List<ScenarioReference.SymbolChaosToken> chaosTokens = entry.getValue();
 
+            // add a spacer
             if (!renderer.getSections().isEmpty())
-                renderer.getSections().add(new MultiSectionRenderer.VerticalSpacerSection(10));
+                renderer.getSections().add(new MultiSectionRenderer.VerticalSpacerSection(verticalSpaceBetweenChaosTokensInPixels));
 
-            // chaos tokens are ~7mm wide on the cards
-            // and allow a small gap between each token and above and below the total
-            int chaosTokenPixelHeight = chaosTokens.size() * paintContext.metricToPixels(7)
-                    + paintContext.metricToPixels(1.5) * chaosTokens.size() + 1;
+            // allocate this info section a height in proportion to how many chaos tokens it has
+            int sectionHeight = (int)heightPerChaosToken * chaosTokens.size();
 
+            MultiSectionRenderer.Section section;
             if (chaosTokens.size() > 1) {
-                renderer.getSections().add(new MultiSectionRenderer.DoubleLineInsetTextSection(chaosTokenInfo.getRules(),
+                section = new MultiSectionRenderer.DoubleLineInsetTextSection(chaosTokenInfo.getRules(),
                         TextStyleUtils.getBodyTextStyle(), MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT,
-                        paintContext.getRenderingDpi(), chaosTokenPixelHeight, chaosTokenPixelHeight, 10));
+                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight, 10);
             }
             else {
-                renderer.getSections().add(new MultiSectionRenderer.TextSection(chaosTokenInfo.getRules(),
+                section = new MultiSectionRenderer.TextSection(chaosTokenInfo.getRules(),
                         TextStyleUtils.getBodyTextStyle(), MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT,
-                        paintContext.getRenderingDpi(), chaosTokenPixelHeight, Integer.MAX_VALUE));
+                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight);
             }
+
+            renderer.getSections().add(section);
+
+            infoToSectionMap.put(chaosTokenInfo, section);
         }
 
-        renderer.draw();
+        // draw the chaos token symbols next to the respective draw regions
+        Map<MultiSectionRenderer.Section, Rectangle> sectionDrawRegions = renderer.draw();
+
+        for (Map.Entry<ScenarioReference.SymbolChaosTokenInfo, MultiSectionRenderer.Section> entry : infoToSectionMap.entrySet()) {
+            ScenarioReference.SymbolChaosTokenInfo info = entry.getKey();
+
+            MultiSectionRenderer.Section section = entry.getValue();
+            Rectangle sectionDrawRegion = sectionDrawRegions.get(section);
+
+            List<ScenarioReference.SymbolChaosToken> tokens = combinedTokens.get(info);
+
+            // chaos tokens are 7mm in diameter
+            // for the case with multiple tokens in the same group, add a small vertical space between
+            // calculate the y position of the first token in the group
+            double yPosition = sectionDrawRegion.getCenterY();
+
+            // the offset is the number of tokens - 1 multiplied by the half of the size of a vertical gap + token height
+            // for example
+            // - with tokens = 1 there is no adjustment
+            // - with tokens = 3 then the first token needs to move a full height + a full spacer above
+            // - with tokens = 2 then it is half of tokens = 2
+            int tokenDiameterInPixels = paintContext.millimetersToPixels(7);
+            int verticalGapInPixels = paintContext.millimetersToPixels(1);
+
+            // this gives the centre position of the first token
+            yPosition = yPosition - (tokens.size() - 1) * (0.5 * (tokenDiameterInPixels + verticalGapInPixels));
+
+            // this gives the top position of the first token
+            yPosition = yPosition - (0.5 * tokenDiameterInPixels);
+
+            for (ScenarioReference.SymbolChaosToken token : tokens) {
+                // draw the token image
+                PaintUtils.paintBufferedImage(paintContext.getGraphics(),
+                        ImageUtils.loadImage("/overlays/chaos_tokens/chaos_" + getChaosTokenResourceName(token) + ".png"),
+                        new Rectangle(CHAOS_TOKEN_X_POSITION, (int)yPosition, tokenDiameterInPixels, tokenDiameterInPixels));
+
+                yPosition = yPosition + tokenDiameterInPixels + verticalGapInPixels;
+            }
+        }
+    }
+
+    private String getChaosTokenResourceName(ScenarioReference.SymbolChaosToken token) {
+        switch (token) {
+            case Skull:
+                return "skull";
+            case Cultist:
+                return "cultist";
+            case Tablet:
+                return "tablet";
+            case ElderThing:
+                return "elder_thing";
+            default:
+                throw new RuntimeException("Invalid token type '" + token + "'");
+        }
     }
 
     private void paintTrackingBox(PaintContext paintContext) {

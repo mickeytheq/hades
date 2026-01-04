@@ -2,13 +2,13 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
-import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import resources.Language;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +107,27 @@ public class MarkupUtils {
         markupRenderer.setStyleForTag("sufb", TextStyleUtils.getScenarioIndexBackTextStyle());
 
         // TODO: missing tags with styles - section, header, boxbullet
+    }
+
+    private static Field lastLineTextWidthField;
+
+    static {
+        try {
+            lastLineTextWidthField = MarkupRenderer.class.getDeclaredField("lastLineTextWidth");
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+        lastLineTextWidthField.setAccessible(true);
+    }
+
+    // some dubious reflection that allows us to get at the last line text width that the markup renderer drew
+    // this is returned by drawSingleLine() but sometimes we need it after calling draw() which returns something else
+    public static double getLastLineWidthInPixels(MarkupRenderer markupRenderer) {
+        try {
+            return (double) lastLineTextWidthField.get(markupRenderer);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // the res:// protocol maps into a 'resources' folder in the root of the classpath which is why

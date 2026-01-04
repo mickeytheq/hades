@@ -34,9 +34,9 @@ public class PaintUtils {
         paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER, false);
     }
 
-    public static double paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment, boolean multiline) {
+    public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment, boolean multiline) {
         if (StringUtils.isEmpty(titleText))
-            return 0;
+            return;
 
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
@@ -51,10 +51,10 @@ public class PaintUtils {
 
         if (multiline) {
             markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
-            return markupRenderer.draw(paintContext.getGraphics(), drawRegion);
+            markupRenderer.draw(paintContext.getGraphics(), drawRegion);
         }
         else {
-            return markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
         }
     }
 

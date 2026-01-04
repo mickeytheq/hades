@@ -660,6 +660,8 @@ public class InterfaceConstants {
     public static final String SECONDARYCLASS = "Hades-SecondaryClass";
     // English value: For the Greater Good
     public static final String FORTHEGREATERGOOD = "Hades-ForTheGreaterGood";
+    // English value: Difficulty
+    public static final String DIFFICULTY = "Hades-Difficulty";
     // English value: Yig's Venom
     public static final String YIGSVENOM = "Hades-YigsVenom";
     // English value: Agenda (Portrait)
@@ -1226,6 +1228,8 @@ public class InterfaceConstants {
     public static final String ENEMY = "Hades-Enemy";
     // English value: Options
     public static final String OPTIONS = "Hades-Options";
+    // English value: Scenario reference
+    public static final String SCENARIO_REFERENCE = "Hades-Scenario-Reference";
     // English value: Story Asset / Enemy
     public static final String ASSETSTORYENEMY = "Hades-AssetStoryEnemy";
     // English value: Text

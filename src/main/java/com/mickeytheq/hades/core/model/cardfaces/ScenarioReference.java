@@ -17,8 +17,6 @@ public class ScenarioReference extends BaseCardFaceModel {
     public static class SymbolChaosTokenInfo {
         private String rules;
         private SymbolChaosToken combineWith;
-        private Integer afterSpacing = 0;
-
         @Property("Rules")
         public String getRules() {
             return rules;
@@ -28,22 +26,13 @@ public class ScenarioReference extends BaseCardFaceModel {
             this.rules = rules;
         }
 
-        @Property("MergeWith")
+        @Property("CombineWith")
         public SymbolChaosToken getCombineWith() {
             return combineWith;
         }
 
         public void setCombineWith(SymbolChaosToken combineWith) {
             this.combineWith = combineWith;
-        }
-
-        @Property("AfterSpacing")
-        public Integer getAfterSpacing() {
-            return afterSpacing;
-        }
-
-        public void setAfterSpacing(Integer afterSpacing) {
-            this.afterSpacing = afterSpacing;
         }
     }
 
