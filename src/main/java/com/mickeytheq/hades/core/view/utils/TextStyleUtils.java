@@ -34,6 +34,9 @@ public class TextStyleUtils {
     private static final TextStyle GSS_TEXT_STYLE;
     private static final TextStyle SCENARIO_INDEX_TEXT_STYLE;
     private static final TextStyle SCENARIO_INDEX_BACK_TEXT_STYLE;
+    private static final TextStyle SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE;
+    private static final TextStyle SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE;
+    private static final TextStyle SCENARIO_REFERENCE_TITLE_TEXT_STYLE;
 
     static {
         // TODO: change all the style references to a specific Font rather than family as there are multiple 'Arno Pro' fonts out there
@@ -118,6 +121,28 @@ public class TextStyleUtils {
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0);
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
         INVESTIGATOR_SKILL_VALUE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE = new TextStyle();
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE.add(TextAttribute.SIZE, 6.0);
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE.add(TextAttribute.WIDTH, 0.97);
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+        SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
+        // modified title style
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE = new TextStyle();
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arkhamic");
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0 * 0.836);
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 1 * 1.02);
+        SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
+
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE = new TextStyle();
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arkhamic");
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE.add(TextAttribute.SIZE, 11.0 * 1.318);
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE.add(TextAttribute.WIDTH, 1 * 1.05);
+        SCENARIO_REFERENCE_TITLE_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         // story text but smaller
         ISS_TEXT_STYLE = new TextStyle();
@@ -248,6 +273,17 @@ public class TextStyleUtils {
         return SCENARIO_INDEX_BACK_TEXT_STYLE;
     }
 
+    public static TextStyle getScenarioReferenceDifficultyTextStyle() {
+        return SCENARIO_REFERENCE_DIFFICULTY_TEXT_STYLE;
+    }
+
+    public static TextStyle getScenarioReferenceTitleTextStyle() {
+        return SCENARIO_REFERENCE_TITLE_TEXT_STYLE;
+    }
+
+    public static TextStyle getScenarioReferenceTrackerBoxTitleTextStyle() {
+        return SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE;
+    }
 
     public static Map<TextAttribute, Object> getAttributes(TextStyle textStyle) {
         // janky way of getting the attributes out of a style - create a fake string and apply the style to it

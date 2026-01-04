@@ -71,16 +71,32 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //        asset();
-            investigator();
+//            investigator();
 //        event();
-//        skill();
+        skill();
 //        treacheryTreachery();
 //            location();
 //            random();
 //            agenda();
 //            act();
 //            enemy();
+//            scenarioReference();
         });
+    }
+
+    private void scenarioReference() {
+        ScenarioReference front = new ScenarioReference();
+        front.getCommonCardFieldsModel().setTitle("Title");
+        front.setDifficulty(ScenarioReference.Difficulty.EasyStandard);
+        front.getSkull().setRules("-X. Where X is horror on your investigator card.");
+        front.getCultist().setRules("-1. -3 instead if there's an enemy at your location.");
+        front.getTablet().setRules("-2. Take 1 horror");
+        front.getElderThing().setRules("-4. If this is an evade test you automatically fail instead.");
+
+        Card card = CardFaces.createCardModel(front, null);
+
+        displayEditor(card);
+
     }
 
     private void enemy() {

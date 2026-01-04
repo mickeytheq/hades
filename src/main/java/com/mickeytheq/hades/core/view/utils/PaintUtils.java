@@ -13,6 +13,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class PaintUtils {
+    public static final double MILLIMETERS_PER_INCH = 25.4;
+
     public static void paintLabel(PaintContext paintContext, Rectangle drawRegion, String labelText) {
         if (StringUtils.isEmpty(labelText))
             return;
@@ -32,9 +34,9 @@ public class PaintUtils {
         paintTitle(paintContext, drawRegion, titleText, unique, MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER, false);
     }
 
-    public static void paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment, boolean multiline) {
+    public static double paintTitle(PaintContext paintContext, Rectangle drawRegion, String titleText, boolean unique, int alignment, boolean multiline) {
         if (StringUtils.isEmpty(titleText))
-            return;
+            return 0;
 
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
@@ -49,10 +51,10 @@ public class PaintUtils {
 
         if (multiline) {
             markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
-            markupRenderer.draw(paintContext.getGraphics(), drawRegion);
+            return markupRenderer.draw(paintContext.getGraphics(), drawRegion);
         }
         else {
-            markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
+            return markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
         }
     }
 

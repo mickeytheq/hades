@@ -36,13 +36,26 @@ public class MultiSectionRenderer {
     }
 
     public void draw() {
-        Map<Section, Double> lastCalculatedHeights = new IdentityHashMap<>();
+        Map<Section, Double> calculatedHeights = calculateSectionHeights();
 
-        // calculate the total height that is fixed/cannot be scaled
-        double unscalableHeight = sections.stream()
-                .filter(o -> !o.isScalable())
-                .mapToDouble(o -> o.calculateHeight(paintContext.getGraphics(), drawRegion))
-                .sum();
+        double currentYOffset = 0.0;
+
+        // adjustment complete, now draw
+        for (Section section : sections) {
+            double textSectionHeight = calculatedHeights.get(section);
+
+            Rectangle sectionDrawRegion = new Rectangle(
+                    (int)drawRegion.getX(), (int)(drawRegion.getY() + currentYOffset),
+                    (int)drawRegion.getWidth(), (int) textSectionHeight);
+
+            section.draw(paintContext.getGraphics(), sectionDrawRegion);
+
+            currentYOffset = currentYOffset + textSectionHeight;
+        }
+    }
+
+    public Map<Section, Double> calculateSectionHeights() {
+        Map<Section, Double> lastCalculatedHeights = new IdentityHashMap<>();
 
         do {
             // calculate height for each section
@@ -51,9 +64,16 @@ public class MultiSectionRenderer {
                 lastCalculatedHeights.put(section, sectionHeight);
             }
 
+            // if any of the following is true then we must re-calculate
+            // - the total height exceed the draw region's height
+            // - any individual section's height exceeds its maximum
             double totalHeight = lastCalculatedHeights.values().stream().mapToDouble(value -> value).sum();
 
-            if (totalHeight < drawRegion.getHeight())
+            boolean totalHeightExceeded = totalHeight > drawRegion.getHeight();
+            boolean anySectionExceededMaximum = lastCalculatedHeights.entrySet().stream().anyMatch(o -> o.getValue() > o.getKey().getMaximumHeight());
+
+            // no bad conditions met - scaling is good, break out
+            if (!totalHeightExceeded && !anySectionExceededMaximum)
                 break;
 
             // adjust scaling of all scalable sections by the same factor and try again
@@ -66,29 +86,31 @@ public class MultiSectionRenderer {
             sections.stream().filter(Section::isScalable).forEach(o -> o.changeScale(0.95));
         } while (true);
 
-        double currentYOffset = 0.0;
-
-        // adjustment complete, now draw
-        for (Section section : sections) {
-            double textSectionHeight = (Double)lastCalculatedHeights.get(section);
-
-            Rectangle sectionDrawRegion = new Rectangle(
-                    (int)drawRegion.getX(), (int)(drawRegion.getY() + currentYOffset),
-                    (int)drawRegion.getWidth(), (int) textSectionHeight);
-
-            section.draw(paintContext.getGraphics(), sectionDrawRegion);
-
-            currentYOffset = currentYOffset + textSectionHeight;
-        }
+        return lastCalculatedHeights;
     }
 
     public interface Section {
+        // do a calculation/test render of this section, returning the desired height
+        // the implementation must not draw to the provided Graphics2D but may use it to derive font metrics
+        // and other measurements
         double calculateHeight(Graphics2D g, Rectangle drawRegion);
 
+        // get the height this section must not exceed
+        // calculatedHeight() must not observe this. instead let the overall calculator detect the overage so it
+        // can perform scaling
+        default double getMaximumHeight() {
+            // default enforce no maximum
+            return Double.MAX_VALUE;
+        }
+
+        // return true if this section can be scaled vertically
         boolean isScalable();
 
+        // change the scale of this section. called when the overall height conditions are not met and sections must
+        // be made smaller to create space. only called is isScalable returns true
         void changeScale(double scale);
 
+        // draw this section
         void draw(Graphics2D g, Rectangle drawRegion);
     }
 
@@ -153,19 +175,27 @@ public class MultiSectionRenderer {
 
     public static class TextSection implements Section {
         private final String text;
+        private final TextStyle textStyle;
         private final int alignment;
         private final double dpi;
-        private final TextStyle textStyle;
+        private final int minimumHeight;
+        private final int maximumHeight;
 
         public TextSection(String text, TextStyle originalTextStyle, int alignment, double dpi) {
+            this(text, originalTextStyle, alignment, dpi, 0, Integer.MAX_VALUE);
+        }
+
+        public TextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int minimumHeight, int maximumHeight) {
             this.text = text;
+            this.alignment = alignment;
+            this.dpi = dpi;
 
             // clone the TextStyle as we might change the values
             textStyle = new TextStyle();
             textStyle.add(originalTextStyle);
 
-            this.alignment = alignment;
-            this.dpi = dpi;
+            this.minimumHeight = minimumHeight;
+            this.maximumHeight = maximumHeight;
         }
 
         public String getText() {
@@ -180,7 +210,17 @@ public class MultiSectionRenderer {
         public double calculateHeight(Graphics2D g, Rectangle drawRegion) {
             MarkupRenderer markupRenderer = createMarkupRenderer();
 
-            return markupRenderer.measure(g, drawRegion);
+            double calculatedHeight = markupRenderer.measure(g, drawRegion);
+
+            // observe any externally provided minimum
+            if (calculatedHeight < minimumHeight)
+                return minimumHeight;
+
+            return calculatedHeight;
+        }
+
+        public double getMaximumHeight() {
+            return maximumHeight;
         }
 
         @Override
@@ -213,11 +253,16 @@ public class MultiSectionRenderer {
         }
     }
 
-    public static class StoryTextSection extends TextSection {
+    public static class DoubleLineInsetTextSection extends TextSection {
         private final int leftIndent;
 
-        public StoryTextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int leftIndent) {
+        public DoubleLineInsetTextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int leftIndent) {
             super(text, originalTextStyle, alignment, dpi);
+            this.leftIndent = leftIndent;
+        }
+
+        public DoubleLineInsetTextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int minimumHeight, int maximumHeight, int leftIndent) {
+            super(text, originalTextStyle, alignment, dpi, minimumHeight, maximumHeight);
             this.leftIndent = leftIndent;
         }
 

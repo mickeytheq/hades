@@ -72,7 +72,7 @@ public class CardFaceViewUtils {
             if (needSeparator)
                 renderer.getSections().add(new MultiSectionRenderer.VerticalSpacerSection(10));
 
-            renderer.getSections().add(new MultiSectionRenderer.StoryTextSection(story, TextStyleUtils.getStoryTextStyle(),
+            renderer.getSections().add(new MultiSectionRenderer.DoubleLineInsetTextSection(story, TextStyleUtils.getStoryTextStyle(),
                     MarkupRenderer.LAYOUT_LEFT, paintContext.getRenderingDpi(), 20));
 
             needSeparator = true;

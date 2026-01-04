@@ -144,6 +144,8 @@ public class InterfaceConstants {
     public static final String BACKPORTRAIT = "Hades-BackPortrait";
     // English value: None
     public static final String SKILL_NONE = "Hades-Skill-None";
+    // English value: New card
+    public static final String NEW_CARD = "Hades-New-Card";
     // English value: Keywords
     public static final String KEYWORDS = "Hades-Keywords";
     // English value: Name

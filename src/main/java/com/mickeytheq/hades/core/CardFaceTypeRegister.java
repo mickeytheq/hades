@@ -32,6 +32,7 @@ public class CardFaceTypeRegister {
         register(Enemy.class, EnemyView.class);
         register(Treachery.class, TreacheryView.class);
 
+        register(ScenarioReference.class, ScenarioReferenceView.class);
         register(Agenda.class, AgendaView.class);
         register(AgendaBack.class, AgendaBackView.class);
         register(Act.class, ActView.class);

@@ -4,6 +4,7 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.view.utils.PaintUtils;
 
 import java.awt.*;
 
@@ -25,6 +26,10 @@ public interface PaintContext {
 
     // desired resolution of the rendering
     double getRenderingDpi();
+
+    default int metricToPixels(double millimeters) {
+        return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getRenderingDpi());
+    }
 
     //
     // markup methods

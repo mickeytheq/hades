@@ -22,10 +22,10 @@ public class NewCardDialog extends DialogWithButtons {
 
     private JTextField filenameEditor;
 
-    // TODO: add option to specify title/filename when creating a new card
-    // when this dialog is launched from the regular Strange Eons 'new game component' code path it cannot be cancelled
     public NewCardDialog() {
         super(StrangeEons.getWindow(), true);
+
+        setTitle(Language.string(InterfaceConstants.NEW_CARD));
 
         initialise();
     }
@@ -74,9 +74,22 @@ public class NewCardDialog extends DialogWithButtons {
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Investigator.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(InvestigatorBack.class)));
 
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.LOCATION), "Location with a standard location back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Location.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(LocationBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ENEMY), "Enemy with encounter card back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Enemy.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.TREACHERY), "Treachery with encounter card back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Treachery.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
+
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.AGENDA), "Agenda with a standard agenda back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Agenda.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(AgendaBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ACT), "Act with a standard act back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Act.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(ActBack.class)));
 
         filenameEditor = new JTextField(20);
 
@@ -101,11 +114,7 @@ public class NewCardDialog extends DialogWithButtons {
         detailsPanel.add(filenameEditor, "split, pushx, growx");
         detailsPanel.add(new JLabel(".hades"), "wrap");
 
-        JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
-        mainPanel.add(helpPanel, "wrap, pushx, growx");
-        mainPanel.add(bothFacesPanel, "wrap, pushx, growx");
-        mainPanel.add(customFacesPanel, "wrap, pushx, growx");
-        mainPanel.add(detailsPanel, "wrap, pushx, growx");
+        JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(helpPanel, bothFacesPanel, customFacesPanel, detailsPanel);
 
         setContentComponent(mainPanel);
 
