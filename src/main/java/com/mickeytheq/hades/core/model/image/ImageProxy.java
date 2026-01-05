@@ -22,7 +22,7 @@ public class ImageProxy {
             loaded = true;
     }
 
-    public ImageProxy(BufferedImage image) {
+    private ImageProxy(BufferedImage image) {
         this.imagePersister = null;
         this.image = image;
 
@@ -66,14 +66,17 @@ public class ImageProxy {
         return identifier;
     }
 
+    // creates an empty proxy that will load nothing
     public static ImageProxy createEmpty() {
         return new ImageProxy(getImagePersister(), null);
     }
 
+    // creates a proxy for an existing identifier
     public static ImageProxy createFor(String identifier) {
         return new ImageProxy(getImagePersister(), identifier);
     }
 
+    // creates a proxy with a specific image - primarily useful for testing
     public static ImageProxy createStatic(BufferedImage image) {
         return new ImageProxy(image);
     }

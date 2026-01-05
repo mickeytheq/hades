@@ -104,7 +104,7 @@ public class PaintUtils {
     public static final Color STATISTIC_LIGHT_TEXT_COLOUR = new Color(0.996f, 0.945f, 0.859f);
 
     public static void paintStatistic(PaintContext paintContext, Rectangle drawRegion, Statistic statistic, Color outlineColour, Color textColour) {
-        if (statistic.isNull())
+        if (statistic.isEmpty())
             return;
 
         new StatisticPainter(paintContext, statistic, drawRegion, outlineColour, textColour).paint();
@@ -218,7 +218,7 @@ public class PaintUtils {
         }
 
         public void paint() {
-            if (statistic.isNull())
+            if (statistic.isEmpty())
                 return;
 
             calculateStatisticValue();

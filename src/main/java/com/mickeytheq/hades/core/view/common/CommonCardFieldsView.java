@@ -60,13 +60,13 @@ public class CommonCardFieldsView {
         EditorUtils.bindTextComponent(subtitleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setSubtitle));
         EditorUtils.bindToggleButton(uniqueEditor, editorContext.wrapConsumerWithMarkedChanged(model::setUnique));
         EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
-        EditorUtils.bindSpinner(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpace));
+        EditorUtils.bindSpinner(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpacing));
         EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
-        EditorUtils.bindSpinner(afterKeywordsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterKeywordsSpace));
+        EditorUtils.bindSpinner(afterKeywordsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterKeywordsSpacing));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
-        EditorUtils.bindSpinner(afterRulesSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterRulesSpace));
+        EditorUtils.bindSpinner(afterRulesSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterRulesSpacing));
         EditorUtils.bindTextComponent(flavourTextEditor, editorContext.wrapConsumerWithMarkedChanged(model::setFlavourText));
-        EditorUtils.bindSpinner(afterFlavourTextSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterFlavourTextSpace));
+        EditorUtils.bindSpinner(afterFlavourTextSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterFlavourTextSpacing));
         EditorUtils.bindTextComponent(victoryEditor, editorContext.wrapConsumerWithMarkedChanged(model::setVictory));
         EditorUtils.bindTextComponent(copyrightEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyright));
 
@@ -74,13 +74,13 @@ public class CommonCardFieldsView {
         subtitleEditor.setText(model.getSubtitle());
         uniqueEditor.setSelected(model.getUnique() != null && model.getUnique());
         traitsEditor.setText(model.getTraits());
-        afterTraitsSpaceEditor.setValue(model.getAfterTraitsSpace());
+        afterTraitsSpaceEditor.setValue(model.getAfterTraitsSpacing());
         keywordsEditor.setText(model.getKeywords());
-        afterKeywordsSpaceEditor.setValue(model.getAfterKeywordsSpace());
+        afterKeywordsSpaceEditor.setValue(model.getAfterKeywordsSpacing());
         rulesEditor.setText(model.getRules());
-        afterRulesSpaceEditor.setValue(model.getAfterRulesSpace());
+        afterRulesSpaceEditor.setValue(model.getAfterRulesSpacing());
         flavourTextEditor.setText(model.getFlavourText());
-        afterFlavourTextSpaceEditor.setValue(model.getAfterFlavourTextSpace());
+        afterFlavourTextSpaceEditor.setValue(model.getAfterFlavourTextSpacing());
         victoryEditor.setText(model.getVictory());
         copyrightEditor.setText(model.getCopyright());
     }
@@ -203,7 +203,7 @@ public class CommonCardFieldsView {
             sb.append(MarkupUtils.getSpacerMarkup(1, 0.5));
         }
 
-        addSpacing(sb, model.getAfterTraitsSpace());
+        addSpacing(sb, model.getAfterTraitsSpacing());
 
         if (!StringUtils.isEmpty(model.getKeywords())) {
             if (sb.length() > 0)
@@ -215,7 +215,7 @@ public class CommonCardFieldsView {
             sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
         }
 
-        addSpacing(sb, model.getAfterKeywordsSpace());
+        addSpacing(sb, model.getAfterKeywordsSpacing());
 
         if (!StringUtils.isEmpty(model.getRules())) {
             if (sb.length() > 0)
@@ -227,7 +227,7 @@ public class CommonCardFieldsView {
             sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
         }
 
-        addSpacing(sb, model.getAfterRulesSpace());
+        addSpacing(sb, model.getAfterRulesSpacing());
 
         if (!StringUtils.isEmpty(model.getFlavourText())) {
             if (sb.length() > 0)
@@ -241,7 +241,7 @@ public class CommonCardFieldsView {
             sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
         }
 
-        addSpacing(sb, model.getAfterFlavourTextSpace());
+        addSpacing(sb, model.getAfterFlavourTextSpacing());
 
         if (!StringUtils.isEmpty(model.getVictory())) {
             if (sb.length() > 0)

@@ -1,12 +1,12 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.NullDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
 // to model statistics such as per investigator numerals or blank/X/- values
 // typically on enemies but investigators can also have weird options
-public class Statistic implements NullDiscriminator {
+public class Statistic implements EmptyEntityDiscriminator {
     private String value;
     private boolean perInvestigator;
 
@@ -41,7 +41,7 @@ public class Statistic implements NullDiscriminator {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean isEmpty() {
         return StringUtils.isEmpty(value);
     }
 }

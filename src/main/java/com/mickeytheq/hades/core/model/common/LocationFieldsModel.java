@@ -1,9 +1,9 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.NullDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 
-public class LocationFieldsModel implements NullDiscriminator {
+public class LocationFieldsModel implements EmptyEntityDiscriminator {
     public static final String EMPTY_VALUE = null;
     public static final String NONE_VALUE = "(None)";
     public static final String COPY_OTHER_VALUE = "(CopyOther)";
@@ -113,11 +113,11 @@ public class LocationFieldsModel implements NullDiscriminator {
     }
 
     @Override
-    public boolean isNull() {
-        if (!getShroud().isNull())
+    public boolean isEmpty() {
+        if (!getShroud().isEmpty())
             return false;
 
-        if (!getClues().isNull())
+        if (!getClues().isEmpty())
             return false;
 
         if (getLocationIcon() != null)

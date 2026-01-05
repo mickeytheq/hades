@@ -1,10 +1,10 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.NullDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
-public class ActAgendaCommonFieldsModel implements NullDiscriminator {
+public class ActAgendaCommonFieldsModel implements EmptyEntityDiscriminator {
     private String header;
     private Integer afterHeaderSpace = 0;
     private String story;
@@ -57,7 +57,7 @@ public class ActAgendaCommonFieldsModel implements NullDiscriminator {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean isEmpty() {
         if (!StringUtils.isEmpty(header))
             return false;
 

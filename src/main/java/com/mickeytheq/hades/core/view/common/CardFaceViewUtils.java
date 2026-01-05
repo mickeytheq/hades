@@ -38,7 +38,7 @@ public class CardFaceViewUtils {
         boolean needSeparator = false;
 
         for (ActAgendaCommonFieldsView sectionView : sectionViews) {
-            if (sectionView.getModel().isNull())
+            if (sectionView.getModel().isEmpty())
                 continue;
 
             if (needSeparator) {
@@ -54,7 +54,7 @@ public class CardFaceViewUtils {
     }
 
     private static void buildSection(PaintContext paintContext, MultiSectionRenderer renderer, ActAgendaCommonFieldsView sectionView) {
-        if (sectionView.getModel().isNull())
+        if (sectionView.getModel().isEmpty())
             return;
 
         String header = sectionView.getModel().getHeader();

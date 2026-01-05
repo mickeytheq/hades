@@ -3,8 +3,9 @@ package com.mickeytheq.hades.core.model.entity;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyValueDiscriminator;
 
-import java.awt.image.BufferedImage;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -58,7 +59,7 @@ public class AnnotatedEntityMetadataBuilder {
             }
 
             if (isValueType(propertyDescriptor)) {
-                propertyMetadataList.add(createValuePropertyMetadata(clazz, propertyDescriptor));
+                propertyMetadataList.add(createValuePropertyMetadata(clazz, propertyDescriptor, property));
             }
             else {
                 propertyMetadataList.add(createEntityPropertyMetadata(propertyDescriptor));
@@ -86,7 +87,7 @@ public class AnnotatedEntityMetadataBuilder {
         }
     }
 
-    private PropertyMetadata createValuePropertyMetadata(Class<?> owningClass, PropertyDescriptor propertyDescriptor) {
+    private PropertyMetadata createValuePropertyMetadata(Class<?> owningClass, PropertyDescriptor propertyDescriptor, Property propertyAnnotation) {
         String propertyName = getPropertyName(propertyDescriptor);
 
         if (propertyDescriptor.getWriteMethod() == null)
@@ -94,7 +95,8 @@ public class AnnotatedEntityMetadataBuilder {
 
         return new ValuePropertyMetadata(propertyName, propertyDescriptor.getPropertyType(),
                 createReadFunction(propertyDescriptor),
-                createWriteFunction(propertyDescriptor)
+                createWriteFunction(propertyDescriptor),
+                createValueDiscriminator(propertyAnnotation.discriminator())
         );
     }
 
@@ -148,6 +150,14 @@ public class AnnotatedEntityMetadataBuilder {
         }
 
         return totalFlattenFunction;
+    }
+
+    private EmptyValueDiscriminator createValueDiscriminator(Class<? extends EmptyValueDiscriminator> discriminatorClass) {
+        try {
+            return discriminatorClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private PropertyMetadata createEntityPropertyMetadata(PropertyDescriptor propertyDescriptor) {
@@ -249,6 +259,14 @@ public class AnnotatedEntityMetadataBuilder {
         }
 
         @Override
+        public boolean shouldInclude(Object value) {
+            if (value instanceof EmptyEntityDiscriminator)
+                return !((EmptyEntityDiscriminator)value).isEmpty();
+
+            return true;
+        }
+
+        @Override
         public Object getPropertyValue(Object parent) {
             return readFunction.apply(parent);
         }
@@ -264,12 +282,14 @@ public class AnnotatedEntityMetadataBuilder {
         private final Class<?> propertyClass;
         private final Function<Object, Object> readFunction;
         private final BiConsumer<Object, Object> writeFunction;
+        private final EmptyValueDiscriminator emptyValueDiscriminator;
 
-        public ValuePropertyMetadata(String name, Class<?> propertyClass, Function<Object, Object> readFunction, BiConsumer<Object, Object> writeFunction) {
+        public ValuePropertyMetadata(String name, Class<?> propertyClass, Function<Object, Object> readFunction, BiConsumer<Object, Object> writeFunction, EmptyValueDiscriminator emptyValueDiscriminator) {
             this.name = name;
             this.propertyClass = propertyClass;
             this.readFunction = readFunction;
             this.writeFunction = writeFunction;
+            this.emptyValueDiscriminator = emptyValueDiscriminator;
         }
 
         @Override
@@ -280,6 +300,11 @@ public class AnnotatedEntityMetadataBuilder {
         @Override
         public boolean isValue() {
             return true;
+        }
+
+        @Override
+        public boolean shouldInclude(Object value) {
+            return !emptyValueDiscriminator.isEmpty(value);
         }
 
         @Override

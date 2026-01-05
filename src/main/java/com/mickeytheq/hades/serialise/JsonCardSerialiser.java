@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
+import com.mickeytheq.hades.core.model.entity.EntityPropertyMetadata;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -165,11 +166,10 @@ public class JsonCardSerialiser {
                 if (value == null)
                     continue;
 
-                // check for the NullDiscriminator interface and skip if it identifies this entity as null/empty
-                if (value instanceof NullDiscriminator) {
-                    if (((NullDiscriminator) value).isNull())
-                        continue;
-                }
+                // property metadata may have awareness of when a property should be included
+                // for example a default value like 0 for an integer property or an empty entity
+                if (!propertyMetadata.shouldInclude(value))
+                    continue;
 
                 if (propertyMetadata.isValue()) {
                     serialiseValue(value, propertyMetadata.getName(), currentNode);
@@ -177,6 +177,11 @@ public class JsonCardSerialiser {
                 }
 
                 if (propertyMetadata.isEntity()) {
+                    EntityPropertyMetadata entityPropertyMetadata = ((EntityPropertyMetadata)propertyMetadata);
+
+                    if (!entityPropertyMetadata.shouldInclude(value))
+                        continue;
+
                     ObjectNode childEntityNode = currentNode.putObject(propertyMetadata.getName());
 
                     serialiseEntity(propertyMetadata.asEntity(), value, childEntityNode);
@@ -270,9 +275,8 @@ public class JsonCardSerialiser {
 
                     Object propertyValue = propertyMetadata.getPropertyValue(entity);
 
-                    if (propertyValue == null) {
-                        // TODO: construct a new instance or fail?
-                    }
+                    if (propertyValue == null)
+                        throw new RuntimeException("Found a field '" + fieldName + "' that is a JSON object but the corresponding property with name '" + propertyMetadata.getName() + "' is null. Model entities should be initialised by their owning object during construction");
 
                     deserialiseEntity(propertyMetadata.asEntity(), (ObjectNode)fieldValueJsonNode, propertyValue);
                     continue;

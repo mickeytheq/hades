@@ -10,6 +10,8 @@ public interface PropertyMetadata {
 
     boolean isValue();
 
+    boolean shouldInclude(Object value);
+
     boolean isEntity();
 
     boolean isList();

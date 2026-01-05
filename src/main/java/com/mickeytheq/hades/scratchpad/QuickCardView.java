@@ -70,7 +70,7 @@ public class QuickCardView {
         projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
 
         ProjectContexts.withContext(projectContext, () -> {
-//        asset();
+        asset();
 //            investigator();
 //        event();
 //        skill();
@@ -78,7 +78,7 @@ public class QuickCardView {
 //            location();
 //            random();
 //            agenda();
-            act();
+//            act();
 //            enemy();
 //            scenarioReference();
         });

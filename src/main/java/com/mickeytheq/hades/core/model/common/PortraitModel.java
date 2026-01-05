@@ -2,13 +2,10 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
-import com.mickeytheq.hades.serialise.NullDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
-import java.awt.image.BufferedImage;
-import java.net.URL;
-
-public class PortraitModel implements NullDiscriminator {
+public class PortraitModel implements EmptyEntityDiscriminator {
     private double panX = 0;
     private double panY = 0;
     private double scale = 1.0;
@@ -73,7 +70,7 @@ public class PortraitModel implements NullDiscriminator {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean isEmpty() {
         // if the image is set then this is not null
         if (!getImage().isEmpty())
             return false;

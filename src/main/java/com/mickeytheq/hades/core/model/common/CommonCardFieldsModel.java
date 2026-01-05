@@ -1,19 +1,20 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.serialise.ZeroNumberDiscriminator;
 
 public class CommonCardFieldsModel {
     private String title;
     private String subtitle;
     private Boolean unique;
     private String traits;
-    private Integer afterTraitsSpace = 0;
+    private Integer afterTraitsSpacing = 0;
     private String keywords;
-    private Integer afterKeywordsSpace = 0;
+    private Integer afterKeywordsSpacing = 0;
     private String rules;
-    private Integer afterRulesSpace = 0;
+    private Integer afterRulesSpacing = 0;
     private String flavourText;
-    private Integer afterFlavourTextSpace = 0;
+    private Integer afterFlavourTextSpacing = 0;
     private String victory;
     private String copyright;
 
@@ -104,39 +105,39 @@ public class CommonCardFieldsModel {
         this.copyright = copyright;
     }
 
-    @Property("AfterTraitsSpace")
-    public Integer getAfterTraitsSpace() {
-        return afterTraitsSpace;
+    @Property(value = "AfterTraitsSpacing", discriminator = ZeroNumberDiscriminator.class)
+    public Integer getAfterTraitsSpacing() {
+        return afterTraitsSpacing;
     }
 
-    public void setAfterTraitsSpace(Integer afterTraitsSpace) {
-        this.afterTraitsSpace = afterTraitsSpace;
+    public void setAfterTraitsSpacing(Integer afterTraitsSpacing) {
+        this.afterTraitsSpacing = afterTraitsSpacing;
     }
 
-    @Property("AfterKeywordsSpace")
-    public Integer getAfterKeywordsSpace() {
-        return afterKeywordsSpace;
+    @Property(value = "AfterKeywordsSpacing", discriminator = ZeroNumberDiscriminator.class)
+    public Integer getAfterKeywordsSpacing() {
+        return afterKeywordsSpacing;
     }
 
-    public void setAfterKeywordsSpace(Integer afterKeywordsSpace) {
-        this.afterKeywordsSpace = afterKeywordsSpace;
+    public void setAfterKeywordsSpacing(Integer afterKeywordsSpacing) {
+        this.afterKeywordsSpacing = afterKeywordsSpacing;
     }
 
-    @Property("AfterRulesSpace")
-    public Integer getAfterRulesSpace() {
-        return afterRulesSpace;
+    @Property(value = "AfterRulesSpacing", discriminator = ZeroNumberDiscriminator.class)
+    public Integer getAfterRulesSpacing() {
+        return afterRulesSpacing;
     }
 
-    public void setAfterRulesSpace(Integer afterRulesSpace) {
-        this.afterRulesSpace = afterRulesSpace;
+    public void setAfterRulesSpacing(Integer afterRulesSpacing) {
+        this.afterRulesSpacing = afterRulesSpacing;
     }
 
-    @Property("AfterFlavourTextSpace")
-    public Integer getAfterFlavourTextSpace() {
-        return afterFlavourTextSpace;
+    @Property(value = "AfterFlavourTextSpacing", discriminator = ZeroNumberDiscriminator.class)
+    public Integer getAfterFlavourTextSpacing() {
+        return afterFlavourTextSpacing;
     }
 
-    public void setAfterFlavourTextSpace(Integer afterFlavourTextSpace) {
-        this.afterFlavourTextSpace = afterFlavourTextSpace;
+    public void setAfterFlavourTextSpacing(Integer afterFlavourTextSpacing) {
+        this.afterFlavourTextSpacing = afterFlavourTextSpacing;
     }
 }

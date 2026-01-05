@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.serialise.ZeroNumberDiscriminator;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class InvestigatorBack implements CardFaceModel {
             this.text = text;
         }
 
-        @Property("AfterSpacing")
+        @Property(value = "AfterSpacing", discriminator = ZeroNumberDiscriminator.class)
         public int getAfterSpacing() {
             return afterSpacing;
         }

@@ -4,10 +4,10 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.view.CardFaceSide;
-import com.mickeytheq.hades.serialise.NullDiscriminator;
+import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
-public class EncounterSetModel implements NullDiscriminator {
+public class EncounterSetModel implements EmptyEntityDiscriminator {
     private boolean copyOtherFace;
     private EncounterSetInfo encounterSet;
     private String number;
@@ -21,7 +21,7 @@ public class EncounterSetModel implements NullDiscriminator {
     }
 
     @Override
-    public boolean isNull() {
+    public boolean isEmpty() {
         if (encounterSet != null)
             return false;
 
