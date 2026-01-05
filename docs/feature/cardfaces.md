@@ -24,7 +24,7 @@ The status columns indicates the current development state
 | Event | None | Event | Alpha |
 | Skill | None |Skill | Alpha |
 | Customizable Upgrade | None | Customizable Upgrades | Missing |
-| Investigator | None | Investiator, Story investigator | Alpha |
+| Investigator | None | Investigator, Story investigator | Alpha |
 | Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Alpha |
 | Minicard | None | Mini Investigator Marker | Missing |
 | Scenario Reference | None | Chaos | Alpha |
