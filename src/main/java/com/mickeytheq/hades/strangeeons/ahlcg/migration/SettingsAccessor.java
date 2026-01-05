@@ -22,18 +22,5 @@ public interface SettingsAccessor {
     // special method to handle getting spacing values which has a suffix at the end (after the 'Back' suffix)
     // for example passing in 'Rules' on a card back face the resulting key will be 'RulesBackSpacing'
     // any errors will just return 0
-    default int getSpacingValue(String spacingPrefixKey) {
-        String spacingSettingsKey = getFullSettingsKey(spacingPrefixKey) + "Spacing";
-
-        String value = getRawSettingsValue(spacingSettingsKey);
-
-        if (value == null)
-            return 0;
-
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
+    int getSpacingValue(String spacingPrefixKey);
 }

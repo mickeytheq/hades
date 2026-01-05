@@ -10,6 +10,7 @@ import java.text.AttributedString;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 // a renderer that can take multiple rendering 'sections' and automatically scale them in equal amounts
 // to fit an overall region
@@ -181,36 +182,23 @@ public class MultiSectionRenderer {
     }
 
     public static class TextSection implements Section {
-        private final String text;
         private final TextStyle textStyle;
-        private final int alignment;
-        private final double dpi;
+        private final Supplier<MarkupRenderer> markupRendererSupplier;
         private final int minimumHeight;
         private final int maximumHeight;
 
-        public TextSection(String text, TextStyle originalTextStyle, int alignment, double dpi) {
-            this(text, originalTextStyle, alignment, dpi, 0, Integer.MAX_VALUE);
+        public TextSection(Supplier<MarkupRenderer> markupRendererSupplier) {
+            this(markupRendererSupplier, 0, Integer.MAX_VALUE);
         }
 
-        public TextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int minimumHeight, int maximumHeight) {
-            this.text = text;
-            this.alignment = alignment;
-            this.dpi = dpi;
+        public TextSection(Supplier<MarkupRenderer> markupRendererSupplier, int minimumHeight, int maximumHeight) {
+            this.markupRendererSupplier = markupRendererSupplier;
+            this.minimumHeight = minimumHeight;
+            this.maximumHeight = maximumHeight;
 
             // clone the TextStyle as we might change the values
             textStyle = new TextStyle();
-            textStyle.add(originalTextStyle);
-
-            this.minimumHeight = minimumHeight;
-            this.maximumHeight = maximumHeight;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public TextStyle getTextStyle() {
-            return textStyle;
+            textStyle.add(markupRendererSupplier.get().getDefaultStyle());
         }
 
         @Override
@@ -249,11 +237,13 @@ public class MultiSectionRenderer {
         }
 
         protected MarkupRenderer createMarkupRenderer() {
-            MarkupRenderer markupRenderer = new MarkupRenderer(dpi);
+            MarkupRenderer markupRenderer = markupRendererSupplier.get();
+
+            // set the text style to our own one that may have been scaled from the original
             markupRenderer.setDefaultStyle(textStyle);
-            markupRenderer.setAlignment(alignment);
-            markupRenderer.setMarkupText(text);
-            markupRenderer.setLineTightness(0.6f);
+
+            // always set text fitting to NONE because we are doing the scaling manually in this code
+            // so don't let the MarkupRenderer try and do it for us
             markupRenderer.setTextFitting(MarkupRenderer.FIT_NONE);
 
             return markupRenderer;
@@ -293,13 +283,13 @@ public class MultiSectionRenderer {
     public static class DoubleLineInsetTextSection extends TextSection {
         private final int leftIndent;
 
-        public DoubleLineInsetTextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int leftIndent) {
-            super(text, originalTextStyle, alignment, dpi);
+        public DoubleLineInsetTextSection(Supplier<MarkupRenderer> markupRendererSupplier, int leftIndent) {
+            super(markupRendererSupplier);
             this.leftIndent = leftIndent;
         }
 
-        public DoubleLineInsetTextSection(String text, TextStyle originalTextStyle, int alignment, double dpi, int minimumHeight, int maximumHeight, int leftIndent) {
-            super(text, originalTextStyle, alignment, dpi, minimumHeight, maximumHeight);
+        public DoubleLineInsetTextSection(Supplier<MarkupRenderer> markupRendererSupplier, int minimumHeight, int maximumHeight, int leftIndent) {
+            super(markupRendererSupplier, minimumHeight, maximumHeight);
             this.leftIndent = leftIndent;
         }
 

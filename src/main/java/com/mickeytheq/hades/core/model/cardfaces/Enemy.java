@@ -32,6 +32,7 @@ public class Enemy extends BaseCardFaceModel {
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
+    @Property("Combat")
     public Statistic getCombat() {
         return combat;
     }
@@ -40,6 +41,7 @@ public class Enemy extends BaseCardFaceModel {
         this.combat = combat;
     }
 
+    @Property("Health")
     public Statistic getHealth() {
         return health;
     }
@@ -48,6 +50,7 @@ public class Enemy extends BaseCardFaceModel {
         this.health = health;
     }
 
+    @Property("Evade")
     public Statistic getEvade() {
         return evade;
     }
@@ -56,6 +59,7 @@ public class Enemy extends BaseCardFaceModel {
         this.evade = evade;
     }
 
+    @Property("Damage")
     public int getDamage() {
         return damage;
     }
@@ -64,6 +68,7 @@ public class Enemy extends BaseCardFaceModel {
         this.damage = damage;
     }
 
+    @Property("Horror")
     public int getHorror() {
         return horror;
     }

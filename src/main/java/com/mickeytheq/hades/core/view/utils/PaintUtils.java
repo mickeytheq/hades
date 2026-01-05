@@ -76,17 +76,22 @@ public class PaintUtils {
         if (StringUtils.isEmpty(bodyText))
             return;
 
+        MarkupRenderer markupRenderer = createBodyTextMarkupRenderer(paintContext);
+        markupRenderer.setPageShape(pageShape);
+        markupRenderer.setMarkupText(bodyText);
+        markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);
+    }
+
+    public static MarkupRenderer createBodyTextMarkupRenderer(PaintContext paintContext) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_LEFT);
         markupRenderer.setLineTightness(0.6f * 0.9f);
         markupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
-        markupRenderer.setPageShape(pageShape);
 
         MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
 
-        markupRenderer.setMarkupText(bodyText);
-        markupRenderer.draw(paintContext.getGraphics(), bodyDrawRegion);
+        return markupRenderer;
     }
 
     private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 12);

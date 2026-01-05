@@ -12,4 +12,8 @@ public interface CardFaceMigrationContext {
     ProjectConfiguration getProjectConfiguration();
 
     SettingsAccessor getSettingsAccessor();
+
+    // Hades uses templates that are larger than the existing AHLCG templates so some measurements that are in
+    // pixels need to be scaled up. for example portrait panning/scaling and spacing
+    double convertPixelSize(double pixelSize);
 }

@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @View(interfaceLanguageKey = InterfaceConstants.AGENDA_BACK)
 public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasEncounterSetView {
@@ -136,9 +137,16 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         String victory = getModel().getCommonCardFieldsModel().getVictory();
 
         if (!StringUtils.isEmpty(victory)) {
-            multiSectionRenderer.getSections().add(
-                    new MultiSectionRenderer.TextSection(victory,
-                            TextStyleUtils.getVictoryTextStyle(), MarkupRenderer.LAYOUT_CENTER, paintContext.getRenderingDpi()));
+            Supplier<MarkupRenderer> markupRendererSupplier = () -> {
+                MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+                markupRenderer.setDefaultStyle(TextStyleUtils.getVictoryTextStyle());
+                markupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER);
+                markupRenderer.setLineTightness(0.6f);
+                markupRenderer.setMarkupText(victory);
+                return markupRenderer;
+            };
+
+            multiSectionRenderer.getSections().add(new MultiSectionRenderer.TextSection(markupRendererSupplier));
         }
 
         multiSectionRenderer.draw();

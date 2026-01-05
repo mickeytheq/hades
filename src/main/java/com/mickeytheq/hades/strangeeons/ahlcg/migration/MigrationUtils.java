@@ -41,7 +41,7 @@ public class MigrationUtils {
         if (cardFaceSide == CardFaceSide.Front)
             commonCardFieldsModel.setTitle(diy.getName());
         else
-            commonCardFieldsModel.setTitle(settingsAccessor.getString(SettingsFieldNames.TITLE_BACK));
+            commonCardFieldsModel.setTitle(settingsAccessor.getString(SettingsFieldNames.TITLE));
 
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
@@ -276,10 +276,10 @@ public class MigrationUtils {
             else
                 portraitModel.getImage().set(defaultPortrait.getImage());
 
-            portraitModel.setPanX(defaultPortrait.getPanX());
-            portraitModel.setPanY(defaultPortrait.getPanY());
+            portraitModel.setPanX(context.convertPixelSize(defaultPortrait.getPanX()));
+            portraitModel.setPanY(context.convertPixelSize(defaultPortrait.getPanY()));
             portraitModel.setRotation(defaultPortrait.getRotation());
-            portraitModel.setScale(defaultPortrait.getScale() * PORTRAIT_SCALE_ADJUST_FACTOR);
+            portraitModel.setScale(context.convertPixelSize(defaultPortrait.getScale()));
         }
     }
 

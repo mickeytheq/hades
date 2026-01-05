@@ -30,6 +30,7 @@ public class ActBack extends BaseCardFaceModel {
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
     }
 
+    @Property("ShadowFront")
     public boolean isShadowFront() {
         return shadowFront;
     }

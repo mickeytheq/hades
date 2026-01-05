@@ -25,6 +25,8 @@ import java.nio.file.Path;
 public class Migrator {
     private static final Logger logger = LogManager.getLogger(Migrator.class);
 
+    private static final double PIXEL_MULTIPLIER = 2;
+
     private final ProjectContext projectContext;
 
     public Migrator(ProjectContext projectContext) {
@@ -74,7 +76,7 @@ public class Migrator {
         private Card migrateCard() {
             String frontTemplateKey = diy.getFrontTemplateKey();
 
-            CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), ""));
+            CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), "", PIXEL_MULTIPLIER));
 
             if (frontFaceModel == null)
                 return null;
@@ -86,7 +88,7 @@ public class Migrator {
                 backFaceModel = checkForGenericBack(diy.getSettings());
 
                 if (backFaceModel == null)
-                    backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back"));
+                    backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back", PIXEL_MULTIPLIER));
             }
 
             // TODO: log out any settings that are not accessed to detect properties that are not picked up
@@ -278,15 +280,24 @@ public class Migrator {
         public SettingsAccessor getSettingsAccessor() {
             return settingsAccessor;
         }
+
+        @Override
+        public double convertPixelSize(double pixelSize) {
+            // for now this is a simple doubling but may need to be more sophisticated if the ratio between
+            // input and output changes or is dynamic, e.g. Hades/Strange Eons changing template size and/or supporting different resolutions
+            return pixelSize * PIXEL_MULTIPLIER;
+        }
     }
 
     static class SettingsAccessorImpl implements SettingsAccessor {
         private final Settings settings;
         private final String settingsKeySuffix;
+        private final double spacingMultiplier;
 
-        public SettingsAccessorImpl(Settings settings, String settingsKeySuffix) {
+        public SettingsAccessorImpl(Settings settings, String settingsKeySuffix, double spacingMultiplier) {
             this.settings = settings;
             this.settingsKeySuffix = settingsKeySuffix;
+            this.spacingMultiplier = spacingMultiplier;
         }
 
         @Override
@@ -340,6 +351,22 @@ public class Migrator {
         @Override
         public String getRawSettingsValue(String fullSettingsKey) {
             return settings.get(fullSettingsKey);
+        }
+
+        @Override
+        public int getSpacingValue(String spacingPrefixKey) {
+            String spacingSettingsKey = getFullSettingsKey(spacingPrefixKey) + "Spacing";
+
+            String value = getRawSettingsValue(spacingSettingsKey);
+
+            if (value == null)
+                return 0;
+
+            try {
+                return (int) (Integer.parseInt(value) * spacingMultiplier);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
         }
     }
 }

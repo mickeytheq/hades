@@ -23,6 +23,7 @@ public class SettingsFieldNames {
     public static final String BACK_TYPE_PLAYER_PURPLE = "PlayerPurple";
 
     // general fields
+    public static final String TITLE = "Title";
     public static final String TITLE_BACK = "TitleBack";
     public static final String SUBTITLE = "Subtitle";
     public static final String TRAITS = "Traits";

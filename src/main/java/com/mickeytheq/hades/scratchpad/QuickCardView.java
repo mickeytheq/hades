@@ -78,9 +78,9 @@ public class QuickCardView {
 //            location();
 //            random();
 //            agenda();
-//            act();
+            act();
 //            enemy();
-            scenarioReference();
+//            scenarioReference();
         });
     }
 

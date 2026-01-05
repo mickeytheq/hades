@@ -261,7 +261,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     }
 
     private static final Rectangle COMBAT_DRAW_REGION = new Rectangle(238, 116, 0, 35);
-    private static final Rectangle HEALTH_DRAW_REGION = new Rectangle(373, 116, 0, 35);
+    private static final Rectangle HEALTH_DRAW_REGION = new Rectangle(376, 116, 0, 35);
     private static final Rectangle EVADE_DRAW_REGION = new Rectangle(517, 116, 0, 35);
 
     private static final List<Rectangle> DAMAGE_DRAW_REGIONS = Lists.newArrayList(

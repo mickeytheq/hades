@@ -148,15 +148,23 @@ public class CommonCardFieldsView {
     public void paintTitleMultilineRotated(PaintContext paintContext, Rectangle drawRegion) {
         // the title is drawn vertically from bottom to top
         // to achieve this we have to create a rotate transform, apply it to the Graphics2D so that the text
-        // drawing transforms and we also have to rotate the draw region as this will also be transformed during the draw
+        // drawing transforms
         // make sure to restore any existing transform afterwards
         AffineTransform oldTransform = paintContext.getGraphics().getTransform();
         try {
-            AffineTransform affineTransform = new AffineTransform();
-            affineTransform.rotate(-Math.PI / 2, drawRegion.getCenterX(), drawRegion.getCenterY());
-            Rectangle rotatedDrawRegion = affineTransform.createTransformedShape(drawRegion).getBounds();
+            AffineTransform rotationTransform = new AffineTransform();
+            rotationTransform.rotate(-Math.PI / 2, drawRegion.getCenterX(), drawRegion.getCenterY());
 
-            paintContext.getGraphics().setTransform(affineTransform);
+            // we also have to rotate the draw region as this will also be transformed during the draw
+            Rectangle rotatedDrawRegion = rotationTransform.createTransformedShape(drawRegion).getBounds();
+
+            // the existing transform needs to be preserved so concatenate the two transforms together, doing the existing one
+            // first followed by our rotation. the existing transform may be doing up/down scaling for higher/lower quality viewing/exports
+            // we use preConcatenate so that our new transform is being altered. we don't want to change the oldTransform
+            // as that needs to be restored later
+            rotationTransform.preConcatenate(oldTransform);
+
+            paintContext.getGraphics().setTransform(rotationTransform);
             paintTitleMultiline(paintContext, rotatedDrawRegion);
         }
         finally {

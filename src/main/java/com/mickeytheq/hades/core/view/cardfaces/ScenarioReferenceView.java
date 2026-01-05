@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 @View(interfaceLanguageKey = InterfaceConstants.ENEMY)
 public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> implements HasEncounterSetView, HasCollectionView {
@@ -303,16 +304,21 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             // allocate this info section a height in proportion to how many chaos tokens it has
             int sectionHeight = (int)heightPerChaosToken * chaosTokens.size();
 
+            Supplier<MarkupRenderer> markupRendererSupplier = () -> {
+                MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+                markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
+                markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
+                markupRenderer.setLineTightness(0.6f);
+                markupRenderer.setMarkupText(chaosTokenInfo.getRules());
+                return markupRenderer;
+            };
+
             MultiSectionRenderer.Section section;
             if (chaosTokens.size() > 1) {
-                section = new MultiSectionRenderer.DoubleLineInsetTextSection(chaosTokenInfo.getRules(),
-                        TextStyleUtils.getBodyTextStyle(), MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT,
-                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight, 15);
+                section = new MultiSectionRenderer.DoubleLineInsetTextSection(markupRendererSupplier, sectionHeight, sectionHeight, 15);
             }
             else {
-                section = new MultiSectionRenderer.TextSection(chaosTokenInfo.getRules(),
-                        TextStyleUtils.getBodyTextStyle(), MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT,
-                        paintContext.getRenderingDpi(), sectionHeight, sectionHeight);
+                section = new MultiSectionRenderer.TextSection(markupRendererSupplier, sectionHeight, sectionHeight);
             }
 
             renderer.getSections().add(section);
