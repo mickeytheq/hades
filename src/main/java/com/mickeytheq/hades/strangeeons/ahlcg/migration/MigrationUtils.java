@@ -315,12 +315,12 @@ public class MigrationUtils {
         model.setClues(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.CLUES, SettingsFieldNames.PER_INVESTIGATOR));
         model.setShroud(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.SHROUD, SettingsFieldNames.SHROUD + SettingsFieldNames.PER_INVESTIGATOR));
         model.setLocationIcon(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.LOCATION_ICON));
-        model.setConnectionIcon1(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "1"));
-        model.setConnectionIcon2(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "2"));
-        model.setConnectionIcon3(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "3"));
-        model.setConnectionIcon4(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "4"));
-        model.setConnectionIcon5(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "5"));
-        model.setConnectionIcon6(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "6"));
+        model.setConnectionIcon1(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "1" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
+        model.setConnectionIcon2(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "2" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
+        model.setConnectionIcon3(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "3" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
+        model.setConnectionIcon4(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "4" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
+        model.setConnectionIcon5(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "5" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
+        model.setConnectionIcon6(MigrationUtils.parseLocationIcon(settingsAccessor, SettingsFieldNames.CONNECTION_ICON_PREFIX + "6" + SettingsFieldNames.CONNECTION_ICON_SUFFIX));
     }
 
     public static String parseLocationIcon(SettingsAccessor settingsAccessor, String settingsKey) {

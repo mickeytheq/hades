@@ -54,13 +54,19 @@ public final class PortraitUtils {
         String temp = Strings.CS.removeStart(templateKey, "AHLCG-");
         String cardType = StringUtils.substring(temp, 0, Strings.CS.lastIndexOf(temp, "-"));
 
+        String portraitKey;
+
         // portrait keys are of the form AHLCG-<card type>-<suffix>
-        // so we can use the card type we've found above to locate the corresponding template
-        // also have to exclude the collection and encounter set portraits which share the same card type as the front of the card
+        // the suffix is Portrait or BackPortrait for Front/Back respectively
+        if (cardFaceSide == CardFaceSide.Front) {
+            portraitKey = "AHLCG-" + cardType + "-Portrait";
+        }
+        else {
+            portraitKey = "AHLCG-" + cardType + "-BackPortrait";
+        }
+
         List<DefaultPortrait> matchingPortraits = getDefaultPortraits(diy).stream()
-                .filter(o -> o.getBaseKey().contains("-" + cardType + "-"))
-                .filter(o -> !o.getBaseKey().endsWith(COLLECTION_PORTRAIT_SUFFIX))
-                .filter(o -> !o.getBaseKey().endsWith(ENCOUNTER_SET_PORTRAIT_SUFFIX))
+                .filter(o -> o.getBaseKey().equals(portraitKey))
                 .collect(Collectors.toList());
 
         if (matchingPortraits.size() > 1)

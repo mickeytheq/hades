@@ -46,7 +46,7 @@ public class TextStyleUtils {
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.WIDTH, 1.05);
         LARGE_LABEL_TEXT_STYLE.add(TextAttribute.TRACKING, 0);
-        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.FOREGROUND, Settings.Colour.BLACK);
+        LARGE_LABEL_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         TITLE_TEXT_STYLE = new TextStyle();
         TITLE_TEXT_STYLE.add(TextAttribute.FAMILY, "Arkhamic");
@@ -82,7 +82,7 @@ public class TextStyleUtils {
         TRAIT_TEXT_STYLE = new TextStyle();
         TRAIT_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
         TRAIT_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
-        TRAIT_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_MEDIUM);
+        TRAIT_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         TRAIT_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
 
         VICTORY_TEXT_STYLE = new TextStyle();
@@ -104,6 +104,7 @@ public class TextStyleUtils {
         FLAVOR_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         FLAVOR_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_REGULAR);
         FLAVOR_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        FLAVOR_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         ARKHAM_HORROR_FONT_TEXT_STYLE = new TextStyle();
         ARKHAM_HORROR_FONT_TEXT_STYLE.add(TextAttribute.FAMILY, AHLCG_SYMBOL_FONT);

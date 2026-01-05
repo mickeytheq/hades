@@ -118,7 +118,8 @@ public class SettingsFieldNames {
     public static final String CLUES = "Clues";
     public static final String SHROUD = "Shroud";
     public static final String LOCATION_ICON = "LocationIcon";
-    public static final String CONNECTION_ICON_PREFIX = "ConnectionIcon";
+    public static final String CONNECTION_ICON_PREFIX = "Connection";
+    public static final String CONNECTION_ICON_SUFFIX = "Icon";
     public static final String LOCATION_ICON_EMPTY_VALUE = "Empty";
     public static final String LOCATION_ICON_NONE_VALUE = "None";
     public static final String LOCATION_ICON_COPY_FRONT_VALUE = COPY_FRONT;

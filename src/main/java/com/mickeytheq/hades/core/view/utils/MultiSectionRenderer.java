@@ -250,36 +250,6 @@ public class MultiSectionRenderer {
         }
     }
 
-    public static class RegionAdjuster implements Section {
-        private final Section wrapping;
-        private final Function<Rectangle, Rectangle> regionAdjuster;
-
-        public RegionAdjuster(Section wrapping, Function<Rectangle, Rectangle> regionAdjuster) {
-            this.wrapping = wrapping;
-            this.regionAdjuster = regionAdjuster;
-        }
-
-        @Override
-        public double calculateHeight(Graphics2D g, Rectangle drawRegion) {
-            return calculateHeight(g, regionAdjuster.apply(drawRegion));
-        }
-
-        @Override
-        public boolean isScalable() {
-            return wrapping.isScalable();
-        }
-
-        @Override
-        public void changeScale(double scale) {
-            wrapping.changeScale(scale);
-        }
-
-        @Override
-        public void draw(Graphics2D g, Rectangle drawRegion) {
-            wrapping.draw(g, regionAdjuster.apply(drawRegion));
-        }
-    }
-
     public static class DoubleLineInsetTextSection extends TextSection {
         private final int leftIndent;
 
