@@ -27,14 +27,14 @@ The status columns indicates the current development state
 | Investigator | None | Investiator, Story investigator | Alpha |
 | Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Alpha |
 | Minicard | None | Mini Investigator Marker | Missing |
-| Scenario | None | Scenario | Missing |
-| Agenda | None | Agenda, numerous variants | Missing |
-| Agenda Back | Only supported as the back face paired with an Agenda front face | (back of agenda card) | Missing |
-| Act | None | Act, numerous variants | Missing |
-| Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Missing |
-| Location | None (however 'copy front' options are only available with a front location) | Location, Location/Location | Missing |
+| Scenario Reference | None | Chaos | Alpha |
+| Agenda | None | Agenda, numerous variants | Alpha |
+| Agenda Back | Only supported as the back face paired with an Agenda front face | (back of agenda card) | Alpha |
+| Act | None | Act, numerous variants | Alpha |
+| Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Alpha |
+| Location | None (however 'copy front' options are only available with a front location) | Location, Location/Location | Alpha |
 | Treachery | None | Treachery, Treachery (weakness) | Alpha |
-| Enemy | None | Enemy, Enemy (weakness) | Missing |
+| Enemy | None | Enemy, Enemy (weakness) | Alpha |
 | Treachery Location | None | TreacheryLocation | Missing |
 | Story | None | Story, numerous variants | Missing |
 | Key | None | Key | Missing |
