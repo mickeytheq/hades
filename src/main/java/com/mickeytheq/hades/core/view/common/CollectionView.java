@@ -27,7 +27,7 @@ public class CollectionView {
     private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_PORTRAIT = new Rectangle(640, 1020, 26, 26);
     private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_LANDSCAPE = new Rectangle(952, 720, 26, 26);
     private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_PORTRAIT = new Rectangle(636, 1024, 74, 20);
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE = new Rectangle(944, 720, 74, 20);
+    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE = new Rectangle(944, 725, 74, 20);
     private final CollectionModel model;
     private final CardFaceView cardFaceView;
 

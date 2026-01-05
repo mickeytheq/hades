@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class EncounterSetView {
     private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_PORTRAIT = new Rectangle(494, 1024, 110, 20);
-    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE = new Rectangle(802, 720, 110, 20);
+    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE = new Rectangle(802, 725, 110, 20);
 
     private final EncounterSetModel model;
     private final CardFaceView cardFaceView;
