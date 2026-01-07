@@ -168,7 +168,7 @@ public class HadesPlugin extends AbstractPlugin {
 
                 Card card = CardIO.readCard(path, projectContext);
 
-                CardView cardView = CardFaces.createCardView(card);
+                CardView cardView = CardFaces.createCardView(card, projectContext);
 
                 return new CardGameComponent(cardView, projectContext);
             }

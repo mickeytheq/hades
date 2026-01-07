@@ -40,8 +40,7 @@ public class DialogWithButtons extends JDialog {
     }
 
     public void addOkCancelButtons() {
-        addDialogClosingButton("OK", OK_OPTION, () -> Boolean.TRUE);
-        addDialogClosingButton("Cancel", CANCEL_OPTION, () -> Boolean.TRUE);
+        addOkCancelButtons(() -> Boolean.TRUE);
     }
 
     public void addOkCancelButtons(Supplier<Boolean> okValidator) {

@@ -7,6 +7,7 @@ import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.ui.DialogWithButtons;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -115,7 +116,7 @@ public class NewCardDialog extends DialogWithButtons {
         JPanel detailsPanel = MigLayoutUtils.createTitledPanel("Details");
         MigLayoutUtils.addLabel(detailsPanel, "Filename");
         detailsPanel.add(filenameEditor, "split, pushx, growx");
-        detailsPanel.add(new JLabel(".hades"), "wrap");
+        detailsPanel.add(new JLabel("." + CardIO.HADES_FILE_EXTENSION), "wrap");
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(helpPanel, bothFacesPanel, customFacesPanel, detailsPanel);
 

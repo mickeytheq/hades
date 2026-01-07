@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view;
 
 import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import resources.Language;
@@ -13,16 +14,22 @@ import java.util.Optional;
  */
 public class CardView {
     private final Card card;
+    private final ProjectContext projectContext;
 
     private CardFaceView frontFaceView;
     private CardFaceView backFaceView;
 
-    public CardView(Card card) {
+    public CardView(Card card, ProjectContext projectContext) {
         this.card = card;
+        this.projectContext = projectContext;
     }
 
     public Card getCard() {
         return card;
+    }
+
+    public ProjectContext getProjectContext() {
+        return projectContext;
     }
 
     public CardFaceView getFrontFaceView() {

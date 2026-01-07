@@ -51,23 +51,29 @@ public final class PortraitUtils {
 
         // deconstruct the template key by removing the standard prefix and the suffix
         // this should leave the card type which will match the corresponding portrait
-        String temp = Strings.CS.removeStart(templateKey, "AHLCG-");
-        String cardType = StringUtils.substring(temp, 0, Strings.CS.lastIndexOf(temp, "-"));
-
-        String portraitKey;
+        String withoutPrefix = Strings.CS.removeStart(templateKey, "AHLCG-");
+        String cardType = StringUtils.substring(withoutPrefix, 0, Strings.CS.lastIndexOf(withoutPrefix, "-"));
 
         // portrait keys are of the form AHLCG-<card type>-<suffix>
-        // the suffix is Portrait or BackPortrait for Front/Back respectively
-        if (cardFaceSide == CardFaceSide.Front) {
-            portraitKey = "AHLCG-" + cardType + "-Portrait";
-        }
-        else {
-            portraitKey = "AHLCG-" + cardType + "-BackPortrait";
-        }
-
+        // so we can use the card type we've found above to locate the corresponding template
+        // also have to exclude the collection and encounter set portraits which share the same card type as the front of the card
         List<DefaultPortrait> matchingPortraits = getDefaultPortraits(diy).stream()
-                .filter(o -> o.getBaseKey().equals(portraitKey))
+                .filter(o -> o.getBaseKey().contains("-" + cardType + "-"))
+                .filter(o -> !o.getBaseKey().endsWith(COLLECTION_PORTRAIT_SUFFIX))
+                .filter(o -> !o.getBaseKey().endsWith(ENCOUNTER_SET_PORTRAIT_SUFFIX))
                 .collect(Collectors.toList());
+
+        if (matchingPortraits.size() > 1) {
+            // sometimes there can be multiple portraits that match on the card type, for example a double-sided Enemy that has two portraits with the -Enemy- type
+            // in the middle
+            // in this case the Back face should have 'Back' in the suffix as the front will not
+            if (cardFaceSide == CardFaceSide.Back) {
+                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("BackPortrait")).collect(Collectors.toList());
+            }
+            else {
+                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("Portrait")).collect(Collectors.toList());
+            }
+        }
 
         if (matchingPortraits.size() > 1)
             throw new RuntimeException("Multiple art portraits found for diy '" + diy.getName() + "' when matching using card type '" + cardType + "'");

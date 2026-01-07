@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.ui.NewCardDialog;
 import com.mickeytheq.hades.ui.DialogWithButtons;
@@ -61,7 +62,7 @@ public class NewCard extends BaseTaskAction {
         Card card = ProjectContexts.withContextReturn(projectContext,
                 () -> CardFaces.createNewCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass, projectContext));
 
-        CardView cardView = CardFaces.createCardView(card);
+        CardView cardView = CardFaces.createCardView(card, projectContext);
 
         // create the game component and its editor and attach the editor to the Strange Eons window
         CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
@@ -84,7 +85,7 @@ public class NewCard extends BaseTaskAction {
         }
 
         // create the new file, attach it to the editor and save it
-        File f = new File(parentMember.getFile(), newCardDialog.getFilename() + ".hades");
+        File f = new File(parentMember.getFile(), newCardDialog.getFilename() + "." + CardIO.HADES_FILE_EXTENSION);
         f = ProjectUtilities.getAvailableFile(f);
         editor.setFile(f);
         editor.save();

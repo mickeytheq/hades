@@ -15,11 +15,11 @@ import java.nio.file.Path;
 public class GameComponentUtils {
     public static GameComponent loadGameComponent(Path path) {
 
-        if (path.toString().endsWith(".hades")) {
+        if (path.toString().endsWith("." + CardIO.HADES_FILE_EXTENSION)) {
             ProjectContext projectContext = StandardProjectContext.getContextForContentPath(path);
 
             Card card = CardIO.readCard(path, projectContext);
-            CardView cardView = CardFaces.createCardView(card);
+            CardView cardView = CardFaces.createCardView(card, projectContext);
             CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
             return cardGameComponent;
         }

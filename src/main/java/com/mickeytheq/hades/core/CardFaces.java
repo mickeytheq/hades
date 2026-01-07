@@ -33,8 +33,8 @@ public class CardFaces {
         return card;
     }
 
-    public static CardView createCardView(Card card) {
-        CardView cardView = new CardView(card);
+    public static CardView createCardView(Card card, ProjectContext projectContext) {
+        CardView cardView = new CardView(card, projectContext);
 
         CardFaceView frontFaceView = createViewForModel(card.getFrontFaceModel());
         cardView.setFrontFaceView(frontFaceView);

@@ -296,7 +296,7 @@ public class QuickCardView {
     }
 
     private void displayEditor(Card card) {
-        CardView cardView = CardFaces.createCardView(card);
+        CardView cardView = CardFaces.createCardView(card, projectContext);
         List<CardView> cardViews = Collections.singletonList(cardView);
         new Editor(cardViews.listIterator()).create();
     }
@@ -323,7 +323,7 @@ public class QuickCardView {
             Asset asset = generator.createAsset();
 
             Card card = CardFaces.createCardModel(asset, null);
-            CardView cardView = CardFaces.createCardView(card);
+            CardView cardView = CardFaces.createCardView(card, projectContext);
             accumulated.add(cardView);
 
             return cardView;
@@ -459,12 +459,12 @@ public class QuickCardView {
             editTabbedPane.removeAll();
 
             // create renderers
-            Renderer frontRenderer = new Renderer(currentCardView, currentCardView.getFrontFaceView());
+            Renderer frontRenderer = new Renderer(currentCardView.getFrontFaceView());
             drawTabbedPane.addTab("Front", frontRenderer);
 
             Renderer backRenderer = null;
             if (currentCardView.hasBack()) {
-                backRenderer = new Renderer(currentCardView, currentCardView.getBackFaceView());
+                backRenderer = new Renderer(currentCardView.getBackFaceView());
                 drawTabbedPane.addTab("Back", backRenderer);
             }
 
@@ -506,10 +506,8 @@ public class QuickCardView {
     }
 
     class Renderer extends JPanel {
-        private final CardView cardView;
         private final CardFaceView cardFaceView;
-        public Renderer(CardView cardView, CardFaceView cardFaceView) {
-            this.cardView = cardView;
+        public Renderer(CardFaceView cardFaceView) {
             this.cardFaceView = cardFaceView;
         }
 
@@ -520,7 +518,7 @@ public class QuickCardView {
             Graphics2D g = (Graphics2D)graphics;
 
             BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
-            cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardView, bufferedImage));
+            cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardFaceView.getCardView(), bufferedImage));
 
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

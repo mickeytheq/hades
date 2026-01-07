@@ -224,11 +224,15 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         paintSlots(paintContext);
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), HEALTH_SYMBOL_DRAW_REGION);
-        PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        if (!getModel().getHealth().isEmpty()) {
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), HEALTH_SYMBOL_DRAW_REGION);
+            PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        }
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), SANITY_SYMBOL_DRAW_REGION);
-        PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        if (!getModel().getSanity().isEmpty()) {
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), SANITY_SYMBOL_DRAW_REGION);
+            PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        }
     }
 
     // regions are from right to left
