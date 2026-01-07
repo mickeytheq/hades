@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.ActAgendaCommonFieldsModel;
+import com.mickeytheq.hades.core.model.common.StorySectionModel;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
 import com.mickeytheq.hades.core.model.entity.Property;
@@ -16,9 +16,9 @@ public class ActBack extends BaseCardFaceModel {
     private String deckId;
 
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
-    private final ActAgendaCommonFieldsModel section1 = new ActAgendaCommonFieldsModel();
-    private final ActAgendaCommonFieldsModel section2 = new ActAgendaCommonFieldsModel();
-    private final ActAgendaCommonFieldsModel section3 = new ActAgendaCommonFieldsModel();
+    private final StorySectionModel section1 = new StorySectionModel();
+    private final StorySectionModel section2 = new StorySectionModel();
+    private final StorySectionModel section3 = new StorySectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
 
     @Override
@@ -60,18 +60,18 @@ public class ActBack extends BaseCardFaceModel {
         return commonCardFieldsModel;
     }
 
-    @Property("Section1")
-    public ActAgendaCommonFieldsModel getSection1() {
+    @Property("StorySection1")
+    public StorySectionModel getSection1() {
         return section1;
     }
 
-    @Property("Section2")
-    public ActAgendaCommonFieldsModel getSection2() {
+    @Property("StorySection2")
+    public StorySectionModel getSection2() {
         return section2;
     }
 
-    @Property("Section3")
-    public ActAgendaCommonFieldsModel getSection3() {
+    @Property("StorySection3")
+    public StorySectionModel getSection3() {
         return section3;
     }
 

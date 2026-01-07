@@ -21,12 +21,12 @@ public class ActMigrator {
         act.setDeckId(settingsAccessor.getString("ScenarioDeckID"));
         act.setClues(MigrationUtils.parseStatistic(settingsAccessor, "Clues", SettingsFieldNames.PER_INVESTIGATOR));
 
-        act.getActCommonFieldsModel().setStory(settingsAccessor.getString(SettingsFieldNames.ACT_STORY));
-        act.getActCommonFieldsModel().setAfterStorySpace(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY));
+        act.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.ACT_STORY));
+        act.getStorySectionModel().setAfterStorySpace(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY));
 
         // default logic will put 'rules' in the standard field, move it out
-        act.getActCommonFieldsModel().setRules(act.getCommonCardFieldsModel().getRules());
-        act.getActCommonFieldsModel().setRules(null);
+        act.getStorySectionModel().setRules(act.getCommonCardFieldsModel().getRules());
+        act.getStorySectionModel().setRules(null);
 
         return act;
     }

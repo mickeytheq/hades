@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.view.common;
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -13,6 +14,7 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 
 public class CommonCardFieldsView {
@@ -100,8 +102,8 @@ public class CommonCardFieldsView {
     }
 
     public void addNonTitleEditorsToPanel(JPanel panel, boolean includeVictory) {
-        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        addTraitsEditorToPanel(panel);
+
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
         MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterKeywordsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
@@ -113,6 +115,11 @@ public class CommonCardFieldsView {
         }
 
         addCopyrightEditorToPanel(panel);
+    }
+
+    public void addTraitsEditorToPanel(JPanel panel) {
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
+        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
     }
 
     public void addVictoryEditorsToPanel(JPanel panel) {
@@ -266,10 +273,14 @@ public class CommonCardFieldsView {
     }
 
     public void paintCopyright(PaintContext paintContext) {
+        paintCopyright(paintContext, COPYRIGHT_DRAW_REGION, TextStyleUtils.getCopyrightTextStyle());
+    }
+
+    public void paintCopyright(PaintContext paintContext, Rectangle drawRegion, TextStyle textStyle) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getCopyrightTextStyle());
+        markupRenderer.setDefaultStyle(textStyle);
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(model.getCopyright());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), COPYRIGHT_DRAW_REGION);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 }

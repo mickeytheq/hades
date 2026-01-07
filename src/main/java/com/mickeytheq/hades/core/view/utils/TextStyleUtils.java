@@ -84,6 +84,7 @@ public class TextStyleUtils {
         TRAIT_TEXT_STYLE.add(TextAttribute.SIZE, 8.6);
         TRAIT_TEXT_STYLE.add(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
         TRAIT_TEXT_STYLE.add(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+        TRAIT_TEXT_STYLE.add(TextAttribute.FOREGROUND, Color.BLACK);
 
         VICTORY_TEXT_STYLE = new TextStyle();
         VICTORY_TEXT_STYLE.add(TextAttribute.FAMILY, "Arno Pro");
@@ -284,6 +285,18 @@ public class TextStyleUtils {
 
     public static TextStyle getScenarioReferenceTrackerBoxTitleTextStyle() {
         return SCENARIO_REFERENCE_TRACKER_BOX_TITLE_TEXT_STYLE;
+    }
+
+    // returns a new TextStyle with one attribute added/changed
+    public static TextStyle withAttribute(TextStyle sourceTextStyle, TextAttribute attribute, Object newValue) {
+        // must clone the TextStyle as they are mutable objects and we don't
+        // want to change the source
+        TextStyle newTextStyle = new TextStyle();
+        newTextStyle.add(sourceTextStyle);
+
+        newTextStyle.add(attribute, newValue);
+
+        return newTextStyle;
     }
 
     public static Map<TextAttribute, Object> getAttributes(TextStyle textStyle) {

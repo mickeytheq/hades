@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 @View(interfaceLanguageKey = InterfaceConstants.AGENDA)
 public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private ActAgendaCommonFieldsView agendaCommonFieldsView;
+    private StorySectionView agendaCommonFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
     private PortraitView portraitView;
@@ -37,7 +37,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         super.initialiseView();
 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        agendaCommonFieldsView = new ActAgendaCommonFieldsView(getModel().getAgendaCommonFieldsModel());
+        agendaCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());

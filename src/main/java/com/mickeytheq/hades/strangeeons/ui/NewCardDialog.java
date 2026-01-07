@@ -94,6 +94,9 @@ public class NewCardDialog extends DialogWithButtons {
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.ACT), "Act with a standard act back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Act.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(ActBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.STORY), "Story with encounter card back",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(Story.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
 
         filenameEditor = new JTextField(20);
 

@@ -21,12 +21,12 @@ public class AgendaMigrator {
         agenda.setDeckId(settingsAccessor.getString("ScenarioDeckID"));
         agenda.setDoom(MigrationUtils.parseStatistic(settingsAccessor, "Doom", SettingsFieldNames.PER_INVESTIGATOR));
 
-        agenda.getAgendaCommonFieldsModel().setStory(settingsAccessor.getString(SettingsFieldNames.AGENDA_STORY));
-        agenda.getAgendaCommonFieldsModel().setAfterStorySpace(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY));
+        agenda.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.AGENDA_STORY));
+        agenda.getStorySectionModel().setAfterStorySpace(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY));
 
         // default logic will put 'rules' in the standard field, move it out
-        agenda.getAgendaCommonFieldsModel().setRules(agenda.getCommonCardFieldsModel().getRules());
-        agenda.getAgendaCommonFieldsModel().setRules(null);
+        agenda.getStorySectionModel().setRules(agenda.getCommonCardFieldsModel().getRules());
+        agenda.getStorySectionModel().setRules(null);
 
         return agenda;
     }

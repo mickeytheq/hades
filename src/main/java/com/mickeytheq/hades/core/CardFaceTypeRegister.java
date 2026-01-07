@@ -38,6 +38,8 @@ public class CardFaceTypeRegister {
         register(Act.class, ActView.class);
         register(ActBack.class, ActBackView.class);
 
+        register(Story.class, StoryView.class);
+
         register(Location.class, LocationView.class);
         register(LocationBack.class, LocationBackView.class);
 

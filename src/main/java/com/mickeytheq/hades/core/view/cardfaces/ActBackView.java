@@ -21,9 +21,9 @@ import java.util.function.Supplier;
 @View(interfaceLanguageKey = InterfaceConstants.ACT_BACK)
 public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private ActAgendaCommonFieldsView section1View;
-    private ActAgendaCommonFieldsView section2View;
-    private ActAgendaCommonFieldsView section3View;
+    private StorySectionView section1View;
+    private StorySectionView section2View;
+    private StorySectionView section3View;
     private EncounterSetView encounterSetView;
 
     private JTextField actNumberEditor;
@@ -35,9 +35,9 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
         super.initialiseView();
 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        section1View = new ActAgendaCommonFieldsView(getModel().getSection1());
-        section2View = new ActAgendaCommonFieldsView(getModel().getSection2());
-        section3View = new ActAgendaCommonFieldsView(getModel().getSection3());
+        section1View = new StorySectionView(getModel().getSection1());
+        section2View = new StorySectionView(getModel().getSection2());
+        section3View = new StorySectionView(getModel().getSection3());
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
     }
 
@@ -132,7 +132,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
         // do the body back of the card that has multiple sections with different layout requirements
         // use the multi-section renderer to handle the dynamic scaling
         MultiSectionRenderer multiSectionRenderer = new MultiSectionRenderer(paintContext, BODY_DRAW_REGION);
-        CardFaceViewUtils.buildActAgendaSections(paintContext, multiSectionRenderer, section1View, section2View, section3View);
+        CardFaceViewUtils.buildStorySections(paintContext, multiSectionRenderer, section1View, section2View, section3View);
 
         String victory = getModel().getCommonCardFieldsModel().getVictory();
 

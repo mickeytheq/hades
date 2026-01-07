@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage;
 @View(interfaceLanguageKey = InterfaceConstants.ACT)
 public class ActView extends BaseCardFaceView<Act> implements HasCollectionView, HasEncounterSetView {
     private CommonCardFieldsView commonCardFieldsView;
-    private ActAgendaCommonFieldsView actCommonFieldsView;
+    private StorySectionView actCommonFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
     private PortraitView portraitView;
@@ -37,7 +37,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         super.initialiseView();
 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
-        actCommonFieldsView = new ActAgendaCommonFieldsView(getModel().getActCommonFieldsModel());
+        actCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());

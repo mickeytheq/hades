@@ -34,10 +34,10 @@ public class CardFaceViewUtils {
     }
 
     // build the header/story/rules sections with appropriate gaps/lines between them
-    public static void buildActAgendaSections(PaintContext paintContext, MultiSectionRenderer renderer, ActAgendaCommonFieldsView ... sectionViews) {
+    public static void buildStorySections(PaintContext paintContext, MultiSectionRenderer renderer, StorySectionView... sectionViews) {
         boolean needSeparator = false;
 
-        for (ActAgendaCommonFieldsView sectionView : sectionViews) {
+        for (StorySectionView sectionView : sectionViews) {
             if (sectionView.getModel().isEmpty())
                 continue;
 
@@ -53,7 +53,7 @@ public class CardFaceViewUtils {
         }
     }
 
-    private static void buildSection(PaintContext paintContext, MultiSectionRenderer renderer, ActAgendaCommonFieldsView sectionView) {
+    private static void buildSection(PaintContext paintContext, MultiSectionRenderer renderer, StorySectionView sectionView) {
         if (sectionView.getModel().isEmpty())
             return;
 

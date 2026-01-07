@@ -295,7 +295,7 @@ public class MigrationUtils {
         return WeaknessType.valueOf(weaknessType);
     }
 
-    public static void populateActAgendaCommonFieldsModel(SettingsAccessor settingsAccessor, String settingsCode, ActAgendaCommonFieldsModel model) {
+    public static void populateStorySectionModel(SettingsAccessor settingsAccessor, String settingsCode, StorySectionModel model) {
         String headerKey = SettingsFieldNames.STORY_SECTION_HEADER_PREFIX + settingsCode;
 
         model.setHeader(settingsAccessor.getString(headerKey));

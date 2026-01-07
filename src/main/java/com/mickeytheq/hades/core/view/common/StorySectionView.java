@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.model.common.ActAgendaCommonFieldsModel;
+import com.mickeytheq.hades.core.model.common.StorySectionModel;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
@@ -15,8 +15,8 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 
-public class ActAgendaCommonFieldsView {
-    private final ActAgendaCommonFieldsModel model;
+public class StorySectionView {
+    private final StorySectionModel model;
 
     private JTextArea headerEditor;
     private JSpinner afterHeaderSpaceEditor;
@@ -24,11 +24,11 @@ public class ActAgendaCommonFieldsView {
     private JSpinner afterStorySpaceEditor;
     private JTextArea rulesEditor;
 
-    public ActAgendaCommonFieldsView(ActAgendaCommonFieldsModel model) {
+    public StorySectionView(StorySectionModel model) {
         this.model = model;
     }
 
-    public ActAgendaCommonFieldsModel getModel() {
+    public StorySectionModel getModel() {
         return model;
     }
 

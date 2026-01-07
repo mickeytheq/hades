@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.graphics.filters.InversionFilter;
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CollectionModel;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
@@ -126,10 +127,10 @@ public class CollectionView {
         else
             drawRegion = COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE;
 
-        paintCollectionNumber(paintContext, drawRegion);
+        paintCollectionNumber(paintContext, drawRegion, TextStyleUtils.getCollectionNumberTextStyle());
     }
 
-    public void paintCollectionNumber(PaintContext paintContext, Rectangle drawRegion) {
+    public void paintCollectionNumber(PaintContext paintContext, Rectangle drawRegion, TextStyle textStyle) {
         Optional<CollectionModel> modelOpt = getModel(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -139,7 +140,7 @@ public class CollectionView {
 
         if (!StringUtils.isEmpty(model.getNumber())) {
             MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-            markupRenderer.setDefaultStyle(TextStyleUtils.getCollectionNumberTextStyle());
+            markupRenderer.setDefaultStyle(textStyle);
             markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
             markupRenderer.setMarkupText(model.getNumber());
             markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);

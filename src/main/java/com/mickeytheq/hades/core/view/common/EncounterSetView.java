@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
@@ -109,10 +110,10 @@ public class EncounterSetView {
         else
             drawRegion = ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE;
 
-        paintEncounterNumbers(paintContext, drawRegion);
+        paintEncounterNumbers(paintContext, drawRegion, TextStyleUtils.getEncounterNumberTextStyle());
     }
 
-    public void paintEncounterNumbers(PaintContext paintContext, Rectangle drawRegion) {
+    public void paintEncounterNumbers(PaintContext paintContext, Rectangle drawRegion, TextStyle textStyle) {
         Optional<EncounterSetModel> modelOpt = getModelToUse(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -122,7 +123,7 @@ public class EncounterSetView {
 
         if (!StringUtils.isEmpty(modelToUse.getNumber()) || !StringUtils.isEmpty(modelToUse.getTotal())) {
             MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-            markupRenderer.setDefaultStyle(TextStyleUtils.getEncounterNumberTextStyle());
+            markupRenderer.setDefaultStyle(textStyle);
             markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
 
             String text = StringUtils.defaultIfEmpty(modelToUse.getNumber(), "") + " / " + StringUtils.defaultIfEmpty(modelToUse.getTotal(), "");

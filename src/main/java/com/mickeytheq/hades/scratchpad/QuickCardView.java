@@ -24,12 +24,9 @@ import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.ui.DialogWithButtons;
-import org.checkerframework.checker.units.qual.C;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -70,7 +67,7 @@ public class QuickCardView {
         projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
 
         ProjectContexts.withContext(projectContext, () -> {
-        asset();
+//        asset();
 //            investigator();
 //        event();
 //        skill();
@@ -81,7 +78,22 @@ public class QuickCardView {
 //            act();
 //            enemy();
 //            scenarioReference();
+            story();
         });
+    }
+
+    private void story() {
+        Story front = new Story();
+        front.getCommonCardFieldsModel().setTitle("Story card");
+        front.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
+        front.getCommonCardFieldsModel().setTraits("Monster.");
+        front.getSection1().setHeader("Header 1");
+        front.getSection1().setStory("Story story");
+        front.getSection1().setRules("Rules are rules");
+
+        Card card = CardFaces.createCardModel(front, null);
+
+        displayEditor(card);
     }
 
     private void scenarioReference() {
@@ -241,8 +253,8 @@ public class QuickCardView {
         model.setAgendaNumber("1");
         model.setDeckId("a");
         model.getCommonCardFieldsModel().setTitle("Title");
-        model.getAgendaCommonFieldsModel().setStory("Story story");
-        model.getAgendaCommonFieldsModel().setRules("Rules rules");
+        model.getStorySectionModel().setStory("Story story");
+        model.getStorySectionModel().setRules("Rules rules");
 
         AgendaBack agendaBack = new AgendaBack();
         agendaBack.setAgendaNumber("1");
@@ -269,8 +281,8 @@ public class QuickCardView {
         frontModel.setActNumber("1");
         frontModel.setDeckId("a");
         frontModel.getCommonCardFieldsModel().setTitle("Title");
-        frontModel.getActCommonFieldsModel().setStory("Story story");
-        frontModel.getActCommonFieldsModel().setRules("Rules rules");
+        frontModel.getStorySectionModel().setStory("Story story");
+        frontModel.getStorySectionModel().setRules("Rules rules");
 
         ActBack backModel = new ActBack();
         backModel.setActNumber("1");
@@ -447,7 +459,7 @@ public class QuickCardView {
 
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(mainPanel);
-            frame.setPreferredSize(new Dimension(2000, 1200));
+            frame.setPreferredSize(new Dimension(2000, 1400));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);

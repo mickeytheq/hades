@@ -4,7 +4,7 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
-public class ActAgendaCommonFieldsModel implements EmptyEntityDiscriminator {
+public class StorySectionModel implements EmptyEntityDiscriminator {
     private String header;
     private Integer afterHeaderSpace = 0;
     private String story;

@@ -14,7 +14,7 @@ public class Act extends BaseCardFaceModel {
     private Statistic clues = Statistic.empty();
 
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
-    private final ActAgendaCommonFieldsModel actCommonFieldsModel = new ActAgendaCommonFieldsModel();
+    private final StorySectionModel storySectionModel = new StorySectionModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final PortraitModel portraitModel = new PortraitModel();
@@ -62,8 +62,8 @@ public class Act extends BaseCardFaceModel {
     }
 
     @Property(flatten = true)
-    public ActAgendaCommonFieldsModel getActCommonFieldsModel() {
-        return actCommonFieldsModel;
+    public StorySectionModel getStorySectionModel() {
+        return storySectionModel;
     }
 
     @Property("Collection")
