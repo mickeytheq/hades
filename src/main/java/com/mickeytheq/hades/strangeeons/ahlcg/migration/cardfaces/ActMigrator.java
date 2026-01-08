@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 
 import com.mickeytheq.hades.core.model.cardfaces.Act;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
@@ -22,7 +23,7 @@ public class ActMigrator {
         act.setClues(MigrationUtils.parseStatistic(settingsAccessor, "Clues", SettingsFieldNames.PER_INVESTIGATOR));
 
         act.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.ACT_STORY));
-        act.getStorySectionModel().setAfterStorySpace(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY));
+        act.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY), Distance.Unit.Pixel));
 
         // default logic will put 'rules' in the standard field, move it out
         act.getStorySectionModel().setRules(act.getCommonCardFieldsModel().getRules());

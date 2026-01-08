@@ -2,7 +2,9 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.ui.DocumentEventAdapter;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
+import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 
 import javax.swing.*;
@@ -105,6 +107,12 @@ public class EditorUtils {
     public static void bindStatisticComponent(StatisticComponent statisticComponent, Consumer<Statistic> consumer) {
         statisticComponent.addActionListener(e -> {
             consumer.accept(statisticComponent.getStatistic());
+        });
+    }
+
+    public static void bindDistanceComponent(DistanceComponent distanceComponent, Consumer<Distance> consumer) {
+        distanceComponent.addActionListener(e -> {
+            consumer.accept(distanceComponent.getDistance());
         });
     }
 

@@ -2,9 +2,11 @@ package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.StorySectionModel;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MarkupUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
@@ -19,9 +21,9 @@ public class StorySectionView {
     private final StorySectionModel model;
 
     private JTextArea headerEditor;
-    private JSpinner afterHeaderSpaceEditor;
+    private DistanceComponent afterHeaderSpaceEditor;
     private JTextArea storyEditor;
-    private JSpinner afterStorySpaceEditor;
+    private DistanceComponent afterStorySpaceEditor;
     private JTextArea rulesEditor;
 
     public StorySectionView(StorySectionModel model) {
@@ -34,21 +36,21 @@ public class StorySectionView {
 
     public void createEditors(EditorContext editorContext) {
         headerEditor = EditorUtils.createTextArea(2, 30);
-        afterHeaderSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterHeaderSpaceEditor = new DistanceComponent();
         storyEditor = EditorUtils.createTextArea(6, 30);
-        afterStorySpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterStorySpaceEditor = new DistanceComponent();
         rulesEditor = EditorUtils.createTextArea(6, 30);
 
         EditorUtils.bindTextComponent(headerEditor, editorContext.wrapConsumerWithMarkedChanged(model::setHeader));
-        EditorUtils.bindSpinner(afterHeaderSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterHeaderSpace));
+        EditorUtils.bindDistanceComponent(afterHeaderSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterHeaderSpace));
         EditorUtils.bindTextComponent(storyEditor, editorContext.wrapConsumerWithMarkedChanged(model::setStory));
-        EditorUtils.bindSpinner(afterStorySpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterStorySpace));
+        EditorUtils.bindDistanceComponent(afterStorySpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterStorySpace));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
 
         headerEditor.setText(model.getHeader());
-        afterHeaderSpaceEditor.setValue(model.getAfterHeaderSpace());
+        afterHeaderSpaceEditor.setDistance(model.getAfterHeaderSpace());
         storyEditor.setText(model.getStory());
-        afterStorySpaceEditor.setValue(model.getAfterStorySpace());
+        afterStorySpaceEditor.setDistance(model.getAfterStorySpace());
         rulesEditor.setText(model.getRules());
     }
 
@@ -114,13 +116,13 @@ public class StorySectionView {
         return sb.toString();
     }
 
-    private void addSpacing(StringBuilder sb, Integer spacing) {
+    private void addSpacing(StringBuilder sb, Distance spacing) {
         if (spacing == null)
             return;
 
-        if (spacing == 0)
+        if (spacing.getAmount() == 0)
             return;
 
-        sb.append(MarkupUtils.getSpacerMarkup(1, spacing));
+        sb.append(MarkupUtils.getSpacerMarkup(1, spacing.getAmount()));
     }
 }

@@ -45,13 +45,13 @@ public class MigrationUtils {
 
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
-        commonCardFieldsModel.setAfterTraitsSpacing(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS));
+        commonCardFieldsModel.setAfterTraitsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS), Distance.Unit.Pixel));
         commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
-        commonCardFieldsModel.setAfterKeywordsSpacing(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS));
+        commonCardFieldsModel.setAfterKeywordsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS), Distance.Unit.Pixel));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
-        commonCardFieldsModel.setAfterRulesSpacing(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT));
+        commonCardFieldsModel.setAfterRulesSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT), Distance.Unit.Pixel));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
-        commonCardFieldsModel.setAfterFlavourTextSpacing(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR));
+        commonCardFieldsModel.setAfterFlavourTextSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR), Distance.Unit.Pixel));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
         commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
     }
@@ -299,11 +299,11 @@ public class MigrationUtils {
         String headerKey = SettingsFieldNames.STORY_SECTION_HEADER_PREFIX + settingsCode;
 
         model.setHeader(settingsAccessor.getString(headerKey));
-        model.setAfterHeaderSpace(settingsAccessor.getSpacingValue(headerKey));
+        model.setAfterHeaderSpace(new Distance(settingsAccessor.getSpacingValue(headerKey), Distance.Unit.Pixel));
 
         String storyKey = SettingsFieldNames.STORY_SECTION_STORY_PREFIX + settingsCode;
         model.setStory(settingsAccessor.getString(storyKey));
-        model.setAfterStorySpace(settingsAccessor.getSpacingValue(storyKey));
+        model.setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(storyKey), Distance.Unit.Pixel));
 
         String rulesKey = SettingsFieldNames.GAME_TEXT + settingsCode;
         model.setRules(settingsAccessor.getString(rulesKey));

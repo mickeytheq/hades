@@ -8,13 +8,13 @@ public class CommonCardFieldsModel {
     private String subtitle;
     private Boolean unique;
     private String traits;
-    private Integer afterTraitsSpacing = 0;
+    private Distance afterTraitsSpacing = new Distance();
     private String keywords;
-    private Integer afterKeywordsSpacing = 0;
+    private Distance afterKeywordsSpacing = new Distance();
     private String rules;
-    private Integer afterRulesSpacing = 0;
+    private Distance afterRulesSpacing = new Distance();
     private String flavourText;
-    private Integer afterFlavourTextSpacing = 0;
+    private Distance afterFlavourTextSpacing = new Distance();
     private String victory;
     private String copyright;
 
@@ -105,39 +105,39 @@ public class CommonCardFieldsModel {
         this.copyright = copyright;
     }
 
-    @Property(value = "AfterTraitsSpacing", discriminator = ZeroNumberDiscriminator.class)
-    public Integer getAfterTraitsSpacing() {
+    @Property(value = "AfterTraitsSpacing")
+    public Distance getAfterTraitsSpacing() {
         return afterTraitsSpacing;
     }
 
-    public void setAfterTraitsSpacing(Integer afterTraitsSpacing) {
+    public void setAfterTraitsSpacing(Distance afterTraitsSpacing) {
         this.afterTraitsSpacing = afterTraitsSpacing;
     }
 
-    @Property(value = "AfterKeywordsSpacing", discriminator = ZeroNumberDiscriminator.class)
-    public Integer getAfterKeywordsSpacing() {
+    @Property(value = "AfterKeywordsSpacing")
+    public Distance getAfterKeywordsSpacing() {
         return afterKeywordsSpacing;
     }
 
-    public void setAfterKeywordsSpacing(Integer afterKeywordsSpacing) {
+    public void setAfterKeywordsSpacing(Distance afterKeywordsSpacing) {
         this.afterKeywordsSpacing = afterKeywordsSpacing;
     }
 
-    @Property(value = "AfterRulesSpacing", discriminator = ZeroNumberDiscriminator.class)
-    public Integer getAfterRulesSpacing() {
+    @Property(value = "AfterRulesSpacing")
+    public Distance getAfterRulesSpacing() {
         return afterRulesSpacing;
     }
 
-    public void setAfterRulesSpacing(Integer afterRulesSpacing) {
+    public void setAfterRulesSpacing(Distance afterRulesSpacing) {
         this.afterRulesSpacing = afterRulesSpacing;
     }
 
-    @Property(value = "AfterFlavourTextSpacing", discriminator = ZeroNumberDiscriminator.class)
-    public Integer getAfterFlavourTextSpacing() {
+    @Property(value = "AfterFlavourTextSpacing")
+    public Distance getAfterFlavourTextSpacing() {
         return afterFlavourTextSpacing;
     }
 
-    public void setAfterFlavourTextSpacing(Integer afterFlavourTextSpacing) {
+    public void setAfterFlavourTextSpacing(Distance afterFlavourTextSpacing) {
         this.afterFlavourTextSpacing = afterFlavourTextSpacing;
     }
 }

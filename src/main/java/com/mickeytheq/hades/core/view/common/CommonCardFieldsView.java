@@ -4,10 +4,12 @@ import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
 import ca.cgjennings.layout.TextStyle;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
+import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -29,13 +31,13 @@ public class CommonCardFieldsView {
     private JTextField copyrightEditor;
 
     private JTextField traitsEditor;
-    private JSpinner afterTraitsSpaceEditor;
+    private DistanceComponent afterTraitsSpaceEditor;
     private JTextArea keywordsEditor;
-    private JSpinner afterKeywordsSpaceEditor;
+    private DistanceComponent afterKeywordsSpaceEditor;
     private JTextArea rulesEditor;
-    private JSpinner afterRulesSpaceEditor;
+    private DistanceComponent afterRulesSpaceEditor;
     private JTextArea flavourTextEditor;
-    private JSpinner afterFlavourTextSpaceEditor;
+    private DistanceComponent afterFlavourTextSpaceEditor;
     private JTextArea victoryEditor;
 
     public CommonCardFieldsView(CommonCardFieldsModel model) {
@@ -48,13 +50,13 @@ public class CommonCardFieldsView {
         subtitleEditor = EditorUtils.createTextField(30);
         uniqueEditor = new JToggleButton(ImageUtilities.createIconForSize(ImageUtils.loadImage(ImageUtils.UNIQUE_STAR_ICON_RESOURCE), 12));
         traitsEditor = EditorUtils.createTextField(30);
-        afterTraitsSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterTraitsSpaceEditor = new DistanceComponent();
         keywordsEditor = EditorUtils.createTextArea(6, 30);
-        afterKeywordsSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterKeywordsSpaceEditor = new DistanceComponent();
         rulesEditor = EditorUtils.createTextArea(6, 30);
-        afterRulesSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterRulesSpaceEditor = new DistanceComponent();
         flavourTextEditor = EditorUtils.createTextArea(6, 30);
-        afterFlavourTextSpaceEditor = EditorUtils.createSpinnerNonNegative(Integer.MAX_VALUE);
+        afterFlavourTextSpaceEditor = new DistanceComponent();
         victoryEditor = EditorUtils.createTextArea(2, 30);
         copyrightEditor = EditorUtils.createTextField(30);
 
@@ -62,13 +64,13 @@ public class CommonCardFieldsView {
         EditorUtils.bindTextComponent(subtitleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setSubtitle));
         EditorUtils.bindToggleButton(uniqueEditor, editorContext.wrapConsumerWithMarkedChanged(model::setUnique));
         EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
-        EditorUtils.bindSpinner(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpacing));
+        EditorUtils.bindDistanceComponent(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpacing));
         EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
-        EditorUtils.bindSpinner(afterKeywordsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterKeywordsSpacing));
+        EditorUtils.bindDistanceComponent(afterKeywordsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterKeywordsSpacing));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
-        EditorUtils.bindSpinner(afterRulesSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterRulesSpacing));
+        EditorUtils.bindDistanceComponent(afterRulesSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterRulesSpacing));
         EditorUtils.bindTextComponent(flavourTextEditor, editorContext.wrapConsumerWithMarkedChanged(model::setFlavourText));
-        EditorUtils.bindSpinner(afterFlavourTextSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterFlavourTextSpacing));
+        EditorUtils.bindDistanceComponent(afterFlavourTextSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterFlavourTextSpacing));
         EditorUtils.bindTextComponent(victoryEditor, editorContext.wrapConsumerWithMarkedChanged(model::setVictory));
         EditorUtils.bindTextComponent(copyrightEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyright));
 
@@ -76,13 +78,13 @@ public class CommonCardFieldsView {
         subtitleEditor.setText(model.getSubtitle());
         uniqueEditor.setSelected(model.getUnique() != null && model.getUnique());
         traitsEditor.setText(model.getTraits());
-        afterTraitsSpaceEditor.setValue(model.getAfterTraitsSpacing());
+        afterTraitsSpaceEditor.setDistance(model.getAfterTraitsSpacing());
         keywordsEditor.setText(model.getKeywords());
-        afterKeywordsSpaceEditor.setValue(model.getAfterKeywordsSpacing());
+        afterKeywordsSpaceEditor.setDistance(model.getAfterKeywordsSpacing());
         rulesEditor.setText(model.getRules());
-        afterRulesSpaceEditor.setValue(model.getAfterRulesSpacing());
+        afterRulesSpaceEditor.setDistance(model.getAfterRulesSpacing());
         flavourTextEditor.setText(model.getFlavourText());
-        afterFlavourTextSpaceEditor.setValue(model.getAfterFlavourTextSpacing());
+        afterFlavourTextSpaceEditor.setDistance(model.getAfterFlavourTextSpacing());
         victoryEditor.setText(model.getVictory());
         copyrightEditor.setText(model.getCopyright());
     }
@@ -105,9 +107,9 @@ public class CommonCardFieldsView {
         addTraitsEditorToPanel(panel);
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.KEYWORDS), keywordsEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterKeywordsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterKeywordsSpaceEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterRulesSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterRulesSpaceEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.FLAVOR), flavourTextEditor);
 
         if (includeVictory) {
@@ -119,11 +121,11 @@ public class CommonCardFieldsView {
 
     public void addTraitsEditorToPanel(JPanel panel) {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TRAITS), traitsEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterTraitsSpaceEditor);
     }
 
     public void addVictoryEditorsToPanel(JPanel panel) {
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterFlavourTextSpaceEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.VICTORY), victoryEditor);
     }
 
@@ -262,14 +264,15 @@ public class CommonCardFieldsView {
         return sb.toString();
     }
 
-    private void addSpacing(StringBuilder sb, Integer spacing) {
+    private void addSpacing(StringBuilder sb, Distance spacing) {
         if (spacing == null)
             return;
 
-        if (spacing == 0)
+        if (spacing.getAmount() == 0)
             return;
 
-        sb.append(MarkupUtils.getSpacerMarkup(1, spacing));
+        // TODO: convert the amount to pixels for other units or use the unit natively if possible
+        sb.append(MarkupUtils.getSpacerMarkup(1, spacing.getAmount()));
     }
 
     public void paintCopyright(PaintContext paintContext) {
