@@ -9,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FileChooser extends JPanel {
     private final JTextField textField;
@@ -38,7 +39,7 @@ public class FileChooser extends JPanel {
             public void focusLost(FocusEvent e) {
                 File textFieldFile = new File(textField.getText());
 
-                if (fileChooser.getSelectedFile().equals(textFieldFile))
+                if (Objects.equals(fileChooser.getSelectedFile(), textFieldFile))
                     return;
 
                 fileChooser.setSelectedFile(new File(textField.getText()));
