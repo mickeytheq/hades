@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * {@link ImagePersister} that stores images in a single directory, assigning a random UUID to new images
+ * {@link ImagePersister} that stores images in a single directory, assigning a random UUID to use as the filename for the image
  */
 public class SingleDirectoryUuidEncodedFilenamesImagePersister implements ImagePersister {
     private final Path imageDirectory;
@@ -45,7 +45,7 @@ public class SingleDirectoryUuidEncodedFilenamesImagePersister implements ImageP
 
     @Override
     public String save(BufferedImage image, String existingIdentifier) {
-        // no image -> no identifier
+        // no image -> return no identifier
         if (image == null)
             return null;
 

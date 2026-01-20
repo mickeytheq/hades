@@ -1,18 +1,15 @@
 package com.mickeytheq.hades.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.*;
-import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import ca.cgjennings.apps.arkham.project.Member;
-import ca.cgjennings.apps.arkham.sheet.Sheet;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
+import com.mickeytheq.hades.core.global.CardDatabase;
+import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.serialise.JsonCardSerialiser;
-import com.mickeytheq.hades.serialise.RawJsonSerialiser;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -20,21 +17,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.Objects;
 
 import static resources.Language.string;
 
 public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
-    private final CardGameComponent cardGameComponent;
-
     public CardEditor(CardGameComponent cardGameComponent) {
-        this.cardGameComponent = cardGameComponent;
-
         setGameComponent(cardGameComponent);
 
         updateTitle();
@@ -67,8 +58,20 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     }
 
     @Override
+    public void setFile(File newFile) {
+        super.setFile(newFile);
+
+        if (getFile() != null) {
+            CardDatabase cardDatabase = CardDatabases.getCardDatabase();
+            cardDatabase.register(cardDatabaseLoader -> cardDatabaseLoader.registerCard(getGameComponent().getCardView().getCard(), getFile().toPath()), this);
+        }
+    }
+
+    @Override
     public void save() {
         Path path = getFile().toPath();
+
+        CardGameComponent cardGameComponent = getGameComponent();
 
         CardIO.writeCard(path, cardGameComponent.getCardView().getCard(), cardGameComponent.getProjectContext());
         cardGameComponent.markSaved();
@@ -126,6 +129,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         }
 
         StrangeEons.getWindow().removePropertyChangeListener(StrangeEonsAppWindow.VIEW_BACKDROP_PROPERTY, propertyChangeListener);
+
+        CardDatabases.getCardDatabase().unregister(this);
     }
 
     @Override
@@ -152,7 +157,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     private void updateTitle() {
         // update the title that shows in the UI tab for the card to the front face's title
-        String title = cardGameComponent.getCardView().getFrontFaceView().getTitle();
+        String title = getGameComponent().getCardView().getFrontFaceView().getTitle();
 
         if (StringUtils.isEmpty(title)) {
             title = "(No title)"; // TODO: i18n
@@ -195,7 +200,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public ProjectContext getProjectContext() {
-            return cardGameComponent.getProjectContext();
+            return getGameComponent().getProjectContext();
         }
 
         @Override
@@ -205,7 +210,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
             // this will mark the sheet as needing repainting the next time a repaint check is done and also
             // tell the SE framework that the content has changed so it will show as un-saved in the UI
-            cardGameComponent.markChanged(sheetIndex);
+            getGameComponent().markChanged(sheetIndex);
 
             // on any change tell the sheet(s) to repaint
             rerenderSheetViewers();

@@ -4,7 +4,7 @@ import com.mickeytheq.hades.core.model.image.ImagePersister;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 
 /**
- * Context for the current 'project'
+ * Context for a 'project'
  *
  * A standard implementation will be based around a Strange Eons project and the Hades specific directory for that project
  * that holds the project configuration and image files.
@@ -19,7 +19,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 public interface ProjectContext {
     /**
      * Returns the {@link ProjectConfiguration} for this context. This must return the same entity (by identity ==) for all
-     * calls for the same context. Put more simply, two cards in the same Strange Eons project must see the same instance
+     * calls for the same project. Put more simply, two cards in the same Strange Eons project must see the same instance
      * of {@link ProjectConfiguration}
      */
     ProjectConfiguration getProjectConfiguration();

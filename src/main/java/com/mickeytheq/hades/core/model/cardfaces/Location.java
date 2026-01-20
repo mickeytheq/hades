@@ -8,7 +8,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Location")
-public class Location extends BaseCardFaceModel {
+public class Location extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();

@@ -56,9 +56,10 @@ public class StandardProjectContext implements ProjectContext {
             // but we're in the middle of creating the ProjectContext that provides the ImagePersister
             // work around this by creating a temporary ProjectContext with just the ImagePersister while the Project config
             // is being loaded
-            ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(new StandardProjectContext(null, imagePersister), () -> {
-                return new ProjectConfigurationProviderJson(hadesProject.getProjectConfigurationFile()).load();
-            });
+            ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(
+                    new StandardProjectContext(null, imagePersister),
+                    () -> new ProjectConfigurationProviderJson(hadesProject.getProjectConfigurationFile()).load()
+            );
 
             return new StandardProjectContext(projectConfiguration, imagePersister);
         });

@@ -2,16 +2,13 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.CollectionModel;
-import com.mickeytheq.hades.core.model.common.EncounterSetModel;
-import com.mickeytheq.hades.core.model.common.StorySectionModel;
-import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
+import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Story")
-public class Story extends BaseCardFaceModel {
+public class Story extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final StorySectionModel section1 = new StorySectionModel();
     private final StorySectionModel section2 = new StorySectionModel();

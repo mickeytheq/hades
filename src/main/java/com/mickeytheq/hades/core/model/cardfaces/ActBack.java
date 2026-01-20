@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
+import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.StorySectionModel;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
@@ -10,7 +11,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "ActBack")
-public class ActBack extends BaseCardFaceModel {
+public class ActBack extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private boolean shadowFront;
     private String actNumber;
     private String deckId;

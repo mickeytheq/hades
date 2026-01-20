@@ -7,13 +7,14 @@ import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.model.common.CollectionModel;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
+import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import resources.Language;
 
 @Model(typeCode = "ScenarioReference")
-public class ScenarioReference extends BaseCardFaceModel {
+public class ScenarioReference extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     public static class SymbolChaosTokenInfo {
         private String rules;
         private SymbolChaosToken combineWith;

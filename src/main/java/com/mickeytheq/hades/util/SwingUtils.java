@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.util;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class SwingUtils {
     public static DefaultTableModel createNonEditableModel() {
@@ -10,5 +11,9 @@ public class SwingUtils {
                 return false;
             }
         };
+    }
+
+    public static Color copyColor(Color color) {
+        return new Color(color.getRGB(), true);
     }
 }

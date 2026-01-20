@@ -8,7 +8,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "AgendaBack")
-public class AgendaBack extends BaseCardFaceModel {
+public class AgendaBack extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private boolean shadowFront;
     private String agendaNumber;
     private String deckId;

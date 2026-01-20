@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
+import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;

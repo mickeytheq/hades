@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Model(typeCode = "Asset")
-public class Asset extends BaseCardFaceModel {
+public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     public enum AssetSlot {
         Ally,
         Accessory,

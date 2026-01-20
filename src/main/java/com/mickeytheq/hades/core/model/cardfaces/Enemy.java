@@ -8,7 +8,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Enemy")
-public class Enemy extends BaseCardFaceModel {
+public class Enemy extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private WeaknessType weaknessType;
 
     private Statistic combat = Statistic.empty();

@@ -62,13 +62,6 @@ public class NewCard extends BaseTaskAction {
         Card card = ProjectContexts.withContextReturn(projectContext,
                 () -> CardFaces.createNewCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass, projectContext));
 
-        CardView cardView = CardFaces.createCardView(card, projectContext);
-
-        // create the game component and its editor and attach the editor to the Strange Eons window
-        CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
-        AbstractGameComponentEditor<CardGameComponent> editor = cardGameComponent.createDefaultEditor();
-        StrangeEons.getWindow().addEditor(editor);
-
         // find the Strange Eons member that will parent this new component
         Member parentMember;
 
@@ -87,6 +80,14 @@ public class NewCard extends BaseTaskAction {
         // create the new file, attach it to the editor and save it
         File f = new File(parentMember.getFile(), newCardDialog.getFilename() + "." + CardIO.HADES_FILE_EXTENSION);
         f = ProjectUtilities.getAvailableFile(f);
+
+        CardView cardView = CardFaces.createCardView(card, projectContext);
+
+        // create the game component and its editor and attach the editor to the Strange Eons window
+        CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
+        AbstractGameComponentEditor<CardGameComponent> editor = cardGameComponent.createDefaultEditor();
+        StrangeEons.getWindow().addEditor(editor);
+
         editor.setFile(f);
         editor.save();
 

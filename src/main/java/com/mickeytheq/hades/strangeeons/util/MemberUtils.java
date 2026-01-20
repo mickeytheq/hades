@@ -4,6 +4,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import com.google.common.collect.Streams;
 import com.mickeytheq.hades.serialise.CardIO;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +45,6 @@ public class MemberUtils {
     }
 
     public static boolean isPathHadesFile(Path path) {
-        return path.getFileName().toString().endsWith("." + CardIO.HADES_FILE_EXTENSION);
+        return path.getFileName().toString().endsWith("." + CardIO.HADES_FILE_EXTENSION) && Files.isRegularFile(path);
     }
 }

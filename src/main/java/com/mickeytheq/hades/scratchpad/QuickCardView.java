@@ -6,8 +6,8 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
-import com.mickeytheq.hades.core.model.image.ImagePersister;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
+import com.mickeytheq.hades.core.model.image.NothingImagePersister;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
@@ -537,18 +537,6 @@ public class QuickCardView {
             g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
             g.drawImage(bufferedImage, 0, 0, null);
-        }
-    }
-
-    private static class NothingImagePersister implements ImagePersister {
-        @Override
-        public BufferedImage load(String identifier) {
-            return null;
-        }
-
-        @Override
-        public String save(BufferedImage image, String existingIdentifier) {
-            return "<random UUID>";
         }
     }
 

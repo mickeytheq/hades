@@ -1,5 +1,7 @@
 package com.mickeytheq.hades.core.model;
 
+import java.nio.file.Path;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -12,6 +14,9 @@ public class Card {
     private CardFaceModel frontFaceModel;
     private CardFaceModel backFaceModel;
     private String comments;
+
+    public Card() {
+    }
 
     public String getId() {
         return id;

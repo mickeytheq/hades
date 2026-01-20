@@ -6,6 +6,8 @@ import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
 import ca.cgjennings.apps.arkham.project.*;
 import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.global.CardDatabase;
+import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
@@ -16,6 +18,8 @@ import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
 import com.mickeytheq.hades.strangeeons.tasks.NewCard;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
+import com.mickeytheq.hades.strangeeons.util.MemberUtils;
+import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
 import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -23,14 +27,18 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HadesPlugin extends AbstractPlugin {
     private static final Logger logger = LogManager.getLogger(HadesPlugin.class);
@@ -56,6 +64,8 @@ public class HadesPlugin extends AbstractPlugin {
                 return false;
 
             installHadesFileType();
+
+            installCardDatabaseUpdater();
 
             installKeyboardShortcuts();
 
@@ -175,12 +185,17 @@ public class HadesPlugin extends AbstractPlugin {
         });
     }
 
-    private static final String HADES_NEW_CARD_ACTION = "HadesNewCard";
-
     private void installKeyboardShortcuts() {
+        installNewCardKeyboardShortcut();
+        installQuickSearchKeyboardShortcut();
+    }
+
+    private void installNewCardKeyboardShortcut() {
         StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
 
         KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_DOWN_MASK);
+
+        final String HADES_NEW_CARD_ACTION = "HadesNewCard";
 
         appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, HADES_NEW_CARD_ACTION);
         appWindow.getRootPane().getActionMap().put(HADES_NEW_CARD_ACTION, new AbstractAction() {
@@ -199,5 +214,57 @@ public class HadesPlugin extends AbstractPlugin {
                 NewCard.newCard(selectedMembers.length == 0 ? null : selectedMembers[0]);
             }
         });
+    }
+
+    private void installQuickSearchKeyboardShortcut() {
+        StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
+
+        KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK);
+
+        final String HADES_QUICK_SEARCH_TITLE = "HadesQuickSearchTitle";
+
+        appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, HADES_QUICK_SEARCH_TITLE);
+        appWindow.getRootPane().getActionMap().put(HADES_QUICK_SEARCH_TITLE, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                QuickSearchDialog quickSearchDialog = new QuickSearchDialog();
+                quickSearchDialog.setLocationRelativeTo(StrangeEons.getWindow());
+                quickSearchDialog.setVisible(true);
+            }
+        });
+    }
+
+    private void installCardDatabaseUpdater() {
+        StrangeEons.getWindow().addProjectEventListener(new CardDatabaseProjectEventListener());
+    }
+
+    static class CardDatabaseProjectEventListener implements StrangeEonsAppWindow.ProjectEventListener {
+        private final CardDatabase cardDatabase = CardDatabases.getCardDatabase();
+
+        @Override
+        public void projectOpened(Project project) {
+            Path projectPath = project.getFile().toPath();
+
+            ProjectContext projectContext = StandardProjectContext.getContextForContentPath(projectPath);
+
+            // load all the cards in the project and register them with the card database
+            try (Stream<Path> stream = Files.walk(projectPath)) {
+                List<Path> paths = stream.filter(MemberUtils::isPathHadesFile).collect(Collectors.toList());
+
+                cardDatabase.register(cardDatabaseLoader -> {
+                    for (Path path : paths) {
+                        Card card = CardIO.readCard(path, projectContext);
+                        cardDatabaseLoader.registerCard(card, path);
+                    }
+                }, project);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public void projectClosing(Project project) {
+            cardDatabase.unregister(project);
+        }
     }
 }
