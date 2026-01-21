@@ -11,6 +11,7 @@ import com.mickeytheq.hades.strangeeons.util.StrangeEonsAppWindowUtils;
 import com.mickeytheq.hades.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import resources.Language;
 
 import javax.swing.*;
@@ -52,11 +53,7 @@ public class CardTitleSearchMode implements SearchMode {
     }
 
     private boolean isMatching(String cardTitle, String searchText) {
-        // TODO: implement * matching
-        if (StringUtils.isEmpty(cardTitle))
-            return false;
-
-        return cardTitle.contains(searchText);
+        return Strings.CI.contains(cardTitle, searchText);
     }
 
     @Override
