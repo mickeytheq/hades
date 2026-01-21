@@ -89,6 +89,21 @@ public class CardDatabaseImpl implements CardDatabase {
         }
     }
 
+    @Override
+    public void update(Card card) {
+        readWriteLock.writeLock().lock();
+        try {
+            CardEntry cardEntry = cardEntryMapById.get(card.getId());
+
+            if (cardEntry == null)
+                return;
+
+            cardEntry.setCard(card);
+        } finally {
+            readWriteLock.writeLock().unlock();
+        }
+    }
+
     private static class CardDatabaseLoaderImpl implements CardDatabaseLoader {
         private final Object registerKey;
         private final List<LoadingCardEntry> cardEntries = new ArrayList<>();
@@ -132,7 +147,7 @@ public class CardDatabaseImpl implements CardDatabase {
 
 
     private static class CardEntry {
-        private final Card card;
+        private Card card;
         private final Path sourcePath;
         private final Set<Object> registeredKeys = new HashSet<>();
 
@@ -143,6 +158,10 @@ public class CardDatabaseImpl implements CardDatabase {
 
         public Card getCard() {
             return card;
+        }
+
+        public void setCard(Card card) {
+            this.card = card;
         }
 
         public Path getSourcePath() {

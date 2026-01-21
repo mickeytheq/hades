@@ -228,7 +228,7 @@ public class HadesPlugin extends AbstractPlugin {
             @Override
             public void actionPerformed(ActionEvent e) {
                 QuickSearchDialog quickSearchDialog = new QuickSearchDialog();
-                quickSearchDialog.setLocationRelativeTo(StrangeEons.getWindow());
+                quickSearchDialog.setLocationRelativeTo(appWindow);
                 quickSearchDialog.setVisible(true);
             }
         });

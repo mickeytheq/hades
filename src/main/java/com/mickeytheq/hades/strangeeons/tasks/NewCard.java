@@ -86,10 +86,10 @@ public class NewCard extends BaseTaskAction {
         // create the game component and its editor and attach the editor to the Strange Eons window
         CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
         AbstractGameComponentEditor<CardGameComponent> editor = cardGameComponent.createDefaultEditor();
-        StrangeEons.getWindow().addEditor(editor);
-
         editor.setFile(f);
         editor.save();
+
+        StrangeEons.getWindow().addEditor(editor);
 
         // tell the parent something has changed
         parentMember.synchronize();

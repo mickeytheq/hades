@@ -16,6 +16,7 @@ import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
+import com.mickeytheq.hades.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -70,8 +71,7 @@ public class QuickSearchDialog extends JDialog {
         setModal(true);
         setUndecorated(true);
 
-        installEscapeCloseOperation(this);
-        installKeyStrokes();
+        installKeyboardShortcuts();
 
         textField = new JTextField(60);
         textField.setFont(textField.getFont().deriveFont(14.0f));
@@ -128,7 +128,8 @@ public class QuickSearchDialog extends JDialog {
 
         searchMode.selected(selectedValue);
 
-        dispose();
+        // always close the dialog after a selection is made
+        SwingUtils.closeWindow(this);
     }
 
     private void textChanged() {
@@ -167,7 +168,9 @@ public class QuickSearchDialog extends JDialog {
     private static final Object NEXT_SELECTION_ACTION = new Object();
     private static final Object SELECT_ACTION = new Object();
 
-    private void installKeyStrokes() {
+    private void installKeyboardShortcuts() {
+        SwingUtils.installEscapeCloseKeyboardShortcut(this);
+
         JRootPane root = getRootPane();
 
         root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(UP_KEY_STROKE, PREVIOUS_SELECTION_ACTION);
@@ -211,19 +214,5 @@ public class QuickSearchDialog extends JDialog {
                 performSelect();
             }
         });
-    }
-
-    private static final KeyStroke ESCAPE_STROKE = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    public static final Object CLOSE_DIALOG_ACTION = new Object();
-
-    public static void installEscapeCloseOperation(final JDialog dialog) {
-        Action dispatchClosing = new AbstractAction() {
-            public void actionPerformed(ActionEvent event) {
-                dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
-            }
-        };
-        JRootPane root = dialog.getRootPane();
-        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ESCAPE_STROKE, CLOSE_DIALOG_ACTION);
-        root.getActionMap().put(CLOSE_DIALOG_ACTION, dispatchClosing);
     }
 }

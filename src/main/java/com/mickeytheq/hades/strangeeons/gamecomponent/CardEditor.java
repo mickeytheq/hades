@@ -25,6 +25,8 @@ import java.util.Objects;
 import static resources.Language.string;
 
 public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
+    private final JTabbedPane previewPane;
+
     public CardEditor(CardGameComponent cardGameComponent) {
         setGameComponent(cardGameComponent);
 
@@ -47,7 +49,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         // TODO: or delegate to the face. however having different encounter set info on the front and back would be quite whacky although perhaps we should make this possible but not the default
         // TODO: same goes for collection although I think this is more certain to be 'card' level
 
-        JTabbedPane previewPane = new JTabbedPane();
+        previewPane = new JTabbedPane();
         initializeSheetViewers(previewPane);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editorTabbedPane, previewPane);
@@ -67,6 +69,12 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         }
     }
 
+    public void selectPreviewFace(CardFaceSide cardFaceSide) {
+        int sheetIndex = cardFaceSide == CardFaceSide.Front ? 0 : 1;
+
+        previewPane.setSelectedIndex(sheetIndex);
+    }
+
     @Override
     public void save() {
         Path path = getFile().toPath();
@@ -77,6 +85,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         cardGameComponent.markSaved();
 
         RecentFiles.addRecentDocument(getFile());
+
+        CardDatabases.getCardDatabase().update(cardGameComponent.getCardView().getCard());
 
         // tell the project view to repaint this member (to un-bold it)
         Member member = StrangeEons.getOpenProject().findMember(getFile());

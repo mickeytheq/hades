@@ -204,6 +204,8 @@ public class InterfaceConstants {
     public static final String MERGINGREALITIES = "Hades-MergingRealities";
     // English value: Dark Veiling
     public static final String DARKVEILING = "Hades-DarkVeiling";
+    // English value: Front & back
+    public static final String FRONT_AND_BACK = "Hades-Front-And-Back";
     // English value: Ice and Death
     public static final String ICEANDDEATH = "Hades-IceAndDeath";
     // English value: Bottom right, corner

@@ -34,8 +34,11 @@ public interface CardDatabase {
     // TODO: listeners if needed to track cards entering/leaving scope
 
     // register Cards with the database
-    // the return value is a unique 'key' that should be used to unregister these cards when they leave scope
     void register(Consumer<CardDatabaseLoader> loader, Object registerKey);
 
+    // unregister all previously registered entries with the given key
     void unregister(Object registerKey);
+
+    // update a Card's state without altering any registration details
+    void update(Card card);
 }

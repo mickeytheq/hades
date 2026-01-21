@@ -34,4 +34,10 @@ public class BasicCardDatabase implements CardDatabase {
     public void unregister(Object registerKey) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void update(Card card) {
+        cards.removeIf(o -> card.getId().equals(o.getId()));
+        cards.add(card);
+    }
 }

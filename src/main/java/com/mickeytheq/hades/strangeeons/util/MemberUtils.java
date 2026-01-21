@@ -41,7 +41,7 @@ public class MemberUtils {
     }
 
     public static boolean isMemberHadesFile(Member member) {
-        return member != null && !member.isFolder() && member.getFile().getAbsolutePath().toLowerCase().endsWith("." + CardIO.HADES_FILE_EXTENSION);
+        return member != null && isPathHadesFile(member.getFile().toPath());
     }
 
     public static boolean isPathHadesFile(Path path) {

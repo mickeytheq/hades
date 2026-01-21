@@ -5,6 +5,7 @@ import com.mickeytheq.hades.core.global.CardDatabase;
 import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.util.StrangeEonsAppWindowUtils;
 import com.mickeytheq.hades.util.SwingUtils;
@@ -36,15 +37,16 @@ public class CardTitleSearchMode implements SearchMode {
             // for two-sided cards that share the title on both sides, treat them as a single result
             // this avoids duplication for cards like locations that commonly have the same front and back title
             if (frontTitle.isPresent() && backTitle.isPresent() && frontTitle.get().equals(backTitle.get())) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), frontTitle.get(), Language.string(InterfaceConstants.FRONT)));
+                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Front, frontTitle.get(), Language.string(InterfaceConstants.FRONT_AND_BACK)));
+                continue;
             }
 
             if (frontTitle.isPresent()) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), frontTitle.get(), Language.string(InterfaceConstants.FRONT)));
+                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Front, frontTitle.get(), Language.string(InterfaceConstants.FRONT)));
             }
 
             if (backTitle.isPresent()) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), backTitle.get(), Language.string(InterfaceConstants.BACK)));
+                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Back, backTitle.get(), Language.string(InterfaceConstants.BACK)));
             }
         }
     }
@@ -113,22 +115,28 @@ public class CardTitleSearchMode implements SearchMode {
     @Override
     public void selected(Object selectedItem) {
         SearchItem searchItem = (SearchItem)selectedItem;
-        StrangeEonsAppWindowUtils.navigateTo(searchItem.getPath());
+        StrangeEonsAppWindowUtils.navigateTo(searchItem.getPath(), searchItem.getCardFaceSide());
     }
 
     static class SearchItem {
         private final Path path;
+        private final CardFaceSide cardFaceSide;
         private final String title;
         private final String description;
 
-        public SearchItem(Path path, String title, String description) {
+        public SearchItem(Path path, CardFaceSide cardFaceSide, String title, String description) {
             this.path = path;
+            this.cardFaceSide = cardFaceSide;
             this.title = title;
             this.description = description;
         }
 
         public Path getPath() {
             return path;
+        }
+
+        public CardFaceSide getCardFaceSide() {
+            return cardFaceSide;
         }
 
         public String getTitle() {
