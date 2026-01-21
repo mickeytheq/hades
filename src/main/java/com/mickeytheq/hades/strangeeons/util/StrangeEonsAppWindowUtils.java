@@ -1,6 +1,5 @@
 package com.mickeytheq.hades.strangeeons.util;
 
-import ca.cgjennings.apps.arkham.EditorAdapter;
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.apps.arkham.StrangeEonsEditor;
@@ -14,23 +13,20 @@ import java.util.Map;
 
 public class StrangeEonsAppWindowUtils {
     // map and listener that handles selecting the correct card face in the preview when an Editor is opened
-    private static Map<Path, CardFaceSide> selectFaceOnSelected = new HashMap<>();
+    private final static Map<Path, CardFaceSide> selectFaceOnOpen = new HashMap<>();
 
     static {
-        StrangeEons.getWindow().addEditorListener(new EditorAdapter() {
-            @Override
-            public void editorSelected(StrangeEonsEditor strangeEonsEditor) {
-                CardFaceSide cardFaceSide = selectFaceOnSelected.remove(strangeEonsEditor.getFile().toPath());
+        StrangeEons.getWindow().addEditorAddedListener(strangeEonsEditor -> {
+            CardFaceSide cardFaceSide = selectFaceOnOpen.remove(strangeEonsEditor.getFile().toPath());
 
-                if (cardFaceSide == null)
-                    return;
+            if (cardFaceSide == null)
+                return;
 
-                if (!(strangeEonsEditor instanceof CardEditor))
-                    return;
+            if (!(strangeEonsEditor instanceof CardEditor))
+                return;
 
-                CardEditor cardEditor = (CardEditor)strangeEonsEditor;
-                cardEditor.selectPreviewFace(cardFaceSide);
-            }
+            CardEditor cardEditor = (CardEditor)strangeEonsEditor;
+            cardEditor.selectPreviewFace(cardFaceSide);
         });
     }
 
@@ -47,11 +43,21 @@ public class StrangeEonsAppWindowUtils {
 
         if (editors.length > 0) {
             editors[0].select();
+
+            selectPreviewFace(editors[0], cardFaceSide);
             return;
         }
 
-        selectFaceOnSelected.put(pathToFile, cardFaceSide);
+        selectFaceOnOpen.put(pathToFile, cardFaceSide);
 
         appWindow.openFile(file);
+    }
+
+    private static void selectPreviewFace(StrangeEonsEditor editor, CardFaceSide cardFaceSide) {
+        if (!(editor instanceof CardEditor))
+            return;
+
+        CardEditor cardEditor = (CardEditor)editor;
+        cardEditor.selectPreviewFace(cardFaceSide);
     }
 }

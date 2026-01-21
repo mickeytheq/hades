@@ -15,6 +15,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
@@ -107,7 +108,7 @@ public class QuickSearchDialog extends JDialog {
             }
         });
 
-        MigLayout layout = new MigLayout();
+        MigLayout layout = new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().insets("2"));
         getContentPane().setLayout(layout);
         getContentPane().add(textField, "wrap, growx, pushx");
 
