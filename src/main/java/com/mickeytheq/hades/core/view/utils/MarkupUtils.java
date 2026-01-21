@@ -57,9 +57,6 @@ public class MarkupUtils {
         BODY_TAG_REPLACEMENT.put("...", "…");
         BODY_TAG_REPLACEMENT.put("ast", "<ahf>*</ahf>");
         BODY_TAG_REPLACEMENT.put("emdash", "—");
-        BODY_TAG_REPLACEMENT.put("name", "Fashionista");
-        BODY_TAG_REPLACEMENT.put("fullname", "Fashionista");
-        BODY_TAG_REPLACEMENT.put("lastname", "Fashionista");
         BODY_TAG_REPLACEMENT.put("lsg", "‹");
         BODY_TAG_REPLACEMENT.put("lsq", "‘");
         BODY_TAG_REPLACEMENT.put("wil", "<ahf>w</ahf>");

@@ -8,11 +8,11 @@ import java.awt.*;
 
 public abstract class BasePaintContext implements PaintContext {
     private final RenderTarget renderTarget;
-    private final CardView cardView;
+    private final CardFaceView cardFaceView;
 
-    public BasePaintContext(RenderTarget renderTarget, CardView cardView) {
+    public BasePaintContext(RenderTarget renderTarget, CardFaceView cardFaceView) {
         this.renderTarget = renderTarget;
-        this.cardView = cardView;
+        this.cardFaceView = cardFaceView;
     }
 
     @Override
@@ -24,20 +24,24 @@ public abstract class BasePaintContext implements PaintContext {
     public MarkupRenderer createMarkupRenderer() {
         MarkupRenderer markupRenderer = new MarkupRenderer(getRenderingDpi());
 
-        String frontTitle = cardView.getFrontFaceView().getTitle();
+        // fullname is always the front title
+        // fullnameb always the back title
+        // title - the current card face's title
+        setTitleTag(markupRenderer, "fullname", cardFaceView.getCardView().getFrontFaceView().getTitle());
 
-        if (!StringUtils.isEmpty(frontTitle)) {
-            markupRenderer.setReplacementForTag("fullname", frontTitle);
-            markupRenderer.setReplacementForTag("title", frontTitle);
+        if (cardFaceView.getCardView().hasBack()) {
+            setTitleTag(markupRenderer, "fullnameb", cardFaceView.getCardView().getBackFaceView().getTitle());
         }
 
-        if (cardView.hasBack()) {
-            String backTitle = cardView.getBackFaceView().getTitle();
-
-            if (!StringUtils.isEmpty(backTitle))
-                markupRenderer.setReplacementForTag("fullnameb", backTitle);
-        }
+        setTitleTag(markupRenderer, "title", cardFaceView.getTitle());
 
         return markupRenderer;
+    }
+
+    private void setTitleTag(MarkupRenderer markupRenderer, String tag, String title) {
+        if (StringUtils.isEmpty(title))
+            return;
+
+        markupRenderer.setReplacementForTag(tag, title);
     }
 }

@@ -37,7 +37,7 @@ public class CardFaceViewComponent extends JPanel {
             return;
 
         BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
-        cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardFaceView.getCardView(), bufferedImage));
+        cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardFaceView, bufferedImage));
 
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -58,8 +58,8 @@ public class CardFaceViewComponent extends JPanel {
         private final Graphics2D graphics2D;
         private final double dpi = 300;
 
-        public PaintContextImpl(RenderTarget renderTarget, CardView cardView, BufferedImage bufferedImage) {
-            super(renderTarget, cardView);
+        public PaintContextImpl(RenderTarget renderTarget, CardFaceView cardFaceView, BufferedImage bufferedImage) {
+            super(renderTarget, cardFaceView);
             this.graphics2D = bufferedImage.createGraphics();
 
             graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);

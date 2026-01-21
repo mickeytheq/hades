@@ -114,7 +114,7 @@ public class CardGameComponent extends AbstractGameComponent {
                 // so we have to clear it first to paint onto a blank canvas
                 g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
 
-                PaintContext paintContext = new PaintContextImpl(g, renderTarget, getCardView(), this);
+                PaintContext paintContext = new PaintContextImpl(g, renderTarget, cardFaceView, this);
 
                 // delegate to the card view to do the painting
                 cardFaceView.paint(paintContext);
@@ -136,8 +136,8 @@ public class CardGameComponent extends AbstractGameComponent {
         private final Graphics2D g;
         private final Sheet<CardGameComponent> sheet;
 
-        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardView cardView, Sheet<CardGameComponent> sheet) {
-            super(renderTarget, cardView);
+        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardFaceView cardFaceView, Sheet<CardGameComponent> sheet) {
+            super(renderTarget, cardFaceView);
             this.g = g;
             this.sheet = sheet;
         }
