@@ -75,6 +75,9 @@ public class CardDatabaseImpl implements CardDatabase {
             // get the list of CardEntry recorded for this key
             List<CardEntry> cardEntries = registerKeyMap.remove(registerKey);
 
+            if (cardEntries == null)
+                return;
+
             // for each one, unregister from the list for that card entry and then
             // prune the overall entry if there are no more registered keys
             for (CardEntry cardEntry : cardEntries) {
