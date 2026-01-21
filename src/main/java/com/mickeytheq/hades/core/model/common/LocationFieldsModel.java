@@ -114,6 +114,9 @@ public class LocationFieldsModel implements EmptyEntityDiscriminator {
 
     @Override
     public boolean isEmpty() {
+        if (isCopyOtherFace())
+            return false;
+
         if (!getShroud().isEmpty())
             return false;
 
