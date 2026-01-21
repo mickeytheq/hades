@@ -19,50 +19,96 @@ public class MarkupUtils {
 
     static {
         BODY_TAG_REPLACEMENT.put("HorizontalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 0.12in 1pt>");
+        BODY_TAG_REPLACEMENT.put("hs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 0.12in 1pt>");
+
         BODY_TAG_REPLACEMENT.put("LargeVerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 3.0pt>");
+        BODY_TAG_REPLACEMENT.put("lvs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 3pt>");
+
         BODY_TAG_REPLACEMENT.put("VerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 1.5pt>");
+        BODY_TAG_REPLACEMENT.put("vs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 1.5pt>");
+
         BODY_TAG_REPLACEMENT.put("SmallVerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 0.5pt>");
-        BODY_TAG_REPLACEMENT.put("act", "<ahf>n</ahf>");
-        BODY_TAG_REPLACEMENT.put("rea", "<ahf>r</ahf>");
-        BODY_TAG_REPLACEMENT.put("fre", "<ahf>f</ahf>");
-        BODY_TAG_REPLACEMENT.put("dash", "<ahf>-</ahf>");
-        BODY_TAG_REPLACEMENT.put("gua", "<ahf>G</ahf>");
-        BODY_TAG_REPLACEMENT.put("see", "<ahf>K</ahf>");
-        BODY_TAG_REPLACEMENT.put("rog", "<ahf>R</ahf>");
-        BODY_TAG_REPLACEMENT.put("mys", "<ahf>M</ahf>");
-        BODY_TAG_REPLACEMENT.put("sur", "<ahf>V</ahf>");
-        BODY_TAG_REPLACEMENT.put("wil", "<ahf>w</ahf>");
-        BODY_TAG_REPLACEMENT.put("int", "<ahf>i</ahf>");
-        BODY_TAG_REPLACEMENT.put("com", "<ahf>c</ahf>");
-        BODY_TAG_REPLACEMENT.put("agi", "<ahf>a</ahf>");
-        BODY_TAG_REPLACEMENT.put("wild", "<ahf>?</ahf>");
-        BODY_TAG_REPLACEMENT.put("sku", "<ahf>S</ahf>");
-        BODY_TAG_REPLACEMENT.put("cul", "<ahf>C</ahf>");
-        BODY_TAG_REPLACEMENT.put("tab", "<ahf>A</ahf>");
-        BODY_TAG_REPLACEMENT.put("mon", "<ahf>L</ahf>");
-        BODY_TAG_REPLACEMENT.put("eld", "<ahf>E</ahf>");
+        BODY_TAG_REPLACEMENT.put("svs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 0.5pt>");
+
+        // ripped from a live renderer in the existing plugin
+        // some tags replaced with alternatives lower down to correct i18n
         BODY_TAG_REPLACEMENT.put("ten", "<ahf>T</ahf>");
-        BODY_TAG_REPLACEMENT.put("ble", "<ahf>D</ahf>");
-        BODY_TAG_REPLACEMENT.put("cur", "<ahf>U</ahf>");
-        BODY_TAG_REPLACEMENT.put("fro", "<ahf>H</ahf>");
-        BODY_TAG_REPLACEMENT.put("seal1", "<ahf>1</ahf>");
-        BODY_TAG_REPLACEMENT.put("seal2", "<ahf>2</ahf>");
-        BODY_TAG_REPLACEMENT.put("seal3", "<ahf>3</ahf>");
-        BODY_TAG_REPLACEMENT.put("seal4", "<ahf>4</ahf>");
-        BODY_TAG_REPLACEMENT.put("seal5", "<ahf>5</ahf>");
-        BODY_TAG_REPLACEMENT.put("ast", "<ahf>*</ahf>");
-        BODY_TAG_REPLACEMENT.put("uni", "<ahf>u</ahf>");
-        BODY_TAG_REPLACEMENT.put("per", "<ahf>p</ahf>");
-        BODY_TAG_REPLACEMENT.put("bul", "<ahf>b</ahf>");
+        BODY_TAG_REPLACEMENT.put(" ", " ");
+        BODY_TAG_REPLACEMENT.put("\"", "“");
+        BODY_TAG_REPLACEMENT.put("'", "‘");
+        BODY_TAG_REPLACEMENT.put("mys", "<ahf>M</ahf>");
+        BODY_TAG_REPLACEMENT.put("infinity", "∞");
         BODY_TAG_REPLACEMENT.put("gbul", "<ahf><boxbullet>B</boxbullet></ahf>");
-        BODY_TAG_REPLACEMENT.put("squ", "<ahf>s</ahf>");
-        BODY_TAG_REPLACEMENT.put("res", "#AHLCG-Resolution-tag");
-        BODY_TAG_REPLACEMENT.put("/res", "</hdr>");
-        BODY_TAG_REPLACEMENT.put("entry1", "<image res://ArkhamHorrorLCG/images/EntryLine.png 0.5in 8pt bottom>");
-        BODY_TAG_REPLACEMENT.put("entry2", "<image res://ArkhamHorrorLCG/images/EntryLine.png 0.75in 8pt bottom>");
-        BODY_TAG_REPLACEMENT.put("entry3", "<image res://ArkhamHorrorLCG/images/EntryLine.png 1.0in 8pt bottom>");
+        BODY_TAG_REPLACEMENT.put("rea", "<ahf>r</ahf>");
+        BODY_TAG_REPLACEMENT.put("rec", "<ahf>m</ahf>");
+        BODY_TAG_REPLACEMENT.put("act", "<ahf>n</ahf>");
+        BODY_TAG_REPLACEMENT.put("eld", "<ahf>E</ahf>");
+        BODY_TAG_REPLACEMENT.put("agi", "<ahf>a</ahf>");
+        BODY_TAG_REPLACEMENT.put("per", "<ahf>p</ahf>");
+        BODY_TAG_REPLACEMENT.put("emsp", " ");
+        BODY_TAG_REPLACEMENT.put("gua", "<ahf>G</ahf>");
+        BODY_TAG_REPLACEMENT.put("cod", "<ahf>#</ahf>");
+        BODY_TAG_REPLACEMENT.put("com", "<ahf>c</ahf>");
+        BODY_TAG_REPLACEMENT.put("rog", "<ahf>R</ahf>");
+        BODY_TAG_REPLACEMENT.put("cul", "<ahf>C</ahf>");
+        BODY_TAG_REPLACEMENT.put("cur", "<ahf>U</ahf>");
+        BODY_TAG_REPLACEMENT.put("rsg", "›");
+        BODY_TAG_REPLACEMENT.put("rsq", "’");
+        BODY_TAG_REPLACEMENT.put("...", "…");
+        BODY_TAG_REPLACEMENT.put("ast", "<ahf>*</ahf>");
+        BODY_TAG_REPLACEMENT.put("emdash", "—");
+        BODY_TAG_REPLACEMENT.put("name", "Fashionista");
+        BODY_TAG_REPLACEMENT.put("fullname", "Fashionista");
+        BODY_TAG_REPLACEMENT.put("lastname", "Fashionista");
+        BODY_TAG_REPLACEMENT.put("lsg", "‹");
+        BODY_TAG_REPLACEMENT.put("lsq", "‘");
+        BODY_TAG_REPLACEMENT.put("wil", "<ahf>w</ahf>");
+        BODY_TAG_REPLACEMENT.put("hor", "<ahf>d</ahf>");
+        BODY_TAG_REPLACEMENT.put("see", "<ahf>K</ahf>");
         BODY_TAG_REPLACEMENT.put("entry4", "<image res://ArkhamHorrorLCG/images/EntryLine.png 1.25in 8pt bottom>");
         BODY_TAG_REPLACEMENT.put("entry5", "<image res://ArkhamHorrorLCG/images/EntryLine.png 1.5in 8pt bottom>");
+        BODY_TAG_REPLACEMENT.put("entry2", "<image res://ArkhamHorrorLCG/images/EntryLine.png 0.75in 8pt bottom>");
+        BODY_TAG_REPLACEMENT.put("entry3", "<image res://ArkhamHorrorLCG/images/EntryLine.png 1.0in 8pt bottom>");
+        BODY_TAG_REPLACEMENT.put("hsp", " ");
+        BODY_TAG_REPLACEMENT.put("ensp", " ");
+        BODY_TAG_REPLACEMENT.put("uni", "<ahf>u</ahf>");
+        BODY_TAG_REPLACEMENT.put("dmg", "<ahf>h</ahf>");
+        BODY_TAG_REPLACEMENT.put("fre", "<ahf>f</ahf>");
+        BODY_TAG_REPLACEMENT.put("sku", "<ahf>S</ahf>");
+        BODY_TAG_REPLACEMENT.put("xpbox", "<family>⧠</family>");
+        BODY_TAG_REPLACEMENT.put("fro", "<ahf>H</ahf>");
+        BODY_TAG_REPLACEMENT.put("endash", "–");
+        BODY_TAG_REPLACEMENT.put("ble", "<ahf>D</ahf>");
+        BODY_TAG_REPLACEMENT.put("lg", "«");
+        BODY_TAG_REPLACEMENT.put("lq", "“");
+        BODY_TAG_REPLACEMENT.put("--", "–");
+        BODY_TAG_REPLACEMENT.put("/\"", "”");
+        BODY_TAG_REPLACEMENT.put("squ", "<ahf>s</ahf>");
+        BODY_TAG_REPLACEMENT.put("/'", "’");
+        BODY_TAG_REPLACEMENT.put("rg", "»");
+        BODY_TAG_REPLACEMENT.put("rq", "”");
+        BODY_TAG_REPLACEMENT.put("sur", "<ahf>V</ahf>");
+        BODY_TAG_REPLACEMENT.put("bul", "<ahf>b</ahf>");
+        BODY_TAG_REPLACEMENT.put("---", "—");
+        BODY_TAG_REPLACEMENT.put("cbox", "<family>⧠</family>");
+        BODY_TAG_REPLACEMENT.put("mon", "<ahf>L</ahf>");
+        BODY_TAG_REPLACEMENT.put("nbsp", " ");
+        BODY_TAG_REPLACEMENT.put("seal4", "<ahf>4</ahf>");
+        BODY_TAG_REPLACEMENT.put("seal3", "<ahf>3</ahf>");
+        BODY_TAG_REPLACEMENT.put("seal2", "<ahf>2</ahf>");
+        BODY_TAG_REPLACEMENT.put("seal1", "<ahf>1</ahf>");
+        BODY_TAG_REPLACEMENT.put("seal5", "<ahf>5</ahf>");
+        BODY_TAG_REPLACEMENT.put("entry1", "<image res://ArkhamHorrorLCG/images/EntryLine.png 0.5in 8pt bottom>");
+        BODY_TAG_REPLACEMENT.put("tab", "<ahf>A</ahf>");
+        BODY_TAG_REPLACEMENT.put("bultab", "     ");
+        BODY_TAG_REPLACEMENT.put("dash", "<ahf>-</ahf>");
+        BODY_TAG_REPLACEMENT.put("thsp", " ");
+        BODY_TAG_REPLACEMENT.put("int", "<ahf>i</ahf>");
+        BODY_TAG_REPLACEMENT.put("wild", "<ahf>?</ahf>");
+
+
+        BODY_TAG_REPLACEMENT.put("res", "#AHLCG-Resolution-tag");
+        BODY_TAG_REPLACEMENT.put("/res", "</hdr>");
 
         // TODO: there are two sets of declarations in the game settings but one overwrites the other and they are the same
         // TODO: probably used in different contexts (maybe one for Arno and one for non as the images referenced below include Arno?)
@@ -79,12 +125,10 @@ public class MarkupUtils {
         BODY_TAG_REPLACEMENT.put("hau", Language.gstring(GameConstants.HAUNTED_TAG));
         BODY_TAG_REPLACEMENT.put("shi", Language.gstring(GameConstants.SHIFT_TAG));
         BODY_TAG_REPLACEMENT.put("cop", "\u00a9");
-        BODY_TAG_REPLACEMENT.put("xpbox", "<family>\u29e0</family>");
 
         // TODO: similarly there's two xp boxes and check boxes declared, probably for use in different contexts
 //        BODY_TAG_REPLACEMENT.put("XPBoxA", "\u2610");
 
-        BODY_TAG_REPLACEMENT.put("cbox", "<family>\u29e0</family>");
 //        BODY_TAG_REPLACEMENT.put("CheckBoxA", "\u2610");
     }
 
