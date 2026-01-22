@@ -2,7 +2,10 @@ package com.mickeytheq.hades.ui.quicksearch;
 
 import javax.swing.*;
 
-public interface SearchMode {
+public interface QuickSearchMode {
+    // display string for this mode to be used to draw labels for mode selection
+    String getDisplay();
+
     // populate the given item list with matched items using the given input text
     void performSearch(String searchText, DefaultListModel<Object> listModel);
 

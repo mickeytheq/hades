@@ -22,9 +22,12 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuickSearchDialog extends JDialog {
     public static void main(String[] args) {
@@ -40,6 +43,8 @@ public class QuickSearchDialog extends JDialog {
             for (int i = 1; i <= 100; i++) {
                 Asset asset = new Asset();
                 asset.getCommonCardFieldsModel().setTitle("Asset" + i);
+                asset.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
+                asset.getCommonCardFieldsModel().setRules("Asset" + i);
                 cards.add(CardFaces.createCardModel(asset, new PlayerCardBack()));
 
                 Event event = new Event();
@@ -63,9 +68,14 @@ public class QuickSearchDialog extends JDialog {
     private final JList<Object> resultList;
     private final JScrollPane scrollPane;
 
-    private SearchMode searchMode = new CardTitleSearchMode();
+    private final List<QuickSearchMode> searchModes = new ArrayList<>();
+
+    private QuickSearchMode currentSearchMode;
 
     public QuickSearchDialog() {
+        searchModes.add(new CardTitleQuickSearchMode());
+        searchModes.add(new TextCardContentSearchMode());
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
 
@@ -79,14 +89,12 @@ public class QuickSearchDialog extends JDialog {
         resultList = new JList<>();
         resultList.setFont(textField.getFont());
 
-        resultList.setCellRenderer(searchMode.getRenderer());
-
         scrollPane = new JScrollPane(resultList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         textField.getDocument().addDocumentListener(new DocumentEventAdapter() {
             @Override
             public void changedUpdate(DocumentEvent documentEvent) {
-                textChanged();
+                performSearch();
             }
         });
 
@@ -110,7 +118,14 @@ public class QuickSearchDialog extends JDialog {
 
         MigLayout layout = new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().insets("2"));
         getContentPane().setLayout(layout);
+
+        JPanel modeSelectionPanel = createModeSelectionPanel();
+
+        getContentPane().add(modeSelectionPanel, "wrap, growx, pushx");
+
         getContentPane().add(textField, "wrap, growx, pushx");
+
+        selectMode(searchModes.get(0));
 
         relayout();
 
@@ -124,16 +139,26 @@ public class QuickSearchDialog extends JDialog {
             getContentPane().add(scrollPane, "wrap, growx, pushx");
     }
 
+    private void selectMode(QuickSearchMode searchMode) {
+        currentSearchMode = searchMode;
+
+        setButtonColours();
+
+        resultList.setCellRenderer(currentSearchMode.getRenderer());
+
+        performSearch();
+    }
+
     private void performSelect() {
         Object selectedValue = resultList.getSelectedValue();
 
-        searchMode.selected(selectedValue);
+        currentSearchMode.selected(selectedValue);
 
         // always close the dialog after a selection is made
         SwingUtils.closeWindow(this);
     }
 
-    private void textChanged() {
+    private void performSearch() {
         boolean resultListVisibleBeforeUpdate = resultList.getModel().getSize() > 0;
 
         // it is far cheaper/faster to create a new list model on each refresh
@@ -141,7 +166,7 @@ public class QuickSearchDialog extends JDialog {
         // element addition/change which in turn triggers costly layout calculations
         DefaultListModel<Object> listModel = new DefaultListModel<>();
 
-        searchMode.performSearch(textField.getText(), listModel);
+        currentSearchMode.performSearch(textField.getText(), listModel);
 
         resultList.setModel(listModel);
 
@@ -215,5 +240,46 @@ public class QuickSearchDialog extends JDialog {
                 performSelect();
             }
         });
+    }
+
+    private final Map<QuickSearchMode, JButton> buttonMap = new HashMap<>();
+
+    private JPanel createModeSelectionPanel() {
+        JPanel panel = new JPanel(new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().insets("2").gridGap("0", "0")));
+        for (QuickSearchMode searchMode : searchModes) {
+            JButton button = new JButton(searchMode.getDisplay());
+            button.setFont(resultList.getFont());
+            button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            button.setContentAreaFilled(false);
+            button.setOpaque(true);
+
+            buttonMap.put(searchMode, button);
+
+            button.addActionListener(e -> {
+                selectMode(searchMode);
+            });
+
+            panel.add(button);
+        }
+
+        return panel;
+    }
+
+    private void setButtonColours() {
+        for (Map.Entry<QuickSearchMode, JButton> entry : buttonMap.entrySet()) {
+            QuickSearchMode searchMode = entry.getKey();
+            JButton button = entry.getValue();
+
+            Color foreground = resultList.getForeground();
+            Color background = resultList.getBackground();
+
+            if (searchMode == currentSearchMode) {
+                foreground = SwingUtils.copyColor(resultList.getSelectionForeground());
+                background = SwingUtils.copyColor(resultList.getSelectionBackground());
+            }
+
+            button.setForeground(foreground);
+            button.setBackground(background);
+        }
     }
 }

@@ -1,27 +1,29 @@
 package com.mickeytheq.hades.ui.quicksearch;
 
-import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.global.CardDatabase;
 import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
-import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
+import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
+import com.mickeytheq.hades.core.model.entity.EntityMetadata;
+import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.util.StrangeEonsAppWindowUtils;
 import com.mickeytheq.hades.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Strings;
-import resources.Language;
 
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.awt.*;
 import java.nio.file.Path;
-import java.util.Optional;
 
-public class CardTitleSearchMode implements SearchMode {
+public class TextCardContentSearchMode implements QuickSearchMode {
     private final CardDatabase cardDatabase = CardDatabases.getCardDatabase();
+
+    @Override
+    public String getDisplay() {
+        return "Text";
+    }
 
     @Override
     public void performSearch(String searchText, DefaultListModel<Object> listModel) {
@@ -29,34 +31,26 @@ public class CardTitleSearchMode implements SearchMode {
             return;
 
         for (Card card : cardDatabase.getCards()) {
-            Optional<String> frontTitle = HasCommonCardFieldsModel.getTitle(card.getFrontFaceModel()).filter(o -> isMatching(o, searchText));
+            EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(card.getFrontFaceModel().getClass());
 
-            Optional<String> backTitle = Optional.empty();
-            if (card.hasBack())
-                backTitle = HasCommonCardFieldsModel.getTitle(card.getBackFaceModel()).filter(o -> isMatching(o, searchText));
+            for (PropertyMetadata propertyMetadata : entityMetadata.getProperties()) {
+                if (propertyMetadata.isValue()) {
+                    if (!propertyMetadata.getPropertyClass().equals(String.class))
+                        continue;
 
-            // for two-sided cards that share the title on both sides, treat them as a single result
-            // this avoids duplication for cards like locations that commonly have the same front and back title
-            if (frontTitle.isPresent() && backTitle.isPresent() && frontTitle.get().equals(backTitle.get())) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Front, frontTitle.get(), Language.string(InterfaceConstants.FRONT_AND_BACK)));
-                continue;
-            }
+                    Object value = propertyMetadata.getPropertyValue(card.getFrontFaceModel());
 
-            if (frontTitle.isPresent()) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Front, frontTitle.get(), Language.string(InterfaceConstants.FRONT)));
-            }
+                    if (value == null)
+                        continue;
 
-            if (backTitle.isPresent()) {
-                listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Back, backTitle.get(), Language.string(InterfaceConstants.BACK)));
+                    if (value.toString().contains(searchText)) {
+                        listModel.addElement(new SearchItem(cardDatabase.getSourcePathForCard(card), CardFaceSide.Front, value.toString(), propertyMetadata.getName()));
+                    }
+                }
             }
         }
     }
 
-    private boolean isMatching(String cardTitle, String searchText) {
-        return Strings.CI.contains(cardTitle, searchText);
-    }
-
-    @Override
     public ListCellRenderer<Object> getRenderer() {
         return new ListCellRendererImpl();
     }
