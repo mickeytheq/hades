@@ -2,6 +2,10 @@ package com.mickeytheq.hades.scratchpad;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
+import com.mickeytheq.hades.core.global.BasicCardDatabase;
+import com.mickeytheq.hades.core.global.CardDatabase;
+import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
@@ -67,7 +71,8 @@ public class QuickCardView {
         projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
 
         ProjectContexts.withContext(projectContext, () -> {
-        asset();
+            shadow();
+//        asset();
 //            investigator();
 //        event();
 //        skill();
@@ -80,6 +85,25 @@ public class QuickCardView {
 //            scenarioReference();
 //            story();
         });
+    }
+
+    private void shadow() {
+        Asset asset = new Asset();
+        asset.getCommonCardFieldsModel().setTitle("Rat Swarm");
+        asset.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
+
+        Card shadowingCard = CardFaces.createCardModel(asset, new PlayerCardBack());
+
+        CardDatabase cardDatabase = new BasicCardDatabase(Lists.newArrayList(shadowingCard));
+        CardDatabases.set(cardDatabase);
+
+        Shadow shadow = new Shadow();
+        shadow.setShadowCardId(shadowingCard.getId());
+        shadow.setShadowSide(CardFaceSide.Front);
+
+        Card shadowCard = CardFaces.createCardModel(shadow, null);
+
+        displayEditor(shadowCard);
     }
 
     private void story() {

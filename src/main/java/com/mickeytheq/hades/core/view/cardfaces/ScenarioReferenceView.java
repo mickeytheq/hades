@@ -32,8 +32,6 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
     @Override
     public void initialiseView() {
-        super.initialiseView();
-
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);

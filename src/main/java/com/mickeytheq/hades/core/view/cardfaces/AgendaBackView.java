@@ -32,8 +32,6 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     @Override
     public void initialiseView() {
-        super.initialiseView();
-
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         section1View = new StorySectionView(getModel().getSection1());
         section2View = new StorySectionView(getModel().getSection2());

@@ -34,8 +34,6 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     @Override
     public void initialiseView() {
-        super.initialiseView();
-
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         agendaCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);

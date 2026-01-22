@@ -27,9 +27,8 @@ public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardF
         initialiseView();
     }
 
-    public void initialiseView() {
-        // default do nothing
-    }
+    // perform any card specific initialisation
+    public abstract void initialiseView();
 
     public CardView getCardView() {
         return cardView;

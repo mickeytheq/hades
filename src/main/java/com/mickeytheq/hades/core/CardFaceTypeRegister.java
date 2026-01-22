@@ -45,6 +45,8 @@ public class CardFaceTypeRegister {
 
         register(EncounterCardBack.class, EncounterCardBackView.class);
         register(PlayerCardBack.class, PlayerCardBackView.class);
+
+        register(Shadow.class, ShadowView.class);
     }
 
     private void register(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {

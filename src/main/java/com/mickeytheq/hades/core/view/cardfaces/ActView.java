@@ -34,8 +34,6 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
     @Override
     public void initialiseView() {
-        super.initialiseView();
-
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         actCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);

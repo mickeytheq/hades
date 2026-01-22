@@ -4,10 +4,11 @@ import com.mickeytheq.hades.core.model.Card;
 
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * A database for accessing all the {@link com.mickeytheq.hades.core.model.Card} currently deemed in scope.
+ * A database for accessing all the {@link dcom.mickeytheq.hades.core.model.Card} currently deemed in scope.
  *
  * Card in scope are:
  * - Those open in editors
@@ -28,6 +29,10 @@ import java.util.function.Consumer;
 public interface CardDatabase {
     // get all cards in scope
     Collection<Card> getCards();
+
+    default Optional<Card> getCardWithId(String id) {
+        return getCards().stream().filter(o -> o.getId().equals(id)).findAny();
+    }
 
     Path getSourcePathForCard(Card card);
 

@@ -13,6 +13,11 @@ import java.awt.image.BufferedImage;
 @View(interfaceLanguageKey = InterfaceConstants.PLAYERCARDBACK)
 public class PlayerCardBackView extends BaseCardFaceView<PlayerCardBack> {
     @Override
+    public void initialiseView() {
+        // nothing to do
+    }
+
+    @Override
     public String getTitle() {
         return null;
     }

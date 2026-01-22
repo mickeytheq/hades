@@ -83,15 +83,17 @@ public class CardGameComponent extends AbstractGameComponent {
     private class CardSheet extends Sheet<CardGameComponent> {
         private final CardFaceView cardFaceView;
 
+        private Dimension currentDimension;
+
         public CardSheet(CardGameComponent gameComponent, CardFaceView cardFaceView) {
             super(gameComponent);
 
             this.cardFaceView = cardFaceView;
 
-            Dimension dimension = cardFaceView.getDimension();
+            currentDimension = cardFaceView.getDimension();
 
             // the only things the 'template' image is used for in our scenario is the
-            BufferedImage template = new BufferedImage((int) dimension.getWidth(), (int) dimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            BufferedImage template = new BufferedImage((int) currentDimension.getWidth(), (int) currentDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
             // BUG: strange eons code has a bug in the parameter checking of initializeTemplate where the class variable is checked for null
             // rather than the parameter being passed in. workaround this by setting it first
@@ -106,6 +108,18 @@ public class CardGameComponent extends AbstractGameComponent {
 
         @Override
         protected void paintSheet(RenderTarget renderTarget) {
+            Dimension newDimension = cardFaceView.getDimension();
+
+            // check for dimension change - not common but if it has happened we need to update the 'template image' of the sheet
+            // so the new painting will use the correct size
+            // this will occur if a card face has variable dimensions based on editor settings, for example a ShadowView
+            if (!newDimension.equals(currentDimension)) {
+                currentDimension = newDimension;
+
+                BufferedImage template = new BufferedImage((int) currentDimension.getWidth(), (int) currentDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                replaceTemplateImage(template);
+            }
+
             StopWatch stopWatch = StopWatch.createStarted();
 
             Graphics2D g = createGraphics();

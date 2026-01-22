@@ -52,13 +52,17 @@ public class HadesProject {
         return projectConfigurationFile;
     }
 
-    public static HadesProject getFromPath(Path path) {
-        Optional<Path> hadesInternalContentDirectoryPath = findHadesInternalContentDirectory(path);
+    public static Optional<HadesProject> findFromPath(Path path) {
+        return findHadesInternalContentDirectory(path).map(HadesProject::new);
+    }
 
-        if (!hadesInternalContentDirectoryPath.isPresent())
+    public static HadesProject getFromPath(Path path) {
+        Optional<HadesProject> hadesProject = findFromPath(path);
+
+        if (!hadesProject.isPresent())
             throw new RuntimeException("No " + HADES_ROOT_DIRECTORY_NAME + " project directory found for path '" + path + "'");
 
-        return new HadesProject(hadesInternalContentDirectoryPath.get());
+        return hadesProject.get();
     }
 
     public static HadesProject createProjectIfNotExists(Path rootPath) {

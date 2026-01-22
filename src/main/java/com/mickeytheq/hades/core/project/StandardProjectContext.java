@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfigurationProvi
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class StandardProjectContext implements ProjectContext {
     // TODO: soft reference this to have old ones GCd automatically? not a big deal as probably not many of them
@@ -29,6 +30,10 @@ public class StandardProjectContext implements ProjectContext {
     @Override
     public ImagePersister getImagePersister() {
         return imagePersister;
+    }
+
+    public static Optional<ProjectContext> findContextForContentPath(Path contentPath) {
+        return HadesProject.findFromPath(contentPath).map(StandardProjectContext::createContext);
     }
 
     // creates a new ProjectContext, expecting the hades project directory to already exist

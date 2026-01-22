@@ -398,6 +398,8 @@ public class InterfaceConstants {
     public static final String OUTSIDERS = "Hades-Outsiders";
     // English value: Top, large
     public static final String GUIDE_TOPLARGE = "Hades-Guide-TopLarge";
+    // English value: Shadow
+    public static final String SHADOW = "Hades-Shadow";
     // English value: Return to Echoes of the Past
     public static final String RETURNTOECHOESOFTHEPAST = "Hades-ReturnToEchoesOfThePast";
     // English value: Opening Hand

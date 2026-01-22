@@ -33,6 +33,16 @@ public class CardDatabaseImpl implements CardDatabase {
     }
 
     @Override
+    public Optional<Card> getCardWithId(String id) {
+        CardEntry cardEntry = cardEntryMapById.get(id);
+
+        if (cardEntry == null)
+            return Optional.empty();
+
+        return Optional.of(cardEntry.getCard());
+    }
+
+    @Override
     public Path getSourcePathForCard(Card card) {
         readWriteLock.readLock().lock();
         try {
