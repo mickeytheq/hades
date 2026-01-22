@@ -24,7 +24,7 @@ public class CardTitleQuickSearchMode implements QuickSearchMode {
 
     @Override
     public String getDisplay() {
-        return "Title";
+        return Language.string(InterfaceConstants.QUICKSEARCHMODE_TITLE);
     }
 
     @Override

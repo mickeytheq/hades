@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.ui.quicksearch;
 
+import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.global.CardDatabase;
 import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
@@ -12,6 +13,7 @@ import com.mickeytheq.hades.strangeeons.util.StrangeEonsAppWindowUtils;
 import com.mickeytheq.hades.util.SwingUtils;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
+import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +24,7 @@ public class TextCardContentSearchMode implements QuickSearchMode {
 
     @Override
     public String getDisplay() {
-        return "Text";
+        return Language.string(InterfaceConstants.QUICKSEARCHMODE_TEXT);
     }
 
     @Override

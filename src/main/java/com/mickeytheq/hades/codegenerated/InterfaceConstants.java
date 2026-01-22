@@ -776,6 +776,8 @@ public class InterfaceConstants {
     public static final String DECAYANDFILTH = "Hades-DecayAndFilth";
     // English value: None
     public static final String STAMINA_NONE = "Hades-Stamina-None";
+    // English value: Title
+    public static final String QUICKSEARCHMODE_TITLE = "Hades-QuickSearchMode-Title";
     // English value: Number
     public static final String SETNUMBER = "Hades-SetNumber";
     // English value: Creatures of the Deep
@@ -1166,6 +1168,8 @@ public class InterfaceConstants {
     public static final String THEBAYOU = "Hades-TheBayou";
     // English value: Skip
     public static final String SKIP = "Hades-Skip";
+    // English value: Text
+    public static final String QUICKSEARCHMODE_TEXT = "Hades-QuickSearchMode-Text";
     // English value: Dancing Mad
     public static final String DANCINGMAD = "Hades-DancingMad";
     // English value: Zoogs
