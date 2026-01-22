@@ -31,6 +31,8 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
 
     @Override
     public Dimension getDimension() {
+        // a default dimension when no card is selected
+        // when this changes the owning framework will detect the change automatically before a repaint occurs
         if (shadowingFaceView == null)
             return new Dimension(1, 1);
 

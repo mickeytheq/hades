@@ -43,6 +43,10 @@ public interface CardFaceView {
 
     /**
      * Returns the dimension of the card face being drawn
+     *
+     * This should be relatively cheap to execute over multiple calls as it is called before each paint to check for
+     * changes to the template size. For example if a real image is being loaded to establish the dimensions caching should
+     * be used so subsequent calls are not as expensive when the sizing isn't changing
      */
     Dimension getDimension();
 
