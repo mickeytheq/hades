@@ -104,7 +104,7 @@ public class MarkupUtils {
         BODY_TAG_REPLACEMENT.put("wild", "<ahf>?</ahf>");
 
 
-        BODY_TAG_REPLACEMENT.put("res", "#AHLCG-Resolution-tag");
+        BODY_TAG_REPLACEMENT.put("res", Language.gstring(GameConstants.RESOLUTION_TAG));
         BODY_TAG_REPLACEMENT.put("/res", "</hdr>");
 
         // TODO: there are two sets of declarations in the game settings but one overwrites the other and they are the same
