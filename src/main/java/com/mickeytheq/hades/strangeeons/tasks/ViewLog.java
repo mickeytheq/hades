@@ -65,7 +65,7 @@ public class ViewLog extends BaseTaskAction {
             JPanel logTextPanel = MigLayoutUtils.createTitledPanel("Log");
             logTextPanel.add(scrollPane, "grow, push");
 
-            scrollPane.setPreferredSize(new Dimension(800, 600));
+            scrollPane.setPreferredSize(new Dimension(1600, 1100));
 
             JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
             mainPanel.add(optionsPanel, "growx, pushx, wrap");
