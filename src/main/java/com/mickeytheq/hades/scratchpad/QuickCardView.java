@@ -71,8 +71,8 @@ public class QuickCardView {
         projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
 
         ProjectContexts.withContext(projectContext, () -> {
-            shadow();
-//        asset();
+//            shadow();
+        asset();
 //            investigator();
 //        event();
 //        skill();

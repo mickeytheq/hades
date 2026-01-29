@@ -5,8 +5,9 @@ import ca.cgjennings.apps.arkham.project.Member;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.cardreviewer.CardReviewDialog;
+import com.mickeytheq.hades.ui.cardreviewer.ItemSource;
+import com.mickeytheq.hades.ui.cardreviewer.ItemSources;
 import com.mickeytheq.hades.ui.cardreviewer.ListItemSource;
-import com.mickeytheq.hades.ui.cardreviewer.CardReviewSourceImpl;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -26,9 +27,9 @@ public class ReviewCardsTaskAction extends BaseTaskAction {
     public boolean performOnSelection(Member[] members) {
         List<Path> hadesFiles = MemberUtils.getAllHadesPathDescendants(Lists.newArrayList(members));
 
-        ListItemSource cardReviewSource = new CardReviewSourceImpl(hadesFiles);
+        ItemSource<Path> cardReviewSource = new ListItemSource<>(hadesFiles);
 
-        new CardReviewDialog(StrangeEons.getWindow(), cardReviewSource);
+        new CardReviewDialog(StrangeEons.getWindow(), ItemSources.cardViewFromPath(cardReviewSource));
 
         return true;
     }

@@ -6,13 +6,14 @@ public class HadesActionTree extends TaskActionTree {
     public HadesActionTree() {
         add(new NewCard());
         add(new OpenProjectConfiguration());
-        add(new ReviewCardsTaskAction());
+//        add(new ReviewCardsTaskAction());
+//        add(new CompareCardsTaskAction());
         add(new MigrateTaskAction());
         add(new ViewLog());
-        add(new PerformanceSuite());
-        add(new LoadGameComponentPerformanceTest());
-        add(new LoadEditorPerformanceTest());
-        add(new PaintingPerformanceTest());
+//        add(new PerformanceSuite());
+//        add(new LoadGameComponentPerformanceTest());
+//        add(new LoadEditorPerformanceTest());
+//        add(new PaintingPerformanceTest());
     }
 
     @Override

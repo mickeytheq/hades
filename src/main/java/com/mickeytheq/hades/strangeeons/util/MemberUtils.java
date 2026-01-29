@@ -37,7 +37,7 @@ public class MemberUtils {
     // returns true if the given member looks like an .eon game component file
     // will require opening an inspection to determine the type/contents
     public static boolean isMemberEonFile(Member member) {
-        return member != null && !member.isFolder() && member.getFile().getAbsolutePath().toLowerCase().endsWith(".eon");
+        return member != null && isPathEonFile(member.getFile().toPath());
     }
 
     public static boolean isMemberHadesFile(Member member) {
@@ -46,5 +46,9 @@ public class MemberUtils {
 
     public static boolean isPathHadesFile(Path path) {
         return path.getFileName().toString().endsWith("." + CardIO.HADES_FILE_EXTENSION) && Files.isRegularFile(path);
+    }
+
+    public static boolean isPathEonFile(Path path) {
+        return path.getFileName().toString().endsWith(".eon") && Files.isRegularFile(path);
     }
 }

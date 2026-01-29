@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CardReviewDialog extends DialogWithButtons {
-    private final ListItemSource<CardView> cardViewIterator;
+    private final ItemSource<CardView> cardViewIterator;
     private JLabel totalDisplay;
     private JPanel imagePanel;
 
-    public CardReviewDialog(Frame frame, ListItemSource<CardView> cardViewIterator) {
+    public CardReviewDialog(Frame frame, ItemSource<CardView> cardViewIterator) {
         super(frame, false);
         this.cardViewIterator = cardViewIterator;
 
@@ -130,9 +130,8 @@ public class CardReviewDialog extends DialogWithButtons {
         Path rootPath = Paths.get("D:\\Temp\\Buffy Investigator Cards SE-Hades\\Buffy Investigators Set One\\1 Investigator and Signature");
         List<Path> hadesFiles = Files.list(rootPath).filter(MemberUtils::isPathHadesFile).collect(Collectors.toList());
 
-        ListItemSource<CardView> cardReviewSource = new CardReviewSourceImpl(hadesFiles);
+        ItemSource<CardView> cardReviewSource = ItemSources.cardViewFromPath(new ListItemSource<>(hadesFiles));
 
         new CardReviewDialog(StrangeEons.getWindow(), cardReviewSource);
-
     }
 }

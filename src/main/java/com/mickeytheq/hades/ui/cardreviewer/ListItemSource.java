@@ -1,30 +1,53 @@
 package com.mickeytheq.hades.ui.cardreviewer;
 
-// an iterator-like interface more suitable for scanning
-// back and forth across a list of elements
-// java.util.ListIterator has behaviour where next() + previous() returns the same element twice
-// which is not ideal when trying to build, for example, a dialog that previews a list of card images where each
-//
-// by default this iterator starts 'just before' the first element so the first operation should be moveNext() to
-// check for the existence of the first element and move to it
-public interface ListItemSource<T> {
-    // returns the current element being pointed to
-    // repeated calls without calls to next()/previous() will return the same item
-    T getCurrent();
+import java.util.List;
 
-    // move to the next element if it exists and return true
-    // return false if there is no next element
-    boolean next();
+public class ListItemSource<T> implements ItemSource<T> {
+    private final List<T> items;
 
-    // move to the previous element if it exists and return true
-    // return false if there is no previous element
-    boolean previous();
+    private int currentIndex = -1;
 
-    // return the current index
-    // the index starts at -1 and each call to next() increments this by 1 and previous() decrements by 1
-    int getCurrentIndex();
+    public ListItemSource(List<T> items) {
+        this.items = items;
+    }
 
-    // return a 'hint' total if available
-    // callers should not rely on this for bounds detection but instead rely on the results of next()/previous()
-    Integer getTotal();
+    @Override
+    public T getCurrent() {
+        if (currentIndex < 0)
+            throw new RuntimeException("Index not initialised. Call next() first");
+
+        return items.get(currentIndex);
+    }
+
+    @Override
+    public boolean next() {
+        int newIndex = currentIndex + 1;
+
+        if (newIndex >= items.size())
+            return false;
+
+        currentIndex = newIndex;
+        return true;
+    }
+
+    @Override
+    public boolean previous() {
+        int newIndex = currentIndex - 1;
+
+        if (newIndex < 0)
+            return false;
+
+        currentIndex = newIndex;
+        return true;
+    }
+
+    @Override
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    @Override
+    public Integer getTotal() {
+        return items.size();
+    }
 }

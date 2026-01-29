@@ -1,6 +1,9 @@
 package com.mickeytheq.hades.core.view.common;
 
+import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.hades.core.view.BasePaintContext;
+import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
@@ -10,6 +13,8 @@ import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
 // some utility methods that cards faces want to share but don't strictly belong to another utility class
@@ -108,5 +113,30 @@ public class CardFaceViewUtils {
 
             renderer.getSections().add(new MultiSectionRenderer.TextSection(markupRendererSupplier));
         }
+    }
+
+    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, double dpi) {
+        BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        try {
+            renderTarget.applyTo(graphics2D);
+
+            cardFaceView.paint(new BasePaintContext(renderTarget, cardFaceView) {
+                @Override
+                public Graphics2D getGraphics() {
+                    return graphics2D;
+                }
+
+                @Override
+                public double getRenderingDpi() {
+                    return dpi;
+                }
+            });
+        }
+        finally {
+            graphics2D.dispose();
+        }
+
+        return bufferedImage;
     }
 }
