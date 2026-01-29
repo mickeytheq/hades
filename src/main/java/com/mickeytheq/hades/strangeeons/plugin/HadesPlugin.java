@@ -17,6 +17,7 @@ import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.tasks.HadesActionTree;
 import com.mickeytheq.hades.strangeeons.tasks.NewCard;
+import com.mickeytheq.hades.strangeeons.tasks.ViewLog;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
@@ -188,6 +189,7 @@ public class HadesPlugin extends AbstractPlugin {
     private void installKeyboardShortcuts() {
         installNewCardKeyboardShortcut();
         installQuickSearchKeyboardShortcut();
+        installOpenLogKeyboardShortcut();
     }
 
     private void installNewCardKeyboardShortcut() {
@@ -234,6 +236,22 @@ public class HadesPlugin extends AbstractPlugin {
         });
     }
 
+    private void installOpenLogKeyboardShortcut() {
+        StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
+
+        KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_DOWN_MASK);
+
+        final String HADES_VIEW_LOG = "HadesViewLog";
+
+        appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, HADES_VIEW_LOG);
+        appWindow.getRootPane().getActionMap().put(HADES_VIEW_LOG, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ViewLog.viewLog();
+            }
+        });
+    }
+
     private void installCardDatabaseUpdater() {
         StrangeEons.getWindow().addProjectEventListener(new CardDatabaseProjectEventListener());
     }
@@ -251,6 +269,8 @@ public class HadesPlugin extends AbstractPlugin {
             try (Stream<Path> stream = Files.walk(projectPath)) {
                 List<Path> paths = stream.filter(MemberUtils::isPathHadesFile).collect(Collectors.toList());
 
+                logger.debug("Registering " + paths.size() + " cards in card database for project with root path '" + projectPath + "'");
+
                 cardDatabase.register(cardDatabaseLoader -> {
                     for (Path path : paths) {
                         Card card = CardIO.readCard(path, projectContext);
@@ -264,6 +284,8 @@ public class HadesPlugin extends AbstractPlugin {
 
         @Override
         public void projectClosing(Project project) {
+            logger.debug("Unregistering all cards in card database for project with root path '" + project.getFile().toPath() + "'");
+
             cardDatabase.unregister(project);
         }
     }

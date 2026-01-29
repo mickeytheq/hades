@@ -1,6 +1,8 @@
 package com.mickeytheq.hades.core.global;
 
 import com.mickeytheq.hades.core.model.Card;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -10,6 +12,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class CardDatabaseImpl implements CardDatabase {
+    private static final Logger logger = LogManager.getLogger(CardDatabaseImpl.class);
+
     // a map of card id to card entry
     // cards can be registered multiple times (e.g. open project and open editor) so we have to track individual
     // registrations
@@ -58,6 +62,8 @@ public class CardDatabaseImpl implements CardDatabase {
         CardDatabaseLoaderImpl impl = new CardDatabaseLoaderImpl(registerKey);
         loader.accept(impl);
 
+        logger.trace("Registering " + impl.getCardEntries().size() + " cards with key " + registerKey);
+
         readWriteLock.writeLock().lock();
         try {
             List<CardEntry> cardEntries = new ArrayList<>();
@@ -72,6 +78,8 @@ public class CardDatabaseImpl implements CardDatabase {
                 cardEntries.add(cardEntry);
 
                 registerKeyMap.put(registerKey, cardEntries);
+
+                logger.trace("Registered card id: " + card.getId() + " from source path '" + sourcePath + "' with register key " + registerKey);
             }
         } finally {
             readWriteLock.writeLock().unlock();
@@ -80,6 +88,8 @@ public class CardDatabaseImpl implements CardDatabase {
 
     @Override
     public void unregister(Object registerKey) {
+        logger.trace("Unregistering all cards with key " + registerKey.toString());
+
         readWriteLock.writeLock().lock();
         try {
             // get the list of CardEntry recorded for this key
@@ -87,6 +97,8 @@ public class CardDatabaseImpl implements CardDatabase {
 
             if (cardEntries == null)
                 return;
+
+            logger.trace("Unregistering " + cardEntries.size() + " cards with key " + registerKey);
 
             // for each one, unregister from the list for that card entry and then
             // prune the overall entry if there are no more registered keys
@@ -96,6 +108,8 @@ public class CardDatabaseImpl implements CardDatabase {
                 if (cardEntry.getRegisteredKeys().isEmpty()) {
                     cardEntryMapById.remove(cardEntry.getCard().getId());
                 }
+
+                logger.trace("Unregistered card id: " + cardEntry.getCard().getId() + " from source path '" + cardEntry.getSourcePath() + "' with register key " + registerKey);
             }
         } finally {
             readWriteLock.writeLock().unlock();
@@ -112,6 +126,8 @@ public class CardDatabaseImpl implements CardDatabase {
                 return;
 
             cardEntry.setCard(card);
+
+            logger.trace("Updated card id: " + card.getId());
         } finally {
             readWriteLock.writeLock().unlock();
         }

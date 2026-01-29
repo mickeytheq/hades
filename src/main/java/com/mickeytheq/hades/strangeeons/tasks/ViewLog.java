@@ -25,9 +25,13 @@ public class ViewLog extends BaseTaskAction {
 
     @Override
     public boolean performOnSelection(Member[] members) {
-        new LogView().showDialog();
+        viewLog();
 
         return true;
+    }
+
+    public static void viewLog() {
+        new LogView().showDialog();
     }
 
     static class LogView extends DialogWithButtons {
@@ -63,7 +67,7 @@ public class ViewLog extends BaseTaskAction {
 
             scrollPane.setPreferredSize(new Dimension(800, 600));
 
-            JPanel mainPanel = MigLayoutUtils.createDialogPanel();
+            JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
             mainPanel.add(optionsPanel, "growx, pushx, wrap");
             mainPanel.add(logTextPanel, "grow, push");
 
