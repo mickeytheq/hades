@@ -113,6 +113,8 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimeters(53.34, 2.37, 21.00, 3.56);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(43.18, 9.99, 42.33, 7.45);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(42.33, 17.61, 44.70, 40.13);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(64.00, 61.38, 14.10, 1.69);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(39.00, 61.38, 14.10, 1.69);
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(61.64, 5.00, 5.42, 5.42);
     private static final RectangleEx DOOM_DRAW_REGION = RectangleEx.millimeters(43.60, 51.39, 0.00, 3.39);
 
@@ -139,12 +141,14 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
         encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
-        portraitView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext, paintContext.toPixelRect(ARTIST_DRAW_REGION));
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
         agendaCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+
+        commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(DOOM_DRAW_REGION), getModel().getDoom(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 

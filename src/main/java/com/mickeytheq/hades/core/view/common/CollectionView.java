@@ -27,9 +27,11 @@ import java.util.Optional;
 
 public class CollectionView {
     private static final RectangleEx COLLECTION_IMAGE_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(54.19, 86.36, 2.20, 2.20);
-    private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(80.60, 59.96, 2.20, 2.20);
     private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(53.85, 86.70, 6.27, 1.69);
-    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(79.93, 60.38, 6.27, 1.69);
+
+    private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(80.60, 60.96, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(79.93, 61.38, 6.27, 1.69);
+
     private final CollectionModel model;
     private final CardFaceView cardFaceView;
 
