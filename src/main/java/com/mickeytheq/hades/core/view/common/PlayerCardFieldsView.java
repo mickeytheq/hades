@@ -223,22 +223,22 @@ public class PlayerCardFieldsView {
     }
 
 
-    private static final List<Rectangle> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(0, 168, 100, 76),
-            new Rectangle(0, 252, 100, 76),
-            new Rectangle(0, 336, 100, 76),
-            new Rectangle(0, 420, 100, 76),
-            new Rectangle(0, 504, 100, 76),
-            new Rectangle(0, 588, 100, 76)
+    private static final List<RectangleEx> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
+            RectangleEx.millimeters(0, 14.22, 8.47, 6.43),
+            RectangleEx.millimeters(0, 21.34, 8.47, 6.43),
+            RectangleEx.millimeters(0, 28.45, 8.47, 6.43),
+            RectangleEx.millimeters(0, 35.56, 8.47, 6.43),
+            RectangleEx.millimeters(0, 42.67, 8.47, 6.43),
+            RectangleEx.millimeters(0, 49.78, 8.47, 6.43)
     );
 
-    private static final List<Rectangle> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(21, 178, 50, 52),
-            new Rectangle(21, 262, 50, 52),
-            new Rectangle(21, 346, 50, 52),
-            new Rectangle(21, 430, 50, 52),
-            new Rectangle(21, 514, 50, 52),
-            new Rectangle(21, 598, 50, 52)
+    private static final List<RectangleEx> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
+            RectangleEx.millimeters(1.78, 15.07, 4.23, 4.4),
+            RectangleEx.millimeters(1.78, 22.18, 4.23, 4.4),
+            RectangleEx.millimeters(1.78, 29.29, 4.23, 4.4),
+            RectangleEx.millimeters(1.78, 36.41, 4.23, 4.4),
+            RectangleEx.millimeters(1.78, 43.52, 4.23, 4.4),
+            RectangleEx.millimeters(1.78, 50.63, 4.23, 4.4)
     );
 
     // TODO: at the moment there's a list of box regions and icon regions
@@ -257,14 +257,14 @@ public class PlayerCardFieldsView {
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
                     ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
-                    SKILL_BOX_DRAW_REGIONS.get(i)
+                    paintContext.toPixelRect(SKILL_BOX_DRAW_REGIONS.get(i))
             );
 
             // paint the skill icon
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
                     ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
-                    SKILL_ICON_DRAW_REGIONS.get(i)
+                    paintContext.toPixelRect(SKILL_ICON_DRAW_REGIONS.get(i))
             );
         }
     }

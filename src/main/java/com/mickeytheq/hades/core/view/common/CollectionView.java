@@ -15,6 +15,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -25,10 +26,10 @@ import java.awt.image.BufferedImageOp;
 import java.util.Optional;
 
 public class CollectionView {
-    private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_PORTRAIT = new Rectangle(640, 1020, 26, 26);
-    private static final Rectangle COLLECTION_IMAGE_DRAW_REGION_LANDSCAPE = new Rectangle(952, 720, 26, 26);
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_PORTRAIT = new Rectangle(636, 1024, 74, 20);
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE = new Rectangle(944, 725, 74, 20);
+    private static final RectangleEx COLLECTION_IMAGE_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(54.19, 86.36, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(80.60, 60.96, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(53.85, 86.70, 6.27, 1.69);
+    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(79.93, 61.38, 6.27, 1.69);
     private final CollectionModel model;
     private final CardFaceView cardFaceView;
 
@@ -88,9 +89,9 @@ public class CollectionView {
         Rectangle drawRegion;
 
         if (orientation == CardFaceOrientation.Portrait)
-            drawRegion = COLLECTION_IMAGE_DRAW_REGION_PORTRAIT;
+            drawRegion = paintContext.toPixelRect(COLLECTION_IMAGE_PORTRAIT_DRAW_REGION);
         else
-            drawRegion = COLLECTION_IMAGE_DRAW_REGION_LANDSCAPE;
+            drawRegion = paintContext.toPixelRect(COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION);
 
         paintCollectionImage(paintContext, drawRegion, paintInverted);
     }
@@ -123,9 +124,9 @@ public class CollectionView {
         Rectangle drawRegion;
 
         if (orientation == CardFaceOrientation.Portrait)
-            drawRegion = COLLECTION_NUMBER_DRAW_REGION_PORTRAIT;
+            drawRegion = paintContext.toPixelRect(COLLECTION_NUMBER_PORTRAIT_DRAW_REGION);
         else
-            drawRegion = COLLECTION_NUMBER_DRAW_REGION_LANDSCAPE;
+            drawRegion = paintContext.toPixelRect(COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION);
 
         paintCollectionNumber(paintContext, drawRegion, TextStyleUtils.getCollectionNumberTextStyle());
     }

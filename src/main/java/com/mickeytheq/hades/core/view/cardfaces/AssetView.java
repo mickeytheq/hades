@@ -279,9 +279,9 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         }
     }
 
-    private static final List<Rectangle> SLOT_DRAW_REGIONS = Lists.newArrayList(
-            new Rectangle(618, 908, 102, 104),
-            new Rectangle(510, 908, 102, 104)
+    private static final List<RectangleEx> SLOT_DRAW_REGIONS = Lists.newArrayList(
+            RectangleEx.millimeters(52.32, 76.88, 8.64, 8.81),
+            RectangleEx.millimeters(43.18, 76.88, 8.64, 8.81)
     );
 
     private void paintSlots(PaintContext paintContext) {
@@ -291,7 +291,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
                     ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
-                    SLOT_DRAW_REGIONS.get(i)
+                    paintContext.toPixelRect(SLOT_DRAW_REGIONS.get(i))
             );
         }
     }

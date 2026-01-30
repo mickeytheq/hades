@@ -187,15 +187,15 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     // regions are from right to left
-    private static final List<Rectangle> CLASS_SYMBOL_REGIONS_PAIR = Lists.newArrayList(
-            new Rectangle(288, 512, 90, 90),
-            new Rectangle(374, 512, 90, 90)
+    private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_PAIR = Lists.newArrayList(
+            RectangleEx.millimeters(24.38, 43.35, 7.62, 7.62),
+            RectangleEx.millimeters(31.67, 43.35, 7.62, 7.62)
     );
 
-    private static final List<Rectangle> CLASS_SYMBOL_REGIONS_TRIPLE = Lists.newArrayList(
-            new Rectangle(246, 512, 90, 90),
-            new Rectangle(332, 512, 90, 90),
-            new Rectangle(418, 512, 90, 90)
+    private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_TRIPLE = Lists.newArrayList(
+            RectangleEx.millimeters(20.83, 43.35, 7.62, 7.62),
+            RectangleEx.millimeters(28.11, 43.35, 7.62, 7.62),
+            RectangleEx.millimeters(35.39, 43.35, 7.62, 7.62)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {
@@ -210,7 +210,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
             return;
 
         // the layout of the icons is different for 2 vs 3
-        List<Rectangle> drawRegions;
+        List<RectangleEx> drawRegions;
 
         if (playerCardClasses.size() == 2)
             drawRegions = CLASS_SYMBOL_REGIONS_PAIR;
@@ -222,7 +222,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
             BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
 
-            Rectangle rectangle = drawRegions.get(i);
+            Rectangle rectangle = paintContext.toPixelRect(drawRegions.get(i));
 
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), classSymbol, rectangle);
         }
