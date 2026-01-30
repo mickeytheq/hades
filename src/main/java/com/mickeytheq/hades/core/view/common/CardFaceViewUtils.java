@@ -19,6 +19,14 @@ import java.util.function.Supplier;
 
 // some utility methods that cards faces want to share but don't strictly belong to another utility class
 public class CardFaceViewUtils {
+    // TODO: this needs to go away and be replace by a dynamic value from the CardFaceView's template info
+    // TODO: current difficulty is it needs to be known to build the portrait control for UI positioning of the the
+    // TODO: image within the available portrait space. Therefore the template and thus DPI needs to selected when/before
+    // TODO: the editor is open
+    //
+    // TODO: we're using this placeholder to easily find where this is being used to fix all instances later
+    public final static double HARDCODED_DPI = 300;
+
     public static void createEncounterSetCollectionTab(EditorContext editorContext, EncounterSetView encounterSetView, CollectionView collectionView) {
         if (encounterSetView == null && collectionView == null)
             return;

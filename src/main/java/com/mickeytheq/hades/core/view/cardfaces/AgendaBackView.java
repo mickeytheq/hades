@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -109,10 +110,10 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final Rectangle SCENARIO_INDEX_DRAW_REGION = new Rectangle(58, 65, 82, 32);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(59, 210, 80, 442);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(220, 78, 740, 620);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(62, 114, 72, 72);
+    private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimeters(4.91, 5.50, 6.94, 2.71);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(5.00, 17.78, 6.77, 37.42);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(18.63, 6.60, 62.65, 52.49);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(5.25, 9.65, 6.10, 6.10);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -120,16 +121,16 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // title - vertical orientation
-        commonCardFieldsView.paintTitleMultilineRotated(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         paintScenarioIndex(paintContext);
 
         // do the body back of the card that has multiple sections with different layout requirements
         // use the multi-section renderer to handle the dynamic scaling
-        MultiSectionRenderer multiSectionRenderer = new MultiSectionRenderer(paintContext, BODY_DRAW_REGION);
+        MultiSectionRenderer multiSectionRenderer = new MultiSectionRenderer(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
         CardFaceViewUtils.buildStorySections(paintContext, multiSectionRenderer, section1View, section2View, section3View);
 
         String victory = getModel().getCommonCardFieldsModel().getVictory();
@@ -161,12 +162,12 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
                 // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
                 // deck id should only be one character in most cases but preserve the rest of the string if there is anything
                 String newDeckId = (char)(agenda.getDeckId().charAt(0) + 1) + StringUtils.substring(agenda.getDeckId(), 1);
-                PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaNumber(), newDeckId);
+                PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaNumber(), newDeckId);
             }
 
             return;
         }
 
-        PaintUtils.paintScenarioIndexBack(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
     }
 }

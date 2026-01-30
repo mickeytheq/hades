@@ -9,8 +9,10 @@ import com.mickeytheq.hades.core.view.BaseCardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.View;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.common.PortraitView;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -25,7 +27,7 @@ import java.util.Map;
 public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     private PortraitView portraitView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(2, 0, 376, 412);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.17, 0.00, 31.83, 34.88);
 
     @Override
     public void initialiseView() {
@@ -34,7 +36,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
             throw new RuntimeException("Investigator Back card face is only supported when the front is an investigator");
         }
 
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -95,26 +97,26 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterSpaceEditor);
     }
 
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(496, 18, 492, 58);
-    private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(596, 82, 318, 30);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(60, 158, 940, 546);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(41.99, 1.52, 41.66, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(50.46, 6.94, 26.92, 2.54);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(5.08, 13.38, 79.59, 46.23);
 
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // titles
-        PaintUtils.paintTitle(paintContext, TITLE_DRAW_REGION, getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUnique());
-        PaintUtils.paintSubtitle(paintContext, SUBTITLE_DRAW_REGION, getInvestigatorFront().getModel().getCommonCardFieldsModel().getSubtitle());
+        PaintUtils.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUnique());
+        PaintUtils.paintSubtitle(paintContext, paintContext.toPixelRect(SUBTITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getSubtitle());
 
         // sections
         String markupText = composeSectionString();
 
-        PaintUtils.paintBodyText(paintContext, markupText, BODY_DRAW_REGION, BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorClass()));
+        PaintUtils.paintBodyText(paintContext, markupText, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorClass()));
 
         portraitView.paintArtist(paintContext);
     }
@@ -166,7 +168,9 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     static {
         BODY_PAGE_SHAPES = new HashMap<>();
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Guardian, MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+        Rectangle bodyRectangle = BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI);
+
+        BODY_PAGE_SHAPES.put(InvestigatorClass.Guardian, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.337, 0.566),
@@ -178,7 +182,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Seeker, MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+        BODY_PAGE_SHAPES.put(InvestigatorClass.Seeker, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.322, 0.585),
@@ -190,7 +194,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Mystic, MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+        BODY_PAGE_SHAPES.put(InvestigatorClass.Mystic, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.315, 0.544),
@@ -202,7 +206,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Rogue, MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+        BODY_PAGE_SHAPES.put(InvestigatorClass.Rogue, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.326, 0.511),
@@ -217,7 +221,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         // survivor and mystic are the same
         BODY_PAGE_SHAPES.put(InvestigatorClass.Survivor, BODY_PAGE_SHAPES.get(InvestigatorClass.Mystic));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Neutral, MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION,
+        BODY_PAGE_SHAPES.put(InvestigatorClass.Neutral, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.400, 0.000),
                         new Point2D.Double(0.357, 0.468),

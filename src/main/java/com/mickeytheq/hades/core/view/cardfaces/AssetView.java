@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -32,8 +33,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(20, 80, 716, 516);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(658, 20, 60, 60);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(1.69, 6.77, 60.62, 43.69);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(55.71, 1.69, 5.08, 5.08);
 
     @Override
     public void initialiseView() {
@@ -41,7 +42,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -177,34 +178,33 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(38, 128, 76, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(136, 28, 476, 58);
-    private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(136, 88, 476, 44);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 640, 672, 280);
-    private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 602, 406, 30);
-    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(658, 602, 406, 30);
-
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(3.22, 10.84, 6.43, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(11.51, 2.37, 40.30, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(11.51, 7.45, 40.30, 3.73);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(3.39, 54.19, 56.90, 23.71);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimeters(14.56, 50.97, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(55.71, 50.97, 34.37, 2.54);
 
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // label
-        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
 
         // title
         // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
-        commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
 
         if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-            encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
 
         portraitView.paintArtist(paintContext);
@@ -225,21 +225,21 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         paintSlots(paintContext);
 
         if (!getModel().getHealth().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), HEALTH_SYMBOL_DRAW_REGION);
-            PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
+            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
 
         if (!getModel().getSanity().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), SANITY_SYMBOL_DRAW_REGION);
-            PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
+            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
     }
 
     // regions are from right to left
-    private static final List<Rectangle> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
-            new Rectangle(458, 4, 104, 104),
-            new Rectangle(548, 4, 104, 104),
-            new Rectangle(638, 4, 104, 104)
+    private static final List<RectangleEx> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
+            RectangleEx.millimeters(38.78, 0.34, 8.81, 8.81),
+            RectangleEx.millimeters(46.4, 0.34, 8.81, 8.81),
+            RectangleEx.millimeters(54.02, 0.34, 8.81, 8.81)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {
@@ -262,7 +262,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
             BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
 
-            Rectangle rectangle = CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount);
+            Rectangle rectangle = paintContext.toPixelRect(CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount));
 
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), classSymbol, rectangle);
         }
@@ -272,10 +272,10 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
-            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
+            PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
-            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
+            PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }
 
@@ -300,8 +300,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         return assetSlot.name().toLowerCase();
     }
 
-    private static final Rectangle HEALTH_SYMBOL_DRAW_REGION = new Rectangle(292, 936, 62, 78);
-    private static final Rectangle HEALTH_STATISTIC_DRAW_REGION = new Rectangle(320, 953, 0, 35);
-    private static final Rectangle SANITY_SYMBOL_DRAW_REGION = new Rectangle(394, 942, 86, 72);
-    private static final Rectangle SANITY_STATISTIC_DRAW_REGION = new Rectangle(438, 953, 0, 35);
+    private static final RectangleEx HEALTH_SYMBOL_DRAW_REGION = RectangleEx.millimeters(24.72, 79.25, 5.25, 6.60);
+    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimeters(27.09, 80.69, 0.00, 2.96);
+    private static final RectangleEx SANITY_SYMBOL_DRAW_REGION = RectangleEx.millimeters(33.36, 79.76, 7.28, 6.10);
+    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimeters(37.08, 80.69, 0.00, 2.96);
 }

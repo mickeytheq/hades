@@ -14,6 +14,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -131,7 +132,7 @@ public class PortraitView {
         return artistWithPortraitPanel;
     }
 
-    private static final Rectangle ARTIST_DRAW_REGION = new Rectangle(28, 1024, 242, 20);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(2.37, 86.70, 20.49, 1.69);
 
     public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
         paint(paintContext, drawRegion, false);
@@ -142,7 +143,7 @@ public class PortraitView {
         markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
         markupRenderer.setMarkupText(portraitModel.getArtist());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), ARTIST_DRAW_REGION);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(ARTIST_DRAW_REGION));
     }
 
 

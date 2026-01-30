@@ -11,6 +11,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -20,7 +21,7 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 
 public class CommonCardFieldsView {
-    private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(274, 1024, 202, 20);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(23.20, 86.70, 17.10, 1.69);
 
 
     private final CommonCardFieldsModel model;
@@ -276,7 +277,7 @@ public class CommonCardFieldsView {
     }
 
     public void paintCopyright(PaintContext paintContext) {
-        paintCopyright(paintContext, COPYRIGHT_DRAW_REGION, TextStyleUtils.getCopyrightTextStyle());
+        paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION), TextStyleUtils.getCopyrightTextStyle());
     }
 
     public void paintCopyright(PaintContext paintContext, Rectangle drawRegion, TextStyle textStyle) {

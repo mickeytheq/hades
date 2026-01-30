@@ -6,6 +6,7 @@ import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
+import com.mickeytheq.hades.util.shape.Unit;
 
 public class AgendaMigrator {
     public Agenda build(CardFaceMigrationContext context) {
@@ -23,7 +24,7 @@ public class AgendaMigrator {
         agenda.setDoom(MigrationUtils.parseStatistic(settingsAccessor, "Doom", SettingsFieldNames.PER_INVESTIGATOR));
 
         agenda.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.AGENDA_STORY));
-        agenda.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY), Distance.Unit.Pixel));
+        agenda.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY), Unit.Pixel));
 
         // default logic will put 'rules' in the standard field, move it out
         agenda.getStorySectionModel().setRules(agenda.getCommonCardFieldsModel().getRules());

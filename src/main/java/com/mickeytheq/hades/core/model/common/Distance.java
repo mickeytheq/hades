@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.util.shape.Unit;
 
 // a distance comprising a unit and an amount of that unit
 public class Distance implements EmptyEntityDiscriminator {
@@ -20,10 +21,6 @@ public class Distance implements EmptyEntityDiscriminator {
     public boolean isEmpty() {
         // 0 is the default so consider it empty when set to zero
         return amount == 0;
-    }
-
-    public enum Unit {
-        Pixel
     }
 
     @Property("Amount")

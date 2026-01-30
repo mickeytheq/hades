@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MarkupUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -27,14 +28,14 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 84, 750, 550);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 7.11, 63.50, 46.57);
 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
 
@@ -116,28 +117,28 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(276, 556, 200, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(130, 8, 484, 58);
-    private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(190, 78, 382, 42);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(40, 600, 672, 286);
-    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 490, 56, 56);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(23.37, 47.07, 16.93, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(11.01, 0.68, 40.98, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(16.09, 6.60, 32.34, 3.56);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(3.39, 50.80, 56.90, 24.21);
+    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.46, 41.49, 4.74, 4.74);
 
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
-        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 
-        commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         portraitView.paintArtist(paintContext);
 

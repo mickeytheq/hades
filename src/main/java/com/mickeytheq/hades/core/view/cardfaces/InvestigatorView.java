@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
@@ -35,15 +36,15 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private JTextField combatEditor;
     private JTextField agilityEditor;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 120, 556, 630);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(22, 24, 56, 56);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 10.16, 47.07, 53.34);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(1.86, 2.03, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -163,17 +164,17 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(96, 22, 414, 54);
-    private static final Rectangle SUBTITLE_DRAW_REGION = new Rectangle(144, 78, 350, 40);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(614, 160, 400, 436);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(8.13, 1.86, 35.05, 4.57);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(12.19, 6.60, 29.63, 3.39);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(51.99, 13.55, 33.87, 36.91);
 
-    private static final Rectangle HEALTH_STATISTIC_DRAW_REGION = new Rectangle(760, 610, 0, 40);
-    private static final Rectangle SANITY_STATISTIC_DRAW_REGION = new Rectangle(868, 610, 0, 40);
+    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimeters(64.35, 51.65, 0.00, 3.39);
+    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimeters(73.49, 51.65, 0.00, 3.39);
 
-    private static final Rectangle WILLPOWER_DRAW_REGION = new Rectangle(582, 38, 32, 44);
-    private static final Rectangle INTELLECT_DRAW_REGION = new Rectangle(702, 38, 32, 44);
-    private static final Rectangle COMBAT_DRAW_REGION = new Rectangle(824, 38, 32, 44);
-    private static final Rectangle AGILITY_DRAW_REGION = new Rectangle(946, 38, 32, 44);
+    private static final RectangleEx WILLPOWER_DRAW_REGION = RectangleEx.millimeters(49.28, 3.22, 2.71, 3.73);
+    private static final RectangleEx INTELLECT_DRAW_REGION = RectangleEx.millimeters(59.44, 3.22, 2.71, 3.73);
+    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimeters(69.77, 3.22, 2.71, 3.73);
+    private static final RectangleEx AGILITY_DRAW_REGION = RectangleEx.millimeters(80.09, 3.22, 2.71, 3.73);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -183,13 +184,13 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         // special handling for fading
         paintArtPortrait(paintContext);
 
-        commonCardFieldsView.paintTitles(paintContext, TITLE_DRAW_REGION, SUBTITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
 
         if (getModel().getInvestigatorClass() == InvestigatorClass.Story) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-            encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
@@ -199,16 +200,16 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         paintSkills(paintContext);
 
-        PaintUtils.paintStatistic(paintContext, HEALTH_STATISTIC_DRAW_REGION, new Statistic(getModel().getHealth(), false), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, SANITY_STATISTIC_DRAW_REGION, new Statistic(getModel().getSanity(), false), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), new Statistic(getModel().getHealth(), false), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), new Statistic(getModel().getSanity(), false), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
     }
 
 
     private void paintSkills(PaintContext paintContext) {
-        paintSkill(paintContext, getModel().getWillpower(), WILLPOWER_DRAW_REGION);
-        paintSkill(paintContext, getModel().getIntellect(), INTELLECT_DRAW_REGION);
-        paintSkill(paintContext, getModel().getCombat(), COMBAT_DRAW_REGION);
-        paintSkill(paintContext, getModel().getAgility(), AGILITY_DRAW_REGION);
+        paintSkill(paintContext, getModel().getWillpower(), paintContext.toPixelRect(WILLPOWER_DRAW_REGION));
+        paintSkill(paintContext, getModel().getIntellect(), paintContext.toPixelRect(INTELLECT_DRAW_REGION));
+        paintSkill(paintContext, getModel().getCombat(), paintContext.toPixelRect(COMBAT_DRAW_REGION));
+        paintSkill(paintContext, getModel().getAgility(), paintContext.toPixelRect(AGILITY_DRAW_REGION));
     }
 
     private void paintSkill(PaintContext paintContext, String text, Rectangle drawRegion) {
@@ -238,13 +239,15 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         double cx = portraitImage.getWidth() / 2.0 - portraitModel.getPanX();
         double cy = portraitImage.getHeight() / 2.0 - portraitModel.getPanY();
 
-        double sizeX = ART_PORTRAIT_DRAW_REGION.getWidth() / scale;
-        double sizeY = ART_PORTRAIT_DRAW_REGION.getHeight() / scale;
+        Rectangle artPortraitRectangle = paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION);
+
+        double sizeX = artPortraitRectangle.getWidth() / scale;
+        double sizeY = artPortraitRectangle.getHeight() / scale;
 
         BufferedImage croppedImage = crop(portraitImage, (int)(cx - sizeX / 2.0), (int)(cy - sizeY / 2.0), (int)sizeX, (int)sizeY);
         croppedImage = createStencilImage(croppedImage);
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), croppedImage, ART_PORTRAIT_DRAW_REGION);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), croppedImage, artPortraitRectangle);
     }
 
     private BufferedImage crop(BufferedImage image, int x, int y, int width, int height) {

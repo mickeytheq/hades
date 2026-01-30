@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.view.component;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.util.shape.Unit;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -13,14 +14,14 @@ import java.awt.event.ActionListener;
 // UI control for editing a Distance object
 public class DistanceComponent extends JPanel {
     private final JSpinner valueEditor;
-    private final JComboBox<Distance.Unit> unitEditor;
+    private final JComboBox<Unit> unitEditor;
 
     private volatile boolean noEvents = false;
 
     public DistanceComponent() {
         valueEditor = new JSpinner(new SpinnerNumberModel(0, 0, Double.MAX_VALUE, 1));
 
-        unitEditor = EditorUtils.createEnumComboBox(Distance.Unit.class);
+        unitEditor = EditorUtils.createEnumComboBox(Unit.class);
 
         setLayout(new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().gridGap("0", "0").insets("0")));
 
@@ -33,7 +34,7 @@ public class DistanceComponent extends JPanel {
     }
 
     public Distance getDistance() {
-        return new Distance((Double)valueEditor.getValue(), (Distance.Unit)unitEditor.getSelectedItem());
+        return new Distance((Double)valueEditor.getValue(), (Unit)unitEditor.getSelectedItem());
     }
 
     public void setDistance(Distance distance) {

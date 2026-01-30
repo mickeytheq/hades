@@ -10,6 +10,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.ui.DynamicListCellRenderer;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.text.WordUtils;
 import resources.Language;
@@ -304,31 +305,31 @@ public class LocationFieldsView {
         }
     }
 
-    private static final Rectangle LOCATION_ICON_DRAW_REGION = new Rectangle(28, 12, 72, 70);
-    private static final Rectangle CONNECTION1_DRAW_REGION = new Rectangle(134, 934, 70, 70);
-    private static final Rectangle CONNECTION2_DRAW_REGION = new Rectangle(216, 918, 70, 70);
-    private static final Rectangle CONNECTION3_DRAW_REGION = new Rectangle(298, 912, 70, 70);
-    private static final Rectangle CONNECTION4_DRAW_REGION = new Rectangle(380, 912, 70, 70);
-    private static final Rectangle CONNECTION5_DRAW_REGION = new Rectangle(462, 918, 70, 70);
-    private static final Rectangle CONNECTION6_DRAW_REGION = new Rectangle(544, 934, 70, 70);
+    private static final RectangleEx LOCATION_ICON_DRAW_REGION = RectangleEx.millimeters(2.37, 1.02, 6.10, 5.93);
+    private static final RectangleEx CONNECTION1_DRAW_REGION = RectangleEx.millimeters(11.35, 79.08, 5.93, 5.93);
+    private static final RectangleEx CONNECTION2_DRAW_REGION = RectangleEx.millimeters(18.29, 77.72, 5.93, 5.93);
+    private static final RectangleEx CONNECTION3_DRAW_REGION = RectangleEx.millimeters(25.23, 77.22, 5.93, 5.93);
+    private static final RectangleEx CONNECTION4_DRAW_REGION = RectangleEx.millimeters(32.17, 77.22, 5.93, 5.93);
+    private static final RectangleEx CONNECTION5_DRAW_REGION = RectangleEx.millimeters(39.12, 77.72, 5.93, 5.93);
+    private static final RectangleEx CONNECTION6_DRAW_REGION = RectangleEx.millimeters(46.06, 79.08, 5.93, 5.93);
     
-    private static final Rectangle CIRCLE_OVERLAY_DRAW_REGION = new Rectangle(18, 2, 94, 92);
+    private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimeters(1.52, 0.17, 7.96, 7.79);
 
     public void paintLocationIcons(PaintContext paintContext) {
         // paint the location background for the location icon but only for the location front template
         if (!LocationFieldsModel.NONE_VALUE.equals(getModel().getLocationIcon())) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/location_circle.png"), CIRCLE_OVERLAY_DRAW_REGION);
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/location_circle.png"), paintContext.toPixelRect(CIRCLE_OVERLAY_DRAW_REGION));
         }
 
         LocationFieldsModel otherFaceModel = getOtherFaceModel();
 
-        paintLocationIcon(paintContext, LOCATION_ICON_DRAW_REGION, otherFaceModel, LocationFieldsModel::getLocationIcon);
-        paintLocationIcon(paintContext, CONNECTION1_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon1);
-        paintLocationIcon(paintContext, CONNECTION2_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon2);
-        paintLocationIcon(paintContext, CONNECTION3_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon3);
-        paintLocationIcon(paintContext, CONNECTION4_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon4);
-        paintLocationIcon(paintContext, CONNECTION5_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon5);
-        paintLocationIcon(paintContext, CONNECTION6_DRAW_REGION, otherFaceModel, LocationFieldsModel::getConnectionIcon6);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(LOCATION_ICON_DRAW_REGION), otherFaceModel, LocationFieldsModel::getLocationIcon);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION1_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon1);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION2_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon2);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION3_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon3);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION4_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon4);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION5_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon5);
+        paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION6_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon6);
     }
 
     private LocationFieldsModel getOtherFaceModel() {
@@ -386,11 +387,11 @@ public class LocationFieldsView {
 
     // the widths are set to zero as statistic painting uses the height to size the statistic value and per investigator icon
     // so the x position is the centre-line for the shroud/clue circles and the text is centred on that position
-    private static final Rectangle SHROUD_DRAW_REGION = new Rectangle(70, 534, 0, 42);
-    private static final Rectangle CLUES_DRAW_REGION = new Rectangle(681, 534, 0, 42);
+    private static final RectangleEx SHROUD_DRAW_REGION = RectangleEx.millimeters(5.93, 45.21, 0.00, 3.56);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimeters(57.66, 45.21, 0.00, 3.56);
 
     public void paintShroudAndClues(PaintContext paintContext) {
-        PaintUtils.paintStatistic(paintContext, SHROUD_DRAW_REGION, getModel().getShroud(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR, Color.BLACK);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SHROUD_DRAW_REGION), getModel().getShroud(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getClues(), PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR, Color.BLACK);
     }
 }

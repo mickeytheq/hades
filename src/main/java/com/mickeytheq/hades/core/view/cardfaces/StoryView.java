@@ -10,6 +10,7 @@ import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.MultiSectionRenderer;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -90,33 +91,33 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(76, 58, 508, 88);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(72, 214, 610, 790);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(608, 62, 72, 72);
-    private static final Rectangle ENCOUNTER_NUMBER_DRAW_REGION = new Rectangle(408, 977, 110, 20);
-    private static final Rectangle COLLECTION_PORTRAIT_DRAW_REGION = new Rectangle(547, 973, 26, 26);
-    private static final Rectangle COLLECTION_NUMBER_DRAW_REGION = new Rectangle(535, 977, 74, 20);
-    private static final Rectangle COPYRIGHT_DRAW_REGION = new Rectangle(118, 977, 172, 20);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(6.43, 4.91, 43.01, 7.45);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(6.10, 18.12, 51.65, 66.89);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(51.48, 5.25, 6.10, 6.10);
+    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimeters(34.54, 82.72, 9.31, 1.69);
+    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(46.31, 82.38, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimeters(45.30, 82.72, 6.27, 1.69);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(9.99, 82.72, 14.56, 1.69);
 
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         // unlike normal cards the footer fields such as copyright/collection info are in black not white
-        commonCardFieldsView.paintCopyright(paintContext, COPYRIGHT_DRAW_REGION, TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
+        commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION), TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
 
-        collectionView.paintCollectionNumber(paintContext, COLLECTION_NUMBER_DRAW_REGION, TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
-        collectionView.paintCollectionImage(paintContext, COLLECTION_PORTRAIT_DRAW_REGION, false);
+        collectionView.paintCollectionNumber(paintContext, paintContext.toPixelRect(COLLECTION_NUMBER_DRAW_REGION), TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
+        collectionView.paintCollectionImage(paintContext, paintContext.toPixelRect(COLLECTION_PORTRAIT_DRAW_REGION), false);
 
-        encounterSetView.paintEncounterNumbers(paintContext, ENCOUNTER_NUMBER_DRAW_REGION, TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterNumbers(paintContext, paintContext.toPixelRect(ENCOUNTER_NUMBER_DRAW_REGION), TextStyleUtils.withAttribute(TextStyleUtils.getCopyrightTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         // do the body back of the card that has multiple sections with different layout requirements
         // use the multi-section renderer to handle the dynamic scaling
-        MultiSectionRenderer multiSectionRenderer = new MultiSectionRenderer(paintContext, BODY_DRAW_REGION);
+        MultiSectionRenderer multiSectionRenderer = new MultiSectionRenderer(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
 
         // traits
         String traits = getModel().getCommonCardFieldsModel().getTraits();

@@ -14,6 +14,7 @@ import com.mickeytheq.hades.core.model.common.PlayerCardClass;
 import com.mickeytheq.hades.core.model.common.PlayerCardType;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -35,8 +36,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(0, 0, 750, 576);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(348, 517, 56, 56);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 0.00, 63.50, 48.77);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.46, 43.77, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
@@ -44,7 +45,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -129,31 +130,31 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(42, 126, 72, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(80, 608, 594, 58);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(88, 676, 576, 316);
-    private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(88, 704, 576, 286);
-    private static final Rectangle WEAKNESS_LABEL_DRAW_REGION = new Rectangle(172, 666, 406, 30);
-    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(346, 516, 60, 60);
-    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(324, 494, 108, 106);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(3.56, 10.67, 6.10, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(6.77, 51.48, 50.29, 4.91);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(7.45, 57.23, 48.77, 26.75);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimeters(7.45, 59.61, 48.77, 24.21);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimeters(14.56, 56.39, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(29.29, 43.69, 5.08, 5.08);
+    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimeters(27.43, 41.83, 9.14, 8.97);
 
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
 
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // label
-        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_EVENT).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_EVENT).toUpperCase());
 
         // title
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        Rectangle bodyDrawRegion = getBodyDrawRegion();
+        Rectangle bodyDrawRegion = getBodyDrawRegion(paintContext);
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
@@ -176,13 +177,13 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         playerCardFieldsView.paintSkillIcons(paintContext);
     }
 
-    private Rectangle getBodyDrawRegion() {
+    private Rectangle getBodyDrawRegion(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
 
         if (playerCardType.isWeakness())
-            return BODY_WEAKNESS_DRAW_REGION;
+            return paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION);
 
-        return BODY_DRAW_REGION;
+        return paintContext.toPixelRect(BODY_DRAW_REGION);
     }
 
     // regions are from right to left
@@ -234,22 +235,22 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         paintEncounterOrBasicWeaknessOverlay(paintContext);
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
     }
 
     private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
-        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/encounter_event.png")), BASIC_WEAKNESS_OVERLAY_DRAW_REGION);
+        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
-            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
+            PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
-            PaintUtils.paintLabel(paintContext, WEAKNESS_LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
+            PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
             paintEncounterOrBasicWeaknessOverlay(paintContext);
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }
 
@@ -270,7 +271,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
                 new Point2D.Double(0.047, 0.993)
         );
 
-        MarkupUtils.PageShapeBuilder pageShapeBuilder = new MarkupUtils.PageShapeBuilder(BODY_DRAW_REGION);
+        MarkupUtils.PageShapeBuilder pageShapeBuilder = new MarkupUtils.PageShapeBuilder(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
 
         ListIterator<Point2D> pathPointIterator = pathPoints.listIterator();
         ListIterator<Point2D> bezierPointIterator = bezierPoints.listIterator();
@@ -284,7 +285,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         // second reverse the X-axis on the mapper function and reverse the draw process
         // this has the effect or creating a left/right mirror region
-        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION));
+        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI)));
 
         // move across to the bottom right corner
         pageShapeBuilder.lineTo(pathPointIterator.previous());

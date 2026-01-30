@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -103,12 +104,12 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(56, 185, 638, 100);
-    private static final Rectangle DIFFICULTY_DRAW_REGION = new Rectangle(258, 254, 228, 28);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(195, 312, 480, 610);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(345, 124, 64, 64);
-    private static final Rectangle TRACKING_BOX_DRAW_REGION = new Rectangle(64, 742, 612, 184);
-    private static final Rectangle TRACKING_TITLE_DRAW_REGION = new Rectangle(88, 750, 560, 40);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(4.74, 15.66, 54.02, 8.47);
+    private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimeters(21.84, 21.51, 19.30, 2.37);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(16.51, 26.42, 40.64, 51.65);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.21, 10.50, 5.42, 5.42);
+    private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimeters(5.42, 62.82, 51.82, 15.58);
+    private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimeters(7.45, 63.50, 47.41, 3.39);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -130,43 +131,50 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // and returns something else (which is 0)
         // so instead do measure() which returns the height of the text without drawing and use that to caluclate
         // then draw afterwards
-        double titleEndedAtYPosition = TITLE_DRAW_REGION.getY() + titleMarkupRenderer.measure(paintContext.getGraphics(), TITLE_DRAW_REGION);
-        titleMarkupRenderer.draw(paintContext.getGraphics(), TITLE_DRAW_REGION);
+        Rectangle titleRectangle = paintContext.toPixelRect(TITLE_DRAW_REGION);
+
+        double titleEndedAtYPosition = titleRectangle.getY() + titleMarkupRenderer.measure(paintContext.getGraphics(), titleRectangle);
+        titleMarkupRenderer.draw(paintContext.getGraphics(), titleRectangle);
 
         // trim slightly to tighten the line vertically against the title
-        titleEndedAtYPosition = titleEndedAtYPosition - 5;
+        titleEndedAtYPosition = titleEndedAtYPosition - paintContext.millimetersToPixels(0.42);
 
         // draw a double line below the title
         double titleLineWidth = MarkupUtils.getLastLineWidthInPixels(titleMarkupRenderer);
         double secondLineYPosition = drawTitleUnderlines(paintContext, titleLineWidth, titleEndedAtYPosition);
 
         // create some vertical space between the lines and the next element
-        double doubleLinesEndedAt = secondLineYPosition + 10;
+        double doubleLinesEndedAt = secondLineYPosition + paintContext.millimetersToPixels(0.85);
+
+        Rectangle difficultyRectangle = paintContext.toPixelRect(DIFFICULTY_DRAW_REGION);
 
         // if the title overspilled then move everything else down
-        int yDelta = Math.max(0, (int)Math.round(doubleLinesEndedAt - DIFFICULTY_DRAW_REGION.getY()));
+        int yDelta = Math.max(0, (int)Math.round(doubleLinesEndedAt - difficultyRectangle.getY()));
 
-        Rectangle difficultyDrawRegion = DIFFICULTY_DRAW_REGION.getBounds();
+        Rectangle difficultyDrawRegion = difficultyRectangle.getBounds();
         difficultyDrawRegion.translate(0, yDelta);
         paintDifficulty(paintContext, difficultyDrawRegion);
+
+        Rectangle bodyRectangle = paintContext.toPixelRect(BODY_DRAW_REGION);
+        Rectangle trackingBoxRectangle = paintContext.toPixelRect(TRACKING_BOX_DRAW_REGION);
 
         // calculate the body region
         // the Y starts just after the difficulty, which may have moved from its default location above so calculate
         // the Y ends just before the tracking box, if it exists, otherwise the default
-        double bodyYStart = difficultyDrawRegion.getMaxY() + 20;
-        double bodyYEnd = BODY_DRAW_REGION.getMaxY();
+        double bodyYStart = difficultyDrawRegion.getMaxY() + paintContext.millimetersToPixels(1.70);
+        double bodyYEnd = bodyRectangle.getMaxY();
 
         if (!StringUtils.isEmpty(getModel().getTrackingBox())) {
-            bodyYEnd = TRACKING_BOX_DRAW_REGION.getY();
+            bodyYEnd = trackingBoxRectangle.getY();
         }
 
-        Rectangle bodyDrawRegion = new Rectangle((int)BODY_DRAW_REGION.getX(), (int)bodyYStart, (int)BODY_DRAW_REGION.getWidth(), (int)(bodyYEnd - bodyYStart));
+        Rectangle bodyDrawRegion = new Rectangle((int)bodyRectangle.getX(), (int)bodyYStart, (int)bodyRectangle.getWidth(), (int)(bodyYEnd - bodyYStart));
 
         paintBody(paintContext, bodyDrawRegion);
 
         paintTrackingBox(paintContext);
 
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
@@ -175,12 +183,12 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     }
 
     private double drawTitleUnderlines(PaintContext paintContext, double lineWidth, double titleEndedAtYPosition) {
-        double lineXPosition = TITLE_DRAW_REGION.getCenterX() - lineWidth * 0.5;
+        double lineXPosition = paintContext.toPixelRect(TITLE_DRAW_REGION).getCenterX() - lineWidth * 0.5;
         Graphics2D lineGraphics = (Graphics2D) paintContext.getGraphics().create();
         lineGraphics.setStroke(new BasicStroke(2.0f));
         lineGraphics.setPaint(Color.BLACK);
         lineGraphics.drawLine((int) lineXPosition, (int) titleEndedAtYPosition, (int) (lineXPosition + lineWidth), (int) titleEndedAtYPosition);
-        double secondLineYPosition = titleEndedAtYPosition + 5;
+        double secondLineYPosition = titleEndedAtYPosition + paintContext.millimetersToPixels(0.42);
         lineGraphics.drawLine((int) lineXPosition, (int) secondLineYPosition, (int) (lineXPosition + lineWidth), (int) secondLineYPosition);
 
         return secondLineYPosition;
@@ -271,8 +279,6 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
-    private static final int CHAOS_TOKEN_X_POSITION = 100;
-
     private void paintBody(PaintContext paintContext, Rectangle drawRegion) {
         // figure out which tokens are grouped together, if any
         // generate an ordered list of text to render with one or more tokens against each
@@ -285,7 +291,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
         Map<ScenarioReference.SymbolChaosTokenInfo, MultiSectionRenderer.Section> infoToSectionMap = new LinkedHashMap<>();
 
-        int verticalSpaceBetweenChaosTokensInPixels = 10;
+        int verticalSpaceBetweenChaosTokensInPixels = paintContext.millimetersToPixels(0.85);
 
         double totalVerticalSpacerHeight = (combinedTokens.size() - 1) * verticalSpaceBetweenChaosTokensInPixels;
         double totalHeightAvailable = drawRegion.getHeight() - totalVerticalSpacerHeight;
@@ -313,7 +319,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
             MultiSectionRenderer.Section section;
             if (chaosTokens.size() > 1) {
-                section = new MultiSectionRenderer.DoubleLineInsetTextSection(markupRendererSupplier, sectionHeight, sectionHeight, 15);
+                section = new MultiSectionRenderer.DoubleLineInsetTextSection(markupRendererSupplier, sectionHeight, sectionHeight, paintContext.millimetersToPixels(1.27));
             }
             else {
                 section = new MultiSectionRenderer.TextSection(markupRendererSupplier, sectionHeight, sectionHeight);
@@ -354,11 +360,13 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             // this gives the top position of the first token
             yPosition = yPosition - (0.5 * tokenDiameterInPixels);
 
+            int chaosTokenXPosition = paintContext.millimetersToPixels(8.45);
+
             for (ScenarioReference.SymbolChaosToken token : tokens) {
                 // draw the token image
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(),
                         ImageUtils.loadImage("/overlays/chaos_tokens/chaos_" + getChaosTokenResourceName(token) + ".png"),
-                        new Rectangle(CHAOS_TOKEN_X_POSITION, (int)yPosition, tokenDiameterInPixels, tokenDiameterInPixels));
+                        new Rectangle(chaosTokenXPosition, (int)yPosition, tokenDiameterInPixels, tokenDiameterInPixels));
 
                 yPosition = yPosition + tokenDiameterInPixels + verticalGapInPixels;
             }
@@ -385,13 +393,13 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             return;
 
         // background image
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/scenario_reference/scenario_reference_tracker_box.png"), TRACKING_BOX_DRAW_REGION);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/scenario_reference/scenario_reference_tracker_box.png"), paintContext.toPixelRect(TRACKING_BOX_DRAW_REGION));
 
         // title
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getScenarioReferenceTrackerBoxTitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP);
         markupRenderer.setMarkupText(getModel().getTrackingBox());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), TRACKING_TITLE_DRAW_REGION);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(TRACKING_TITLE_DRAW_REGION));
     }
 }

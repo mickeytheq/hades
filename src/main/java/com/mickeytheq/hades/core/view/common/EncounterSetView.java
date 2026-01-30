@@ -14,6 +14,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -22,8 +23,8 @@ import java.awt.*;
 import java.util.Optional;
 
 public class EncounterSetView {
-    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_PORTRAIT = new Rectangle(494, 1024, 110, 20);
-    private static final Rectangle ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE = new Rectangle(802, 725, 110, 20);
+    private static final RectangleEx ENCOUNTER_NUMBERS_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(41.83, 86.70, 9.31, 1.69);
+    private static final RectangleEx ENCOUNTER_NUMBERS_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(67.90, 61.38, 9.31, 1.69);
 
     private final EncounterSetModel model;
     private final CardFaceView cardFaceView;
@@ -106,9 +107,9 @@ public class EncounterSetView {
         Rectangle drawRegion;
 
         if (orientation == CardFaceOrientation.Portrait)
-            drawRegion = ENCOUNTER_NUMBERS_DRAW_REGION_PORTRAIT;
+            drawRegion = paintContext.toPixelRect(ENCOUNTER_NUMBERS_PORTRAIT_DRAW_REGION);
         else
-            drawRegion = ENCOUNTER_NUMBERS_DRAW_REGION_LANDSCAPE;
+            drawRegion = paintContext.toPixelRect(ENCOUNTER_NUMBERS_LANDSCAPE_DRAW_REGION);
 
         paintEncounterNumbers(paintContext, drawRegion, TextStyleUtils.getEncounterNumberTextStyle());
     }

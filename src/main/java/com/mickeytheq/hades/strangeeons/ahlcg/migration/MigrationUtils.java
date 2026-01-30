@@ -7,6 +7,7 @@ import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
@@ -45,13 +46,13 @@ public class MigrationUtils {
 
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
-        commonCardFieldsModel.setAfterTraitsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS), Distance.Unit.Pixel));
+        commonCardFieldsModel.setAfterTraitsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS), Unit.Pixel));
         commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
-        commonCardFieldsModel.setAfterKeywordsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS), Distance.Unit.Pixel));
+        commonCardFieldsModel.setAfterKeywordsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS), Unit.Pixel));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
-        commonCardFieldsModel.setAfterRulesSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT), Distance.Unit.Pixel));
+        commonCardFieldsModel.setAfterRulesSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT), Unit.Pixel));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
-        commonCardFieldsModel.setAfterFlavourTextSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR), Distance.Unit.Pixel));
+        commonCardFieldsModel.setAfterFlavourTextSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR), Unit.Pixel));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
         commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
     }
@@ -299,11 +300,11 @@ public class MigrationUtils {
         String headerKey = SettingsFieldNames.STORY_SECTION_HEADER_PREFIX + settingsCode;
 
         model.setHeader(settingsAccessor.getString(headerKey));
-        model.setAfterHeaderSpace(new Distance(settingsAccessor.getSpacingValue(headerKey), Distance.Unit.Pixel));
+        model.setAfterHeaderSpace(new Distance(settingsAccessor.getSpacingValue(headerKey), Unit.Pixel));
 
         String storyKey = SettingsFieldNames.STORY_SECTION_STORY_PREFIX + settingsCode;
         model.setStory(settingsAccessor.getString(storyKey));
-        model.setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(storyKey), Distance.Unit.Pixel));
+        model.setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(storyKey), Unit.Pixel));
 
         String rulesKey = SettingsFieldNames.GAME_TEXT + settingsCode;
         model.setRules(settingsAccessor.getString(rulesKey));

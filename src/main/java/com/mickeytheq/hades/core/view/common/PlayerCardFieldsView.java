@@ -12,6 +12,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import resources.Language;
@@ -184,8 +185,8 @@ public class PlayerCardFieldsView {
         panel.add(skillIcon5Editor);
     }
 
-    private static final Rectangle LEVEL_DRAW_REGION = new Rectangle(30, 76, 92, 44);
-    private static final Rectangle NO_LEVEL_DRAW_REGION = new Rectangle(16, 10, 120, 116);
+    private static final RectangleEx LEVEL_DRAW_REGION = RectangleEx.millimeters(2.54, 6.43, 7.79, 3.73);
+    private static final RectangleEx NO_LEVEL_DRAW_REGION = RectangleEx.millimeters(1.35, 0.85, 10.16, 9.82);
 
     public void paintLevel(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardType();
@@ -195,24 +196,24 @@ public class PlayerCardFieldsView {
             if (level == null) {
                 ImageUtils.drawImage(paintContext.getGraphics(),
                         ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
-                        NO_LEVEL_DRAW_REGION);
+                        paintContext.toPixelRect(NO_LEVEL_DRAW_REGION));
             } else if (level == 0) {
                 // do nothing for level 0
             } else {
                 ImageUtils.drawImage(paintContext.getGraphics(),
                         ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getLevel() + ".png")),
-                        LEVEL_DRAW_REGION);
+                        paintContext.toPixelRect(LEVEL_DRAW_REGION));
             }
         }
     }
 
     private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 15);
-    private static final Rectangle COST_DRAW_REGION = new Rectangle(36, 27, 80, 76);
+    private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimeters(3.05, 2.29, 6.77, 6.43);
 
     public void paintCost(PaintContext paintContext) {
         PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
                 getModel().getCost(),
-                COST_DRAW_REGION,
+                paintContext.toPixelRect(COST_DRAW_REGION),
                 COST_FONT,
                 15.0f, 1.6f,
                 Color.WHITE,

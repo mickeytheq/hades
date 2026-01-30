@@ -72,7 +72,7 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
-        asset();
+//        asset();
 //            investigator();
 //        event();
 //        skill();
@@ -82,7 +82,7 @@ public class QuickCardView {
 //            agenda();
 //            act();
 //            enemy();
-//            scenarioReference();
+            scenarioReference();
 //            story();
         });
     }

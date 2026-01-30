@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.codegenerated.GameConstants;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -30,25 +31,25 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private PortraitView portraitView;
 
     // locations to draw portraits
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(350, 508, 56, 56);
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(34, 0, 688, 596);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.63, 43.01, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(2.88, 0.00, 58.25, 50.46);
 
     // locations to draw other elements
-    private static final Rectangle LABEL_DRAW_REGION = new Rectangle(274, 572, 208, 28);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(78, 614, 598, 58);
-    private static final Rectangle BODY_NON_WEAKNESS_DRAW_REGION = new Rectangle(60, 680, 636, 320);
-    private static final Rectangle BODY_WEAKNESS_DRAW_REGION = new Rectangle(60, 714, 636, 290);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(23.20, 48.43, 17.61, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(6.60, 51.99, 50.63, 4.91);
+    private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimeters(5.08, 57.57, 53.85, 27.09);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimeters(5.08, 60.45, 53.85, 24.55);
 
-    private static final Rectangle BASIC_WEAKNESS_OVERLAY_DRAW_REGION = new Rectangle(312, 486, 132, 82);
-    private static final Rectangle BASIC_WEAKNESS_ICON_DRAW_REGION = new Rectangle(350, 506, 56, 56);
-    private static final Rectangle WEAKNESS_SUBTYPE_DRAW_REGION = new Rectangle(176, 674, 400, 34);
+    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimeters(26.42, 41.15, 11.18, 6.94);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(29.63, 42.84, 4.74, 4.74);
+    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimeters(14.90, 57.07, 33.87, 2.88);
 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -111,16 +112,16 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // label
-        PaintUtils.paintLabel(paintContext, LABEL_DRAW_REGION, Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
 
         // title
-        commonCardFieldsView.paintTitle(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         if (getModel().getWeaknessType() == WeaknessType.None)
             paintNonWeaknessContent(paintContext);
@@ -131,12 +132,12 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_NON_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_NON_WEAKNESS_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -146,13 +147,13 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         WeaknessType weaknessType = getModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), BASIC_WEAKNESS_OVERLAY_DRAW_REGION);
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
 
             if (weaknessType == WeaknessType.Basic) {
-                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), BASIC_WEAKNESS_ICON_DRAW_REGION);
+                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
             }
             else {
-                encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+                encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
                 encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             }
         }
@@ -167,9 +168,9 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), WEAKNESS_SUBTYPE_DRAW_REGION);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(WEAKNESS_SUBTYPE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, BODY_WEAKNESS_DRAW_REGION);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION));
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);

@@ -10,6 +10,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -30,7 +31,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private JTextField deckIdEditor;
     private StatisticComponent cluesEditor;
 
-    private static final Rectangle ART_PORTRAIT_DRAW_REGION = new Rectangle(440, 0, 610, 750);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(37.25, 0.00, 51.65, 63.50);
 
     @Override
     public void initialiseView() {
@@ -38,7 +39,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         actCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override
@@ -109,13 +110,13 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final Rectangle SCENARIO_INDEX_DRAW_REGION = new Rectangle(154, 28, 248, 42);
-    private static final Rectangle TITLE_DRAW_REGION = new Rectangle(40, 118, 480, 88);
-    private static final Rectangle BODY_DRAW_REGION = new Rectangle(30, 208, 528, 454);
-    private static final Rectangle ENCOUNTER_PORTRAIT_DRAW_REGION = new Rectangle(246, 59, 64, 64);
-    private static final Rectangle CLUES_DRAW_REGION = new Rectangle(526, 607, 0, 40);
+    private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimeters(13.04, 2.37, 21.00, 3.56);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(3.39, 9.99, 40.64, 7.45);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(2.54, 17.61, 44.70, 38.44);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(20.83, 5.00, 5.42, 5.42);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimeters(44.53, 51.39, 0.00, 3.39);
 
-    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION, Lists.newArrayList(
+    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI), Lists.newArrayList(
             new Point2D.Double(0.0, 0.0),
             new Point2D.Double(0.0, 1.00),
             new Point2D.Double(0.715, 1.00),
@@ -128,26 +129,26 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-        portraitView.paintArtPortrait(paintContext, ART_PORTRAIT_DRAW_REGION);
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // title
-        commonCardFieldsView.paintTitleMultiline(paintContext, TITLE_DRAW_REGION);
+        commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-        encounterSetView.paintEncounterPortrait(paintContext, ENCOUNTER_PORTRAIT_DRAW_REGION);
+        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         portraitView.paintArtist(paintContext);
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
-        actCommonFieldsView.paintBody(paintContext, BODY_DRAW_REGION, BODY_PAGE_SHAPE);
+        actCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
 
-        PaintUtils.paintStatistic(paintContext, CLUES_DRAW_REGION, getModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
-        PaintUtils.paintScenarioIndex(paintContext, SCENARIO_INDEX_DRAW_REGION, Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndex(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
     }
 }
