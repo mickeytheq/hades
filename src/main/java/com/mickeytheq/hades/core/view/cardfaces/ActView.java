@@ -113,6 +113,13 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimeters(13.04, 2.37, 21.00, 3.56);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(3.39, 9.99, 40.64, 7.45);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(2.54, 17.61, 44.70, 38.44);
+
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(1.00, 61.38, 14.10, 1.69);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(17.00, 61.38, 14.10, 1.69);
+    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimeters(33.00, 61.38, 9.31, 1.69);
+    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(46.00, 60.96, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimeters(49.00, 61.38, 3.00, 1.69);
+
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(20.83, 5.00, 5.42, 5.42);
     private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimeters(44.53, 51.39, 0.00, 3.39);
 
@@ -137,15 +144,16 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         // title
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
+        encounterSetView.paintEncounterNumbers(paintContext, paintContext.toPixelRect(ENCOUNTER_NUMBER_DRAW_REGION));
         encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
-        portraitView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext, paintContext.toPixelRect(ARTIST_DRAW_REGION));
 
-        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
-        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
+        collectionView.paintCollectionImage(paintContext, paintContext.toPixelRect(COLLECTION_PORTRAIT_DRAW_REGION), true);
+        collectionView.paintCollectionNumber(paintContext, paintContext.toPixelRect(COLLECTION_NUMBER_DRAW_REGION));
 
         actCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 

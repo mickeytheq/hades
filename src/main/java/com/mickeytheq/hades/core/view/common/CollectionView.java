@@ -130,6 +130,10 @@ public class CollectionView {
         else
             drawRegion = paintContext.toPixelRect(COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION);
 
+        paintCollectionNumber(paintContext, drawRegion);
+    }
+
+    public void paintCollectionNumber(PaintContext paintContext, Rectangle drawRegion) {
         paintCollectionNumber(paintContext, drawRegion, TextStyleUtils.getCollectionNumberTextStyle());
     }
 

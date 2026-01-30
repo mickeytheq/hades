@@ -111,6 +111,10 @@ public class EncounterSetView {
         else
             drawRegion = paintContext.toPixelRect(ENCOUNTER_NUMBERS_LANDSCAPE_DRAW_REGION);
 
+        paintEncounterNumbers(paintContext, drawRegion);
+    }
+
+    public void paintEncounterNumbers(PaintContext paintContext, Rectangle drawRegion) {
         paintEncounterNumbers(paintContext, drawRegion, TextStyleUtils.getEncounterNumberTextStyle());
     }
 
