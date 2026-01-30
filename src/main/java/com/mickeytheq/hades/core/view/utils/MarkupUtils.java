@@ -197,12 +197,12 @@ public class MarkupUtils {
 
     private static String getUnitMarkupText(Unit unit) {
         switch (unit) {
-            case Pixel:
-                return "px";
             case Point:
                 return "pt";
             case Millimetre:
                 return "cm";
+            case Pixel:
+                throw new RuntimeException("Pixel unit is not valid for generating markup as it maps to different real distances depending on the resolution of the template/card. Use a real unit like Point/Millimetre instead");
             default:
                 throw new RuntimeException("Invalid unit " + unit);
         }
