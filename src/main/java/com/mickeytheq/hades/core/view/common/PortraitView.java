@@ -139,13 +139,16 @@ public class PortraitView {
     }
 
     public void paintArtist(PaintContext paintContext) {
+        paintArtist(paintContext, paintContext.toPixelRect(ARTIST_DRAW_REGION));
+    }
+
+    public void paintArtist(PaintContext paintContext, Rectangle drawRegion) {
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
         markupRenderer.setMarkupText(portraitModel.getArtist());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(ARTIST_DRAW_REGION));
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
-
 
     // creates a portrait panel hosting this portrait content and passes changed events back through the EditorContext
     public PortraitPanel createPortraitPanel(EditorContext editorContext, String panelTitle) {

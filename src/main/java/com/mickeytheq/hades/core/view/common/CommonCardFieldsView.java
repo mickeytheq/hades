@@ -17,11 +17,10 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 
 public class CommonCardFieldsView {
-    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(23.20, 86.70, 17.10, 1.69);
+    private static final RectangleEx COPYRIGHT_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(23.20, 86.70, 17.10, 1.69);
 
 
     private final CommonCardFieldsModel model;
@@ -190,11 +189,18 @@ public class CommonCardFieldsView {
         paintBodyAndCopyright(paintContext, bodyDrawRegion, PageShape.RECTANGLE_SHAPE);
     }
 
-    public void paintBodyAndCopyright(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape pageShape) {
-        String bodyString = composeBodyString();
-        PaintUtils.paintBodyText(paintContext, bodyString, bodyDrawRegion, pageShape);
-
+    public void paintBodyAndCopyright(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape bodyPageShape) {
+        paintBody(paintContext, bodyDrawRegion, bodyPageShape);
         paintCopyright(paintContext);
+    }
+
+    public void paintBody(PaintContext paintContext, Rectangle bodyDrawRegion) {
+        paintBody(paintContext, bodyDrawRegion, PageShape.RECTANGLE_SHAPE);
+    }
+
+    public void paintBody(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape bodyPageShape) {
+        String bodyString = composeBodyString();
+        PaintUtils.paintBodyText(paintContext, bodyString, bodyDrawRegion, bodyPageShape);
     }
 
     private String composeBodyString() {
@@ -277,7 +283,11 @@ public class CommonCardFieldsView {
     }
 
     public void paintCopyright(PaintContext paintContext) {
-        paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION), TextStyleUtils.getCopyrightTextStyle());
+        paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_PORTRAIT_DRAW_REGION), TextStyleUtils.getCopyrightTextStyle());
+    }
+
+    public void paintCopyright(PaintContext paintContext, Rectangle drawRegion) {
+        paintCopyright(paintContext, drawRegion, TextStyleUtils.getCopyrightTextStyle());
     }
 
     public void paintCopyright(PaintContext paintContext, Rectangle drawRegion, TextStyle textStyle) {

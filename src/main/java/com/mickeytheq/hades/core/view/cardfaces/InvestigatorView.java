@@ -167,6 +167,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(8.13, 1.86, 35.05, 4.57);
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(12.19, 6.60, 29.63, 3.39);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(51.99, 13.55, 33.87, 36.91);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(66.00, 60.38, 14.10, 1.69);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(49, 60.38, 14.10, 1.69);
 
     private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimeters(64.35, 51.65, 0.00, 3.39);
     private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimeters(73.49, 51.65, 0.00, 3.39);
@@ -186,7 +188,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
+        commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
+        commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
         if (getModel().getInvestigatorClass() == InvestigatorClass.Story) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
@@ -196,7 +199,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
-        portraitView.paintArtist(paintContext);
+        portraitView.paintArtist(paintContext, paintContext.toPixelRect(ARTIST_DRAW_REGION));
 
         paintSkills(paintContext);
 
