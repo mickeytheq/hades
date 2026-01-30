@@ -12,6 +12,7 @@ import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.RectangleEx;
+import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -208,7 +209,7 @@ public class CommonCardFieldsView {
 
         if (StringUtils.isEmpty(model.getTraits())) {
             // if there's no traits some space is added instead
-            sb.append(MarkupUtils.getSpacerMarkup(1, 6));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(6, Unit.Point)));
         } else {
             sb.append("<center>");
             sb.append("<ts>");
@@ -216,7 +217,7 @@ public class CommonCardFieldsView {
             sb.append("</ts>");
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 0.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(0.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterTraitsSpacing());
@@ -228,7 +229,7 @@ public class CommonCardFieldsView {
             sb.append(model.getKeywords());
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterKeywordsSpacing());
@@ -240,7 +241,7 @@ public class CommonCardFieldsView {
             sb.append(model.getRules());
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterRulesSpacing());
@@ -254,7 +255,7 @@ public class CommonCardFieldsView {
             sb.append("</fs>");
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterFlavourTextSpacing());
@@ -279,7 +280,7 @@ public class CommonCardFieldsView {
             return;
 
         // TODO: convert the amount to pixels for other units or use the unit natively if possible
-        sb.append(MarkupUtils.getSpacerMarkup(1, spacing.getAmount()));
+        sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), spacing));
     }
 
     public void paintCopyright(PaintContext paintContext) {

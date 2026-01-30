@@ -3,6 +3,8 @@ package com.mickeytheq.hades.core.view.utils;
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.GameConstants;
+import com.mickeytheq.hades.core.model.common.Distance;
+import com.mickeytheq.hades.util.shape.Unit;
 import resources.Language;
 
 import java.awt.*;
@@ -173,8 +175,37 @@ public class MarkupUtils {
 
     // the res:// protocol maps into a 'resources' folder in the root of the classpath which is why
     // the targeted file is in resources (the actual classpath root) /resources (the above folder)/spacers
-    public static String getSpacerMarkup(double horizontalPoints, double verticalPoints) {
-        return "<image res://spacers/empty1x1.png " + horizontalPoints + "pt " + verticalPoints + "pt>";
+    public static String getSpacerMarkup(Distance horizontal, Distance vertical) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<image res://spacers/empty1x1.png ");
+        sb.append(getUnitAmount(horizontal));
+        sb.append(getUnitMarkupText(horizontal.getUnit()));
+        sb.append(" ");
+        sb.append(getUnitAmount(vertical));
+        sb.append(getUnitMarkupText(vertical.getUnit()));
+        sb.append(">");
+
+        return sb.toString();
+    }
+
+    private static String getUnitAmount(Distance distance) {
+        if (distance.getUnit() == Unit.Millimetre)
+            return Double.toString(distance.getAmount() / 10);
+
+        return Double.toString(distance.getAmount());
+    }
+
+    private static String getUnitMarkupText(Unit unit) {
+        switch (unit) {
+            case Pixel:
+                return "px";
+            case Point:
+                return "pt";
+            case Millimetre:
+                return "cm";
+            default:
+                throw new RuntimeException("Invalid unit " + unit);
+        }
     }
 
     // creates a function that maps input Points to output points. Input points are a ratio (typically 0 to 1) of the

@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
@@ -19,7 +20,7 @@ public class InvestigatorBack implements CardFaceModel {
     public static class InvestigatorBackSection {
         private String header;
         private String text;
-        private int afterSpacing = 0;
+        private Distance afterSpacing = new Distance();
 
         @Property("Header")
         public String getHeader() {
@@ -39,12 +40,12 @@ public class InvestigatorBack implements CardFaceModel {
             this.text = text;
         }
 
-        @Property(value = "AfterSpacing", discriminator = ZeroNumberDiscriminator.class)
-        public int getAfterSpacing() {
+        @Property(value = "AfterSpacing")
+        public Distance getAfterSpacing() {
             return afterSpacing;
         }
 
-        public void setAfterSpacing(int afterSpacing) {
+        public void setAfterSpacing(Distance afterSpacing) {
             this.afterSpacing = afterSpacing;
         }
     }

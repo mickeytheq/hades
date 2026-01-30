@@ -4,6 +4,7 @@ import ca.cgjennings.layout.PageShape;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.InvestigatorBack;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
 import com.mickeytheq.hades.core.view.BaseCardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
@@ -11,8 +12,10 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.common.PortraitView;
+import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.RectangleEx;
+import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -82,15 +85,15 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     private void createSection(EditorContext editorContext, InvestigatorBack.InvestigatorBackSection section, int sectionIndex, JPanel panel) {
         JTextField headerEditor = EditorUtils.createTextField(30);
         JTextArea textEditor = EditorUtils.createTextArea(6, 30);
-        JSpinner afterSpaceEditor = EditorUtils.createSpinnerNonNegative(100);
+        DistanceComponent afterSpaceEditor = new DistanceComponent();
 
         EditorUtils.bindTextComponent(headerEditor, editorContext.wrapConsumerWithMarkedChanged(section::setHeader));
         EditorUtils.bindTextComponent(textEditor, editorContext.wrapConsumerWithMarkedChanged(section::setText));
-        EditorUtils.bindSpinner(afterSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(section::setAfterSpacing));
+        EditorUtils.bindDistanceComponent(afterSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(section::setAfterSpacing));
 
         headerEditor.setText(section.getHeader());
         textEditor.setText(section.getText());
-        afterSpaceEditor.setValue(section.getAfterSpacing());
+        afterSpaceEditor.setDistance(section.getAfterSpacing());
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SECTION) + sectionIndex, headerEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.TEXT), textEditor);
@@ -127,7 +130,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         for (InvestigatorBack.InvestigatorBackSection section : getModel().getSections()) {
             String header = section.getHeader();
             String text = section.getText();
-            int afterSpacing = section.getAfterSpacing();
+            Distance afterSpacing = section.getAfterSpacing();
 
             if (StringUtils.isEmpty(text))
                 continue;
@@ -144,10 +147,10 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
             sb.append(text);
 
             // spacing
-            if (section.getAfterSpacing() > 0)
-                sb.append(MarkupUtils.getSpacerMarkup(1, afterSpacing));
+            if (section.getAfterSpacing().getAmount() > 0)
+                sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), afterSpacing));
             else
-                sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+                sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         if (!StringUtils.isEmpty(getModel().getStory())) {

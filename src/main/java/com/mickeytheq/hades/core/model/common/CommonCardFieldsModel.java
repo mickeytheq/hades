@@ -1,7 +1,6 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.ZeroNumberDiscriminator;
 
 public class CommonCardFieldsModel {
     private String title;

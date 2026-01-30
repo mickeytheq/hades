@@ -21,7 +21,11 @@ public class DistanceComponent extends JPanel {
     public DistanceComponent() {
         valueEditor = new JSpinner(new SpinnerNumberModel(0, 0, Double.MAX_VALUE, 1));
 
-        unitEditor = EditorUtils.createEnumComboBox(Unit.class);
+        // don't allow pixel for distance specification as it varies based on the context
+        // of the template/image being rendered
+        unitEditor = new JComboBox<>();
+        unitEditor.addItem(Unit.Point);
+        unitEditor.addItem(Unit.Millimetre);
 
         setLayout(new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().gridGap("0", "0").insets("0")));
 

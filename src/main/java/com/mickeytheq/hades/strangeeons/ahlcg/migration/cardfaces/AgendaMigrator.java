@@ -24,7 +24,7 @@ public class AgendaMigrator {
         agenda.setDoom(MigrationUtils.parseStatistic(settingsAccessor, "Doom", SettingsFieldNames.PER_INVESTIGATOR));
 
         agenda.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.AGENDA_STORY));
-        agenda.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY), Unit.Pixel));
+        agenda.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY), Unit.Point));
 
         // default logic will put 'rules' in the standard field, move it out
         agenda.getStorySectionModel().setRules(agenda.getCommonCardFieldsModel().getRules());

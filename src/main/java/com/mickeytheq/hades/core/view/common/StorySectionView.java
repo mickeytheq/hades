@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MarkupUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -59,11 +60,11 @@ public class StorySectionView {
 
         if (includeHeader) {
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.HEADER), headerEditor);
-            MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterHeaderSpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterHeaderSpaceEditor);
         }
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.STORY), storyEditor);
-        MigLayoutUtils.addLabelledComponent(panel, Language.string(InterfaceConstants.SPACING), afterStorySpaceEditor, MigLayoutUtils.SPACING_EDITOR_CONSTRAINTS);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterStorySpaceEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.RULES), rulesEditor);
 
         return panel;
@@ -85,7 +86,7 @@ public class StorySectionView {
             sb.append("</ts>");
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterHeaderSpace());
@@ -98,7 +99,7 @@ public class StorySectionView {
             sb.append("</gss>");
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         addSpacing(sb, model.getAfterStorySpace());
@@ -110,7 +111,7 @@ public class StorySectionView {
             sb.append(model.getRules());
 
             sb.append("\n");
-            sb.append(MarkupUtils.getSpacerMarkup(1, 1.5));
+            sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
         return sb.toString();
@@ -123,6 +124,6 @@ public class StorySectionView {
         if (spacing.getAmount() == 0)
             return;
 
-        sb.append(MarkupUtils.getSpacerMarkup(1, spacing.getAmount()));
+        sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), spacing));
     }
 }

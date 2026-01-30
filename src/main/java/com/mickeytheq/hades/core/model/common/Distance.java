@@ -7,7 +7,7 @@ import com.mickeytheq.hades.util.shape.Unit;
 // a distance comprising a unit and an amount of that unit
 public class Distance implements EmptyEntityDiscriminator {
     private double amount = 0;
-    private Unit unit = Unit.Pixel;
+    private Unit unit = Unit.Point;
 
     public Distance() {
     }

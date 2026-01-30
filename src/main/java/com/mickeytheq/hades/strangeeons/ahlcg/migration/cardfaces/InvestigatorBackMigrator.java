@@ -2,11 +2,13 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.InvestigatorBack;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsFieldNames;
+import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.Strings;
 
 public class InvestigatorBackMigrator {
@@ -43,7 +45,7 @@ public class InvestigatorBackMigrator {
 
         backSection.setHeader(header);
         backSection.setText(settingsAccessor.getString("Text" + index));
-        backSection.setAfterSpacing(settingsAccessor.getSpacingValue("Text" + index));
+        backSection.setAfterSpacing(new Distance(settingsAccessor.getSpacingValue("Text" + index), Unit.Point));
 
         return backSection;
     }
