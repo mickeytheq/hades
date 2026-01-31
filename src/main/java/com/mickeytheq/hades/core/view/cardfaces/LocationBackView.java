@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -29,7 +28,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 7.11, 63.50, 46.57);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 63.50, 46.57);
 
     @Override
     public void initialiseView() {
@@ -116,10 +115,10 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(23.37, 47.07, 16.93, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(11.01, 0.68, 40.98, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(16.09, 6.60, 32.34, 3.56);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(3.39, 50.80, 56.90, 24.21);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(23.37, 47.07, 16.93, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.01, 0.68, 40.98, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(16.09, 6.60, 32.34, 3.56);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
     private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI),
             Lists.newArrayList(
                     new Point2D.Double(0.111, 0.000),
@@ -129,7 +128,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
                     new Point2D.Double(1.0, 0.204),
                     new Point2D.Double(0.889, 0.0)
             ));
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.46, 41.49, 4.74, 4.74);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 41.49, 4.74, 4.74);
 
     @Override
     public void paint(PaintContext paintContext) {

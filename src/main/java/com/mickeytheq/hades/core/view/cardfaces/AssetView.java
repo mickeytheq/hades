@@ -33,8 +33,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(1.69, 6.77, 60.62, 43.69);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(55.71, 1.69, 5.08, 5.08);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(1.69, 6.77, 60.62, 43.69);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(55.71, 1.69, 5.08, 5.08);
 
     @Override
     public void initialiseView() {
@@ -178,12 +178,12 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(3.22, 10.84, 6.43, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(11.51, 2.37, 40.30, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(11.51, 7.45, 40.30, 3.73);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(3.39, 54.19, 56.90, 23.71);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimeters(14.56, 50.97, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(55.71, 50.97, 34.37, 2.54);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.22, 10.84, 6.43, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 2.37, 40.30, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 7.45, 40.30, 3.73);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 54.19, 56.90, 23.71);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 50.97, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(55.71, 50.97, 34.37, 2.54);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -237,9 +237,9 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
     // regions are from right to left
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(38.78, 0.34, 8.81, 8.81),
-            RectangleEx.millimeters(46.4, 0.34, 8.81, 8.81),
-            RectangleEx.millimeters(54.02, 0.34, 8.81, 8.81)
+            RectangleEx.millimetres(38.78, 0.34, 8.81, 8.81),
+            RectangleEx.millimetres(46.4, 0.34, 8.81, 8.81),
+            RectangleEx.millimetres(54.02, 0.34, 8.81, 8.81)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {
@@ -280,8 +280,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private static final List<RectangleEx> SLOT_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(52.32, 76.88, 8.64, 8.81),
-            RectangleEx.millimeters(43.18, 76.88, 8.64, 8.81)
+            RectangleEx.millimetres(52.32, 76.88, 8.64, 8.81),
+            RectangleEx.millimetres(43.18, 76.88, 8.64, 8.81)
     );
 
     private void paintSlots(PaintContext paintContext) {
@@ -300,8 +300,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         return assetSlot.name().toLowerCase();
     }
 
-    private static final RectangleEx HEALTH_SYMBOL_DRAW_REGION = RectangleEx.millimeters(24.72, 79.25, 5.25, 6.60);
-    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimeters(27.09, 80.69, 0.00, 2.96);
-    private static final RectangleEx SANITY_SYMBOL_DRAW_REGION = RectangleEx.millimeters(33.36, 79.76, 7.28, 6.10);
-    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimeters(37.08, 80.69, 0.00, 2.96);
+    private static final RectangleEx HEALTH_SYMBOL_DRAW_REGION = RectangleEx.millimetres(24.72, 79.25, 5.25, 6.60);
+    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(27.09, 80.69, 0.00, 2.96);
+    private static final RectangleEx SANITY_SYMBOL_DRAW_REGION = RectangleEx.millimetres(33.36, 79.76, 7.28, 6.10);
+    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(37.08, 80.69, 0.00, 2.96);
 }

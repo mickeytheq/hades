@@ -21,12 +21,10 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.EVENT)
 public class EventView extends BaseCardFaceView<Event> implements HasCollectionView, HasEncounterSetView {
@@ -36,8 +34,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 0.00, 63.50, 48.77);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.46, 43.77, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 63.50, 48.77);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 43.77, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
@@ -130,13 +128,13 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(3.56, 10.67, 6.10, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(6.77, 51.48, 50.29, 4.91);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(7.45, 57.23, 48.77, 26.75);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimeters(7.45, 59.61, 48.77, 24.21);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimeters(14.56, 56.39, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(29.29, 43.69, 5.08, 5.08);
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimeters(27.43, 41.83, 9.14, 8.97);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.56, 10.67, 6.10, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 51.48, 50.29, 4.91);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(7.45, 57.23, 48.77, 26.75);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(7.45, 59.61, 48.77, 24.21);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 56.39, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(29.29, 43.69, 5.08, 5.08);
+    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(27.43, 41.83, 9.14, 8.97);
 
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
 
@@ -188,14 +186,14 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     // regions are from right to left
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_PAIR = Lists.newArrayList(
-            RectangleEx.millimeters(24.38, 43.35, 7.62, 7.62),
-            RectangleEx.millimeters(31.67, 43.35, 7.62, 7.62)
+            RectangleEx.millimetres(24.38, 43.35, 7.62, 7.62),
+            RectangleEx.millimetres(31.67, 43.35, 7.62, 7.62)
     );
 
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_TRIPLE = Lists.newArrayList(
-            RectangleEx.millimeters(20.83, 43.35, 7.62, 7.62),
-            RectangleEx.millimeters(28.11, 43.35, 7.62, 7.62),
-            RectangleEx.millimeters(35.39, 43.35, 7.62, 7.62)
+            RectangleEx.millimetres(20.83, 43.35, 7.62, 7.62),
+            RectangleEx.millimetres(28.11, 43.35, 7.62, 7.62),
+            RectangleEx.millimetres(35.39, 43.35, 7.62, 7.62)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {

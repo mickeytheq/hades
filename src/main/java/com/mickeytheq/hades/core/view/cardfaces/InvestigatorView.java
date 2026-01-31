@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
@@ -36,8 +37,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private JTextField combatEditor;
     private JTextField agilityEditor;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 10.16, 47.07, 53.34);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(1.86, 2.03, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 10.16, 47.07, 53.34);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(1.86, 2.03, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
@@ -164,19 +165,22 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(8.13, 1.86, 35.05, 4.57);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(12.19, 6.60, 29.63, 3.39);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(51.99, 13.55, 33.87, 36.91);
-    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(66.00, 60.38, 14.10, 1.69);
-    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(49, 60.38, 14.10, 1.69);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(8.13, 1.86, 35.05, 4.57);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(12.19, 6.60, 29.63, 3.39);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(51.99, 13.55, 33.87, 36.91);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(66.00, 60.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(49, 60.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
-    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimeters(64.35, 51.65, 0.00, 3.39);
-    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimeters(73.49, 51.65, 0.00, 3.39);
+    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(64.35, 52.15, 0.00, 3.39);
+    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(73.49, 52.15, 0.00, 3.39);
 
-    private static final RectangleEx WILLPOWER_DRAW_REGION = RectangleEx.millimeters(49.28, 3.22, 2.71, 3.73);
-    private static final RectangleEx INTELLECT_DRAW_REGION = RectangleEx.millimeters(59.44, 3.22, 2.71, 3.73);
-    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimeters(69.77, 3.22, 2.71, 3.73);
-    private static final RectangleEx AGILITY_DRAW_REGION = RectangleEx.millimeters(80.09, 3.22, 2.71, 3.73);
+    private static final DimensionEx STAT_DIMENSION = DimensionEx.millimetres(2.71, 3.73);
+    private static final double STAT_Y_POSITION = 3.22;
+
+    private static final RectangleEx WILLPOWER_DRAW_REGION = RectangleEx.millimetres(49.28, STAT_Y_POSITION, STAT_DIMENSION);
+    private static final RectangleEx INTELLECT_DRAW_REGION = RectangleEx.millimetres(59.44, STAT_Y_POSITION, STAT_DIMENSION);
+    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimetres(69.77, STAT_Y_POSITION, STAT_DIMENSION);
+    private static final RectangleEx AGILITY_DRAW_REGION = RectangleEx.millimetres(80.09, STAT_Y_POSITION, STAT_DIMENSION);
 
     @Override
     public void paint(PaintContext paintContext) {

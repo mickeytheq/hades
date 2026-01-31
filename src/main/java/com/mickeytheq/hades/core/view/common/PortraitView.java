@@ -132,7 +132,7 @@ public class PortraitView {
         return artistWithPortraitPanel;
     }
 
-    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(2.37, 86.70, 20.49, 1.69);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(2.37, 86.70, 20.49, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
     public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
         paint(paintContext, drawRegion, false);

@@ -13,62 +13,46 @@ import java.awt.*;
 // if the template size and therefore DPI was changed to 600 - the calculation would result in a pixel output double the amount
 public class RectangleEx {
     private final Unit unit;
-    private final double topLeftX;
-    private final double topLeftY;
+    private final double x;
+    private final XRelativeTo xRelativeTo;
+    private final double y;
+    private final YRelativeTo yRelativeTo;
 
     private final double width;
     private final double height;
 
-    private RectangleEx(Unit unit, double topLeftX, double topLeftY, double width, double height) {
+    private RectangleEx(Unit unit, double x, XRelativeTo xRelativeTo, double y, YRelativeTo yRelativeTo, double width, double height) {
         this.unit = unit;
-        this.topLeftX = topLeftX;
-        this.topLeftY = topLeftY;
+        this.x = x;
+        this.xRelativeTo = xRelativeTo;
+        this.y = y;
+        this.yRelativeTo = yRelativeTo;
         this.width = width;
         this.height = height;
     }
 
-    public static RectangleEx millimeters(double topLeftX, double topLeftY, double width, double height) {
-        return new RectangleEx(Unit.Millimetre, topLeftX, topLeftY, width, height);
+    public static RectangleEx millimetres(double topLeftX, double topLeftY, double width, double height) {
+        return new RectangleEx(Unit.Millimetre, topLeftX, XRelativeTo.Left, topLeftY, YRelativeTo.Top, width, height);
+    }
+
+    public static RectangleEx millimetres(double topLeftX, double topLeftY, DimensionEx size) {
+        return millimetres(topLeftX, topLeftY,
+                UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getWidth()),
+                UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getHeight()));
     }
 
     public Rectangle toPixelRectangle(double dpi) {
-        double conversionRatio = getConversionRatio(unit, Unit.Pixel, dpi);
-        return toRectangle(conversionRatio);
+        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
+
+        // add 0.5 as this has the same effect as rounding to the nearest whole number with the int cast
+        return new Rectangle((int) (x * conversionRatio + 0.5), (int) (y * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
     }
 
-    private Rectangle toRectangle(double conversionRatio) {
-        // add 0.5 as this has the same effect as rounding to the nearest whole number
-        return new Rectangle((int) (topLeftX * conversionRatio + 0.5), (int) (topLeftY * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
+    public enum XRelativeTo {
+        Left, Right
     }
 
-    private static final double MILLIMETERS_PER_INCH = 10 * 2.54;
-    private static final double INCHES_PER_MILLIMETER = 1.0 / MILLIMETERS_PER_INCH;
-    private static final double POINTS_PER_INCH = 72;
-    private static final double MILLIMETERS_PER_POINT = MILLIMETERS_PER_INCH / POINTS_PER_INCH;
-    private static final double POINTS_PER_MILLIMETER = 1 / MILLIMETERS_PER_POINT;
-
-    private double getConversionRatio(Unit fromUnit, Unit toUnit, double dpi) {
-        if (fromUnit == toUnit)
-            return 1.0;
-
-        if (fromUnit == Unit.Millimetre && toUnit == Unit.Pixel)
-            return INCHES_PER_MILLIMETER * dpi;
-
-        if (fromUnit == Unit.Point && toUnit == Unit.Pixel)
-            return dpi / POINTS_PER_INCH;
-
-        if (fromUnit == Unit.Millimetre && toUnit == Unit.Point)
-            return POINTS_PER_MILLIMETER;
-
-        if (fromUnit == Unit.Point && toUnit == Unit.Millimetre)
-            return 1 / POINTS_PER_MILLIMETER;
-
-        if (fromUnit == Unit.Pixel && toUnit == Unit.Millimetre)
-            return 1 / (INCHES_PER_MILLIMETER * dpi);
-
-        if (fromUnit == Unit.Pixel && toUnit == Unit.Point)
-            return POINTS_PER_INCH / dpi;
-
-        throw new UnsupportedOperationException("Unsupported unit conversion from " + fromUnit + " to " + toUnit);
+    public enum YRelativeTo {
+        Top, Bottom
     }
 }

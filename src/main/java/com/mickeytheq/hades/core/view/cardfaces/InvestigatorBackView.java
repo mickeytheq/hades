@@ -30,7 +30,7 @@ import java.util.Map;
 public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.17, 0.00, 31.83, 34.88);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.17, 0.00, 31.83, 34.88);
 
     @Override
     public void initialiseView() {
@@ -100,9 +100,9 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.SPACING), afterSpaceEditor);
     }
 
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(41.99, 1.52, 41.66, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(50.46, 6.94, 26.92, 2.54);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(5.08, 13.38, 79.59, 46.23);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(41.99, 1.52, 41.66, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(50.46, 6.94, 26.92, 2.54);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(5.08, 13.38, 79.59, 46.23);
 
     @Override
     public void paint(PaintContext paintContext) {

@@ -40,15 +40,15 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private JComboBox<Integer> horrorEditor;
 
     // locations to draw portraits
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.38, 46.40, 4.74, 4.74);
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(0.00, 40.81, 63.50, 48.09);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.38, 46.40, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 40.81, 63.50, 48.09);
 
     // locations to draw other elements
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(26.59, 51.90, 10.33, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(10.50, 0.85, 42.67, 4.57);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimeters(6.77, 5.84, 49.61, 3.39);
-    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimeters(6.77, 5.84, 49.61, 3.39);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(3.39, 17.61, 57.23, 27.94);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(26.59, 51.90, 10.33, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(10.50, 0.85, 42.67, 4.57);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
+    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 17.61, 57.23, 27.94);
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
 
     @Override
@@ -259,24 +259,24 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
     }
 
-    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimeters(20.15, 9.82, 0.00, 2.96);
-    private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimeters(31.83, 9.82, 0.00, 2.96);
-    private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimeters(43.77, 9.82, 0.00, 2.96);
+    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimetres(20.15, 9.82, 0.00, 2.96);
+    private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimetres(31.83, 9.82, 0.00, 2.96);
+    private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimetres(43.77, 9.82, 0.00, 2.96);
 
     private static final List<RectangleEx> DAMAGE_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(22.35, 48.09, 3.22, 3.89),
-            RectangleEx.millimeters(18.46, 46.91, 3.22, 3.89),
-            RectangleEx.millimeters(14.56, 45.38, 3.22, 3.89),
-            RectangleEx.millimeters(11.01, 43.35, 3.22, 3.89),
-            RectangleEx.millimeters(7.62, 40.98, 3.22, 3.89)
+            RectangleEx.millimetres(22.35, 48.09, 3.22, 3.89),
+            RectangleEx.millimetres(18.46, 46.91, 3.22, 3.89),
+            RectangleEx.millimetres(14.56, 45.38, 3.22, 3.89),
+            RectangleEx.millimetres(11.01, 43.35, 3.22, 3.89),
+            RectangleEx.millimetres(7.62, 40.98, 3.22, 3.89)
     );
 
     private static final List<RectangleEx> HORROR_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(37.42, 48.09, 4.57, 4.06),
-            RectangleEx.millimeters(41.32, 46.91, 4.57, 4.06),
-            RectangleEx.millimeters(45.21, 45.38, 4.57, 4.06),
-            RectangleEx.millimeters(48.77, 43.18, 4.57, 4.06),
-            RectangleEx.millimeters(52.15, 40.98, 4.57, 4.06)
+            RectangleEx.millimetres(37.42, 48.09, 4.57, 4.06),
+            RectangleEx.millimetres(41.32, 46.91, 4.57, 4.06),
+            RectangleEx.millimetres(45.21, 45.38, 4.57, 4.06),
+            RectangleEx.millimetres(48.77, 43.18, 4.57, 4.06),
+            RectangleEx.millimetres(52.15, 40.98, 4.57, 4.06)
     );
 
     private void paintStatistics(PaintContext paintContext) {

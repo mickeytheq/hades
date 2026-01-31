@@ -21,7 +21,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class CommonCardFieldsView {
-    private static final RectangleEx COPYRIGHT_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(23.20, 86.70, 17.10, 1.69);
+    private static final RectangleEx COPYRIGHT_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(23.20, 86.70, 17.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
 
     private final CommonCardFieldsModel model;

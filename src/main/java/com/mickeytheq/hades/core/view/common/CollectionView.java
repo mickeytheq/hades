@@ -15,6 +15,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -26,11 +27,14 @@ import java.awt.image.BufferedImageOp;
 import java.util.Optional;
 
 public class CollectionView {
-    private static final RectangleEx COLLECTION_IMAGE_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(54.19, 86.36, 2.20, 2.20);
-    private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(53.85, 86.70, 6.27, 1.69);
+    public static final DimensionEx COLLECTION_IMAGE_SIZE = DimensionEx.millimetres(2.20, 2.20);
+    public static final DimensionEx COLLECTION_NUMBER_SIZE = DimensionEx.millimetres(6.27, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
-    private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(80.60, 60.96, 2.20, 2.20);
-    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimeters(79.93, 61.38, 6.27, 1.69);
+    private static final RectangleEx COLLECTION_IMAGE_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(54.19, 86.36, COLLECTION_IMAGE_SIZE);
+    private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(53.85, 86.70, COLLECTION_NUMBER_SIZE);
+
+    private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(80.60, 60.96, COLLECTION_IMAGE_SIZE);
+    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(79.93, 61.38, COLLECTION_NUMBER_SIZE);
 
     private final CollectionModel model;
     private final CardFaceView cardFaceView;

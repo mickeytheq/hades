@@ -305,15 +305,15 @@ public class LocationFieldsView {
         }
     }
 
-    private static final RectangleEx LOCATION_ICON_DRAW_REGION = RectangleEx.millimeters(2.37, 1.02, 6.10, 5.93);
-    private static final RectangleEx CONNECTION1_DRAW_REGION = RectangleEx.millimeters(11.35, 79.08, 5.93, 5.93);
-    private static final RectangleEx CONNECTION2_DRAW_REGION = RectangleEx.millimeters(18.29, 77.72, 5.93, 5.93);
-    private static final RectangleEx CONNECTION3_DRAW_REGION = RectangleEx.millimeters(25.23, 77.22, 5.93, 5.93);
-    private static final RectangleEx CONNECTION4_DRAW_REGION = RectangleEx.millimeters(32.17, 77.22, 5.93, 5.93);
-    private static final RectangleEx CONNECTION5_DRAW_REGION = RectangleEx.millimeters(39.12, 77.72, 5.93, 5.93);
-    private static final RectangleEx CONNECTION6_DRAW_REGION = RectangleEx.millimeters(46.06, 79.08, 5.93, 5.93);
+    private static final RectangleEx LOCATION_ICON_DRAW_REGION = RectangleEx.millimetres(2.37, 1.02, 6.10, 5.93);
+    private static final RectangleEx CONNECTION1_DRAW_REGION = RectangleEx.millimetres(11.35, 79.08, 5.93, 5.93);
+    private static final RectangleEx CONNECTION2_DRAW_REGION = RectangleEx.millimetres(18.29, 77.72, 5.93, 5.93);
+    private static final RectangleEx CONNECTION3_DRAW_REGION = RectangleEx.millimetres(25.23, 77.22, 5.93, 5.93);
+    private static final RectangleEx CONNECTION4_DRAW_REGION = RectangleEx.millimetres(32.17, 77.22, 5.93, 5.93);
+    private static final RectangleEx CONNECTION5_DRAW_REGION = RectangleEx.millimetres(39.12, 77.72, 5.93, 5.93);
+    private static final RectangleEx CONNECTION6_DRAW_REGION = RectangleEx.millimetres(46.06, 79.08, 5.93, 5.93);
     
-    private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimeters(1.52, 0.17, 7.96, 7.79);
+    private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimetres(1.52, 0.17, 7.96, 7.79);
 
     public void paintLocationIcons(PaintContext paintContext) {
         // paint the location background for the location icon but only for the location front template
@@ -387,8 +387,8 @@ public class LocationFieldsView {
 
     // the widths are set to zero as statistic painting uses the height to size the statistic value and per investigator icon
     // so the x position is the centre-line for the shroud/clue circles and the text is centred on that position
-    private static final RectangleEx SHROUD_DRAW_REGION = RectangleEx.millimeters(5.93, 45.21, 0.00, 3.56);
-    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimeters(57.66, 45.21, 0.00, 3.56);
+    private static final RectangleEx SHROUD_DRAW_REGION = RectangleEx.millimetres(5.93, 45.21, 0.00, 3.56);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(57.66, 45.21, 0.00, 3.56);
 
     public void paintShroudAndClues(PaintContext paintContext) {
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SHROUD_DRAW_REGION), getModel().getShroud(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);

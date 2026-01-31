@@ -13,8 +13,6 @@ import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.util.shape.RectangleEx;
-import net.miginfocom.layout.LC;
-import net.miginfocom.swing.MigLayout;
 import resources.Language;
 
 import javax.swing.*;
@@ -185,8 +183,8 @@ public class PlayerCardFieldsView {
         panel.add(skillIcon5Editor);
     }
 
-    private static final RectangleEx LEVEL_DRAW_REGION = RectangleEx.millimeters(2.54, 6.43, 7.79, 3.73);
-    private static final RectangleEx NO_LEVEL_DRAW_REGION = RectangleEx.millimeters(1.35, 0.85, 10.16, 9.82);
+    private static final RectangleEx LEVEL_DRAW_REGION = RectangleEx.millimetres(2.54, 6.43, 7.79, 3.73);
+    private static final RectangleEx NO_LEVEL_DRAW_REGION = RectangleEx.millimetres(1.35, 0.85, 10.16, 9.82);
 
     public void paintLevel(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardType();
@@ -208,7 +206,7 @@ public class PlayerCardFieldsView {
     }
 
     private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 15);
-    private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimeters(3.05, 2.29, 6.77, 6.43);
+    private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimetres(3.05, 2.29, 6.77, 6.43);
 
     public void paintCost(PaintContext paintContext) {
         PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
@@ -224,21 +222,21 @@ public class PlayerCardFieldsView {
 
 
     private static final List<RectangleEx> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(0, 14.22, 8.47, 6.43),
-            RectangleEx.millimeters(0, 21.34, 8.47, 6.43),
-            RectangleEx.millimeters(0, 28.45, 8.47, 6.43),
-            RectangleEx.millimeters(0, 35.56, 8.47, 6.43),
-            RectangleEx.millimeters(0, 42.67, 8.47, 6.43),
-            RectangleEx.millimeters(0, 49.78, 8.47, 6.43)
+            RectangleEx.millimetres(0, 14.22, 8.47, 6.43),
+            RectangleEx.millimetres(0, 21.34, 8.47, 6.43),
+            RectangleEx.millimetres(0, 28.45, 8.47, 6.43),
+            RectangleEx.millimetres(0, 35.56, 8.47, 6.43),
+            RectangleEx.millimetres(0, 42.67, 8.47, 6.43),
+            RectangleEx.millimetres(0, 49.78, 8.47, 6.43)
     );
 
     private static final List<RectangleEx> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimeters(1.78, 15.07, 4.23, 4.4),
-            RectangleEx.millimeters(1.78, 22.18, 4.23, 4.4),
-            RectangleEx.millimeters(1.78, 29.29, 4.23, 4.4),
-            RectangleEx.millimeters(1.78, 36.41, 4.23, 4.4),
-            RectangleEx.millimeters(1.78, 43.52, 4.23, 4.4),
-            RectangleEx.millimeters(1.78, 50.63, 4.23, 4.4)
+            RectangleEx.millimetres(1.78, 15.07, 4.23, 4.4),
+            RectangleEx.millimetres(1.78, 22.18, 4.23, 4.4),
+            RectangleEx.millimetres(1.78, 29.29, 4.23, 4.4),
+            RectangleEx.millimetres(1.78, 36.41, 4.23, 4.4),
+            RectangleEx.millimetres(1.78, 43.52, 4.23, 4.4),
+            RectangleEx.millimetres(1.78, 50.63, 4.23, 4.4)
     );
 
     // TODO: at the moment there's a list of box regions and icon regions

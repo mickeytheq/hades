@@ -31,7 +31,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private JTextField deckIdEditor;
     private StatisticComponent cluesEditor;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(37.25, 0.00, 51.65, 63.50);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(37.25, 0.00, 51.65, 63.50);
 
     @Override
     public void initialiseView() {
@@ -110,18 +110,18 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimeters(13.04, 2.37, 21.00, 3.56);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(3.39, 9.99, 40.64, 7.45);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(2.54, 17.61, 44.70, 38.44);
+    private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimetres(13.04, 2.37, 21.00, 3.56);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(3.39, 9.99, 40.64, 7.45);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(2.54, 17.61, 44.70, 38.44);
 
-    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimeters(1.00, 61.38, 14.10, 1.69);
-    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(17.00, 61.38, 14.10, 1.69);
-    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimeters(33.00, 61.38, 9.31, 1.69);
-    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(46.00, 60.96, 2.20, 2.20);
-    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimeters(49.00, 61.38, 3.00, 1.69);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(1.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(17.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimetres(33.00, 61.38, EncounterSetView.ENCOUNTER_NUMBERS_SIZE);
+    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.00, 60.96, CollectionView.COLLECTION_IMAGE_SIZE);
+    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(49.00, 61.38, CollectionView.COLLECTION_NUMBER_SIZE);
 
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(20.83, 5.00, 5.42, 5.42);
-    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimeters(44.53, 51.39, 0.00, 3.39);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(20.83, 5.00, 5.42, 5.42);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(44.53, 51.39, 0.00, 3.39);
 
     private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI), Lists.newArrayList(
             new Point2D.Double(0.0, 0.0),

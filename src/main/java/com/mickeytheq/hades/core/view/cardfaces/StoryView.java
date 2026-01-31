@@ -91,13 +91,13 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(6.43, 4.91, 43.01, 7.45);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(6.10, 18.12, 51.65, 66.89);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(51.48, 5.25, 6.10, 6.10);
-    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimeters(34.54, 82.72, 9.31, 1.69);
-    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(46.31, 82.38, 2.20, 2.20);
-    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimeters(45.30, 82.72, 6.27, 1.69);
-    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimeters(9.99, 82.72, 14.56, 1.69);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.43, 4.91, 43.01, 7.45);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(6.10, 18.12, 51.65, 66.89);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(51.48, 5.25, 6.10, 6.10);
+    private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimetres(34.54, 82.72, EncounterSetView.ENCOUNTER_NUMBERS_SIZE);
+    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.31, 82.38, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(45.30, 82.72, CollectionView.COLLECTION_NUMBER_SIZE);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(9.99, 82.72, 14.56, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
     @Override
     public void paint(PaintContext paintContext) {

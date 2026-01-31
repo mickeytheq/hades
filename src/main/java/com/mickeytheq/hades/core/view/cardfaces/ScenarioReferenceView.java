@@ -104,12 +104,12 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(4.74, 15.66, 54.02, 8.47);
-    private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimeters(21.84, 21.51, 19.30, 2.37);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(16.51, 26.42, 40.64, 51.65);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.21, 10.50, 5.42, 5.42);
-    private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimeters(5.42, 62.82, 51.82, 15.58);
-    private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimeters(7.45, 63.50, 47.41, 3.39);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(4.74, 15.66, 54.02, 8.47);
+    private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimetres(21.84, 21.51, 19.30, 2.37);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(16.51, 26.42, 40.64, 51.65);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.21, 10.50, 5.42, 5.42);
+    private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimetres(5.42, 62.82, 51.82, 15.58);
+    private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimetres(7.45, 63.50, 47.41, 3.39);
 
     @Override
     public void paint(PaintContext paintContext) {

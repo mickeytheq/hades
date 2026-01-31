@@ -20,12 +20,10 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.function.Function;
 
 @View(interfaceLanguageKey = InterfaceConstants.SKILL)
 public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionView, HasEncounterSetView {
@@ -35,8 +33,8 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(2.37, 6.77, 58.93, 50.46);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimeters(29.46, 43.77, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.37, 6.77, 58.93, 50.46);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 43.77, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
@@ -131,13 +129,13 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimeters(3.56, 10.67, 6.43, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimeters(12.36, 2.71, 49.78, 4.91);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimeters(6.27, 59.44, 50.97, 24.55);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimeters(6.27, 62.65, 50.97, 21.17);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimeters(14.56, 58.93, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimeters(54.86, 2.20, 5.08, 5.08);
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimeters(52.83, 0.51, 9.14, 8.97);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.56, 10.67, 6.43, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(12.36, 2.71, 49.78, 4.91);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(6.27, 59.44, 50.97, 24.55);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(6.27, 62.65, 50.97, 21.17);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 58.93, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(54.86, 2.20, 5.08, 5.08);
+    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(52.83, 0.51, 9.14, 8.97);
 
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
 
