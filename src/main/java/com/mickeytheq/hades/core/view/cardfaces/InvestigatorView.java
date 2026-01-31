@@ -168,8 +168,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(8.13, 1.86, 35.05, 4.57);
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(12.19, 6.60, 29.63, 3.39);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(51.99, 13.55, 33.87, 36.91);
-    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(66.00, 60.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
-    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(49, 60.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(66.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(49, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
     private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(64.35, 52.15, 0.00, 3.39);
     private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(73.49, 52.15, 0.00, 3.39);
