@@ -3,6 +3,8 @@ package com.mickeytheq.hades.strangeeons.util;
 import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.apps.arkham.StrangeEonsEditor;
+import ca.cgjennings.apps.arkham.project.Member;
+import ca.cgjennings.apps.arkham.project.Project;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardEditor;
 
@@ -37,6 +39,9 @@ public class StrangeEonsAppWindowUtils {
     public static void navigateTo(Path pathToFile, CardFaceSide cardFaceSide) {
         StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
 
+        if (appWindow == null)
+            return;
+
         File file = pathToFile.toFile();
 
         StrangeEonsEditor[] editors = appWindow.getEditorsShowingFile(file);
@@ -48,9 +53,25 @@ public class StrangeEonsAppWindowUtils {
             return;
         }
 
+        // open() below is asynchronous so we have a permanent listener that waits for the editor to open
+        // and selects the correct card face
         selectFaceOnOpen.put(pathToFile, cardFaceSide);
 
         appWindow.openFile(file);
+
+        // select the file in the project view making sure it is visible in the project view
+        Project project = StrangeEons.getOpenProject();
+
+        if (project == null)
+            return;
+
+        Member member = StrangeEons.getOpenProject().findMember(file);
+
+        if (member == null)
+            return;
+
+        StrangeEons.getOpenProject().getView().ensureVisible(member);
+        StrangeEons.getOpenProject().getView().select(member);
     }
 
     private static void selectPreviewFace(StrangeEonsEditor editor, CardFaceSide cardFaceSide) {

@@ -64,7 +64,7 @@ public class QuickSearchDialog extends JDialog {
         });
     }
 
-    private final JTextField textField;
+    private final JTextField searchTextField;
     private final JList<Object> resultList;
     private final JScrollPane scrollPane;
 
@@ -84,14 +84,14 @@ public class QuickSearchDialog extends JDialog {
 
         installKeyboardShortcuts();
 
-        textField = new JTextField(60);
-        textField.setFont(textField.getFont().deriveFont(14.0f));
+        searchTextField = new JTextField(60);
+        searchTextField.setFont(searchTextField.getFont().deriveFont(14.0f));
         resultList = new JList<>();
-        resultList.setFont(textField.getFont());
+        resultList.setFont(searchTextField.getFont());
 
         scrollPane = new JScrollPane(resultList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        textField.getDocument().addDocumentListener(new DocumentEventAdapter() {
+        searchTextField.getDocument().addDocumentListener(new DocumentEventAdapter() {
             @Override
             public void changedUpdate(DocumentEvent documentEvent) {
                 performSearch();
@@ -123,13 +123,16 @@ public class QuickSearchDialog extends JDialog {
 
         getContentPane().add(modeSelectionPanel, "wrap, growx, pushx");
 
-        getContentPane().add(textField, "wrap, growx, pushx");
+        getContentPane().add(searchTextField, "wrap, growx, pushx");
 
         selectMode(searchModes.get(0));
 
         relayout();
 
         pack();
+
+        // start the focus on the search field
+        searchTextField.requestFocusInWindow();
     }
 
     private void relayout() {
@@ -166,7 +169,7 @@ public class QuickSearchDialog extends JDialog {
         // element addition/change which in turn triggers costly layout calculations
         DefaultListModel<Object> listModel = new DefaultListModel<>();
 
-        currentSearchMode.performSearch(textField.getText(), listModel);
+        currentSearchMode.performSearch(searchTextField.getText(), listModel);
 
         resultList.setModel(listModel);
 
