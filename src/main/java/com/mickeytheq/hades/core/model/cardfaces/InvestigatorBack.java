@@ -20,7 +20,7 @@ public class InvestigatorBack implements CardFaceModel {
     public static class InvestigatorBackSection {
         private String header;
         private String text;
-        private Distance afterSpacing = new Distance();
+        private Distance afterSpacing = Distance.createZeroPoint();
 
         @Property("Header")
         public String getHeader() {

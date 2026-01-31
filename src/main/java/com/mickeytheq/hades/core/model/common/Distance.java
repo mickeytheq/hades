@@ -6,10 +6,11 @@ import com.mickeytheq.hades.util.shape.Unit;
 
 // a distance comprising a unit and an amount of that unit
 public class Distance implements EmptyEntityDiscriminator {
-    private double amount = 0;
-    private Unit unit = Unit.Point;
+    private final double amount;
+    private final Unit unit;
 
-    public Distance() {
+    public static Distance createZeroPoint() {
+        return new Distance(0, Unit.Point);
     }
 
     public Distance(double amount, Unit unit) {
@@ -23,21 +24,11 @@ public class Distance implements EmptyEntityDiscriminator {
         return amount == 0;
     }
 
-    @Property("Amount")
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    @Property("Unit")
     public Unit getUnit() {
         return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
     }
 }

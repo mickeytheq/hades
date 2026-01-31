@@ -7,13 +7,13 @@ public class CommonCardFieldsModel {
     private String subtitle;
     private Boolean unique;
     private String traits;
-    private Distance afterTraitsSpacing = new Distance();
+    private Distance afterTraitsSpacing = Distance.createZeroPoint();
     private String keywords;
-    private Distance afterKeywordsSpacing = new Distance();
+    private Distance afterKeywordsSpacing = Distance.createZeroPoint();
     private String rules;
-    private Distance afterRulesSpacing = new Distance();
+    private Distance afterRulesSpacing = Distance.createZeroPoint();
     private String flavourText;
-    private Distance afterFlavourTextSpacing = new Distance();
+    private Distance afterFlavourTextSpacing = Distance.createZeroPoint();
     private String victory;
     private String copyright;
 

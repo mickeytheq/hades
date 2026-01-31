@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class StorySectionModel implements EmptyEntityDiscriminator {
     private String header;
-    private Distance afterHeaderSpace = new Distance();
+    private Distance afterHeaderSpace = Distance.createZeroPoint();
     private String story;
-    private Distance afterStorySpace = new Distance();
+    private Distance afterStorySpace = Distance.createZeroPoint();
     private String rules;
 
     @Property("Header")
