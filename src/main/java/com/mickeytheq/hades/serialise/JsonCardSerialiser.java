@@ -17,6 +17,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
 import com.mickeytheq.hades.util.shape.Unit;
@@ -26,7 +27,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Handles converting a generic JSON object tree from/to a Card entity
@@ -44,6 +47,27 @@ public class JsonCardSerialiser {
     private static final String HADES_SOFTWARE_VERSION = "HadesSoftwareVersion";
 
     private static final int CURRENT_CARD_VERSION = 1;
+
+    private static Map<Class<?>, ValueSerialiser<?>> valueSerialisers = new HashMap<>();
+
+    static {
+        valueSerialisers.put(String.class, new StringSerialiser());
+
+        valueSerialisers.put(Integer.class, new IntegerSerialiser());
+        valueSerialisers.put(Integer.TYPE, new IntegerSerialiser());
+
+        valueSerialisers.put(Double.class, new DoubleSerialiser());
+        valueSerialisers.put(Double.TYPE, new DoubleSerialiser());
+
+        valueSerialisers.put(Boolean.class, new BooleanSerialiser());
+        valueSerialisers.put(Boolean.TYPE, new BooleanSerialiser());
+
+        valueSerialisers.put(Distance.class, new DistanceSerialiser());
+        valueSerialisers.put(URL.class, new UrlSerialiser());
+        valueSerialisers.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
+        valueSerialisers.put(CollectionInfo.class, new CollectionInfoSerialiser());
+        valueSerialisers.put(ImageProxy.class, new ImageProxySerialiser());
+    }
 
     public static ObjectNode serialiseCard(Card card) {
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
@@ -150,9 +174,11 @@ public class JsonCardSerialiser {
 
     private static class Serialiser {
         private final ObjectMapper objectMapper;
+        private final ProjectContext projectContext;
 
         public Serialiser(ObjectMapper objectMapper) {
             this.objectMapper = objectMapper;
+            this.projectContext = ProjectContexts.getCurrentContext();
         }
 
         public void serialise(CardFaceModel cardFaceModel, ObjectNode faceNode) {
@@ -174,7 +200,7 @@ public class JsonCardSerialiser {
                     continue;
 
                 if (propertyMetadata.isValue()) {
-                    serialiseValue(value, propertyMetadata.getName(), currentNode);
+                    serialiseValue(value, propertyMetadata, currentNode);
                     continue;
                 }
 
@@ -191,69 +217,25 @@ public class JsonCardSerialiser {
             }
         }
 
-        private void serialiseValue(Object value, String fieldName, ObjectNode currentNode) {
-            // TODO: replace all this hardcoding with plug-in serialisers for each class/type
-            if (value instanceof String) {
-                currentNode.put(fieldName, (String)value);
+        private void serialiseValue(Object value, PropertyMetadata propertyMetadata, ObjectNode currentNode) {
+            String propertyName = propertyMetadata.getName();
+
+            // handle enums specially
+            if (propertyMetadata.getPropertyClass().isEnum()) {
+                currentNode.put(propertyName, ((Enum<?>)value).name());
                 return;
             }
 
-            if (value.getClass().isEnum()) {
-                currentNode.put(fieldName, ((Enum<?>)value).name());
-                return;
+            ValueSerialiser valueSerialiser = valueSerialisers.get(value.getClass());
+
+            if (valueSerialiser == null)
+                throw new RuntimeException("Value '" + value + "' of class '" + propertyMetadata.getPropertyClass().getName() + "' from property '" + propertyName + "' is not supported by any value serialiser");
+
+            try {
+                valueSerialiser.serialiseValue(propertyName, currentNode, value, projectContext);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to serialise value '" + value + "' of class '" + propertyMetadata.getPropertyClass().getName() + "' from property '" + propertyName + "'");
             }
-
-            if (value instanceof Integer) {
-                currentNode.put(fieldName, (Integer)value);
-                return;
-            }
-
-            if (value instanceof Double) {
-                currentNode.put(fieldName, (Double)value);
-                return;
-            }
-
-            if (value instanceof Boolean) {
-                currentNode.put(fieldName, (Boolean)value);
-                return;
-            }
-
-            if (value instanceof URL) {
-                currentNode.put(fieldName, ((URL)value).toExternalForm());
-                return;
-            }
-
-            if (value instanceof ImageProxy) {
-                ImageProxy imageProxy = (ImageProxy)value;
-
-                String identifier = imageProxy.save();
-
-                if (identifier != null)
-                    currentNode.put(fieldName, identifier);
-
-                return;
-            }
-
-            if (value instanceof EncounterSetInfo) {
-                currentNode.put(fieldName, ((EncounterSetInfo)value).getTag());
-                return;
-            }
-
-            if (value instanceof CollectionInfo) {
-                currentNode.put(fieldName, ((CollectionInfo)value).getTag());
-                return;
-            }
-
-            if (value instanceof Distance) {
-                Distance distance = (Distance)value;
-
-                ObjectNode objectNode = currentNode.putObject(fieldName);
-                objectNode.put("Amount", distance.getAmount());
-                objectNode.put("Unit", distance.getUnit().name());
-                return;
-            }
-
-            throw new RuntimeException("Value type '" + value.toString() + "' of class '" + value.getClass().getName() + "' from property '" + fieldName + "' is not supported");
         }
     }
 
@@ -303,81 +285,25 @@ public class JsonCardSerialiser {
         }
 
         private void deserialiseValue(JsonNode jsonNode, PropertyMetadata propertyMetadata, Object entity) {
-            if (propertyMetadata.getPropertyClass().equals(String.class)) {
-                propertyMetadata.setPropertyValue(entity, jsonNode.asText());
-                return;
-            }
-
+            // handle enums specially
             if (propertyMetadata.getPropertyClass().isEnum()) {
                 propertyMetadata.setPropertyValue(entity, Enum.valueOf(propertyMetadata.getPropertyClass().asSubclass(Enum.class), jsonNode.asText()));
                 return;
             }
 
-            if (propertyMetadata.getPropertyClass().equals(Integer.class) || propertyMetadata.getPropertyClass().equals(Integer.TYPE)) {
-                propertyMetadata.setPropertyValue(entity, jsonNode.asInt());
-                return;
+            ValueSerialiser<?> valueSerialiser = valueSerialisers.get(propertyMetadata.getPropertyClass());
+
+            if (valueSerialiser == null)
+                throw new RuntimeException("No value serialiser found for raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");
+
+            Object value;
+            try {
+                value = valueSerialiser.deserialiseValue(jsonNode, projectContext);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to deserialise raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'", e);
             }
 
-            if (propertyMetadata.getPropertyClass().equals(Boolean.class) || propertyMetadata.getPropertyClass().equals(Boolean.TYPE)) {
-                propertyMetadata.setPropertyValue(entity, jsonNode.asBoolean());
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(Double.class) || propertyMetadata.getPropertyClass().equals(Double.TYPE)) {
-                propertyMetadata.setPropertyValue(entity, jsonNode.asDouble());
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(URL.class)) {
-                String text = jsonNode.asText();
-                try {
-                    propertyMetadata.setPropertyValue(entity, new URL(text));
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException("Error parsing URL from string '" + text + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'",e);
-                }
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(ImageProxy.class)) {
-                String imageIdentifier = jsonNode.asText();
-                ImageProxy imageProxy = ImageProxy.createFor(imageIdentifier);
-                propertyMetadata.setPropertyValue(entity, imageProxy);
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(EncounterSetInfo.class)) {
-                String encounterSetKey = jsonNode.asText();
-
-                projectContext.getProjectConfiguration().getEncounterSetConfiguration().findEncounterSetInfo(encounterSetKey).ifPresent(encounterSetInfo -> {
-                    propertyMetadata.setPropertyValue(entity, encounterSetInfo);
-                });
-
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(CollectionInfo.class)) {
-                String collectionKey = jsonNode.asText();
-
-                projectContext.getProjectConfiguration().getCollectionConfiguration().findCollectionInfo(collectionKey).ifPresent(collectionInfo -> {
-                    propertyMetadata.setPropertyValue(entity, collectionInfo);
-                });
-
-                return;
-            }
-
-            if (propertyMetadata.getPropertyClass().equals(Distance.class)) {
-                JsonNode amountNode = jsonNode.get("Amount");
-                JsonNode unitNode = jsonNode.get("Unit");
-
-                double amount = amountNode.asDouble();
-                Unit unit = Unit.valueOf(unitNode.asText());
-
-                propertyMetadata.setPropertyValue(entity, new Distance(amount, unit));
-
-                return;
-            }
-
-            throw new RuntimeException("Failed to deserialise raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");
+            propertyMetadata.setPropertyValue(entity, value);
         }
     }
 }
