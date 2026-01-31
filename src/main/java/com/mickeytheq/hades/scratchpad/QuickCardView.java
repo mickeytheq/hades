@@ -33,6 +33,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +50,38 @@ public class QuickCardView {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
+//        createdOnTheFly();
+
+        loadCardFromFile(Paths.get("D:\\Temp\\Buffy Investigator Cards SE-Hades\\Buffy Investigators Set One\\7 Multi\\Dawn Summers.hades"));
+    }
+
+    private void loadCardFromFile(Path pathToCard) {
+        projectContext = StandardProjectContext.getContextForContentPath(pathToCard);
+        Card card = CardIO.readCard(pathToCard, projectContext);
+        displayEditor(card);
+    }
+
+    private void createdOnTheFly() {
+        projectContext = createFakeProjectContext();
+
+        ProjectContexts.withContext(projectContext, () -> {
+//            shadow();
+//        asset();
+            investigator();
+//        event();
+//        skill();
+//        treacheryTreachery();
+//            location();
+//            random();
+//            agenda();
+//            act();
+//            enemy();
+//            scenarioReference();
+//            story();
+        });
+    }
+
+    private ProjectContext createFakeProjectContext() {
         ProjectContext temporaryProjectContext = new StandardProjectContext(null, new NothingImagePersister());
 
         ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(temporaryProjectContext, () -> {
@@ -68,23 +102,7 @@ public class QuickCardView {
             return config;
         });
 
-        projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
-
-        ProjectContexts.withContext(projectContext, () -> {
-//            shadow();
-//        asset();
-            investigator();
-//        event();
-//        skill();
-//        treacheryTreachery();
-//            location();
-//            random();
-//            agenda();
-//            act();
-//            enemy();
-//            scenarioReference();
-//            story();
-        });
+        return new StandardProjectContext(projectConfiguration, new NothingImagePersister());
     }
 
     private void shadow() {

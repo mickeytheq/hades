@@ -1,0 +1,221 @@
+package com.mickeytheq.hades.strangeeons.tasks;
+
+import ca.cgjennings.apps.arkham.StrangeEons;
+import ca.cgjennings.apps.arkham.component.GameComponent;
+import ca.cgjennings.apps.arkham.project.Member;
+import ca.cgjennings.apps.arkham.sheet.RenderTarget;
+import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.strangeeons.util.MemberUtils;
+import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.FileChooser;
+import com.mickeytheq.hades.ui.LoggingLevel;
+import com.mickeytheq.hades.ui.ProgressDialog;
+import org.apache.commons.lang3.Strings;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import resources.ResourceKit;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
+    private static final Logger logger = LogManager.getLogger(GenerateComparisonImagesTaskAction.class);
+
+    @Override
+    public String getLabel() {
+        return "Generate AHLCG and Hades comparison images";
+    }
+
+    @Override
+    public boolean appliesToSelection(Member[] members) {
+        return true;
+    }
+
+    @Override
+    public boolean performOnSelection(Member[] members) {
+        CompareOptions compareOptions = new CompareOptions();
+        if (!compareOptions.showDialog())
+            return true;
+
+        new ProgressDialog(LoggingLevel.Normal).runWithinProgressDialog(() -> {
+                buildComparison(compareOptions.getAhlcgDirectoryChooser().getSelectedPath(),
+                        compareOptions.getHadesDirectoryChooser().getSelectedPath(),
+                        compareOptions.getOutputDirectoryChooser().getSelectedPath());
+                return null;
+        });
+
+        return true;
+    }
+
+    private void buildComparison(Path ahlcgProjectRoot, Path hadesProjectRoot, Path outputDirectory) {
+        List<Path> eonsFiles = getEonsFiles(ahlcgProjectRoot);
+
+        try {
+            Files.createDirectories(outputDirectory);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create output directory", e);
+        }
+
+        ProjectContext projectContext = StandardProjectContext.getContextForContentPath(hadesProjectRoot);
+
+        int dpi = 300;
+        RenderTarget renderTarget = RenderTarget.PREVIEW;
+
+        for (Path eonsFile : eonsFiles) {
+            Path relativePath = ahlcgProjectRoot.relativize(eonsFile);
+            Path hadesPath = Paths.get(Strings.CS.replace(hadesProjectRoot.resolve(relativePath).toString(), ".eon", ".hades"));
+
+            // AHLCG
+            GameComponent gameComponent = ResourceKit.getGameComponentFromFile(eonsFile.toFile());
+            Sheet[] sheets = gameComponent.createDefaultSheets();
+            BufferedImage ahlcgFrontImage = sheets[0].paint(renderTarget, dpi);
+            BufferedImage ahlcgBackImage = sheets[1] != null ? sheets[1].paint(renderTarget, dpi) : null;
+
+            // hades
+            Card card = CardIO.readCard(hadesPath, projectContext);
+            CardView cardView = CardFaces.createCardView(card, projectContext);
+
+            BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi);
+
+            BufferedImage hadesBackImage = null;
+            if (cardView.hasBack())
+                hadesBackImage = CardFaceViewUtils.paintCardFace(cardView.getBackFaceView(), renderTarget, dpi);
+
+            writeImage(composeImage(ahlcgFrontImage, hadesFrontImage), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-front.png"));
+            writeImage(composeImage(ahlcgBackImage, hadesBackImage), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-back.png"));
+        }
+    }
+
+    private void writeImage(BufferedImage bufferedImage, Path outputPath) {
+        if (bufferedImage == null)
+            return;
+
+        try {
+            ImageIO.write(bufferedImage, "png", outputPath.toFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        logger.info("Created composed image at " + outputPath);
+    }
+
+    private String cleanPath(String path) {
+        path = Strings.CS.replace(path,"\\", "-");
+        path = Strings.CS.replace(path,"/", "-");
+        return path;
+    }
+
+    private BufferedImage composeImage(BufferedImage ahlcg, BufferedImage hades) {
+        if (ahlcg == null && hades == null)
+            return null;
+
+        ahlcg = substituteIfMissing(ahlcg);
+        hades = substituteIfMissing(hades);
+
+        int spacingBetween = 100;
+        BufferedImage composed = new BufferedImage(ahlcg.getWidth() + hades.getWidth() + spacingBetween, Math.max(ahlcg.getHeight(), hades.getHeight()), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = composed.createGraphics();
+        try {
+            g.setPaint(Color.BLACK);
+            g.fillRect(0, 0, composed.getWidth(), composed.getHeight());
+            g.drawImage(ahlcg, 0, 0, null);
+            g.drawImage(hades, ahlcg.getWidth() + spacingBetween, 0, null);
+        } finally {
+            g.dispose();
+        }
+
+        return composed;
+    }
+
+    private BufferedImage substituteIfMissing(BufferedImage bufferedImage) {
+        if (bufferedImage != null)
+            return bufferedImage;
+
+        BufferedImage missing = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = missing.createGraphics();
+        try {
+            g.setPaint(Color.RED);
+            g.fillRect(0, 0, missing.getWidth(), missing.getHeight());
+        } finally {
+            g.dispose();
+        }
+
+        return missing;
+    }
+
+    private List<Path> getEonsFiles(Path ahlcgProjectRoot) {
+        try (Stream<Path> stream = Files.walk(ahlcgProjectRoot)) {
+            return stream.filter(MemberUtils::isPathEonFile).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static class CompareOptions {
+        private FileChooser ahlcgDirectoryChooser;
+        private FileChooser hadesDirectoryChooser;
+        private FileChooser outputDirectoryChooser;
+
+        public boolean showDialog() {
+            ahlcgDirectoryChooser = new FileChooser();
+            ahlcgDirectoryChooser.setSelectedFile(StrangeEons.getOpenProject().getFile());
+            ahlcgDirectoryChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            ahlcgDirectoryChooser.getTextField().setEnabled(false);
+
+            hadesDirectoryChooser = new FileChooser();
+            hadesDirectoryChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            hadesDirectoryChooser.getTextField().setEnabled(false);
+
+            outputDirectoryChooser = new FileChooser();
+            outputDirectoryChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            outputDirectoryChooser.getTextField().setEnabled(false);
+
+            ahlcgDirectoryChooser.addActionListener(e -> {
+                hadesDirectoryChooser.setSelectedFile(new File(ahlcgDirectoryChooser.getSelectedFile() + "-hades"));
+                outputDirectoryChooser.setSelectedFile(new File(ahlcgDirectoryChooser.getSelectedFile() + "-compare-ahlcg-hades"));
+            });
+
+            JPanel panel = MigLayoutUtils.createTitledPanel("Options");
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "AHLCG directory: ", ahlcgDirectoryChooser);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Hades directory: ", hadesDirectoryChooser);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Output directory: ", outputDirectoryChooser);
+
+            DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
+            dialogWithButtons.setContentComponent(panel);
+            dialogWithButtons.setTitle("Migration options");
+            dialogWithButtons.addOkCancelButtons(() -> Boolean.TRUE);
+
+            return dialogWithButtons.showDialog() == DialogWithButtons.OK_OPTION;
+        }
+
+        public FileChooser getAhlcgDirectoryChooser() {
+            return ahlcgDirectoryChooser;
+        }
+
+        public FileChooser getHadesDirectoryChooser() {
+            return hadesDirectoryChooser;
+        }
+
+        public FileChooser getOutputDirectoryChooser() {
+            return outputDirectoryChooser;
+        }
+    }
+}

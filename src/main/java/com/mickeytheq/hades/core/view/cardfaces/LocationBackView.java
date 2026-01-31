@@ -128,7 +128,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
                     new Point2D.Double(1.0, 0.204),
                     new Point2D.Double(0.889, 0.0)
             ));
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 41.49, 4.74, 4.74);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = LocationView.ENCOUNTER_PORTRAIT_DRAW_REGION;
 
     @Override
     public void paint(PaintContext paintContext) {

@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.serialise.BooleanFalseDiscriminator;
 
 public class CommonCardFieldsModel {
     private String title;
@@ -27,7 +28,7 @@ public class CommonCardFieldsModel {
         this.title = title;
     }
 
-    @Property("Unique")
+    @Property(value = "Unique", discriminator = BooleanFalseDiscriminator.class)
     public Boolean getUnique() {
         return unique;
     }
@@ -37,7 +38,7 @@ public class CommonCardFieldsModel {
     }
 
     // return true only if the unique is set to true, false if the value is false or null
-    public boolean isUnique() {
+    public boolean isUniqueSafe() {
         return Boolean.TRUE.equals(unique);
     }
 

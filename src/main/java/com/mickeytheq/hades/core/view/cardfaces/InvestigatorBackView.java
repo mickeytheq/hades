@@ -113,7 +113,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
         // titles
-        PaintUtils.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUnique());
+        PaintUtils.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUniqueSafe());
         PaintUtils.paintSubtitle(paintContext, paintContext.toPixelRect(SUBTITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getSubtitle());
 
         // sections

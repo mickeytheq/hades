@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +60,10 @@ public class FileChooser extends JPanel {
 
     public File getSelectedFile() {
         return fileChooser.getSelectedFile();
+    }
+
+    public Path getSelectedPath() {
+        return getSelectedFile().toPath();
     }
 
     public void setSelectedFile(File file) {

@@ -1,31 +1,9 @@
 package com.mickeytheq.hades.strangeeons.tasks;
 
-import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.project.StandardProjectContext;
-import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.strangeeons.ahlcg.migration.Migrator;
-import com.mickeytheq.hades.strangeeons.util.MemberUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
-import com.mickeytheq.hades.ui.FileChooser;
-import com.mickeytheq.hades.ui.LoggingLevel;
-import com.mickeytheq.hades.ui.ProgressDialog;
-import com.mickeytheq.hades.util.LoggerUtils;
-import org.apache.commons.io.FilenameUtils;
+import com.mickeytheq.hades.strangeeons.ahlcg.migration.ProjectMigrator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MigrateTaskAction extends BaseTaskAction {
     private static final Logger logger = LogManager.getLogger(MigrateTaskAction.class);
@@ -42,135 +20,7 @@ public class MigrateTaskAction extends BaseTaskAction {
 
     @Override
     public boolean performOnSelection(Member[] members) {
-        new Migration(members).run();
+        new ProjectMigrator(members).run();
         return true;
     }
-
-    static class Migration {
-        private final Member[] members;
-        private ProgressDialog progressDialog;
-        private MigrationOptions migrationOptions;
-
-        public Migration(Member[] members) {
-            this.members = members;
-        }
-
-        public void run() {
-            migrationOptions = new MigrationOptions();
-
-            Path projectPath = StrangeEons.getOpenProject().getFile().toPath();
-            Path migrateToPath = projectPath.getParent().resolve(projectPath.getFileName() + "-Hades");
-
-            if (!migrationOptions.showDialog(migrateToPath))
-                return;
-
-            progressDialog = new ProgressDialog(LoggingLevel.Debug);
-
-            // migrate anything selected or children of
-            List<Member> membersToMigrate = MemberUtils.getAllMemberDescendants(Lists.newArrayList(members)).stream()
-                    .filter(MemberUtils::isMemberEonFile)
-                    .collect(Collectors.toList());
-
-            progressDialog.runWithinProgressDialog(() -> {
-                doMigration(membersToMigrate);
-                return null;
-            });
-        }
-
-        private void doMigration(List<Member> members) {
-            Path projectRoot = StrangeEons.getOpenProject().getFile().toPath();
-            Path migrationRootDirectory = migrationOptions.getFileChooser().getSelectedFile().toPath();
-
-            try {
-                Files.createDirectories(migrationRootDirectory);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create migration root directory " + migrationRootDirectory, e);
-            }
-
-            createSeProject(migrationRootDirectory);
-
-            ProjectContext projectContext = StandardProjectContext.createContextForStrangeEonsRoot(migrationRootDirectory);
-
-            Migrator migrator = new Migrator(projectContext);
-
-            for (Member member : members) {
-                if (member.isFolder())
-                    continue;
-
-                Path sourceFile = member.getFile().toPath();
-                Path targetFile = migrationRootDirectory.resolve(projectRoot.relativize(sourceFile));
-                Path targetDirectory = targetFile.getParent();
-
-                // change the extension to hades
-                String filename = targetFile.getFileName().toString();
-                filename = FilenameUtils.removeExtension(filename);
-                filename = filename + "." + CardIO.HADES_FILE_EXTENSION;
-
-                targetFile = targetDirectory.resolve(filename);
-
-                try {
-                    Files.createDirectories(targetDirectory);
-                } catch (IOException e) {
-                    throw new RuntimeException("Error creating target directory '" + targetDirectory + "'", e);
-                }
-
-                try {
-                    migrator.migrate(sourceFile, targetFile);
-                } catch (Exception e) {
-                    logger.error(LoggerUtils.toLoggable("Migration of '" + sourceFile + "' to '" + targetFile + "' failed", e));
-                }
-            }
-        }
-
-        private void createSeProject(Path migrationRootDirectory) {
-            Path seProjectPath = migrationRootDirectory.resolve("seproject");
-
-            if (Files.exists(seProjectPath))
-                return;
-
-            // create a minimal se project file
-            try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(seProjectPath, Charsets.UTF_8))) {
-                writer.println("# Generated by hades");
-                writer.println("type = PROJECT");
-            } catch (IOException e) {
-                throw new RuntimeException("Error creating seproject file at path '" + migrationRootDirectory + "'", e);
-            }
-        }
-    }
-
-    static class MigrationOptions {
-        private FileChooser fileChooser;
-
-        public boolean showDialog(Path suggestedMigrationTargetPath) {
-            fileChooser = new FileChooser();
-            fileChooser.setSelectedFile(suggestedMigrationTargetPath.toFile());
-            fileChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fileChooser.getTextField().setEnabled(false);
-
-            JPanel panel = MigLayoutUtils.createTitledPanel("Options");
-            MigLayoutUtils.addLabel(panel, "Target directory: ");
-            panel.add(fileChooser);
-
-            DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
-            dialogWithButtons.setContentComponent(panel);
-            dialogWithButtons.setTitle("Migration options");
-            dialogWithButtons.addOkCancelButtons(() -> {
-                if (fileChooser.getSelectedFile().getAbsolutePath().equals(StrangeEons.getOpenProject().getFile().getAbsolutePath())) {
-                    JOptionPane.showMessageDialog(dialogWithButtons,
-                            "Migrating into the same directory as the open Strange Eons project would overwrite all source files. Please choose another directory",
-                            "Invalid export directory", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-
-                return true;
-            });
-
-            return dialogWithButtons.showDialog() == DialogWithButtons.OK_OPTION;
-        }
-
-        public FileChooser getFileChooser() {
-            return fileChooser;
-        }
-    }
-
 }

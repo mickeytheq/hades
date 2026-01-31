@@ -151,7 +151,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_SKILL).toUpperCase());
 
         // title - skill titles are left aligned
-        PaintUtils.paintTitleLeftAlign(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getModel().getCommonCardFieldsModel().getTitle(), getModel().getCommonCardFieldsModel().isUnique());
+        PaintUtils.paintTitleLeftAlign(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getModel().getCommonCardFieldsModel().getTitle(), getModel().getCommonCardFieldsModel().isUniqueSafe());
 
         Rectangle bodyDrawRegion = getBodyDrawRegion(paintContext);
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);

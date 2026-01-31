@@ -6,6 +6,7 @@ import ca.cgjennings.apps.arkham.component.Portrait;
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.graphics.filters.InversionFilter;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.view.EditorContext;
@@ -16,6 +17,7 @@ import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import resources.Language;
 
 import javax.swing.*;
@@ -143,10 +145,18 @@ public class PortraitView {
     }
 
     public void paintArtist(PaintContext paintContext, Rectangle drawRegion) {
+        if (StringUtils.isEmpty(portraitModel.getArtist()))
+            return;
+
+        String artistText = portraitModel.getArtist();
+
+        // add the standard illustration prefix if missing
+        artistText = Strings.CS.prependIfMissing(artistText, Language.gstring(GameConstants.ILLUSTRATORSHORT) + " ");
+
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getArtistTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
-        markupRenderer.setMarkupText(portraitModel.getArtist());
+        markupRenderer.setMarkupText(artistText);
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 

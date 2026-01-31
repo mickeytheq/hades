@@ -18,6 +18,8 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ASSET)
@@ -179,9 +181,9 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.22, 10.84, 6.43, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 2.37, 40.30, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 7.45, 40.30, 3.73);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 54.19, 56.90, 23.71);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 2.87, 40.30, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 7.35, 40.30, 3.73);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 54.19, 56.90, 22.71);
     private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 50.97, 34.37, 2.54);
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(55.71, 50.97, 34.37, 2.54);
 
@@ -280,20 +282,37 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private static final List<RectangleEx> SLOT_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(52.32, 76.88, 8.64, 8.81),
-            RectangleEx.millimetres(43.18, 76.88, 8.64, 8.81)
+            RectangleEx.millimetres(43.18, 76.88, 8.64, 8.81),
+            RectangleEx.millimetres(52.32, 76.88, 8.64, 8.81)
     );
 
     private void paintSlots(PaintContext paintContext) {
-        for (int i = 0; i < getModel().getAssetSlots().size(); i++) {
-            Asset.AssetSlot assetSlot = getModel().getAssetSlots().get(i);
+        List<Asset.AssetSlot> assetSlots = getModel().getAssetSlots();
 
-            PaintUtils.paintBufferedImage(
-                    paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
-                    paintContext.toPixelRect(SLOT_DRAW_REGIONS.get(i))
-            );
+        if (assetSlots.isEmpty())
+            return;
+
+        // when there's a single asset slot we want it displayed on the far right position
+        if (assetSlots.size() == 1) {
+            paintSlot(paintContext, SLOT_DRAW_REGIONS.get(1), assetSlots.get(0));
+            return;
         }
+
+        // when there's a two asset slot we want them displayed left to right with the first
+        // asset in the left-most position
+        if (assetSlots.size() == 2) {
+            paintSlot(paintContext, SLOT_DRAW_REGIONS.get(0), assetSlots.get(0));
+            paintSlot(paintContext, SLOT_DRAW_REGIONS.get(1), assetSlots.get(1));
+            return;
+        }
+    }
+
+    private void paintSlot(PaintContext paintContext, RectangleEx drawRegion, Asset.AssetSlot assetSlot) {
+        PaintUtils.paintBufferedImage(
+                paintContext.getGraphics(),
+                ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
+                paintContext.toPixelRect(drawRegion)
+        );
     }
 
     private String getSlotName(Asset.AssetSlot assetSlot) {

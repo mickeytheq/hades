@@ -44,7 +44,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 40.81, 63.50, 48.09);
 
     // locations to draw other elements
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(26.59, 51.90, 10.33, 2.37);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(26.29, 51.90, 10.33, 2.37);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(10.50, 0.85, 42.67, 4.57);
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
     private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);

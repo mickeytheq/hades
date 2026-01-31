@@ -6,7 +6,6 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
-import com.mickeytheq.hades.core.model.cardfaces.ScenarioReference;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
@@ -33,7 +32,7 @@ public class Migrator {
         this.projectContext = projectContext;
     }
 
-    public void migrate(Path sourceFile, Path targetFile) {
+    public void migrateFile(Path sourceFile, Path targetFile) {
         logger.debug("Migrating '" + sourceFile + "' to '" + targetFile + "'...");
 
         if (!sourceFile.getFileName().toString().endsWith(".eon")) {
@@ -76,7 +75,7 @@ public class Migrator {
         private Card migrateCard() {
             String frontTemplateKey = diy.getFrontTemplateKey();
 
-            CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), "", PIXEL_MULTIPLIER));
+            CardFaceModel frontFaceModel = migrateFace(CardFaceSide.Front, frontTemplateKey, new SettingsAccessorImpl(diy.getSettings(), ""));
 
             if (frontFaceModel == null)
                 return null;
@@ -88,7 +87,7 @@ public class Migrator {
                 backFaceModel = checkForGenericBack(diy.getSettings());
 
                 if (backFaceModel == null)
-                    backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back", PIXEL_MULTIPLIER));
+                    backFaceModel = migrateFace(CardFaceSide.Back, diy.getBackTemplateKey(), new SettingsAccessorImpl(diy.getSettings(), "Back"));
             }
 
             // TODO: log out any settings that are not accessed to detect properties that are not picked up
@@ -292,12 +291,10 @@ public class Migrator {
     static class SettingsAccessorImpl implements SettingsAccessor {
         private final Settings settings;
         private final String settingsKeySuffix;
-        private final double spacingMultiplier;
 
-        public SettingsAccessorImpl(Settings settings, String settingsKeySuffix, double spacingMultiplier) {
+        public SettingsAccessorImpl(Settings settings, String settingsKeySuffix) {
             this.settings = settings;
             this.settingsKeySuffix = settingsKeySuffix;
-            this.spacingMultiplier = spacingMultiplier;
         }
 
         @Override
@@ -363,7 +360,7 @@ public class Migrator {
                 return 0;
 
             try {
-                return (int) (Integer.parseInt(value) * spacingMultiplier);
+                return Integer.parseInt(value);
             } catch (NumberFormatException e) {
                 return 0;
             }

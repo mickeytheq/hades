@@ -122,7 +122,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(16.09, 6.60, 32.34, 3.56);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 41.49, 4.74, 4.74);
+    public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.40, 41.69, 4.74, 4.74);
 
     @Override
     public void paint(PaintContext paintContext) {

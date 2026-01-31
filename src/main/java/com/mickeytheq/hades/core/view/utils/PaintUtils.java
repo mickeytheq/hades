@@ -94,7 +94,8 @@ public class PaintUtils {
         return markupRenderer;
     }
 
-    private static final Font STAT_FONT = new Font("Bolton", Font.PLAIN, 12);
+    private static final Font STATISTIC_DEFAULT_FONT = new Font("Bolton", Font.PLAIN, 12);
+    private static final Font STATISTIC_DASH_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 36);
     private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 3).deriveFont(3.25f);
 
     public static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
@@ -197,13 +198,15 @@ public class PaintUtils {
         private final Rectangle drawRegion;
         private final Color outlineColour;
         private final Color textColour;
-        private Font statisticValueFont = STAT_FONT;
+        private Font statisticValueFont = STATISTIC_DEFAULT_FONT;
         private Font perInvestigatorFont = PER_INVESTIGATOR_FONT;
 
         private GlyphVector statisticValueGlyphVector;
         private Rectangle2D valueTextBounds;
         private GlyphVector perInvestigatorGlyphVector;
         private Rectangle2D perInvestigatorBounds;
+
+        private boolean performScaling = true;
 
         // only the height is used to control the sizing/scale of the rendered text so the width is only used in combination
         // with the X position to determine the horizontal centre for positioning
@@ -215,6 +218,12 @@ public class PaintUtils {
             this.drawRegion = drawRegion;
             this.outlineColour = outlineColour;
             this.textColour = textColour;
+
+            // for a certain specific strings we use different fonts
+            if (statistic.getValue().equals("-")) {
+                statisticValueFont = STATISTIC_DASH_FONT;
+                performScaling = false;
+            }
         }
 
         public void paint() {
@@ -238,7 +247,13 @@ public class PaintUtils {
             valueTextBounds = statisticValueGlyphVector.getLogicalBounds();
 
             // calculate a new font size based on the desired draw region - use the height as the defining size
-            double scaleAdjust = drawRegion.getHeight() / valueTextBounds.getHeight();
+            double scaleAdjust = 1;
+
+            // in certain cases we disable the scaling, for example when rendering a single hyphen/dash
+            // in general we want the automatic scaling to handle variable width text keeping the text the desired height
+            if (performScaling) {
+                scaleAdjust = drawRegion.getHeight() / valueTextBounds.getHeight();
+            }
 
             // recalculate glyph vector and text bounds with the new font size
             statisticValueFont = statisticValueFont.deriveFont(statisticValueFont.getSize() * (float)scaleAdjust);
