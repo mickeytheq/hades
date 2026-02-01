@@ -29,7 +29,7 @@ public class Act extends BaseCardFaceModel implements HasCommonCardFieldsModel {
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property("AgendaNumber")
+    @Property("ActNumber")
     public String getActNumber() {
         return actNumber;
     }

@@ -45,7 +45,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
@@ -81,7 +81,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General");
 
-        commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false, false);
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(generalPanel, Language.string(InterfaceConstants.WEAKNESS_TYPE), weaknessTypeEditor);
 

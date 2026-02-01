@@ -53,7 +53,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
@@ -105,7 +105,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true, false);
 
         // stats
         MigLayout migLayout = MigLayoutUtils.createTwoColumnLayout();

@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.serialise.BooleanFalseDiscriminator;
 import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
 
 public class LocationFieldsModel implements EmptyEntityDiscriminator {
@@ -40,7 +41,7 @@ public class LocationFieldsModel implements EmptyEntityDiscriminator {
         this.clues = clues;
     }
 
-    @Property("CopyOtherFace")
+    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }

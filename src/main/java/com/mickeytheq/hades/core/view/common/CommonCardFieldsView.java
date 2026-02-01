@@ -5,6 +5,8 @@ import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
 import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.core.model.common.Distance;
+import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
+import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -19,15 +21,19 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Optional;
 
 public class CommonCardFieldsView {
     private static final RectangleEx COPYRIGHT_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(23.20, 86.70, 17.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
 
     private final CommonCardFieldsModel model;
+    private final CardFaceView cardFaceView;
+
     private JTextField titleEditor;
     private JTextField subtitleEditor;
     private JToggleButton uniqueEditor;
+    private JCheckBox copyOtherFaceTitlesEditor;
 
     private JTextField copyrightEditor;
 
@@ -41,8 +47,9 @@ public class CommonCardFieldsView {
     private DistanceComponent afterFlavourTextSpaceEditor;
     private JTextArea victoryEditor;
 
-    public CommonCardFieldsView(CommonCardFieldsModel model) {
+    public CommonCardFieldsView(CommonCardFieldsModel model, CardFaceView cardFaceView) {
         this.model = model;
+        this.cardFaceView = cardFaceView;
     }
 
     public void createEditors(EditorContext editorContext) {
@@ -50,6 +57,16 @@ public class CommonCardFieldsView {
         titleEditor = EditorUtils.createTextField(30);
         subtitleEditor = EditorUtils.createTextField(30);
         uniqueEditor = new JToggleButton(ImageUtilities.createIconForSize(ImageUtils.loadImage(ImageUtils.UNIQUE_STAR_ICON_RESOURCE), 12));
+
+        copyOtherFaceTitlesEditor = EditorUtils.createCheckBox();
+        copyOtherFaceTitlesEditor.addChangeListener(e -> {
+            boolean useOtherFace = copyOtherFaceTitlesEditor.isSelected();
+
+            titleEditor.setEnabled(!useOtherFace);
+            subtitleEditor.setEnabled(!useOtherFace);
+            uniqueEditor.setEnabled(!useOtherFace);
+        });
+
         traitsEditor = EditorUtils.createTextField(30);
         afterTraitsSpaceEditor = new DistanceComponent();
         keywordsEditor = EditorUtils.createTextArea(6, 30);
@@ -64,6 +81,7 @@ public class CommonCardFieldsView {
         EditorUtils.bindTextComponent(titleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTitle));
         EditorUtils.bindTextComponent(subtitleEditor, editorContext.wrapConsumerWithMarkedChanged(model::setSubtitle));
         EditorUtils.bindToggleButton(uniqueEditor, editorContext.wrapConsumerWithMarkedChanged(model::setUnique));
+        EditorUtils.bindToggleButton(copyOtherFaceTitlesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyOtherFaceTitles));
         EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
         EditorUtils.bindDistanceComponent(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpacing));
         EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
@@ -77,7 +95,8 @@ public class CommonCardFieldsView {
 
         titleEditor.setText(model.getTitle());
         subtitleEditor.setText(model.getSubtitle());
-        uniqueEditor.setSelected(model.getUnique() != null && model.getUnique());
+        uniqueEditor.setSelected(model.isUnique());
+        copyOtherFaceTitlesEditor.setSelected(model.getCopyOtherFaceTitles());
         traitsEditor.setText(model.getTraits());
         afterTraitsSpaceEditor.setDistance(model.getAfterTraitsSpacing());
         keywordsEditor.setText(model.getKeywords());
@@ -90,7 +109,11 @@ public class CommonCardFieldsView {
         copyrightEditor.setText(model.getCopyright());
     }
 
-    public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption) {
+    public void addTitleEditorsToPanel(JPanel panel, boolean uniqueOption, boolean subtitleOption, boolean copyOtherFaceOption) {
+        if (copyOtherFaceOption) {
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, Language.string(InterfaceConstants.COPY_OTHER_FACE), copyOtherFaceTitlesEditor);
+        }
+
         MigLayoutUtils.addLabel(panel, Language.string(InterfaceConstants.TITLE));
 
         // have the unique button share the same layout cell as the title text editor
@@ -144,15 +167,24 @@ public class CommonCardFieldsView {
     }
 
     public void paintTitle(PaintContext paintContext, Rectangle titleDrawRegion) {
-        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUniqueSafe(),
+        PaintUtils.paintTitle(paintContext, titleDrawRegion, getTitleText(), getModel().isUnique(),
+                MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
+                false);
+    }
+
+    public void paintTitleMultiline(PaintContext paintContext, Rectangle titleDrawRegion) {
+        PaintUtils.paintTitle(paintContext, titleDrawRegion, getTitleText(), getModel().isUnique(),
                 MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
                 true);
     }
 
-    public void paintTitleMultiline(PaintContext paintContext, Rectangle titleDrawRegion) {
-        PaintUtils.paintTitle(paintContext, titleDrawRegion, getModel().getTitle(), getModel().isUniqueSafe(),
-                MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER,
-                true);
+    public String getTitleText() {
+        CommonCardFieldsModel model = getModel();
+
+        if (!model.getCopyOtherFaceTitles())
+            return model.getTitle();
+
+        return cardFaceView.getOtherFaceView().flatMap(o -> HasCommonCardFieldsModel.getTitle(o.getModel())).orElse(null);
     }
 
     public void paintTitleMultilineRotated(PaintContext paintContext, Rectangle drawRegion) {
@@ -183,7 +215,24 @@ public class CommonCardFieldsView {
     }
 
     public void paintSubtitle(PaintContext paintContext, Rectangle subtitleDrawRegion) {
-        PaintUtils.paintSubtitle(paintContext, subtitleDrawRegion, getModel().getSubtitle());
+        PaintUtils.paintSubtitle(paintContext, subtitleDrawRegion, getSubtitleText());
+    }
+
+    public String getSubtitleText() {
+        CommonCardFieldsModel model = getModel();
+
+        if (!model.getCopyOtherFaceTitles())
+            return model.getSubtitle();
+
+        Optional<CardFaceView> otherCardFaceView = cardFaceView.getOtherFaceView();
+
+        if (!otherCardFaceView.isPresent())
+            return null;
+
+        Optional<CommonCardFieldsModel> commonCardFieldsModel = HasCommonCardFieldsModel.getInstance(otherCardFaceView.get().getModel());
+
+        return commonCardFieldsModel.map(CommonCardFieldsModel::getSubtitle).orElse(null);
+
     }
 
     public void paintBodyAndCopyright(PaintContext paintContext, Rectangle bodyDrawRegion) {

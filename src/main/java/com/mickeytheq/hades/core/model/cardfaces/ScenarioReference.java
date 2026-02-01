@@ -87,10 +87,16 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        if (cardFaceSide == CardFaceSide.Front)
+        if (cardFaceSide == CardFaceSide.Front) {
             difficulty = Difficulty.EasyStandard;
-        else
+            getCommonCardFieldsModel().setCopyOtherFaceTitles(false);
+        }
+        else {
             difficulty = Difficulty.HardExpert;
+
+            // by default copy the titles of the front face of the card
+            getCommonCardFieldsModel().setCopyOtherFaceTitles(true);
+        }
     }
 
     @Property("Difficulty")

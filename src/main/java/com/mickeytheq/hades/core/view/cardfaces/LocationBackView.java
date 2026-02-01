@@ -32,7 +32,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
@@ -106,7 +106,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private void layoutTitleAndConnectionsEditors(EditorContext editorContext) {
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, true);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, true, true);
 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");

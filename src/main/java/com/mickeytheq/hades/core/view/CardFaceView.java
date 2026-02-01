@@ -37,6 +37,11 @@ public interface CardFaceView {
     CardFaceSide getCardFaceSide();
 
     /**
+     * Returns the model for this view
+     */
+    CardFaceModel getModel();
+
+    /**
      * Gets the title of the card face. May return null if the title is not set or the card face doesn't support a title
      */
     String getTitle();

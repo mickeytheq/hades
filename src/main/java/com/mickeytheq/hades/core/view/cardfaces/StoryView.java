@@ -31,7 +31,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         section1View = new StorySectionView(getModel().getSection1());
         section2View = new StorySectionView(getModel().getSection2());
         section3View = new StorySectionView(getModel().getSection3());
@@ -69,7 +69,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         collectionView.createEditors(editorContext);
 
         JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
-        commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false, false);
         commonCardFieldsView.addCopyrightEditorToPanel(generalPanel);
 
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), generalPanel);

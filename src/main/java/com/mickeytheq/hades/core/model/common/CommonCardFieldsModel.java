@@ -6,7 +6,8 @@ import com.mickeytheq.hades.serialise.BooleanFalseDiscriminator;
 public class CommonCardFieldsModel {
     private String title;
     private String subtitle;
-    private Boolean unique;
+    private boolean copyOtherFaceTitles = false;
+    private boolean unique = false;
     private String traits;
     private Distance afterTraitsSpacing = Distance.createZeroPoint();
     private String keywords;
@@ -28,20 +29,6 @@ public class CommonCardFieldsModel {
         this.title = title;
     }
 
-    @Property(value = "Unique", discriminator = BooleanFalseDiscriminator.class)
-    public Boolean getUnique() {
-        return unique;
-    }
-
-    public void setUnique(Boolean unique) {
-        this.unique = unique;
-    }
-
-    // return true only if the unique is set to true, false if the value is false or null
-    public boolean isUniqueSafe() {
-        return Boolean.TRUE.equals(unique);
-    }
-
     @Property("Subtitle")
     public String getSubtitle() {
         return subtitle;
@@ -49,6 +36,24 @@ public class CommonCardFieldsModel {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE + "Titles", discriminator = BooleanFalseDiscriminator.class)
+    public boolean getCopyOtherFaceTitles() {
+        return copyOtherFaceTitles;
+    }
+
+    public void setCopyOtherFaceTitles(boolean copyOtherFaceTitles) {
+        this.copyOtherFaceTitles = copyOtherFaceTitles;
+    }
+
+    @Property(value = "Unique", discriminator = BooleanFalseDiscriminator.class)
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public void setUnique(boolean unique) {
+        this.unique = unique;
     }
 
     @Property("Traits")

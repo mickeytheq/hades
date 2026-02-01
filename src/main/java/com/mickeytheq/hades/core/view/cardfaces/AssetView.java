@@ -40,7 +40,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
@@ -116,7 +116,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, true, true, false);
 
         playerCardFieldsView.createEditors(editorContext);
 

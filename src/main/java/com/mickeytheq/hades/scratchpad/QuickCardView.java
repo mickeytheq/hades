@@ -52,7 +52,7 @@ public class QuickCardView {
 
 //        createdOnTheFly();
 
-        loadCardFromFile(Paths.get("D:\\Temp\\Buffy Investigator Cards SE-Hades\\Buffy Investigators Set One\\7 Multi\\Dawn Summers.hades"));
+        loadCardFromFile(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\01 - One Night Only\\Scenario Cards\\Token Effects.hades"));
     }
 
     private void loadCardFromFile(Path pathToCard) {

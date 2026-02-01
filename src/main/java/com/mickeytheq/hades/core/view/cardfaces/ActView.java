@@ -35,7 +35,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         actCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
@@ -89,7 +89,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
     private void layoutMainTab(EditorContext editorContext) {
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, false);
 
         JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ACT));
         MigLayoutUtils.addLabelledComponent(statsPanel, Language.string(InterfaceConstants.ACTNUMBER), actNumberEditor, "pushx, growx");

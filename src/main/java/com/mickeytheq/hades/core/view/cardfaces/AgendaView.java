@@ -35,7 +35,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         agendaCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
@@ -89,7 +89,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     private void layoutMainTab(EditorContext editorContext) {
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, false);
 
         JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.AGENDA));
         MigLayoutUtils.addLabelledComponent(statsPanel, Language.string(InterfaceConstants.AGENDANUMBER), agendaNumberEditor, "pushx, growx");

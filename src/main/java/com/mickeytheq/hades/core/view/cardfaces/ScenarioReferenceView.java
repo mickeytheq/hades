@@ -34,7 +34,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         skullView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Skull, getModel().getSkull());
@@ -69,7 +69,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, getCardFaceSide() == CardFaceSide.Back);
 
         // difficulty
         difficultyEditor = EditorUtils.createEnumComboBox(ScenarioReference.Difficulty.class);
@@ -130,7 +130,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         titleMarkupRenderer.setLineTightness(0.5f);
         MarkupUtils.applyTagMarkupConfiguration(titleMarkupRenderer);
 
-        titleMarkupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getTitle());
+        titleMarkupRenderer.setMarkupText(commonCardFieldsView.getTitleText());
 
         // the MarkupRenderer.draw() is supposed to return the 'next' y position
         // however when the input text has no whitespace and FIT_SCALE_TEXT is used it follows a different code path

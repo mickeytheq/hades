@@ -32,7 +32,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         section1View = new StorySectionView(getModel().getSection1());
         section2View = new StorySectionView(getModel().getSection2());
         section3View = new StorySectionView(getModel().getSection3());
@@ -88,7 +88,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     private void layoutMainTab(EditorContext editorContext) {
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, false);
 
         JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.AGENDA));
         MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SHADOW_FRONT), shadowFrontEditor);

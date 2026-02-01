@@ -38,7 +38,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
     @Override
     public void initialiseView() {
-        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel());
+        commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), false);
@@ -93,7 +93,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private void createTitleAndStatisticsEditors(EditorContext editorContext) {
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
-        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false);
+        commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, false);
 
         playerCardFieldsView.createEditors(editorContext);
 
@@ -151,7 +151,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_SKILL).toUpperCase());
 
         // title - skill titles are left aligned
-        PaintUtils.paintTitleLeftAlign(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getModel().getCommonCardFieldsModel().getTitle(), getModel().getCommonCardFieldsModel().isUniqueSafe());
+        PaintUtils.paintTitleLeftAlign(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getModel().getCommonCardFieldsModel().getTitle(), false);
 
         Rectangle bodyDrawRegion = getBodyDrawRegion(paintContext);
         commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);

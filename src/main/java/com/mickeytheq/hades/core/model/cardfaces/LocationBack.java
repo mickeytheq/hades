@@ -19,6 +19,8 @@ public class LocationBack extends BaseCardFaceModel implements HasCommonCardFiel
         commonCardFieldsModel = new CommonCardFieldsModel();
         portraitModel = new PortraitModel();
         locationFieldsModel = new LocationFieldsModel();
+
+        commonCardFieldsModel.setCopyOtherFaceTitles(true);
     }
 
     @Override
