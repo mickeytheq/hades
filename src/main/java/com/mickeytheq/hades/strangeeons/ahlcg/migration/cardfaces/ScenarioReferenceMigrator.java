@@ -21,7 +21,7 @@ public class ScenarioReferenceMigrator {
 
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
-        scenarioReference.setTrackingBox(settingsAccessor.getString("TrackerBox"));
+        scenarioReference.setTrackingBox(settingsAccessor.getRawSettingsValue("TrackerBox"));
 
         populateChaosSymbolInfo(settingsAccessor, scenarioReference.getSkull(), SettingsFieldNames.CHAOS_TOKEN_SKULL);
         populateChaosSymbolInfo(settingsAccessor, scenarioReference.getCultist(), SettingsFieldNames.CHAOS_TOKEN_CULTIST);
@@ -34,7 +34,7 @@ public class ScenarioReferenceMigrator {
     private void populateChaosSymbolInfo(SettingsAccessor settingsAccessor, ScenarioReference.SymbolChaosTokenInfo chaosTokenInfo, String settingKey) {
         chaosTokenInfo.setRules(settingsAccessor.getString(settingKey));
 
-        String combineWith = settingsAccessor.getString(SettingsFieldNames.CHAOS_TOKEN_MERGE_PREFIX + SettingsFieldNames.CHAOS_TOKEN_SKULL);
+        String combineWith = settingsAccessor.getString(SettingsFieldNames.CHAOS_TOKEN_MERGE_PREFIX + settingKey);
 
         if (!StringUtils.isEmpty(combineWith)) {
             chaosTokenInfo.setCombineWith(ScenarioReference.SymbolChaosToken.valueOf(combineWith));
