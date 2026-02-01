@@ -1,5 +1,7 @@
 package com.mickeytheq.hades.core.model;
 
+import com.mickeytheq.hades.core.view.CardFaceSide;
+
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,6 +45,20 @@ public class Card {
 
     public void setBackFaceModel(CardFaceModel backFaceModel) {
         this.backFaceModel = backFaceModel;
+    }
+
+    public CardFaceModel getCardFaceModel(CardFaceSide cardFaceSide) {
+        if (cardFaceSide == CardFaceSide.Front)
+            return getFrontFaceModel();
+        else
+            return getBackFaceModel();
+    }
+
+    public void setCardFaceModel(CardFaceSide cardFaceSide, CardFaceModel cardFaceModel) {
+        if (cardFaceSide == CardFaceSide.Front)
+            setFrontFaceModel(cardFaceModel);
+        else
+            setBackFaceModel(cardFaceModel);
     }
 
     public String getComments() {

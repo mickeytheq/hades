@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
 
-@View(interfaceLanguageKey = InterfaceConstants.ENEMY)
+@View(interfaceLanguageKey = InterfaceConstants.SCENARIO_REFERENCE)
 public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> implements HasEncounterSetView, HasCollectionView {
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;

@@ -167,7 +167,7 @@ public class JsonCardSerialiser {
 
         String typeCode = typeField.asText();
 
-        CardFaceModel cardFaceModel = CardFaces.createFaceModelForTypeCode(typeCode);
+        CardFaceModel cardFaceModel = CardFaces.createFaceModelForTypeCode(typeCode, ProjectContexts.getCurrentContext());
 
         new Deserialiser(objectMapper).deserialise(faceNode, cardFaceModel);
 

@@ -22,7 +22,8 @@ public class ImageUtils {
                 .build(CacheLoader.from(ImageUtils::loadImageWithNoCaching));
     }
 
-    public static final Icon HADES_PURPLE_H_ICON = new ImageIcon(ImageUtils.loadImage("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH));
+    public static final Image HADES_PURPLE_H_IMAGE = ImageUtils.loadImage("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+    public static final Icon HADES_PURPLE_H_ICON = new ImageIcon(HADES_PURPLE_H_IMAGE);
     public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
     public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");
     public static final URL EMPTY_IMAGE = ImageUtils.class.getResource("/resources/spacers/empty1x1.png");

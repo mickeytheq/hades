@@ -10,6 +10,7 @@ public class HadesActionTree extends TaskActionTree {
 //        add(new CompareCardsTaskAction());
         add(new MigrateTaskAction());
         add(new GenerateComparisonImagesTaskAction());
+        add(new ChangeCardFaceTypeTaskAction());
         add(new ViewLog());
 //        add(new PerformanceSuite());
 //        add(new LoadGameComponentPerformanceTest());

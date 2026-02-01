@@ -69,6 +69,7 @@ public class FontInstallManager {
 
                 panel.add(new JLabel("Font name: "));
                 JTextField fontNameTextField = new JTextField(fontName, 20);
+                fontNameTextField.setEditable(false);
                 panel.add(fontNameTextField);
 
                 panel.add(new JLabel("Expected location: "));

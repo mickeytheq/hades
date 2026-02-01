@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfigurationProvi
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class StandardProjectContext implements ProjectContext {

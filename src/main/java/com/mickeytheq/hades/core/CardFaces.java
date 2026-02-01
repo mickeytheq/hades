@@ -56,10 +56,12 @@ public class CardFaces {
         return cardView;
     }
 
-    public static CardFaceModel createFaceModelForTypeCode(String typeCode) {
-        CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForTypeCode(typeCode);
+    public static CardFaceModel createFaceModelForTypeCode(String typeCode, ProjectContext projectContext) {
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForTypeCode(typeCode);
 
-        return createModelForClass(cardFaceInfo.getCardFaceModelClass());
+            return createModelForClass(cardFaceInfo.getCardFaceModelClass());
+        });
     }
 
     private static CardFaceModel createModelForClass(Class<? extends CardFaceModel> cardFaceClass) {

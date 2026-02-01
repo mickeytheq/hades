@@ -37,7 +37,7 @@ public class NewCardDialog extends DialogWithButtons {
 
         CardFaceTypeRegister cardFaceTypeRegister = CardFaceTypeRegister.get();
 
-        cardFaceTypeRegister.getAllCardInformation().stream().sorted(Comparator.comparing(info -> Language.string(info.getInterfaceLanguageKey()))).forEach(o -> {
+        cardFaceTypeRegister.getAllCardInformation().forEach(o -> {
             frontFaceOptionEditor.addItem(o);
             backFaceOptionEditor.addItem(o);
         });

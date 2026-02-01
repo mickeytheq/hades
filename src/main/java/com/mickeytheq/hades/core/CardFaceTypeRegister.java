@@ -9,6 +9,7 @@ import com.mickeytheq.hades.core.view.CardFaceView;
 import resources.Language;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // register of all model and view types with look-ups on key fields
 public class CardFaceTypeRegister {
@@ -67,7 +68,7 @@ public class CardFaceTypeRegister {
     }
 
     public List<CardFaceInfo> getAllCardInformation() {
-        return new ArrayList<>(modelClassLookup.values());
+        return modelClassLookup.values().stream().sorted(Comparator.comparing(info -> Language.string(info.getInterfaceLanguageKey()))).collect(Collectors.toList());
     }
 
     private CardFaceInfo buildInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {
