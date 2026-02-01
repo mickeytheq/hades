@@ -7,6 +7,8 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 public interface CardFaceMigrationContext {
     DIY getDIY();
 
+    String getTemplateKey();
+
     CardFaceSide getCardFaceSide();
 
     ProjectConfiguration getProjectConfiguration();
