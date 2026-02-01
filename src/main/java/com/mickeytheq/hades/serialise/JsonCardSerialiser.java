@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.common.Distance;
+import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
 import com.mickeytheq.hades.core.model.entity.EntityPropertyMetadata;
@@ -63,6 +64,7 @@ public class JsonCardSerialiser {
         valueSerialisers.put(Boolean.TYPE, new BooleanSerialiser());
 
         valueSerialisers.put(Distance.class, new DistanceSerialiser());
+        valueSerialisers.put(Statistic.class, new StatisticSerialiser());
         valueSerialisers.put(URL.class, new UrlSerialiser());
         valueSerialisers.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
         valueSerialisers.put(CollectionInfo.class, new CollectionInfoSerialiser());

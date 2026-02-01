@@ -300,11 +300,11 @@ public class MigrationUtils {
         String headerKey = SettingsFieldNames.STORY_SECTION_HEADER_PREFIX + settingsCode;
 
         model.setHeader(settingsAccessor.getString(headerKey));
-        model.setAfterHeaderSpace(new Distance(settingsAccessor.getSpacingValue(headerKey), Unit.Point));
+        model.setAfterHeaderSpacing(new Distance(settingsAccessor.getSpacingValue(headerKey), Unit.Point));
 
         String storyKey = SettingsFieldNames.STORY_SECTION_STORY_PREFIX + settingsCode;
         model.setStory(settingsAccessor.getString(storyKey));
-        model.setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(storyKey), Unit.Point));
+        model.setAfterStorySpacing(new Distance(settingsAccessor.getSpacingValue(storyKey), Unit.Point));
 
         String rulesKey = SettingsFieldNames.GAME_TEXT + settingsCode;
         model.setRules(settingsAccessor.getString(rulesKey));

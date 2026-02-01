@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.model.entity;
 
 import com.mickeytheq.hades.core.model.common.Distance;
+import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
@@ -211,6 +212,9 @@ public class AnnotatedEntityMetadataBuilder {
             return true;
 
         if (Distance.class.isAssignableFrom(propertyType))
+            return true;
+
+        if (Statistic.class.isAssignableFrom(propertyType))
             return true;
 
         return false;

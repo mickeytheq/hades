@@ -43,15 +43,15 @@ public class StorySectionView {
         rulesEditor = EditorUtils.createTextArea(6, 30);
 
         EditorUtils.bindTextComponent(headerEditor, editorContext.wrapConsumerWithMarkedChanged(model::setHeader));
-        EditorUtils.bindDistanceComponent(afterHeaderSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterHeaderSpace));
+        EditorUtils.bindDistanceComponent(afterHeaderSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterHeaderSpacing));
         EditorUtils.bindTextComponent(storyEditor, editorContext.wrapConsumerWithMarkedChanged(model::setStory));
-        EditorUtils.bindDistanceComponent(afterStorySpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterStorySpace));
+        EditorUtils.bindDistanceComponent(afterStorySpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterStorySpacing));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
 
         headerEditor.setText(model.getHeader());
-        afterHeaderSpaceEditor.setDistance(model.getAfterHeaderSpace());
+        afterHeaderSpaceEditor.setDistance(model.getAfterHeaderSpacing());
         storyEditor.setText(model.getStory());
-        afterStorySpaceEditor.setDistance(model.getAfterStorySpace());
+        afterStorySpaceEditor.setDistance(model.getAfterStorySpacing());
         rulesEditor.setText(model.getRules());
     }
 
@@ -89,7 +89,7 @@ public class StorySectionView {
             sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
-        addSpacing(sb, model.getAfterHeaderSpace());
+        addSpacing(sb, model.getAfterHeaderSpacing());
 
         if (!StringUtils.isEmpty(model.getStory())) {
             if (sb.length() > 0)
@@ -102,7 +102,7 @@ public class StorySectionView {
             sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
         }
 
-        addSpacing(sb, model.getAfterStorySpace());
+        addSpacing(sb, model.getAfterStorySpacing());
 
         if (!StringUtils.isEmpty(model.getRules())) {
             if (sb.length() > 0)

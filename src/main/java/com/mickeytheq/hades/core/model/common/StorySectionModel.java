@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class StorySectionModel implements EmptyEntityDiscriminator {
     private String header;
-    private Distance afterHeaderSpace = Distance.createZeroPoint();
+    private Distance afterHeaderSpacing = Distance.createZeroPoint();
     private String story;
-    private Distance afterStorySpace = Distance.createZeroPoint();
+    private Distance afterStorySpacing = Distance.createZeroPoint();
     private String rules;
 
     @Property("Header")
@@ -20,13 +20,13 @@ public class StorySectionModel implements EmptyEntityDiscriminator {
         this.header = header;
     }
 
-    @Property("AfterHeaderSpace")
-    public Distance getAfterHeaderSpace() {
-        return afterHeaderSpace;
+    @Property("AfterHeaderSpacing")
+    public Distance getAfterHeaderSpacing() {
+        return afterHeaderSpacing;
     }
 
-    public void setAfterHeaderSpace(Distance afterHeaderSpace) {
-        this.afterHeaderSpace = afterHeaderSpace;
+    public void setAfterHeaderSpacing(Distance afterHeaderSpacing) {
+        this.afterHeaderSpacing = afterHeaderSpacing;
     }
 
     @Property("Story")
@@ -38,13 +38,13 @@ public class StorySectionModel implements EmptyEntityDiscriminator {
         this.story = story;
     }
 
-    @Property("AfterStorySpace")
-    public Distance getAfterStorySpace() {
-        return afterStorySpace;
+    @Property("AfterStorySpacing")
+    public Distance getAfterStorySpacing() {
+        return afterStorySpacing;
     }
 
-    public void setAfterStorySpace(Distance afterStorySpace) {
-        this.afterStorySpace = afterStorySpace;
+    public void setAfterStorySpacing(Distance afterStorySpacing) {
+        this.afterStorySpacing = afterStorySpacing;
     }
 
     @Property("Rules")

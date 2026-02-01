@@ -24,7 +24,7 @@ public class ActMigrator {
         act.setClues(MigrationUtils.parseStatistic(settingsAccessor, "Clues", SettingsFieldNames.PER_INVESTIGATOR));
 
         act.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.ACT_STORY));
-        act.getStorySectionModel().setAfterStorySpace(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY), Unit.Point));
+        act.getStorySectionModel().setAfterStorySpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY), Unit.Point));
 
         // default logic will put 'rules' in the standard field, move it out
         act.getStorySectionModel().setRules(act.getCommonCardFieldsModel().getRules());

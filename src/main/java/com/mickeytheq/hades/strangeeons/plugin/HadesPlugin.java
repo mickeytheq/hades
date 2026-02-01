@@ -273,8 +273,12 @@ public class HadesPlugin extends AbstractPlugin {
 
                 cardDatabase.register(cardDatabaseLoader -> {
                     for (Path path : paths) {
-                        Card card = CardIO.readCard(path, projectContext);
-                        cardDatabaseLoader.registerCard(card, path);
+                        try {
+                            Card card = CardIO.readCard(path, projectContext);
+                            cardDatabaseLoader.registerCard(card, path);
+                        } catch (RuntimeException e) {
+                            logger.error("Error loading card from path '" + path + "' while building card database", e);
+                        }
                     }
                 }, project);
             } catch (IOException e) {

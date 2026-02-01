@@ -8,17 +8,20 @@ import com.mickeytheq.hades.serialise.ValueSerialiser;
 import com.mickeytheq.hades.util.shape.Unit;
 
 public class DistanceSerialiser implements ValueSerialiser<Distance> {
+    private static final String AMOUNT_FIELD = "Amount";
+    private static final String UNIT_FIELD = "Unit";
+
     @Override
     public void serialiseValue(String fieldName, ObjectNode currentNode, Distance value, ProjectContext projectContext) {
         ObjectNode objectNode = currentNode.putObject(fieldName);
-        objectNode.put("Amount", value.getAmount());
-        objectNode.put("Unit", value.getUnit().name());
+        objectNode.put(AMOUNT_FIELD, value.getAmount());
+        objectNode.put(UNIT_FIELD, value.getUnit().name());
     }
 
     @Override
     public Distance deserialiseValue(JsonNode jsonNode, ProjectContext projectContext) {
-        JsonNode amountNode = jsonNode.get("Amount");
-        JsonNode unitNode = jsonNode.get("Unit");
+        JsonNode amountNode = jsonNode.get(AMOUNT_FIELD);
+        JsonNode unitNode = jsonNode.get(UNIT_FIELD);
 
         double amount = amountNode.asDouble();
         Unit unit = Unit.valueOf(unitNode.asText());
