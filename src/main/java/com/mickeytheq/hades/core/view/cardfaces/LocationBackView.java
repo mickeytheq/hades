@@ -133,6 +133,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     }
 
     private void paintCollectionImage(PaintContext paintContext) {
+        // location backs don't have their own collection configuration and only the collection image is painted
         // paint the collection image on the other face
         getOtherFaceView()
                 .filter(o -> o instanceof HasCollectionView)
