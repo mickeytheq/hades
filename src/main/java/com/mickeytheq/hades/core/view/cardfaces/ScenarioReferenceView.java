@@ -14,6 +14,7 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
@@ -104,10 +105,10 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(4.74, 15.66, 54.02, 8.47);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.74, 15.66, 50.02, 8.47);
     private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimetres(21.84, 21.51, 19.30, 2.37);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(16.51, 26.42, 40.64, 51.65);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.21, 10.50, 5.42, 5.42);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.51, 10.50, 5.0, 5.0);
     private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimetres(5.42, 62.82, 51.82, 15.58);
     private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimetres(7.45, 63.50, 47.41, 3.39);
 
@@ -118,7 +119,9 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // title needs special handling as it is allowed to spill onto a second line
         // set the alignment to the top so a short title will stay on one line
         MarkupRenderer titleMarkupRenderer = paintContext.createMarkupRenderer();
-        titleMarkupRenderer.setDefaultStyle(TextStyleUtils.getTitleTextStyle());
+
+        // similar but bigger font for this title
+        titleMarkupRenderer.setDefaultStyle(TextStyleUtils.withAttribute(TextStyleUtils.getTitleTextStyle(), TextAttribute.SIZE, 15));
         titleMarkupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP);
         titleMarkupRenderer.setTextFitting(MarkupRenderer.FIT_SCALE_TEXT);
         titleMarkupRenderer.setLineTightness(0.5f);
