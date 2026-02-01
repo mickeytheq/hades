@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core;
 
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -12,16 +13,18 @@ import java.lang.reflect.InvocationTargetException;
 
 public class CardFaces {
     public static Card createNewCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass, ProjectContext projectContext) {
-        CardFaceModel frontFaceModel = createModelForClass(frontFaceModelClass);
-        frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            CardFaceModel frontFaceModel = createModelForClass(frontFaceModelClass);
+            frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
 
-        CardFaceModel backFaceModel = null;
-        if (backFaceModelClass != null) {
-            backFaceModel = createModelForClass(backFaceModelClass);
-            backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
-        }
+            CardFaceModel backFaceModel = null;
+            if (backFaceModelClass != null) {
+                backFaceModel = createModelForClass(backFaceModelClass);
+                backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
+            }
 
-        return createCardModel(frontFaceModel, backFaceModel);
+            return createCardModel(frontFaceModel, backFaceModel);
+        });
     }
 
     public static Card createCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel) {

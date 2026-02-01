@@ -59,8 +59,7 @@ public class NewCard extends BaseTaskAction {
         ProjectContext projectContext = StandardProjectContext.createContextForStrangeEonsRoot(StrangeEons.getOpenProject().getFile().toPath());
 
         // create the card model and view
-        Card card = ProjectContexts.withContextReturn(projectContext,
-                () -> CardFaces.createNewCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass, projectContext));
+        Card card = CardFaces.createNewCardModel(newCardDialog.getSelectedFrontFace().getCardFaceModelClass(), backFaceModelClass, projectContext);
 
         // find the Strange Eons member that will parent this new component
         Member parentMember;
