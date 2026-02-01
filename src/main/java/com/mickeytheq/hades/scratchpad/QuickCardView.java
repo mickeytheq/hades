@@ -52,7 +52,7 @@ public class QuickCardView {
 
 //        createdOnTheFly();
 
-        loadCardFromFile(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\01 - One Night Only\\Scenario Cards\\Token Effects.hades"));
+        loadCardFromFile(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades"));
     }
 
     private void loadCardFromFile(Path pathToCard) {

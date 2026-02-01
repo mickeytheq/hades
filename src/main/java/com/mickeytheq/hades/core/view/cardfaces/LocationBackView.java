@@ -19,12 +19,11 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION_BACK)
-public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView, HasEncounterSetView, HasCollectionView {
+public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView {
     private CommonCardFieldsView commonCardFieldsView;
-    private EncounterSetView encounterSetView;
-    private CollectionView collectionView;
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
@@ -33,8 +32,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
-        collectionView = new CollectionView(getModel().getCollectionModel(), this);
-        encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
@@ -42,16 +39,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     @Override
     public LocationFieldsView getLocationsFieldView() {
         return locationFieldsView;
-    }
-
-    @Override
-    public CollectionView getCollectionView() {
-        return collectionView;
-    }
-
-    @Override
-    public EncounterSetView getEncounterSetView() {
-        return encounterSetView;
     }
 
     @Override
@@ -84,11 +71,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         layoutTitleAndConnectionsEditors(editorContext);
         createRulesAndPortraitTab(editorContext);
-
-        collectionView.createEditors(editorContext);
-        encounterSetView.createEditors(editorContext);
-
-        CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
     private void createRulesAndPortraitTab(EditorContext editorContext) {
@@ -143,14 +125,18 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
 
-        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
-
         portraitView.paintArtist(paintContext);
 
-        collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
-        collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
+        paintCollectionImage(paintContext);
 
         locationFieldsView.paintLocationIcons(paintContext);
+    }
+
+    private void paintCollectionImage(PaintContext paintContext) {
+        // paint the collection image on the other face
+        getOtherFaceView()
+                .filter(o -> o instanceof HasCollectionView)
+                .map(o -> ((HasCollectionView) o).getCollectionView())
+                .ifPresent(o -> o.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true));
     }
 }
