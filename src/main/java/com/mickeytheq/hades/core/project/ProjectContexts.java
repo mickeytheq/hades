@@ -2,6 +2,8 @@ package com.mickeytheq.hades.core.project;
 
 import java.util.function.Supplier;
 
+// allows ProjectContext to be placed in a ThreadLocal and accessed via getCurrentContext
+// used in a few places where passing the ProjectContext through would be prohibitively messy, for example the ImagePersister
 public class ProjectContexts {
     private final static ThreadLocal<ProjectContext> CONTEXT_THREAD_LOCAL = new ThreadLocal<>();
 

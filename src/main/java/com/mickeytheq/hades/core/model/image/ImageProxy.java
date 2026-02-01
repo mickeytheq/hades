@@ -4,6 +4,10 @@ import com.mickeytheq.hades.core.project.ProjectContexts;
 
 import java.awt.image.BufferedImage;
 
+// a wrapper around a loadable image
+// delegates loading/saving to the provided ImagePersister
+// provides lazy loading of images so that loading a container such as a Card/CardFaceModel does not
+// load all the heavy image data immediately
 public class ImageProxy {
     private final ImagePersister imagePersister;
 

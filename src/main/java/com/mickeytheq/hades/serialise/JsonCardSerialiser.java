@@ -48,7 +48,7 @@ public class JsonCardSerialiser {
 
     private static final int CURRENT_CARD_VERSION = 1;
 
-    private static Map<Class<?>, ValueSerialiser<?>> valueSerialisers = new HashMap<>();
+    private static final Map<Class<?>, ValueSerialiser<?>> valueSerialisers = new HashMap<>();
 
     static {
         valueSerialisers.put(String.class, new StringSerialiser());
