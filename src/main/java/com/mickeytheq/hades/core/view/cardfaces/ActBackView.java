@@ -112,7 +112,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
     private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimetres(4.91, 5.50, 6.94, 2.71);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(5.00, 17.78, 6.77, 37.42);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(18.63, 6.60, 62.65, 52.49);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(5.25, 9.65, 6.10, 6.10);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(5.55, 9.65, 5.5, 5.5);
 
     @Override
     public void paint(PaintContext paintContext) {

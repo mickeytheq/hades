@@ -120,7 +120,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.00, 60.96, CollectionView.COLLECTION_IMAGE_SIZE);
     private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(49.00, 61.38, CollectionView.COLLECTION_NUMBER_SIZE);
 
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(20.83, 5.00, 5.42, 5.42);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(21.00, 5.00, 5.0, 5.0);
     private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(44.53, 51.39, 0.00, 3.39);
 
     private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI), Lists.newArrayList(
