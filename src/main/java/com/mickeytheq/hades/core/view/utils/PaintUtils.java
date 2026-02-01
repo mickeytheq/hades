@@ -266,7 +266,7 @@ public class PaintUtils {
 
             // calculate per investigator font/glyph/bounds
             // scale the per investigator font off the text font so they stay in proportion as the text font changes
-            perInvestigatorFont = perInvestigatorFont.deriveFont(statisticValueFont.getSize() * 0.4f);
+            perInvestigatorFont = perInvestigatorFont.deriveFont(statisticValueFont.getSize() * 0.5f);
             perInvestigatorGlyphVector = perInvestigatorFont.createGlyphVector(g.getFontRenderContext(), "p");
             perInvestigatorBounds = perInvestigatorGlyphVector.getLogicalBounds();
         }
@@ -291,7 +291,7 @@ public class PaintUtils {
 
                 // adjust the y position of the per investigator by a factor of the text height to position it
                 // approximately in the vertical-middle of the text
-                y = y + (float)valueTextBounds.getHeight() * 0.5f;
+                y = y + (float)valueTextBounds.getHeight() * 0.4f;
 
                 drawStroke(perInvestigatorFont, perInvestigatorGlyphVector, x, y);
             }
