@@ -105,7 +105,7 @@ public class Migrator {
             if (cardFaceType == null)
                 return null;
             
-            CardFaceMigrationContext context = new CardFaceMigrationContextImpl(diy, settingsAccessor, cardFaceSide, projectContext.getProjectConfiguration());
+            CardFaceMigrationContext context = new CardFaceMigrationContextImpl(diy, templateKey, settingsAccessor, cardFaceSide, projectContext.getProjectConfiguration());
 
             switch (cardFaceType) {
                 case Asset:
@@ -251,12 +251,14 @@ public class Migrator {
 
     static class CardFaceMigrationContextImpl implements CardFaceMigrationContext {
         private final DIY diy;
+        private final String templateKey;
         private final SettingsAccessor settingsAccessor;
         private final CardFaceSide cardFaceSide;
         private final ProjectConfiguration projectConfiguration;
 
-        public CardFaceMigrationContextImpl(DIY diy, SettingsAccessor settingsAccessor, CardFaceSide cardFaceSide, ProjectConfiguration projectConfiguration) {
+        public CardFaceMigrationContextImpl(DIY diy, String templateKey, SettingsAccessor settingsAccessor, CardFaceSide cardFaceSide, ProjectConfiguration projectConfiguration) {
             this.diy = diy;
+            this.templateKey = templateKey;
             this.settingsAccessor = settingsAccessor;
             this.cardFaceSide = cardFaceSide;
             this.projectConfiguration = projectConfiguration;
@@ -265,6 +267,11 @@ public class Migrator {
         @Override
         public DIY getDIY() {
             return diy;
+        }
+
+        @Override
+        public String getTemplateKey() {
+            return templateKey;
         }
 
         @Override

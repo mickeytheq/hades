@@ -60,7 +60,7 @@ public class MigrationUtils {
     public static void populatePlayerCardFields(CardFaceMigrationContext context, PlayerCardFieldsModel playerCardFieldsModel) {
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
-        populatePlayerCardTypeAndClasses(settingsAccessor, playerCardFieldsModel);
+        populatePlayerCardTypeAndClasses(context, playerCardFieldsModel);
 
         playerCardFieldsModel.setCost(settingsAccessor.getString("ResourceCost"));
         playerCardFieldsModel.setLevel(settingsAccessor.getIntegerAllowInvalid("Level"));
@@ -73,7 +73,15 @@ public class MigrationUtils {
         playerCardFieldsModel.setSkillIcon6(parseSkillIcon(settingsAccessor.getString("Skill6")));
     }
 
-    public static void populatePlayerCardTypeAndClasses(SettingsAccessor settingsAccessor, PlayerCardFieldsModel playerCardFieldsModel) {
+    public static void populatePlayerCardTypeAndClasses(CardFaceMigrationContext context, PlayerCardFieldsModel playerCardFieldsModel) {
+        SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
+        // special case for Story as this are distinguished by template in AHLCG plugin rather than CardClass
+        if (context.getTemplateKey().contains("Story")) {
+            playerCardFieldsModel.setPlayerCardType(PlayerCardType.Story);
+            return;
+        }
+
         String cardClass = settingsAccessor.getString("CardClass");
 
         PlayerCardType playerCardType = settingsAccessor.getEnumAllowInvalid("CardClass", PlayerCardType.class);
