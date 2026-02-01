@@ -68,10 +68,10 @@ public final class PortraitUtils {
             // in the middle
             // in this case the Back face should have 'Back' in the suffix as the front will not
             if (cardFaceSide == CardFaceSide.Back) {
-                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("BackPortrait")).collect(Collectors.toList());
+                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("-BackPortrait")).collect(Collectors.toList());
             }
             else {
-                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("Portrait")).collect(Collectors.toList());
+                matchingPortraits = matchingPortraits.stream().filter(o -> o.getBaseKey().endsWith("-Portrait")).collect(Collectors.toList());
             }
         }
 

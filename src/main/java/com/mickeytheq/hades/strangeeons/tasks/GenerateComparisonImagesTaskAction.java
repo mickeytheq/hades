@@ -5,6 +5,7 @@ import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,28 +82,42 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         RenderTarget renderTarget = RenderTarget.PREVIEW;
 
         for (Path eonsFile : eonsFiles) {
-            Path relativePath = ahlcgProjectRoot.relativize(eonsFile);
-            Path hadesPath = Paths.get(Strings.CS.replace(hadesProjectRoot.resolve(relativePath).toString(), ".eon", ".hades"));
+            try {
+                Path relativePath = ahlcgProjectRoot.relativize(eonsFile);
 
-            // AHLCG
-            GameComponent gameComponent = ResourceKit.getGameComponentFromFile(eonsFile.toFile());
-            Sheet[] sheets = gameComponent.createDefaultSheets();
-            BufferedImage ahlcgFrontImage = sheets[0].paint(renderTarget, dpi);
-            BufferedImage ahlcgBackImage = sheets[1] != null ? sheets[1].paint(renderTarget, dpi) : null;
+                // AHLCG
+                GameComponent gameComponent = ResourceKit.getGameComponentFromFile(eonsFile.toFile());
+                Sheet[] sheets = gameComponent.createDefaultSheets();
+                BufferedImage ahlcgFrontImage = sheets[0].paint(renderTarget, dpi);
+                BufferedImage ahlcgBackImage = sheets.length > 1 ? sheets[1].paint(renderTarget, dpi) : null;
 
-            // hades
-            Card card = CardIO.readCard(hadesPath, projectContext);
-            CardView cardView = CardFaces.createCardView(card, projectContext);
+                // hades
+                Path hadesPath = Paths.get(Strings.CS.replace(hadesProjectRoot.resolve(relativePath).toString(), ".eon", ".hades"));
+                List<BufferedImage> hadesImages = createHadesImages(hadesPath, projectContext, renderTarget, dpi);
 
-            BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi);
-
-            BufferedImage hadesBackImage = null;
-            if (cardView.hasBack())
-                hadesBackImage = CardFaceViewUtils.paintCardFace(cardView.getBackFaceView(), renderTarget, dpi);
-
-            writeImage(composeImage(ahlcgFrontImage, hadesFrontImage), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-front.png"));
-            writeImage(composeImage(ahlcgBackImage, hadesBackImage), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-back.png"));
+                writeImage(composeImage(ahlcgFrontImage, hadesImages.get(0)), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-1-front.png"));
+                writeImage(composeImage(ahlcgBackImage, hadesImages.get(1)), outputDirectory.resolve(cleanPath(relativePath.toString()) + "-2-back.png"));
+            }
+            catch (Exception e) {
+                logger.error("Error generating comparison image for eons file '" + eonsFile + "'", e);
+            }
         }
+    }
+
+    private List<BufferedImage> createHadesImages(Path cardPath, ProjectContext projectContext, RenderTarget renderTarget, double dpi) {
+        if (!Files.exists(cardPath))
+            return Lists.newArrayList(null, null);
+
+        Card card = CardIO.readCard(cardPath, projectContext);
+        CardView cardView = CardFaces.createCardView(card, projectContext);
+
+        BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi);
+
+        BufferedImage hadesBackImage = null;
+        if (cardView.hasBack())
+            hadesBackImage = CardFaceViewUtils.paintCardFace(cardView.getBackFaceView(), renderTarget, dpi);
+
+        return Lists.newArrayList(hadesFrontImage, hadesBackImage);
     }
 
     private void writeImage(BufferedImage bufferedImage, Path outputPath) {

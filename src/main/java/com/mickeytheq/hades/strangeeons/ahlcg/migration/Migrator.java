@@ -136,6 +136,8 @@ public class Migrator {
                     return new AgendaBackMigrator().build(context);
                 case Chaos:
                     return new ScenarioReferenceMigrator().build(context);
+                case Story:
+                    return new StoryMigrator().build(context);
                 default:
                     return null;
             }

@@ -34,10 +34,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -263,7 +260,11 @@ public class HadesPlugin extends AbstractPlugin {
         public void projectOpened(Project project) {
             Path projectPath = project.getFile().toPath();
 
-            ProjectContext projectContext = StandardProjectContext.getContextForContentPath(projectPath);
+            // look for the hades project context, if it doesn't exist skip
+            Optional<ProjectContext> projectContext = StandardProjectContext.findContextForContentPath(projectPath);
+
+            if (!projectContext.isPresent())
+                return;
 
             // load all the cards in the project and register them with the card database
             try (Stream<Path> stream = Files.walk(projectPath)) {
@@ -274,7 +275,7 @@ public class HadesPlugin extends AbstractPlugin {
                 cardDatabase.register(cardDatabaseLoader -> {
                     for (Path path : paths) {
                         try {
-                            Card card = CardIO.readCard(path, projectContext);
+                            Card card = CardIO.readCard(path, projectContext.get());
                             cardDatabaseLoader.registerCard(card, path);
                         } catch (RuntimeException e) {
                             logger.error("Error loading card from path '" + path + "' while building card database", e);
