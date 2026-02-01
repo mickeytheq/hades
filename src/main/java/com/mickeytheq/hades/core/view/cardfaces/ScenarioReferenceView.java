@@ -116,6 +116,9 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     public void paint(PaintContext paintContext) {
         paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
 
+        // this painting logic is significantly different to other cards as instead of painting elements in specific
+        // regions the content falls vertically down the page
+
         // title needs special handling as it is allowed to spill onto a second line
         // set the alignment to the top so a short title will stay on one line
         MarkupRenderer titleMarkupRenderer = paintContext.createMarkupRenderer();
@@ -132,7 +135,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // the MarkupRenderer.draw() is supposed to return the 'next' y position
         // however when the input text has no whitespace and FIT_SCALE_TEXT is used it follows a different code path
         // and returns something else (which is 0)
-        // so instead do measure() which returns the height of the text without drawing and use that to caluclate
+        // so instead do measure() which returns the height of the text without drawing and use that to calculate
         // then draw afterwards
         Rectangle titleRectangle = paintContext.toPixelRect(TITLE_DRAW_REGION);
 
