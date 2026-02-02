@@ -18,6 +18,9 @@ public class ScenarioReferenceMigrator {
 
         scenarioReference.getScenarioReferenceFieldsModel().setDifficulty(context.getCardFaceSide() == CardFaceSide.Front ? ScenarioReference.Difficulty.EasyStandard : ScenarioReference.Difficulty.HardExpert);
 
+        // set the back side to copy the front title by default
+        scenarioReference.getCommonCardFieldsModel().setCopyOtherFaceTitles(context.getCardFaceSide() == CardFaceSide.Back);
+
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
         scenarioReference.getScenarioReferenceFieldsModel().setTrackingBox(settingsAccessor.getRawSettingsValue("TrackerBox"));
