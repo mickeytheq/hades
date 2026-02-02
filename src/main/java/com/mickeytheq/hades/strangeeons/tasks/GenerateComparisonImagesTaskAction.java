@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,8 +58,14 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         if (!compareOptions.showDialog())
             return true;
 
+        List<Path> eonsPathsToCompare = MemberUtils.getAllMemberDescendants(Arrays.asList(members)).stream()
+                .filter(MemberUtils::isMemberEonFile)
+                .map(o -> o.getFile().toPath())
+                .collect(Collectors.toList());
+
         new ProgressDialog(LoggingLevel.Normal).runWithinProgressDialog(() -> {
-                buildComparison(compareOptions.getAhlcgDirectoryChooser().getSelectedPath(),
+                buildComparison(eonsPathsToCompare,
+                        compareOptions.getAhlcgDirectoryChooser().getSelectedPath(),
                         compareOptions.getHadesDirectoryChooser().getSelectedPath(),
                         compareOptions.getOutputDirectoryChooser().getSelectedPath());
                 return null;
@@ -67,9 +74,7 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         return true;
     }
 
-    private void buildComparison(Path ahlcgProjectRoot, Path hadesProjectRoot, Path outputDirectory) {
-        List<Path> eonsFiles = getEonsFiles(ahlcgProjectRoot);
-
+    private void buildComparison(List<Path> eonsFiles, Path ahlcgProjectRoot, Path hadesProjectRoot, Path outputDirectory) {
         try {
             Files.createDirectories(outputDirectory);
         } catch (IOException e) {
@@ -177,14 +182,6 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         return missing;
     }
 
-    private List<Path> getEonsFiles(Path ahlcgProjectRoot) {
-        try (Stream<Path> stream = Files.walk(ahlcgProjectRoot)) {
-            return stream.filter(MemberUtils::isPathEonFile).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     static class CompareOptions {
         private FileChooser ahlcgDirectoryChooser;
         private FileChooser hadesDirectoryChooser;
@@ -210,8 +207,8 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
             });
 
             JPanel panel = MigLayoutUtils.createTitledPanel("Options");
-            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "AHLCG directory: ", ahlcgDirectoryChooser);
-            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Hades directory: ", hadesDirectoryChooser);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "AHLCG project root directory: ", ahlcgDirectoryChooser);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Hades project root directory: ", hadesDirectoryChooser);
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Output directory: ", outputDirectoryChooser);
 
             DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
