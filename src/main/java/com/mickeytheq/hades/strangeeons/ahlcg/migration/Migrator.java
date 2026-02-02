@@ -52,7 +52,7 @@ public class Migrator {
         Card card = ProjectContexts.withContextReturn(projectContext, () -> migrateCard(diy));
 
         if (card == null) {
-            logger.warn("Skipping '" + sourceFile + "' as that card face/type is not supported");
+            logger.warn("Skipping '" + sourceFile + "' as that card face/type is not supported. Front template is " + diy.getFrontTemplateKey() + " and back template is " + diy.getBackTemplateKey());
             return;
         }
 
