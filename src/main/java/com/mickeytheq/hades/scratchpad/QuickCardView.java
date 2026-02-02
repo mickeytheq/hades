@@ -50,9 +50,9 @@ public class QuickCardView {
     private void run() {
         Bootstrapper.initaliseOutsideStrangeEons();
 
-//        createdOnTheFly();
+        createdOnTheFly();
 
-        loadCardFromFile(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades"));
+//        loadCardFromFile(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades"));
     }
 
     private void loadCardFromFile(Path pathToCard) {
@@ -67,7 +67,7 @@ public class QuickCardView {
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
 //        asset();
-            investigator();
+//            investigator();
 //        event();
 //        skill();
 //        treacheryTreachery();
@@ -75,7 +75,7 @@ public class QuickCardView {
 //            random();
 //            agenda();
 //            act();
-//            enemy();
+            enemy();
 //            scenarioReference();
 //            story();
         });

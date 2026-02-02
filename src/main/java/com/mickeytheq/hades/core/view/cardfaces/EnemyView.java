@@ -12,6 +12,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
@@ -263,20 +264,23 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimetres(31.83, 9.82, 0.00, 2.96);
     private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimetres(43.77, 9.82, 0.00, 2.96);
 
+    private static final DimensionEx DAMAGE_ICON_SIZE = DimensionEx.millimetres(3.22, 3.29);
+    private static final DimensionEx HORROR_ICON_SIZE = DAMAGE_ICON_SIZE;
+
     private static final List<RectangleEx> DAMAGE_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(22.35, 48.09, 3.22, 3.89),
-            RectangleEx.millimetres(18.46, 46.91, 3.22, 3.89),
-            RectangleEx.millimetres(14.56, 45.38, 3.22, 3.89),
-            RectangleEx.millimetres(11.01, 43.35, 3.22, 3.89),
-            RectangleEx.millimetres(7.62, 40.98, 3.22, 3.89)
+            RectangleEx.millimetres(22.35, 49.00, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(18.46, 47.91, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(14.56, 46.38, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(11.01, 44.35, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(7.62, 41.98, DAMAGE_ICON_SIZE)
     );
 
     private static final List<RectangleEx> HORROR_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(37.42, 48.09, 4.57, 4.06),
-            RectangleEx.millimetres(41.32, 46.91, 4.57, 4.06),
-            RectangleEx.millimetres(45.21, 45.38, 4.57, 4.06),
-            RectangleEx.millimetres(48.77, 43.18, 4.57, 4.06),
-            RectangleEx.millimetres(52.15, 40.98, 4.57, 4.06)
+            RectangleEx.millimetres(37.42, 49.00, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(41.32, 47.91, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(45.21, 46.38, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(48.77, 44.35, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(52.15, 41.98, HORROR_ICON_SIZE)
     );
 
     private void paintStatistics(PaintContext paintContext) {

@@ -92,6 +92,9 @@ public class PerformanceTests {
     public static void main(String[] args) {
         Bootstrapper.initaliseOutsideStrangeEons();
 
+//        System.setProperty("sun.java2d.d3d", "true");
+//        System.setProperty("sun.java2d.opengl", "True");
+
         int iterations = 1000;
         Path path = Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades");
 
