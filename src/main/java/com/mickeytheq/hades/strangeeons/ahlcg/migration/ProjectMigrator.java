@@ -49,9 +49,7 @@ public class ProjectMigrator {
         progressDialog = new ProgressDialog(LoggingLevel.Debug);
 
         // migrate anything selected or children of
-        List<Member> membersToMigrate = MemberUtils.getAllMemberDescendants(Lists.newArrayList(members)).stream()
-                .filter(MemberUtils::isMemberEonFile)
-                .collect(Collectors.toList());
+        List<Member> membersToMigrate = MemberUtils.getAllMemberDescendants(Lists.newArrayList(members));
 
         progressDialog.runWithinProgressDialog(() -> {
             doMigration(membersToMigrate);
@@ -89,7 +87,28 @@ public class ProjectMigrator {
 
             Path sourceFile = member.getFile().toPath();
             Path targetFile = migrationRootDirectory.resolve(projectRoot.relativize(sourceFile));
+
             Path targetDirectory = targetFile.getParent();
+
+            try {
+                Files.createDirectories(targetDirectory);
+            } catch (IOException e) {
+                throw new RuntimeException("Error creating target directory '" + targetDirectory + "'", e);
+            }
+
+            // for non-eon files just copy the file directly
+            // it might be an image or another important element
+            if (!MemberUtils.isPathEonFile(sourceFile)) {
+                try {
+                    Files.copy(sourceFile, targetFile);
+                } catch (IOException e) {
+                    logger.error("Error doing straightforward copy of '" + sourceFile + "' to '" + targetFile + "'");
+                    continue;
+                }
+
+                logger.info("Performed straightforward copy of '" + sourceFile + "' to '" + targetFile + "' as it was not a .eon file");
+                continue;
+            }
 
             // change the extension to hades
             String filename = targetFile.getFileName().toString();
@@ -97,12 +116,6 @@ public class ProjectMigrator {
             filename = filename + "." + CardIO.HADES_FILE_EXTENSION;
 
             targetFile = targetDirectory.resolve(filename);
-
-            try {
-                Files.createDirectories(targetDirectory);
-            } catch (IOException e) {
-                throw new RuntimeException("Error creating target directory '" + targetDirectory + "'", e);
-            }
 
             try {
                 migrator.migrateFile(sourceFile, targetFile);
