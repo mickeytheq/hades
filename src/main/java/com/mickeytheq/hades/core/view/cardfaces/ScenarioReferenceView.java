@@ -316,6 +316,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
             Supplier<MarkupRenderer> markupRendererSupplier = () -> {
                 MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+                MarkupUtils.applyTagMarkupConfiguration(markupRenderer);
                 markupRenderer.setDefaultStyle(TextStyleUtils.getBodyTextStyle());
                 markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_LEFT);
                 markupRenderer.setLineTightness(0.6f);
