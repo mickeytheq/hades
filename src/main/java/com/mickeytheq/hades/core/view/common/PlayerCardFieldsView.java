@@ -43,7 +43,7 @@ public class PlayerCardFieldsView {
     }
 
     public String getTemplateName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getCardType();
         List<PlayerCardClass> cardClasses = getModel().getPlayerCardClasses();
 
         if (playerCardType == PlayerCardType.Standard) {
@@ -80,7 +80,7 @@ public class PlayerCardFieldsView {
     public void createEditors(EditorContext editorContext) {
         // stats/settings for the asset
         typeEditor = EditorUtils.createEnumComboBox(PlayerCardType.class);
-        EditorUtils.bindComboBox(typeEditor, editorContext.wrapConsumerWithMarkedChanged(s -> getModel().setPlayerCardType((PlayerCardType) typeEditor.getSelectedItem())));
+        EditorUtils.bindComboBox(typeEditor, editorContext.wrapConsumerWithMarkedChanged(s -> getModel().setCardType((PlayerCardType) typeEditor.getSelectedItem())));
 
         // first one is not-nullable as when classes are being selected, a minimum of one must always be specified
         playerCardClass1Editor = EditorUtils.createEnumComboBox(PlayerCardClass.class);
@@ -111,10 +111,10 @@ public class PlayerCardFieldsView {
         skillIcon5Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardSkillIcon.class);
 
         // bindings
-        EditorUtils.bindComboBox(typeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardType(value)));
-        EditorUtils.bindComboBox(playerCardClass1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass1(value)));
-        EditorUtils.bindComboBox(playerCardClass2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass2(value)));
-        EditorUtils.bindComboBox(playerCardClass3Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setPlayerCardClass3(value)));
+        EditorUtils.bindComboBox(typeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCardType(value)));
+        EditorUtils.bindComboBox(playerCardClass1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCardClass1(value)));
+        EditorUtils.bindComboBox(playerCardClass2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCardClass2(value)));
+        EditorUtils.bindComboBox(playerCardClass3Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCardClass3(value)));
         EditorUtils.bindComboBox(playerCardLevelEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setLevel(value)));
 
         if (showCost)
@@ -127,10 +127,10 @@ public class PlayerCardFieldsView {
         EditorUtils.bindComboBox(skillIcon5Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSkillIcon5(value)));
 
         // initialise values
-        typeEditor.setSelectedItem(getModel().getPlayerCardType());
-        playerCardClass1Editor.setSelectedItem(getModel().getPlayerCardClass1());
-        playerCardClass2Editor.setSelectedItem(getModel().getPlayerCardClass2());
-        playerCardClass3Editor.setSelectedItem(getModel().getPlayerCardClass3());
+        typeEditor.setSelectedItem(getModel().getCardType());
+        playerCardClass1Editor.setSelectedItem(getModel().getCardClass1());
+        playerCardClass2Editor.setSelectedItem(getModel().getCardClass2());
+        playerCardClass3Editor.setSelectedItem(getModel().getCardClass3());
 
         if (showCost)
             costEditor.setText(getModel().getCost());
@@ -187,7 +187,7 @@ public class PlayerCardFieldsView {
     private static final RectangleEx NO_LEVEL_DRAW_REGION = RectangleEx.millimetres(1.35, 0.85, 10.16, 9.82);
 
     public void paintLevel(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getCardType();
 
         if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
             Integer level = getModel().getLevel();
@@ -268,7 +268,7 @@ public class PlayerCardFieldsView {
     }
 
     private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
-        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getCardType();
         String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
 
         if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
@@ -280,7 +280,7 @@ public class PlayerCardFieldsView {
     }
 
     private String getSkillBoxName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getCardType();
 
         if (getModel().getPlayerCardClasses().size() > 2)
             return "multi";

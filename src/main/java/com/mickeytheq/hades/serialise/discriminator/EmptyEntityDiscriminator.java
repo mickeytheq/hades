@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.serialise;
+package com.mickeytheq.hades.serialise.discriminator;
 
 // used during Serialisation to allow entities
 // to self-identify whether they are 'null'/empty and serialisation can be skipped

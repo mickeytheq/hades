@@ -141,11 +141,11 @@ public class QuickCardView {
     private void scenarioReference() {
         ScenarioReference front = new ScenarioReference();
         front.getCommonCardFieldsModel().setTitle("Title");
-        front.setDifficulty(ScenarioReference.Difficulty.EasyStandard);
-        front.getSkull().setRules("-X. Where X is horror on your investigator card.");
-        front.getCultist().setRules("-1. -3 instead if there's an enemy at your location.");
-        front.getTablet().setRules("-2. Take 1 horror");
-        front.getElderThing().setRules("-4. If this is an evade test you automatically fail instead.");
+        front.getScenarioReferenceFieldsModel().setDifficulty(ScenarioReference.Difficulty.EasyStandard);
+        front.getScenarioReferenceFieldsModel().getSkull().setRules("-X. Where X is horror on your investigator card.");
+        front.getScenarioReferenceFieldsModel().getCultist().setRules("-1. -3 instead if there's an enemy at your location.");
+        front.getScenarioReferenceFieldsModel().getTablet().setRules("-2. Take 1 horror");
+        front.getScenarioReferenceFieldsModel().getElderThing().setRules("-4. If this is an evade test you automatically fail instead.");
 
         Card card = CardFaces.createCardModel(front, null);
 
@@ -155,14 +155,12 @@ public class QuickCardView {
 
     private void enemy() {
         Enemy model = new Enemy();
-        model.setCombat(new Statistic("3", false));
-        model.setHealth(new Statistic("4", true));
-        model.setEvade(new Statistic("2", false));
+        model.getEnemyFieldsModel().setCombat(new Statistic("3", false));
+        model.getEnemyFieldsModel().setHealth(new Statistic("4", true));
+        model.getEnemyFieldsModel().setEvade(new Statistic("2", false));
 
-        model.setDamage(1);
-        model.setHorror(1);
-
-        model.setWeaknessType(WeaknessType.None);
+        model.getEnemyFieldsModel().setDamage(1);
+        model.getEnemyFieldsModel().setHorror(1);
 
         model.getCommonCardFieldsModel().setTraits("Monster.");
         model.getCommonCardFieldsModel().setKeywords("Hunter.");
@@ -178,13 +176,13 @@ public class QuickCardView {
         Investigator model = new Investigator();
         model.getCommonCardFieldsModel().setTitle("MickeyTheQ");
 
-        model.setWillpower("1");
-        model.setIntellect("2");
-        model.setCombat("3");
-        model.setAgility("4");
+        model.getInvestigatorFieldsModel().setWillpower("1");
+        model.getInvestigatorFieldsModel().setIntellect("2");
+        model.getInvestigatorFieldsModel().setCombat("3");
+        model.getInvestigatorFieldsModel().setAgility("4");
 
-        model.setHealth("6");
-        model.setSanity("8");
+        model.getInvestigatorFieldsModel().setHealth("6");
+        model.getInvestigatorFieldsModel().setSanity("8");
 
         InvestigatorBack backModel = new InvestigatorBack();
         backModel.getSection1().setHeader("<hdr>Deck Size: </hdr>");
@@ -246,12 +244,12 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setSkillIcon3(PlayerCardSkillIcon.Intellect);
         model.getPlayerCardFieldsModel().setSkillIcon4(PlayerCardSkillIcon.Intellect);
         model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
-        model.setAssetSlot1(Asset.AssetSlot.Hand);
-        model.setAssetSlot2(Asset.AssetSlot.Arcane);
+        model.getAssetFieldsModel().setSlot1(Asset.AssetSlot.Hand);
+        model.getAssetFieldsModel().setSlot2(Asset.AssetSlot.Arcane);
         model.getPlayerCardFieldsModel().setCost("3");
         model.getPlayerCardFieldsModel().setLevel(5);
-        model.setHealth(new Statistic("1", false));
-        model.setSanity(new Statistic("1", true));
+        model.getAssetFieldsModel().setHealth(new Statistic("1", false));
+        model.getAssetFieldsModel().setSanity(new Statistic("1", true));
 
 
         Card card = CardFaces.createCardModel(model, null);
@@ -291,16 +289,16 @@ public class QuickCardView {
 
     private void agenda() {
         Agenda model = new Agenda();
-        model.setDoom(new Statistic("4", false));
-        model.setAgendaNumber("1");
-        model.setDeckId("a");
+        model.getAgendaFieldsModel().setDoom(new Statistic("4", false));
+        model.getAgendaFieldsModel().setNumber("1");
+        model.getAgendaFieldsModel().setDeckId("a");
         model.getCommonCardFieldsModel().setTitle("Title");
         model.getStorySectionModel().setStory("Story story");
         model.getStorySectionModel().setRules("Rules rules");
 
         AgendaBack agendaBack = new AgendaBack();
-        agendaBack.setAgendaNumber("1");
-        agendaBack.setDeckId("b");
+        agendaBack.getAgendaFieldsModel().setNumber("1");
+        agendaBack.getAgendaFieldsModel().setDeckId("b");
         agendaBack.getCommonCardFieldsModel().setTitle("Back title");
         agendaBack.getSection1().setHeader("Header");
         agendaBack.getSection1().setRules("Rules rules");
@@ -319,16 +317,16 @@ public class QuickCardView {
 
     private void act() {
         Act frontModel = new Act();
-        frontModel.setClues(new Statistic("4", false));
-        frontModel.setActNumber("1");
-        frontModel.setDeckId("a");
+        frontModel.getActFieldsModel().setClues(new Statistic("4", false));
+        frontModel.getActFieldsModel().setNumber("1");
+        frontModel.getActFieldsModel().setDeckId("a");
         frontModel.getCommonCardFieldsModel().setTitle("Title");
         frontModel.getStorySectionModel().setStory("Story story");
         frontModel.getStorySectionModel().setRules("Rules rules");
 
         ActBack backModel = new ActBack();
-        backModel.setActNumber("1");
-        backModel.setDeckId("b");
+        backModel.getActFieldsModel().setNumber("1");
+        backModel.getActFieldsModel().setDeckId("b");
         backModel.getCommonCardFieldsModel().setTitle("Back title");
         backModel.getSection1().setHeader("Header");
         backModel.getSection1().setRules("Rules rules");

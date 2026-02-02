@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.serialise;
+package com.mickeytheq.hades.serialise.discriminator;
 
 // implementations must have a no-arg constructor
 public interface EmptyValueDiscriminator {

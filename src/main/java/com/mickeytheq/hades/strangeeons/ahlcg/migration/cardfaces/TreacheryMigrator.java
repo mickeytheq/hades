@@ -22,7 +22,7 @@ public class TreacheryMigrator {
         MigrationUtils.populateEncounterSet(context, treachery.getEncounterSetModel());
         MigrationUtils.populateArt(context, treachery.getPortraitModel());
 
-        treachery.setWeaknessType(MigrationUtils.getWeaknessType(settingsAccessor.getString(SettingsFieldNames.SUBTYPE)));
+        treachery.getTreacheryFieldsModel().setWeaknessType(MigrationUtils.getWeaknessType(settingsAccessor.getString(SettingsFieldNames.SUBTYPE)));
 
         return treachery;
     }

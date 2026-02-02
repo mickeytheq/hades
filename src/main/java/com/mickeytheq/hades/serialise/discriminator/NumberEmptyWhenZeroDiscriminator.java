@@ -1,6 +1,6 @@
-package com.mickeytheq.hades.serialise;
+package com.mickeytheq.hades.serialise.discriminator;
 
-public class ZeroNumberDiscriminator implements EmptyValueDiscriminator {
+public class NumberEmptyWhenZeroDiscriminator implements EmptyValueDiscriminator {
     @Override
     public boolean isEmpty(Object value) {
         if (!(value instanceof Number))

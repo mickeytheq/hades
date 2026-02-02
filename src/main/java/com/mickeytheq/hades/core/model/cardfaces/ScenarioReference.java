@@ -4,10 +4,7 @@ import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.CollectionModel;
-import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
-import com.mickeytheq.hades.core.model.common.EncounterSetModel;
-import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
+import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -74,13 +71,7 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
         }
     }
 
-    private Difficulty difficulty = Difficulty.EasyStandard;
-    private final SymbolChaosTokenInfo skull = new SymbolChaosTokenInfo();
-    private final SymbolChaosTokenInfo cultist = new SymbolChaosTokenInfo();
-    private final SymbolChaosTokenInfo tablet = new SymbolChaosTokenInfo();
-    private final SymbolChaosTokenInfo elderThing = new SymbolChaosTokenInfo();
-    private String trackingBox;
-
+    private final ScenarioReferenceFieldsModel scenarioReferenceFieldsModel = new ScenarioReferenceFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final CollectionModel collectionModel = new CollectionModel();
@@ -88,67 +79,81 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
         if (cardFaceSide == CardFaceSide.Front) {
-            difficulty = Difficulty.EasyStandard;
+            getScenarioReferenceFieldsModel().setDifficulty(Difficulty.EasyStandard);
             getCommonCardFieldsModel().setCopyOtherFaceTitles(false);
         }
         else {
-            difficulty = Difficulty.HardExpert;
+            getScenarioReferenceFieldsModel().setDifficulty(Difficulty.HardExpert);
 
             // by default copy the titles of the front face of the card
             getCommonCardFieldsModel().setCopyOtherFaceTitles(true);
         }
     }
 
-    @Property("Difficulty")
-    public Difficulty getDifficulty() {
-        return difficulty;
+    @Property("ScenarioReference")
+    public ScenarioReferenceFieldsModel getScenarioReferenceFieldsModel() {
+        return scenarioReferenceFieldsModel;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    @Property("Skull")
-    public SymbolChaosTokenInfo getSkull() {
-        return skull;
-    }
-
-    @Property("Cultist")
-    public SymbolChaosTokenInfo getCultist() {
-        return cultist;
-    }
-
-    @Property("Tablet")
-    public SymbolChaosTokenInfo getTablet() {
-        return tablet;
-    }
-
-    @Property("ElderThing")
-    public SymbolChaosTokenInfo getElderThing() {
-        return elderThing;
-    }
-
-    @Property("TrackingBox")
-    public String getTrackingBox() {
-        return trackingBox;
-    }
-
-    public void setTrackingBox(String trackingBox) {
-        this.trackingBox = trackingBox;
-    }
-
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
+    }
+
+    public static class ScenarioReferenceFieldsModel {
+        private Difficulty difficulty = Difficulty.EasyStandard;
+        private final SymbolChaosTokenInfo skull = new SymbolChaosTokenInfo();
+        private final SymbolChaosTokenInfo cultist = new SymbolChaosTokenInfo();
+        private final SymbolChaosTokenInfo tablet = new SymbolChaosTokenInfo();
+        private final SymbolChaosTokenInfo elderThing = new SymbolChaosTokenInfo();
+        private String trackingBox;
+
+        @Property("Difficulty")
+        public Difficulty getDifficulty() {
+            return difficulty;
+        }
+
+        public void setDifficulty(Difficulty difficulty) {
+            this.difficulty = difficulty;
+        }
+
+        @Property("Skull")
+        public SymbolChaosTokenInfo getSkull() {
+            return skull;
+        }
+
+        @Property("Cultist")
+        public SymbolChaosTokenInfo getCultist() {
+            return cultist;
+        }
+
+        @Property("Tablet")
+        public SymbolChaosTokenInfo getTablet() {
+            return tablet;
+        }
+
+        @Property("ElderThing")
+        public SymbolChaosTokenInfo getElderThing() {
+            return elderThing;
+        }
+
+        @Property("TrackingBox")
+        public String getTrackingBox() {
+            return trackingBox;
+        }
+
+        public void setTrackingBox(String trackingBox) {
+            this.trackingBox = trackingBox;
+        }
     }
 }

@@ -66,7 +66,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     // TODO: story template image is half-resolution
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_" + getModel().getInvestigatorClass().name().toLowerCase() + ".png");
+        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_" + getModel().getInvestigatorFieldsModel().getInvestigatorClass().name().toLowerCase() + ".png");
     }
 
     @Override
@@ -131,22 +131,22 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         editorContext.addDisplayComponent("Stats", mainPanel); // TODO: i18n
 
         // bindings
-        EditorUtils.bindComboBox(investigatorClassEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setInvestigatorClass(value)));
-        EditorUtils.bindTextComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setHealth(value)));
-        EditorUtils.bindTextComponent(sanityEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSanity(value)));
-        EditorUtils.bindTextComponent(willpowerEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWillpower(value)));
-        EditorUtils.bindTextComponent(intellectEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setIntellect(value)));
-        EditorUtils.bindTextComponent(combatEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCombat(value)));
-        EditorUtils.bindTextComponent(agilityEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setAgility(value)));
+        EditorUtils.bindComboBox(investigatorClassEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setInvestigatorClass));
+        EditorUtils.bindTextComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setHealth));
+        EditorUtils.bindTextComponent(sanityEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setSanity));
+        EditorUtils.bindTextComponent(willpowerEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setWillpower));
+        EditorUtils.bindTextComponent(intellectEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setIntellect));
+        EditorUtils.bindTextComponent(combatEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setCombat));
+        EditorUtils.bindTextComponent(agilityEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getInvestigatorFieldsModel()::setAgility));
 
         // intialise values
-        investigatorClassEditor.setSelectedItem(getModel().getInvestigatorClass());
-        healthEditor.setText(getModel().getHealth());
-        sanityEditor.setText(getModel().getSanity());
-        willpowerEditor.setText(getModel().getWillpower());
-        intellectEditor.setText(getModel().getIntellect());
-        combatEditor.setText(getModel().getCombat());
-        agilityEditor.setText(getModel().getAgility());
+        investigatorClassEditor.setSelectedItem(getModel().getInvestigatorFieldsModel().getInvestigatorClass());
+        healthEditor.setText(getModel().getInvestigatorFieldsModel().getHealth());
+        sanityEditor.setText(getModel().getInvestigatorFieldsModel().getSanity());
+        willpowerEditor.setText(getModel().getInvestigatorFieldsModel().getWillpower());
+        intellectEditor.setText(getModel().getInvestigatorFieldsModel().getIntellect());
+        combatEditor.setText(getModel().getInvestigatorFieldsModel().getCombat());
+        agilityEditor.setText(getModel().getInvestigatorFieldsModel().getAgility());
 
         collectionView.createEditors(editorContext);
         encounterSetView.createEditors(editorContext);
@@ -195,7 +195,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
         commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
-        if (getModel().getInvestigatorClass() == InvestigatorClass.Story) {
+        if (getModel().getInvestigatorFieldsModel().getInvestigatorClass() == InvestigatorClass.Story) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
             encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
@@ -207,16 +207,16 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         paintSkills(paintContext);
 
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), new Statistic(getModel().getHealth(), false), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), new Statistic(getModel().getSanity(), false), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), new Statistic(getModel().getInvestigatorFieldsModel().getHealth(), false), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), new Statistic(getModel().getInvestigatorFieldsModel().getSanity(), false), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
     }
 
 
     private void paintSkills(PaintContext paintContext) {
-        paintSkill(paintContext, getModel().getWillpower(), paintContext.toPixelRect(WILLPOWER_DRAW_REGION));
-        paintSkill(paintContext, getModel().getIntellect(), paintContext.toPixelRect(INTELLECT_DRAW_REGION));
-        paintSkill(paintContext, getModel().getCombat(), paintContext.toPixelRect(COMBAT_DRAW_REGION));
-        paintSkill(paintContext, getModel().getAgility(), paintContext.toPixelRect(AGILITY_DRAW_REGION));
+        paintSkill(paintContext, getModel().getInvestigatorFieldsModel().getWillpower(), paintContext.toPixelRect(WILLPOWER_DRAW_REGION));
+        paintSkill(paintContext, getModel().getInvestigatorFieldsModel().getIntellect(), paintContext.toPixelRect(INTELLECT_DRAW_REGION));
+        paintSkill(paintContext, getModel().getInvestigatorFieldsModel().getCombat(), paintContext.toPixelRect(COMBAT_DRAW_REGION));
+        paintSkill(paintContext, getModel().getInvestigatorFieldsModel().getAgility(), paintContext.toPixelRect(AGILITY_DRAW_REGION));
     }
 
     private void paintSkill(PaintContext paintContext, String text, Rectangle drawRegion) {

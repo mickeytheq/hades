@@ -74,13 +74,13 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         deckIdEditor = EditorUtils.createTextField(20);
         doomEditor = new StatisticComponent();
 
-        EditorUtils.bindTextComponent(agendaNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setAgendaNumber));
-        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDeckId));
-        EditorUtils.bindStatisticComponent(doomEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDoom));
+        EditorUtils.bindTextComponent(agendaNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setNumber));
+        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setDeckId));
+        EditorUtils.bindStatisticComponent(doomEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setDoom));
 
-        agendaNumberEditor.setText(getModel().getAgendaNumber());
-        deckIdEditor.setText(getModel().getDeckId());
-        doomEditor.setStatistic(getModel().getDoom());
+        agendaNumberEditor.setText(getModel().getAgendaFieldsModel().getNumber());
+        deckIdEditor.setText(getModel().getAgendaFieldsModel().getDeckId());
+        doomEditor.setStatistic(getModel().getAgendaFieldsModel().getDoom());
 
         layoutMainTab(editorContext);
 
@@ -150,8 +150,8 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
         commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(DOOM_DRAW_REGION), getModel().getDoom(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(DOOM_DRAW_REGION), getModel().getAgendaFieldsModel().getDoom(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
-        PaintUtils.paintScenarioIndex(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndex(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaFieldsModel().getNumber(), getModel().getAgendaFieldsModel().getDeckId());
     }
 }

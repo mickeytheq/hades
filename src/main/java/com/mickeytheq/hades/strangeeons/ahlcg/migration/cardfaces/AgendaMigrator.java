@@ -19,9 +19,9 @@ public class AgendaMigrator {
         MigrationUtils.populateEncounterSet(context, agenda.getEncounterSetModel());
         MigrationUtils.populateArt(context, agenda.getPortraitModel());
 
-        agenda.setAgendaNumber(settingsAccessor.getString("ScenarioIndex"));
-        agenda.setDeckId(settingsAccessor.getString("ScenarioDeckID"));
-        agenda.setDoom(MigrationUtils.parseStatistic(settingsAccessor, "Doom", SettingsFieldNames.PER_INVESTIGATOR));
+        agenda.getAgendaFieldsModel().setNumber(settingsAccessor.getString("ScenarioIndex"));
+        agenda.getAgendaFieldsModel().setDeckId(settingsAccessor.getString("ScenarioDeckID"));
+        agenda.getAgendaFieldsModel().setDoom(MigrationUtils.parseStatistic(settingsAccessor, "Doom", SettingsFieldNames.PER_INVESTIGATOR));
 
         agenda.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.AGENDA_STORY));
         agenda.getStorySectionModel().setAfterStorySpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.AGENDA_STORY), Unit.Point));

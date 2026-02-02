@@ -1,9 +1,7 @@
 package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 
-import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
-import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.MigrationUtils;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.SettingsAccessor;
@@ -20,13 +18,13 @@ public class InvestigatorMigrator {
         MigrationUtils.populateEncounterSet(context, investigator.getEncounterSetModel());
         MigrationUtils.populateArt(context, investigator.getPortraitModel());
 
-        investigator.setHealth(settingsAccessor.getString(SettingsFieldNames.HEALTH));
-        investigator.setSanity(settingsAccessor.getString(SettingsFieldNames.SANITY));
+        investigator.getInvestigatorFieldsModel().setHealth(settingsAccessor.getString(SettingsFieldNames.HEALTH));
+        investigator.getInvestigatorFieldsModel().setSanity(settingsAccessor.getString(SettingsFieldNames.SANITY));
 
-        investigator.setWillpower(settingsAccessor.getString(SettingsFieldNames.WILLPOWER));
-        investigator.setIntellect(settingsAccessor.getString(SettingsFieldNames.INTELLECT));
-        investigator.setCombat(settingsAccessor.getString(SettingsFieldNames.COMBAT));
-        investigator.setAgility(settingsAccessor.getString(SettingsFieldNames.AGILITY));
+        investigator.getInvestigatorFieldsModel().setWillpower(settingsAccessor.getString(SettingsFieldNames.WILLPOWER));
+        investigator.getInvestigatorFieldsModel().setIntellect(settingsAccessor.getString(SettingsFieldNames.INTELLECT));
+        investigator.getInvestigatorFieldsModel().setCombat(settingsAccessor.getString(SettingsFieldNames.COMBAT));
+        investigator.getInvestigatorFieldsModel().setAgility(settingsAccessor.getString(SettingsFieldNames.AGILITY));
 
         // TODO: parallel investigators
 
@@ -34,9 +32,9 @@ public class InvestigatorMigrator {
 
         // story investigators don't have an explicit card class defined
         if (cardClass == null)
-            investigator.setInvestigatorClass(InvestigatorClass.Story);
+            investigator.getInvestigatorFieldsModel().setInvestigatorClass(InvestigatorClass.Story);
         else
-            investigator.setInvestigatorClass(InvestigatorClass.valueOf(cardClass));
+            investigator.getInvestigatorFieldsModel().setInvestigatorClass(InvestigatorClass.valueOf(cardClass));
 
         return investigator;
     }

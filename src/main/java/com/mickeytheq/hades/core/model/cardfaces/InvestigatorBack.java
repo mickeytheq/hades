@@ -2,13 +2,14 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
+import com.mickeytheq.hades.core.model.common.CardModelPropertyNames;
 import com.mickeytheq.hades.core.model.common.Distance;
-import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
-import com.mickeytheq.hades.serialise.ZeroNumberDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
 
 @Model(typeCode = "InvestigatorBack")
 public class InvestigatorBack implements CardFaceModel {
-    public static class InvestigatorBackSection {
+    public static class InvestigatorBackSection implements EmptyEntityDiscriminator {
         private String header;
         private String text;
         private Distance afterSpacing = Distance.createZeroPoint();
@@ -47,6 +48,11 @@ public class InvestigatorBack implements CardFaceModel {
 
         public void setAfterSpacing(Distance afterSpacing) {
             this.afterSpacing = afterSpacing;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return StringUtils.isEmpty(header) && StringUtils.isEmpty(text);
         }
     }
 
@@ -157,7 +163,7 @@ public class InvestigatorBack implements CardFaceModel {
         this.story = story;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

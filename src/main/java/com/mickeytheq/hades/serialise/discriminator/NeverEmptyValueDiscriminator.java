@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.serialise;
+package com.mickeytheq.hades.serialise.discriminator;
 
 public class NeverEmptyValueDiscriminator implements EmptyValueDiscriminator {
     @Override

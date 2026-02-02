@@ -27,27 +27,27 @@ public class Event implements CardFaceModel, HasCommonCardFieldsModel {
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.PLAYER)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

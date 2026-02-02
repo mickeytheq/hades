@@ -1,6 +1,5 @@
 package com.mickeytheq.hades.strangeeons.ahlcg.migration.cardfaces;
 
-import com.mickeytheq.hades.core.model.cardfaces.ActBack;
 import com.mickeytheq.hades.core.model.cardfaces.ScenarioReference;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.strangeeons.ahlcg.migration.CardFaceMigrationContext;
@@ -17,16 +16,16 @@ public class ScenarioReferenceMigrator {
         MigrationUtils.populateEncounterSet(context, scenarioReference.getEncounterSetModel());
         MigrationUtils.populateCollection(context, scenarioReference.getCollectionModel());
 
-        scenarioReference.setDifficulty(context.getCardFaceSide() == CardFaceSide.Front ? ScenarioReference.Difficulty.EasyStandard : ScenarioReference.Difficulty.HardExpert);
+        scenarioReference.getScenarioReferenceFieldsModel().setDifficulty(context.getCardFaceSide() == CardFaceSide.Front ? ScenarioReference.Difficulty.EasyStandard : ScenarioReference.Difficulty.HardExpert);
 
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
-        scenarioReference.setTrackingBox(settingsAccessor.getRawSettingsValue("TrackerBox"));
+        scenarioReference.getScenarioReferenceFieldsModel().setTrackingBox(settingsAccessor.getRawSettingsValue("TrackerBox"));
 
-        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getSkull(), SettingsFieldNames.CHAOS_TOKEN_SKULL);
-        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getCultist(), SettingsFieldNames.CHAOS_TOKEN_CULTIST);
-        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getTablet(), SettingsFieldNames.CHAOS_TOKEN_TABLET);
-        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getElderThing(), SettingsFieldNames.CHAOS_TOKEN_ELDER_THING);
+        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getSkull(), SettingsFieldNames.CHAOS_TOKEN_SKULL);
+        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getCultist(), SettingsFieldNames.CHAOS_TOKEN_CULTIST);
+        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getTablet(), SettingsFieldNames.CHAOS_TOKEN_TABLET);
+        populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getElderThing(), SettingsFieldNames.CHAOS_TOKEN_ELDER_THING);
 
         return scenarioReference;
     }

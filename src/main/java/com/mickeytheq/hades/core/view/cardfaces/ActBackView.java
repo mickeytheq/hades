@@ -28,7 +28,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
 
     private JTextField actNumberEditor;
     private JTextField deckIdEditor;
-    private JCheckBox shadowFrontEditor;
+    private JCheckBox copyOtherFaceEditor;
 
     @Override
     public void initialiseView() {
@@ -64,18 +64,18 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
 
         actNumberEditor = EditorUtils.createTextField(20);
         deckIdEditor = EditorUtils.createTextField(20);
-        shadowFrontEditor = EditorUtils.createCheckBox();
+        copyOtherFaceEditor = EditorUtils.createCheckBox();
 
-        EditorUtils.bindTextComponent(actNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setActNumber));
-        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDeckId));
-        EditorUtils.bindToggleButton(shadowFrontEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setShadowFront));
+        EditorUtils.bindTextComponent(actNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setNumber));
+        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setDeckId));
+        EditorUtils.bindToggleButton(copyOtherFaceEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setCopyOtherFace));
 
-        actNumberEditor.setText(getModel().getActNumber());
-        deckIdEditor.setText(getModel().getDeckId());
-        shadowFrontEditor.setSelected(getModel().isShadowFront());
+        actNumberEditor.setText(getModel().getActFieldsModel().getNumber());
+        deckIdEditor.setText(getModel().getActFieldsModel().getDeckId());
+        copyOtherFaceEditor.setSelected(getModel().getActFieldsModel().isCopyOtherFace());
 
-        shadowFrontEditor.addChangeListener(e -> {
-            boolean shadowing = shadowFrontEditor.isSelected();
+        copyOtherFaceEditor.addChangeListener(e -> {
+            boolean shadowing = copyOtherFaceEditor.isSelected();
 
             actNumberEditor.setEnabled(!shadowing);
             deckIdEditor.setEnabled(!shadowing);
@@ -91,7 +91,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
         commonCardFieldsView.addTitleEditorsToPanel(titlePanel, false, false, false);
 
         JPanel statsPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ACT));
-        MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SHADOW_FRONT), shadowFrontEditor);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SHADOW_FRONT), copyOtherFaceEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.ACTNUMBER), actNumberEditor);
         MigLayoutUtils.addLabelledComponentWrapGrowPush(statsPanel, Language.string(InterfaceConstants.SCENARIODECKID), deckIdEditor);
 
@@ -152,7 +152,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
 
     private void paintScenarioIndex(PaintContext paintContext) {
         // if shadowing the front then look for an Act on the other face. if missing do nothing
-        if (getModel().isShadowFront()) {
+        if (getModel().getActFieldsModel().isCopyOtherFace()) {
             Optional<Act> otherFaceModel = getOtherFaceView().filter(o -> o instanceof ActView).map(o -> ((ActView)o).getModel());
 
             if (otherFaceModel.isPresent()) {
@@ -160,13 +160,13 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
 
                 // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
                 // deck id should only be one character in most cases but preserve the rest of the string if there is anything
-                String newDeckId = (char)(act.getDeckId().charAt(0) + 1) + StringUtils.substring(act.getDeckId(), 1);
-                PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), act.getActNumber(), newDeckId);
+                String newDeckId = (char)(act.getActFieldsModel().getDeckId().charAt(0) + 1) + StringUtils.substring(act.getActFieldsModel().getDeckId(), 1);
+                PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), act.getActFieldsModel().getNumber(), newDeckId);
             }
 
             return;
         }
 
-        PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), getModel().getActFieldsModel().getNumber(), getModel().getActFieldsModel().getDeckId());
     }
 }

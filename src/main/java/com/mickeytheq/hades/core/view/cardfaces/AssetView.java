@@ -78,7 +78,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private String getTemplateName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
         // special template for story weakness instead of the regular weakness
         if (playerCardType == PlayerCardType.StoryWeakness)
@@ -88,7 +88,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private boolean canHaveSubtitleTemplate() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
         if (playerCardType == PlayerCardType.StoryWeakness || playerCardType == PlayerCardType.Specialist)
             return false;
@@ -147,16 +147,16 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         playerCardFieldsView.layoutFourthColumnEditors(statsPanel);
 
         // bindings
-        EditorUtils.bindComboBox(assetSlot1Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setAssetSlot1(value)));
-        EditorUtils.bindComboBox(assetSlot2Editor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setAssetSlot2(value)));
-        EditorUtils.bindStatisticComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setHealth(value)));
-        EditorUtils.bindStatisticComponent(sanityEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setSanity(value)));
+        EditorUtils.bindComboBox(assetSlot1Editor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAssetFieldsModel()::setSlot1));
+        EditorUtils.bindComboBox(assetSlot2Editor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAssetFieldsModel()::setSlot2));
+        EditorUtils.bindStatisticComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAssetFieldsModel()::setHealth));
+        EditorUtils.bindStatisticComponent(sanityEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAssetFieldsModel()::setSanity));
 
         // intialise values
-        assetSlot1Editor.setSelectedItem(getModel().getAssetSlot1());
-        assetSlot2Editor.setSelectedItem(getModel().getAssetSlot2());
-        healthEditor.setStatistic(getModel().getHealth());
-        sanityEditor.setStatistic(getModel().getSanity());
+        assetSlot1Editor.setSelectedItem(getModel().getAssetFieldsModel().getSlot1());
+        assetSlot2Editor.setSelectedItem(getModel().getAssetFieldsModel().getSlot2());
+        healthEditor.setStatistic(getModel().getAssetFieldsModel().getHealth());
+        sanityEditor.setStatistic(getModel().getAssetFieldsModel().getSanity());
 
         JPanel mainPanel = MigLayoutUtils.createOrganiserPanel();
         mainPanel.add(titlePanel, "wrap, growx, pushx");
@@ -202,7 +202,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
 
-        if (getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails()) {
+        if (getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails()) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
@@ -224,14 +224,14 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         paintSlots(paintContext);
 
-        if (!getModel().getHealth().isEmpty()) {
+        if (!getModel().getAssetFieldsModel().getHealth().isEmpty()) {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/health_base.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
-            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), getModel().getAssetFieldsModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
 
-        if (!getModel().getSanity().isEmpty()) {
+        if (!getModel().getAssetFieldsModel().getSanity().isEmpty()) {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/sanity_base.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
-            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+            PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), getModel().getAssetFieldsModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
     }
 
@@ -269,7 +269,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
@@ -285,7 +285,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     );
 
     private void paintSlots(PaintContext paintContext) {
-        List<Asset.AssetSlot> assetSlots = getModel().getAssetSlots();
+        List<Asset.AssetSlot> assetSlots = getModel().getAssetFieldsModel().getAssetSlots();
 
         if (assetSlots.isEmpty())
             return;

@@ -19,9 +19,9 @@ public class ActMigrator {
         MigrationUtils.populateEncounterSet(context, act.getEncounterSetModel());
         MigrationUtils.populateArt(context, act.getPortraitModel());
 
-        act.setActNumber(settingsAccessor.getString("ScenarioIndex"));
-        act.setDeckId(settingsAccessor.getString("ScenarioDeckID"));
-        act.setClues(MigrationUtils.parseStatistic(settingsAccessor, "Clues", SettingsFieldNames.PER_INVESTIGATOR));
+        act.getActFieldsModel().setNumber(settingsAccessor.getString("ScenarioIndex"));
+        act.getActFieldsModel().setDeckId(settingsAccessor.getString("ScenarioDeckID"));
+        act.getActFieldsModel().setClues(MigrationUtils.parseStatistic(settingsAccessor, "Clues", SettingsFieldNames.PER_INVESTIGATOR));
 
         act.getStorySectionModel().setStory(settingsAccessor.getString(SettingsFieldNames.ACT_STORY));
         act.getStorySectionModel().setAfterStorySpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.ACT_STORY), Unit.Point));

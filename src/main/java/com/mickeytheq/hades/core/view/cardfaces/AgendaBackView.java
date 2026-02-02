@@ -66,13 +66,13 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         deckIdEditor = EditorUtils.createTextField(20);
         shadowFrontEditor = EditorUtils.createCheckBox();
 
-        EditorUtils.bindTextComponent(agendaNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setAgendaNumber));
-        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDeckId));
-        EditorUtils.bindToggleButton(shadowFrontEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setShadowFront));
+        EditorUtils.bindTextComponent(agendaNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setNumber));
+        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setDeckId));
+        EditorUtils.bindToggleButton(shadowFrontEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getAgendaFieldsModel()::setCopyOtherFace));
 
-        agendaNumberEditor.setText(getModel().getAgendaNumber());
-        deckIdEditor.setText(getModel().getDeckId());
-        shadowFrontEditor.setSelected(getModel().isShadowFront());
+        agendaNumberEditor.setText(getModel().getAgendaFieldsModel().getNumber());
+        deckIdEditor.setText(getModel().getAgendaFieldsModel().getDeckId());
+        shadowFrontEditor.setSelected(getModel().getAgendaFieldsModel().isCopyOtherFace());
 
         shadowFrontEditor.addChangeListener(e -> {
             boolean shadowing = shadowFrontEditor.isSelected();
@@ -152,7 +152,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     private void paintScenarioIndex(PaintContext paintContext) {
         // if shadowing the front then look for an Agenda on the other face. if missing do nothing
-        if (getModel().isShadowFront()) {
+        if (getModel().getAgendaFieldsModel().isCopyOtherFace()) {
             Optional<Agenda> otherFaceAgenda = getOtherFaceView().filter(o -> o instanceof AgendaView).map(o -> ((AgendaView)o).getModel());
 
             if (otherFaceAgenda.isPresent()) {
@@ -160,13 +160,13 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
                 // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
                 // deck id should only be one character in most cases but preserve the rest of the string if there is anything
-                String newDeckId = (char)(agenda.getDeckId().charAt(0) + 1) + StringUtils.substring(agenda.getDeckId(), 1);
-                PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaNumber(), newDeckId);
+                String newDeckId = (char)(agenda.getAgendaFieldsModel().getDeckId().charAt(0) + 1) + StringUtils.substring(agenda.getAgendaFieldsModel().getDeckId(), 1);
+                PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaFieldsModel().getNumber(), newDeckId);
             }
 
             return;
         }
 
-        PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), getModel().getAgendaFieldsModel().getNumber(), getModel().getAgendaFieldsModel().getDeckId());
     }
 }

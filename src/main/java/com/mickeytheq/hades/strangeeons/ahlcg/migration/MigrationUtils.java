@@ -78,7 +78,7 @@ public class MigrationUtils {
 
         // special case for Story as this are distinguished by template in AHLCG plugin rather than CardClass
         if (context.getTemplateKey().contains("Story")) {
-            playerCardFieldsModel.setPlayerCardType(PlayerCardType.Story);
+            playerCardFieldsModel.setCardType(PlayerCardType.Story);
             return;
         }
 
@@ -89,17 +89,17 @@ public class MigrationUtils {
         if (playerCardType == null)
             playerCardType = PlayerCardType.Standard;
 
-        playerCardFieldsModel.setPlayerCardType(playerCardType);
+        playerCardFieldsModel.setCardType(playerCardType);
 
         // for non-standard types no need to do anything else
         if (playerCardType != PlayerCardType.Standard)
             return;
 
-        playerCardFieldsModel.setPlayerCardClass1(PlayerCardClass.valueOf(cardClass));
+        playerCardFieldsModel.setCardClass1(PlayerCardClass.valueOf(cardClass));
 
         // look for multi-class
-        playerCardFieldsModel.setPlayerCardClass2(settingsAccessor.getEnumAllowInvalid("CardClass2", PlayerCardClass.class));
-        playerCardFieldsModel.setPlayerCardClass3(settingsAccessor.getEnumAllowInvalid("CardClass3", PlayerCardClass.class));
+        playerCardFieldsModel.setCardClass2(settingsAccessor.getEnumAllowInvalid("CardClass2", PlayerCardClass.class));
+        playerCardFieldsModel.setCardClass3(settingsAccessor.getEnumAllowInvalid("CardClass3", PlayerCardClass.class));
     }
 
     private static PlayerCardSkillIcon parseSkillIcon(String skill) {
@@ -294,7 +294,7 @@ public class MigrationUtils {
 
     public static WeaknessType getWeaknessType(String subType) {
         if (StringUtils.isEmpty(subType))
-            return WeaknessType.None;
+            return null;
 
         if (subType.equals("Weakness"))
             return WeaknessType.Investigator;

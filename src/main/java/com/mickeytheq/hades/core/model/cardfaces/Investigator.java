@@ -10,30 +10,22 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 // TODO: parallel investigator support
 @Model(typeCode = "Investigator")
 public class Investigator implements CardFaceModel, HasCommonCardFieldsModel {
-    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final InvestigatorFieldsModel investigatorFieldsModel = new InvestigatorFieldsModel();
+    private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitModel portraitModel;
-    private InvestigatorClass investigatorClass;
-    private String health;
-    private String sanity;
-    private String willpower;
-    private String intellect;
-    private String combat;
-    private String agility;
+    private final PortraitModel portraitModel = new PortraitModel();
 
     public Investigator() {
-        commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitModel = new PortraitModel();
-
-        investigatorClass = InvestigatorClass.Guardian;
         commonCardFieldsModel.setUnique(true);
-        health = "7";
-        sanity = "7";
-        willpower = "3";
-        intellect = "3";
-        combat = "3";
-        agility = "3";
+
+        investigatorFieldsModel.setInvestigatorClass(InvestigatorClass.Guardian);
+        investigatorFieldsModel.setHealth("7");
+        investigatorFieldsModel.setSanity("7");
+        investigatorFieldsModel.setWillpower("3");
+        investigatorFieldsModel.setIntellect("3");
+        investigatorFieldsModel.setCombat("3");
+        investigatorFieldsModel.setAgility("3");
     }
 
     @Override
@@ -42,86 +34,101 @@ public class Investigator implements CardFaceModel, HasCommonCardFieldsModel {
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(flatten = true)
+    @Property("Investigator")
+    public InvestigatorFieldsModel getInvestigatorFieldsModel() {
+        return investigatorFieldsModel;
+    }
+
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }
 
-    @Property("InvestigatorClass")
-    public InvestigatorClass getInvestigatorClass() {
-        return investigatorClass;
-    }
+    public static class InvestigatorFieldsModel {
+        private InvestigatorClass investigatorClass;
+        private String health;
+        private String sanity;
+        private String willpower;
+        private String intellect;
+        private String combat;
+        private String agility;
 
-    public void setInvestigatorClass(InvestigatorClass investigatorClass) {
-        this.investigatorClass = investigatorClass;
-    }
+        @Property("Class")
+        public InvestigatorClass getInvestigatorClass() {
+            return investigatorClass;
+        }
 
-    @Property("Health")
-    public String getHealth() {
-        return health;
-    }
+        public void setInvestigatorClass(InvestigatorClass investigatorClass) {
+            this.investigatorClass = investigatorClass;
+        }
 
-    public void setHealth(String health) {
-        this.health = health;
-    }
+        @Property("Health")
+        public String getHealth() {
+            return health;
+        }
 
-    @Property("Sanity")
-    public String getSanity() {
-        return sanity;
-    }
+        public void setHealth(String health) {
+            this.health = health;
+        }
 
-    public void setSanity(String sanity) {
-        this.sanity = sanity;
-    }
+        @Property("Sanity")
+        public String getSanity() {
+            return sanity;
+        }
 
-    @Property("Willpower")
-    public String getWillpower() {
-        return willpower;
-    }
+        public void setSanity(String sanity) {
+            this.sanity = sanity;
+        }
 
-    public void setWillpower(String willpower) {
-        this.willpower = willpower;
-    }
+        @Property("Willpower")
+        public String getWillpower() {
+            return willpower;
+        }
 
-    @Property("Intellect")
-    public String getIntellect() {
-        return intellect;
-    }
+        public void setWillpower(String willpower) {
+            this.willpower = willpower;
+        }
 
-    public void setIntellect(String intellect) {
-        this.intellect = intellect;
-    }
+        @Property("Intellect")
+        public String getIntellect() {
+            return intellect;
+        }
 
-    @Property("Combat")
-    public String getCombat() {
-        return combat;
-    }
+        public void setIntellect(String intellect) {
+            this.intellect = intellect;
+        }
 
-    public void setCombat(String combat) {
-        this.combat = combat;
-    }
+        @Property("Combat")
+        public String getCombat() {
+            return combat;
+        }
 
-    @Property("Agility")
-    public String getAgility() {
-        return agility;
-    }
+        public void setCombat(String combat) {
+            this.combat = combat;
+        }
 
-    public void setAgility(String agility) {
-        this.agility = agility;
+        @Property("Agility")
+        public String getAgility() {
+            return agility;
+        }
+
+        public void setAgility(String agility) {
+            this.agility = agility;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.BooleanFalseDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 
 public class CommonCardFieldsModel {
     private String title;
@@ -38,7 +38,7 @@ public class CommonCardFieldsModel {
         this.subtitle = subtitle;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE + "Titles", discriminator = BooleanFalseDiscriminator.class)
+    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE + "Titles", discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean getCopyOtherFaceTitles() {
         return copyOtherFaceTitles;
     }
@@ -47,7 +47,7 @@ public class CommonCardFieldsModel {
         this.copyOtherFaceTitles = copyOtherFaceTitles;
     }
 
-    @Property(value = "Unique", discriminator = BooleanFalseDiscriminator.class)
+    @Property(value = "Unique", discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isUnique() {
         return unique;
     }

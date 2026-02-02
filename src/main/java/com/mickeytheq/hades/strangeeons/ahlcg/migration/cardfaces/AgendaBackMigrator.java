@@ -11,7 +11,7 @@ public class AgendaBackMigrator {
         MigrationUtils.populateCommonCardFields(context, agendaBack.getCommonCardFieldsModel());
         MigrationUtils.populateEncounterSet(context, agendaBack.getEncounterSetModel());
 
-        agendaBack.setShadowFront(true);
+        agendaBack.getAgendaFieldsModel().setCopyOtherFace(true);
 
         MigrationUtils.populateStorySectionModel(context.getSettingsAccessor(), "A", agendaBack.getSection1());
         MigrationUtils.populateStorySectionModel(context.getSettingsAccessor(), "B", agendaBack.getSection2());

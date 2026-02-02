@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,11 +26,7 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
         Tarot
     }
 
-    private AssetSlot assetSlot1;
-    private AssetSlot assetSlot2;
-    private Statistic health;
-    private Statistic sanity;
-
+    private final AssetFieldsModel assetFieldsModel = new AssetFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
@@ -40,9 +37,6 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
         playerCardFieldsModel = new PlayerCardFieldsModel();
         commonCardFieldsModel = new CommonCardFieldsModel();
         portraitModel = new PortraitModel();
-
-        health = Statistic.empty();
-        sanity = Statistic.empty();
     }
 
     @Override
@@ -51,71 +45,85 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property("AssetSlot1")
-    public AssetSlot getAssetSlot1() {
-        return assetSlot1;
+    @Property("Asset")
+    public AssetFieldsModel getAssetFieldsModel() {
+        return assetFieldsModel;
     }
 
-    public void setAssetSlot1(AssetSlot assetSlot1) {
-        this.assetSlot1 = assetSlot1;
-    }
-
-    @Property("AssetSlot2")
-    public AssetSlot getAssetSlot2() {
-        return assetSlot2;
-    }
-
-    public void setAssetSlot2(AssetSlot assetSlot2) {
-        this.assetSlot2 = assetSlot2;
-    }
-
-    @Property("Health")
-    public Statistic getHealth() {
-        return health;
-    }
-
-    public void setHealth(Statistic health) {
-        this.health = health;
-    }
-
-    @Property("Sanity")
-    public Statistic getSanity() {
-        return sanity;
-    }
-
-    public void setSanity(Statistic sanity) {
-        this.sanity = sanity;
-    }
-
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.PLAYER)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }
 
-    public List<AssetSlot> getAssetSlots() {
-        return Stream.of(getAssetSlot1(), getAssetSlot2())
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
+    public static class AssetFieldsModel {
+        private AssetSlot slot1;
+        private AssetSlot slot2;
+        private Statistic health = Statistic.empty();
+        private Statistic sanity = Statistic.empty();
+
+        @Property("Slot1")
+        public AssetSlot getSlot1() {
+            return slot1;
+        }
+
+        public void setSlot1(AssetSlot slot1) {
+            this.slot1 = slot1;
+        }
+
+        @Property("Slot2")
+        public AssetSlot getSlot2() {
+            return slot2;
+        }
+
+        public void setSlot2(AssetSlot slot2) {
+            this.slot2 = slot2;
+        }
+
+        @Property("Health")
+        public Statistic getHealth() {
+            return health;
+        }
+
+        public void setHealth(Statistic health) {
+            this.health = health;
+        }
+
+        @Property("Sanity")
+        public Statistic getSanity() {
+            return sanity;
+        }
+
+        public void setSanity(Statistic sanity) {
+            this.sanity = sanity;
+        }
+
+        // convenience method for getting a list of asset slots
+        public List<AssetSlot> getAssetSlots() {
+            return Stream.of(getSlot1(), getSlot2())
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+
     }
 }

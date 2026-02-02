@@ -9,16 +9,13 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Location")
 public class Location extends BaseCardFaceModel implements HasCommonCardFieldsModel {
-    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitModel portraitModel;
-    private final LocationFieldsModel locationFieldsModel;
+    private final PortraitModel portraitModel = new PortraitModel();
+    private final LocationFieldsModel locationFieldsModel = new LocationFieldsModel();
 
     public Location() {
-        commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitModel = new PortraitModel();
-        locationFieldsModel = new LocationFieldsModel();
     }
 
     @Override
@@ -27,22 +24,22 @@ public class Location extends BaseCardFaceModel implements HasCommonCardFieldsMo
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

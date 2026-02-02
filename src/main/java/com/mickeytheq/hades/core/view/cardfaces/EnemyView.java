@@ -87,21 +87,21 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         damageEditor = createEnemyAttackComboBox();
         horrorEditor = createEnemyAttackComboBox();
 
-        weaknessTypeEditor = EditorUtils.createEnumComboBox(WeaknessType.class);
+        weaknessTypeEditor = EditorUtils.createEnumComboBoxNullable(WeaknessType.class);
 
-        EditorUtils.bindStatisticComponent(combatEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setCombat(value)));
-        EditorUtils.bindStatisticComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setHealth(value)));
-        EditorUtils.bindStatisticComponent(evadeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setEvade(value)));
-        EditorUtils.bindComboBox(damageEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setDamage(value)));
-        EditorUtils.bindComboBox(horrorEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setHorror(value)));
-        EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
+        EditorUtils.bindStatisticComponent(combatEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setCombat));
+        EditorUtils.bindStatisticComponent(healthEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setHealth));
+        EditorUtils.bindStatisticComponent(evadeEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setEvade));
+        EditorUtils.bindComboBox(damageEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setDamage));
+        EditorUtils.bindComboBox(horrorEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setHorror));
+        EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getEnemyFieldsModel()::setWeaknessType));
 
-        combatEditor.setStatistic(getModel().getCombat());
-        healthEditor.setStatistic(getModel().getHealth());
-        evadeEditor.setStatistic(getModel().getEvade());
-        damageEditor.setSelectedItem(getModel().getDamage());
-        horrorEditor.setSelectedItem(getModel().getHorror());
-        weaknessTypeEditor.setSelectedItem(getModel().getWeaknessType());
+        combatEditor.setStatistic(getModel().getEnemyFieldsModel().getCombat());
+        healthEditor.setStatistic(getModel().getEnemyFieldsModel().getHealth());
+        evadeEditor.setStatistic(getModel().getEnemyFieldsModel().getEvade());
+        damageEditor.setSelectedItem(getModel().getEnemyFieldsModel().getDamage());
+        horrorEditor.setSelectedItem(getModel().getEnemyFieldsModel().getHorror());
+        weaknessTypeEditor.setSelectedItem(getModel().getEnemyFieldsModel().getWeaknessType());
 
         // title
         JPanel titlePanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TITLE));
@@ -165,8 +165,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         StringBuilder sb = new StringBuilder();
         sb.append("/templates/enemy/enemy");
 
-        WeaknessType weaknessType = getModel().getWeaknessType();
-        if (weaknessType != WeaknessType.None) {
+        WeaknessType weaknessType = getModel().getEnemyFieldsModel().getWeaknessType();
+        if (weaknessType != null) {
             sb.append("_weakness");
 
             switch (weaknessType) {
@@ -205,7 +205,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         // title
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        if (getModel().getWeaknessType() == WeaknessType.None)
+        if (getModel().getEnemyFieldsModel().getWeaknessType() == null)
             paintNonWeaknessContent(paintContext);
         else
             paintWeaknessContent(paintContext);
@@ -230,7 +230,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         // draw the weakness overlay
         // this is the circular area either the standard basic weakness icon goes in or the encounter icon
         // for story weaknesses
-        WeaknessType weaknessType = getModel().getWeaknessType();
+        WeaknessType weaknessType = getModel().getEnemyFieldsModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
             if (weaknessType == WeaknessType.Basic) {
@@ -280,18 +280,18 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     );
 
     private void paintStatistics(PaintContext paintContext) {
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(COMBAT_DRAW_REGION), getModel().getCombat(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_DRAW_REGION), getModel().getHealth(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(EVADE_DRAW_REGION), getModel().getEvade(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(COMBAT_DRAW_REGION), getModel().getEnemyFieldsModel().getCombat(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_DRAW_REGION), getModel().getEnemyFieldsModel().getHealth(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(EVADE_DRAW_REGION), getModel().getEnemyFieldsModel().getEvade(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
         BufferedImage damageIcon = ImageUtils.loadImageReadOnly("/overlays/damage.png");
         BufferedImage horrorIcon = ImageUtils.loadImageReadOnly("/overlays/horror.png");
 
-        IntStream.rangeClosed(1, getModel().getDamage()).forEach(o -> {
+        IntStream.rangeClosed(1, getModel().getEnemyFieldsModel().getDamage()).forEach(o -> {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), damageIcon, paintContext.toPixelRect(DAMAGE_DRAW_REGIONS.get(o - 1)));
         });
 
-        IntStream.rangeClosed(1, getModel().getHorror()).forEach(o -> {
+        IntStream.rangeClosed(1, getModel().getEnemyFieldsModel().getHorror()).forEach(o -> {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), horrorIcon, paintContext.toPixelRect(HORROR_DRAW_REGIONS.get(o - 1)));
         });
     }

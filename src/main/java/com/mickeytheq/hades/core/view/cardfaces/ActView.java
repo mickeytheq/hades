@@ -74,13 +74,13 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         deckIdEditor = EditorUtils.createTextField(20);
         cluesEditor = new StatisticComponent();
 
-        EditorUtils.bindTextComponent(actNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setActNumber));
-        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDeckId));
-        EditorUtils.bindStatisticComponent(cluesEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setClues));
+        EditorUtils.bindTextComponent(actNumberEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setNumber));
+        EditorUtils.bindTextComponent(deckIdEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setDeckId));
+        EditorUtils.bindStatisticComponent(cluesEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getActFieldsModel()::setClues));
 
-        actNumberEditor.setText(getModel().getActNumber());
-        deckIdEditor.setText(getModel().getDeckId());
-        cluesEditor.setStatistic(getModel().getClues());
+        actNumberEditor.setText(getModel().getActFieldsModel().getNumber());
+        deckIdEditor.setText(getModel().getActFieldsModel().getDeckId());
+        cluesEditor.setStatistic(getModel().getActFieldsModel().getClues());
 
         layoutMainTab(editorContext);
 
@@ -155,8 +155,8 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         actCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
         commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
-        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
+        PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getActFieldsModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
-        PaintUtils.paintScenarioIndex(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), getModel().getActNumber(), getModel().getDeckId());
+        PaintUtils.paintScenarioIndex(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), getModel().getActFieldsModel().getNumber(), getModel().getActFieldsModel().getDeckId());
     }
 }

@@ -4,8 +4,8 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.core.view.CardFaceSide;
-import com.mickeytheq.hades.serialise.BooleanFalseDiscriminator;
-import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
 public class EncounterSetModel implements EmptyEntityDiscriminator {
@@ -38,7 +38,7 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
         return true;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanFalseDiscriminator.class)
+    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }
@@ -65,7 +65,7 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
         this.total = total;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetInfo getEncounterSet() {
         return encounterSet;
     }

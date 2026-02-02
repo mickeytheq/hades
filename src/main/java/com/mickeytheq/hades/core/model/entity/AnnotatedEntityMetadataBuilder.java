@@ -5,8 +5,8 @@ import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
-import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
-import com.mickeytheq.hades.serialise.EmptyValueDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyValueDiscriminator;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;

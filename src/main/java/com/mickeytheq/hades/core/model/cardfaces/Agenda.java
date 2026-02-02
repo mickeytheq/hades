@@ -9,10 +9,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Agenda")
 public class Agenda extends BaseCardFaceModel implements HasCommonCardFieldsModel {
-    private String agendaNumber;
-    private String deckId;
-    private Statistic doom = Statistic.empty();
-
+    private final AgendaFieldsModel agendaFieldsModel = new AgendaFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final StorySectionModel storySectionModel = new StorySectionModel();
     private final CollectionModel collectionModel = new CollectionModel();
@@ -21,62 +18,40 @@ public class Agenda extends BaseCardFaceModel implements HasCommonCardFieldsMode
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
-        agendaNumber = "1";
-        deckId = "a";
-        doom = new Statistic("3", false);
+        agendaFieldsModel.setNumber("1");
+        agendaFieldsModel.setDeckId("a");
+        agendaFieldsModel.setDoom(new Statistic("3", false));
 
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property("AgendaNumber")
-    public String getAgendaNumber() {
-        return agendaNumber;
+    @Property(CardModelPropertyNames.AGENDA)
+    public AgendaFieldsModel getAgendaFieldsModel() {
+        return agendaFieldsModel;
     }
 
-    public void setAgendaNumber(String agendaNumber) {
-        this.agendaNumber = agendaNumber;
-    }
-
-    @Property("DeckId")
-    public String getDeckId() {
-        return deckId;
-    }
-
-    public void setDeckId(String deckId) {
-        this.deckId = deckId;
-    }
-
-    @Property("Doom")
-    public Statistic getDoom() {
-        return doom;
-    }
-
-    public void setDoom(Statistic doom) {
-        this.doom = doom;
-    }
-
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.STORY)
     public StorySectionModel getStorySectionModel() {
         return storySectionModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

@@ -9,18 +9,13 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Treachery")
 public class Treachery extends BaseCardFaceModel implements HasCommonCardFieldsModel {
-    private WeaknessType weaknessType;
-
-    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final TreacheryFieldsModel treacheryFieldsModel = new TreacheryFieldsModel();
+    private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PortraitModel portraitModel;
+    private final PortraitModel portraitModel = new PortraitModel();
 
     public Treachery() {
-        weaknessType = WeaknessType.None;
-
-        commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitModel = new PortraitModel();
     }
 
     @Override
@@ -29,32 +24,41 @@ public class Treachery extends BaseCardFaceModel implements HasCommonCardFieldsM
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property("WeaknessType")
-    public WeaknessType getWeaknessType() {
-        return weaknessType;
+    @Property("Treachery")
+    public TreacheryFieldsModel getTreacheryFieldsModel() {
+        return treacheryFieldsModel;
     }
 
-    public void setWeaknessType(WeaknessType weaknessType) {
-        this.weaknessType = weaknessType;
-    }
-
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
+    }
+
+    public static class TreacheryFieldsModel {
+        private WeaknessType weaknessType;
+
+        @Property("WeaknessType")
+        public WeaknessType getWeaknessType() {
+            return weaknessType;
+        }
+
+        public void setWeaknessType(WeaknessType weaknessType) {
+            this.weaknessType = weaknessType;
+        }
     }
 }

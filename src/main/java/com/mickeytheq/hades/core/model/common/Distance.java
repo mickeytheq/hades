@@ -1,7 +1,6 @@
 package com.mickeytheq.hades.core.model.common;
 
-import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import com.mickeytheq.hades.util.shape.Unit;
 
 // a distance comprising a unit and an amount of that unit

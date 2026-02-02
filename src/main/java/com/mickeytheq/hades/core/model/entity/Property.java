@@ -1,8 +1,7 @@
 package com.mickeytheq.hades.core.model.entity;
 
-import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
-import com.mickeytheq.hades.serialise.EmptyValueDiscriminator;
-import com.mickeytheq.hades.serialise.NeverEmptyValueDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyValueDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.NeverEmptyValueDiscriminator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

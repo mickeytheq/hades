@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
-import com.mickeytheq.hades.serialise.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
 public class StorySectionModel implements EmptyEntityDiscriminator {

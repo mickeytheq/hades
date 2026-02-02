@@ -37,10 +37,10 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
-        skullView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Skull, getModel().getSkull());
-        cultistView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Cultist, getModel().getCultist());
-        tabletView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Tablet, getModel().getTablet());
-        elderThingView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getElderThing());
+        skullView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Skull, getModel().getScenarioReferenceFieldsModel().getSkull());
+        cultistView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Cultist, getModel().getScenarioReferenceFieldsModel().getCultist());
+        tabletView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.Tablet, getModel().getScenarioReferenceFieldsModel().getTablet());
+        elderThingView = new SymbolChaosTokenInfoView(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getScenarioReferenceFieldsModel().getElderThing());
     }
 
     @Override
@@ -73,8 +73,8 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
         // difficulty
         difficultyEditor = EditorUtils.createEnumComboBox(ScenarioReference.Difficulty.class);
-        EditorUtils.bindComboBox(difficultyEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setDifficulty));
-        difficultyEditor.setSelectedItem(getModel().getDifficulty());
+        EditorUtils.bindComboBox(difficultyEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getScenarioReferenceFieldsModel()::setDifficulty));
+        difficultyEditor.setSelectedItem(getModel().getScenarioReferenceFieldsModel().getDifficulty());
 
         // rules/chaos token effects
         JPanel rulesPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.RULES));
@@ -87,8 +87,8 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         // tracking
         JPanel trackingPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.TRACKERBOX));
         trackingBoxEditor = EditorUtils.createTextField(30);
-        EditorUtils.bindTextComponent(trackingBoxEditor, editorContext.wrapConsumerWithMarkedChanged(getModel()::setTrackingBox));
-        trackingBoxEditor.setText(getModel().getTrackingBox());
+        EditorUtils.bindTextComponent(trackingBoxEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getScenarioReferenceFieldsModel()::setTrackingBox));
+        trackingBoxEditor.setText(getModel().getScenarioReferenceFieldsModel().getTrackingBox());
 
         MigLayoutUtils.addLabelledComponentWrapGrowPush(trackingPanel, Language.string(InterfaceConstants.TRACKERBOX), trackingBoxEditor);
 
@@ -170,7 +170,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         double bodyYStart = difficultyDrawRegion.getMaxY() + paintContext.millimetersToPixels(1.70);
         double bodyYEnd = bodyRectangle.getMaxY();
 
-        if (!StringUtils.isEmpty(getModel().getTrackingBox())) {
+        if (!StringUtils.isEmpty(getModel().getScenarioReferenceFieldsModel().getTrackingBox())) {
             bodyYEnd = trackingBoxRectangle.getY();
         }
 
@@ -204,10 +204,10 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         Map<ScenarioReference.SymbolChaosTokenInfo, List<ScenarioReference.SymbolChaosToken>> combinedMap = new LinkedHashMap<>();
 
         Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosTokenInfo> tokenMap = new LinkedHashMap<>();
-        tokenMap.put(ScenarioReference.SymbolChaosToken.Skull, getModel().getSkull());
-        tokenMap.put(ScenarioReference.SymbolChaosToken.Cultist, getModel().getCultist());
-        tokenMap.put(ScenarioReference.SymbolChaosToken.Tablet, getModel().getTablet());
-        tokenMap.put(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getElderThing());
+        tokenMap.put(ScenarioReference.SymbolChaosToken.Skull, getModel().getScenarioReferenceFieldsModel().getSkull());
+        tokenMap.put(ScenarioReference.SymbolChaosToken.Cultist, getModel().getScenarioReferenceFieldsModel().getCultist());
+        tokenMap.put(ScenarioReference.SymbolChaosToken.Tablet, getModel().getScenarioReferenceFieldsModel().getTablet());
+        tokenMap.put(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getScenarioReferenceFieldsModel().getElderThing());
 
         Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosToken> combinedInto = new HashMap<>();
 
@@ -281,7 +281,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getScenarioReferenceDifficultyTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP);
-        markupRenderer.setMarkupText(getModel().getDifficulty().toString());
+        markupRenderer.setMarkupText(getModel().getScenarioReferenceFieldsModel().getDifficulty().toString());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
@@ -395,7 +395,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     }
 
     private void paintTrackingBox(PaintContext paintContext) {
-        if (StringUtils.isEmpty(getModel().getTrackingBox()))
+        if (StringUtils.isEmpty(getModel().getScenarioReferenceFieldsModel().getTrackingBox()))
             return;
 
         // background image
@@ -405,7 +405,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
         markupRenderer.setDefaultStyle(TextStyleUtils.getScenarioReferenceTrackerBoxTitleTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_CENTER | MarkupRenderer.LAYOUT_TOP);
-        markupRenderer.setMarkupText(getModel().getTrackingBox());
+        markupRenderer.setMarkupText(getModel().getScenarioReferenceFieldsModel().getTrackingBox());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(TRACKING_TITLE_DRAW_REGION));
     }
 }

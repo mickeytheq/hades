@@ -73,11 +73,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         encounterSetView.createEditors(editorContext);
         portraitView.createEditors(editorContext);
 
-        weaknessTypeEditor = EditorUtils.createEnumComboBox(WeaknessType.class);
+        weaknessTypeEditor = EditorUtils.createEnumComboBoxNullable(WeaknessType.class);
 
-        EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(value -> getModel().setWeaknessType(value)));
+        EditorUtils.bindComboBox(weaknessTypeEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getTreacheryFieldsModel()::setWeaknessType));
 
-        weaknessTypeEditor.setSelectedItem(getModel().getWeaknessType());
+        weaknessTypeEditor.setSelectedItem(getModel().getTreacheryFieldsModel().getWeaknessType());
 
         JPanel generalPanel = MigLayoutUtils.createTitledPanel("General");
 
@@ -100,7 +100,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
     public BufferedImage getTemplateImage() {
         URL templateUrl;
-        if (getModel().getWeaknessType() != WeaknessType.None)
+        if (getModel().getTreacheryFieldsModel().getWeaknessType() != null)
             templateUrl = WEAKNESS_TEMPLATE_RESOURCE;
         else
             templateUrl = DEFAULT_TEMPLATE_RESOURCE;
@@ -122,7 +122,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         // title
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        if (getModel().getWeaknessType() == WeaknessType.None)
+        if (getModel().getTreacheryFieldsModel().getWeaknessType() == null)
             paintNonWeaknessContent(paintContext);
         else
             paintWeaknessContent(paintContext);
@@ -143,7 +143,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         // draw the weakness overlay
         // this is the circular area either the standard basic weakness icon goes in or the encounter icon
         // for story weaknesses
-        WeaknessType weaknessType = getModel().getWeaknessType();
+        WeaknessType weaknessType = getModel().getTreacheryFieldsModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(BASIC_WEAKNESS_OVERLAY_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));

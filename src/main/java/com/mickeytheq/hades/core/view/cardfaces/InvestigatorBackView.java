@@ -53,7 +53,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
 
     @Override
     protected BufferedImage getTemplateImage() {
-        InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorClass();
+        InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass();
 
         return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png");
     }
@@ -119,7 +119,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         // sections
         String markupText = composeSectionString();
 
-        PaintUtils.paintBodyText(paintContext, markupText, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorClass()));
+        PaintUtils.paintBodyText(paintContext, markupText, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass()));
 
         portraitView.paintArtist(paintContext);
     }

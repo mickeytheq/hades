@@ -22,10 +22,10 @@ public class CardFaceGenerator {
     public Asset createAsset() {
         return ProjectContexts.withContextReturn(projectContext, () -> {
             Asset asset = new Asset();
-            asset.setAssetSlot1(randomEnum(Asset.AssetSlot.class));
-            asset.setAssetSlot2(randomEnum(Asset.AssetSlot.class));
-            asset.setHealth(randomStatistic(3));
-            asset.setSanity(randomStatistic(3));
+            asset.getAssetFieldsModel().setSlot1(randomEnum(Asset.AssetSlot.class));
+            asset.getAssetFieldsModel().setSlot2(randomEnum(Asset.AssetSlot.class));
+            asset.getAssetFieldsModel().setHealth(randomStatistic(3));
+            asset.getAssetFieldsModel().setSanity(randomStatistic(3));
 
             randomlyPopulateCommonCardFieldsModel(asset.getCommonCardFieldsModel());
             randomlyPopulatePlayerCardFieldsModel(asset.getPlayerCardFieldsModel());
@@ -66,7 +66,7 @@ public class CardFaceGenerator {
 
     private void randomlyPopulatePlayerCardFieldsModel(PlayerCardFieldsModel model) {
         model.setLevel(random.nextInt(6));
-        model.setPlayerCardType(randomEnum(PlayerCardType.class));
+        model.setCardType(randomEnum(PlayerCardType.class));
         model.setCost(Integer.toString(random.nextInt(5)));
 
         model.setPlayerCardClasses(IntStream.range(0, random.nextInt(3) + 1).mapToObj(o -> randomEnum(PlayerCardClass.class)).collect(Collectors.toList()));

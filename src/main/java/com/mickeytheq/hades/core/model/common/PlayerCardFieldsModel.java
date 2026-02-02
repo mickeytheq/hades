@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PlayerCardFieldsModel {
-    private PlayerCardType playerCardType;
-    private PlayerCardClass playerCardClass1;
-    private PlayerCardClass playerCardClass2;
-    private PlayerCardClass playerCardClass3;
+    private PlayerCardType cardType;
+    private PlayerCardClass cardClass1;
+    private PlayerCardClass cardClass2;
+    private PlayerCardClass cardClass3;
     private String cost;
     private Integer level;
     private PlayerCardSkillIcon skillIcon1;
@@ -22,19 +22,19 @@ public class PlayerCardFieldsModel {
     private PlayerCardSkillIcon skillIcon6;
 
     public PlayerCardFieldsModel() {
-        playerCardType = PlayerCardType.Standard;
-        playerCardClass1 = PlayerCardClass.Guardian;
+        cardType = PlayerCardType.Standard;
+        cardClass1 = PlayerCardClass.Guardian;
         cost = "0";
         level = 0;
     }
 
-    @Property("PlayerCardType")
-    public PlayerCardType getPlayerCardType() {
-        return playerCardType;
+    @Property("CardType")
+    public PlayerCardType getCardType() {
+        return cardType;
     }
 
-    public void setPlayerCardType(PlayerCardType playerCardType) {
-        this.playerCardType = playerCardType;
+    public void setCardType(PlayerCardType cardType) {
+        this.cardType = cardType;
     }
 
     @Property("Cost")
@@ -55,31 +55,31 @@ public class PlayerCardFieldsModel {
         this.level = level;
     }
 
-    @Property("PlayerCardClass1")
-    public PlayerCardClass getPlayerCardClass1() {
-        return playerCardClass1;
+    @Property("CardClass1")
+    public PlayerCardClass getCardClass1() {
+        return cardClass1;
     }
 
-    public void setPlayerCardClass1(PlayerCardClass playerCardClass1) {
-        this.playerCardClass1 = playerCardClass1;
+    public void setCardClass1(PlayerCardClass cardClass1) {
+        this.cardClass1 = cardClass1;
     }
 
-    @Property("PlayerCardClass2")
-    public PlayerCardClass getPlayerCardClass2() {
-        return playerCardClass2;
+    @Property("CardClass2")
+    public PlayerCardClass getCardClass2() {
+        return cardClass2;
     }
 
-    public void setPlayerCardClass2(PlayerCardClass playerCardClass2) {
-        this.playerCardClass2 = playerCardClass2;
+    public void setCardClass2(PlayerCardClass cardClass2) {
+        this.cardClass2 = cardClass2;
     }
 
-    @Property("PlayerCardClass3")
-    public PlayerCardClass getPlayerCardClass3() {
-        return playerCardClass3;
+    @Property("CardClass3")
+    public PlayerCardClass getCardClass3() {
+        return cardClass3;
     }
 
-    public void setPlayerCardClass3(PlayerCardClass playerCardClass3) {
-        this.playerCardClass3 = playerCardClass3;
+    public void setCardClass3(PlayerCardClass cardClass3) {
+        this.cardClass3 = cardClass3;
     }
 
     @Property("SkillIcon1")
@@ -139,9 +139,9 @@ public class PlayerCardFieldsModel {
     // for convenience accessing as a list
     public List<PlayerCardClass> getPlayerCardClasses() {
         List<PlayerCardClass> cardClasses = Stream.of(
-                        getPlayerCardClass1(),
-                        getPlayerCardClass2(),
-                        getPlayerCardClass3())
+                        getCardClass1(),
+                        getCardClass2(),
+                        getCardClass3())
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
@@ -157,17 +157,17 @@ public class PlayerCardFieldsModel {
         if (playerCardClasses.isEmpty())
             return;
         
-        setPlayerCardClass1(playerCardClasses.get(0));
+        setCardClass1(playerCardClasses.get(0));
 
         if (playerCardClasses.size() < 2)
             return;
 
-        setPlayerCardClass2(playerCardClasses.get(1));
+        setCardClass2(playerCardClasses.get(1));
 
         if (playerCardClasses.size() < 3)
             return;
 
-        setPlayerCardClass3(playerCardClasses.get(2));
+        setCardClass3(playerCardClasses.get(2));
     }
 
     // for convenience accessing as a list

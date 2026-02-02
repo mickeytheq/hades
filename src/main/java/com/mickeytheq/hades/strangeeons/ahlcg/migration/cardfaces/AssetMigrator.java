@@ -17,13 +17,13 @@ public class AssetMigrator {
         MigrationUtils.populateEncounterSet(context, asset.getEncounterSetModel());
         MigrationUtils.populateArt(context, asset.getPortraitModel());
 
-        asset.setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));
-        asset.setSanity(MigrationUtils.parseStatistic(settingsAccessor, "Sanity", null));
+        asset.getAssetFieldsModel().setHealth(MigrationUtils.parseStatistic(settingsAccessor, "Stamina", null));
+        asset.getAssetFieldsModel().setSanity(MigrationUtils.parseStatistic(settingsAccessor, "Sanity", null));
 
         asset.getCommonCardFieldsModel().setUnique(Integer.parseInt(settingsAccessor.getString("Unique")) != 0);
 
-        asset.setAssetSlot1(parseAssetSlot(settingsAccessor.getString("Slot")));
-        asset.setAssetSlot2(parseAssetSlot(settingsAccessor.getString("Slot2")));
+        asset.getAssetFieldsModel().setSlot1(parseAssetSlot(settingsAccessor.getString("Slot")));
+        asset.getAssetFieldsModel().setSlot2(parseAssetSlot(settingsAccessor.getString("Slot2")));
 
         return asset;
     }

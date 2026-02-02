@@ -20,32 +20,32 @@ public class Story extends BaseCardFaceModel implements HasCommonCardFieldsModel
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Section1")
+    @Property(CardModelPropertyNames.STORY_SECTION_1)
     public StorySectionModel getSection1() {
         return section1;
     }
 
-    @Property("Section2")
+    @Property(CardModelPropertyNames.STORY_SECTION_2)
     public StorySectionModel getSection2() {
         return section2;
     }
 
-    @Property("Section3")
+    @Property(CardModelPropertyNames.STORY_SECTION_3)
     public StorySectionModel getSection3() {
         return section3;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }

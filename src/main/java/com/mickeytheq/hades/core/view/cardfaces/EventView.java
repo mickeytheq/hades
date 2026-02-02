@@ -176,7 +176,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private Rectangle getBodyDrawRegion(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
         if (playerCardType.isWeakness())
             return paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION);
@@ -227,7 +227,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private void paintEncounterContent(PaintContext paintContext) {
-        if (!getModel().getPlayerCardFieldsModel().getPlayerCardType().isHasEncounterDetails())
+        if (!getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails())
             return;
 
         paintEncounterOrBasicWeaknessOverlay(paintContext);
@@ -241,7 +241,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getPlayerCardType();
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());

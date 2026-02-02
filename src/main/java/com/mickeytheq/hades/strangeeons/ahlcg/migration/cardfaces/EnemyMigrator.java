@@ -17,12 +17,12 @@ public class EnemyMigrator {
         MigrationUtils.populateEncounterSet(context, enemy.getEncounterSetModel());
         MigrationUtils.populateArt(context, enemy.getPortraitModel());
 
-        enemy.setCombat(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_COMBAT, SettingsFieldNames.PER_INVESTIGATOR + SettingsFieldNames.ENEMY_COMBAT));
-        enemy.setHealth(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_HEALTH, SettingsFieldNames.PER_INVESTIGATOR));
-        enemy.setEvade(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_EVADE, SettingsFieldNames.PER_INVESTIGATOR + SettingsFieldNames.ENEMY_EVADE));
-        enemy.setDamage(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.ENEMY_DAMAGE));
-        enemy.setHorror(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.ENEMY_HORROR));
-        enemy.setWeaknessType(MigrationUtils.getWeaknessType(settingsAccessor.getString(SettingsFieldNames.SUBTYPE)));
+        enemy.getEnemyFieldsModel().setCombat(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_COMBAT, SettingsFieldNames.PER_INVESTIGATOR + SettingsFieldNames.ENEMY_COMBAT));
+        enemy.getEnemyFieldsModel().setHealth(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_HEALTH, SettingsFieldNames.PER_INVESTIGATOR));
+        enemy.getEnemyFieldsModel().setEvade(MigrationUtils.parseStatistic(settingsAccessor, SettingsFieldNames.ENEMY_EVADE, SettingsFieldNames.PER_INVESTIGATOR + SettingsFieldNames.ENEMY_EVADE));
+        enemy.getEnemyFieldsModel().setDamage(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.ENEMY_DAMAGE));
+        enemy.getEnemyFieldsModel().setHorror(settingsAccessor.getIntegerAllowInvalid(SettingsFieldNames.ENEMY_HORROR));
+        enemy.getEnemyFieldsModel().setWeaknessType(MigrationUtils.getWeaknessType(settingsAccessor.getString(SettingsFieldNames.SUBTYPE)));
 
         enemy.getCommonCardFieldsModel().setUnique(Integer.parseInt(settingsAccessor.getString("Unique")) != 0);
 

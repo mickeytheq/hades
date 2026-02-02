@@ -11,7 +11,7 @@ public class ActBackMigrator {
         MigrationUtils.populateCommonCardFields(context, actBack.getCommonCardFieldsModel());
         MigrationUtils.populateEncounterSet(context, actBack.getEncounterSetModel());
 
-        actBack.setShadowFront(true);
+        actBack.getActFieldsModel().setCopyOtherFace(true);
 
         MigrationUtils.populateStorySectionModel(context.getSettingsAccessor(), "A", actBack.getSection1());
         MigrationUtils.populateStorySectionModel(context.getSettingsAccessor(), "B", actBack.getSection2());

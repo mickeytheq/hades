@@ -9,16 +9,13 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Skill")
 public class Skill extends BaseCardFaceModel implements HasCommonCardFieldsModel {
-    private final CommonCardFieldsModel commonCardFieldsModel;
+    private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
-    private final PlayerCardFieldsModel playerCardFieldsModel;
-    private final PortraitModel portraitModel;
+    private final PlayerCardFieldsModel playerCardFieldsModel = new PlayerCardFieldsModel();
+    private final PortraitModel portraitModel = new PortraitModel();
 
     public Skill() {
-        playerCardFieldsModel = new PlayerCardFieldsModel();
-        commonCardFieldsModel = new CommonCardFieldsModel();
-        portraitModel = new PortraitModel();
     }
 
     @Override
@@ -27,27 +24,27 @@ public class Skill extends BaseCardFaceModel implements HasCommonCardFieldsModel
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property("Collection")
+    @Property(CardModelPropertyNames.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property("EncounterSet")
+    @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(flatten = true)
+    @Property(CardModelPropertyNames.PLAYER)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
     }
 
-    @Property("ArtPortrait")
+    @Property(CardModelPropertyNames.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }
