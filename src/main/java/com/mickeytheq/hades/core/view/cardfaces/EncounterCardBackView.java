@@ -24,7 +24,7 @@ public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
 
     @Override
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly(getClass().getResource("/templates/AHLCG-EncounterBack.jp2"));
+        return ImageUtils.loadImageReadOnly(getClass().getResource("/templates/backs/encounter_card_back.png"));
     }
 
     @Override
