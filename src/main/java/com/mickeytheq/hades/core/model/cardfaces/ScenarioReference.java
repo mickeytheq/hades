@@ -12,65 +12,6 @@ import resources.Language;
 
 @Model(typeCode = "ScenarioReference")
 public class ScenarioReference extends BaseCardFaceModel implements HasCommonCardFieldsModel {
-    public static class SymbolChaosTokenInfo {
-        private String rules;
-        private SymbolChaosToken combineWith;
-
-        @Property("Rules")
-        public String getRules() {
-            return rules;
-        }
-
-        public void setRules(String rules) {
-            this.rules = rules;
-        }
-
-        @Property("CombineWith")
-        public SymbolChaosToken getCombineWith() {
-            return combineWith;
-        }
-
-        public void setCombineWith(SymbolChaosToken combineWith) {
-            this.combineWith = combineWith;
-        }
-    }
-
-    public enum Difficulty {
-        EasyStandard(GameConstants.DIFFICULTY_FRONT), HardExpert(GameConstants.DIFFICULTY_BACK);
-
-        private final String languageKey;
-
-        Difficulty(String languageKey) {
-            this.languageKey = languageKey;
-        }
-
-        public String getLanguageKey() {
-            return languageKey;
-        }
-
-        public String toString() {
-            return Language.gstring(languageKey);
-        }
-    }
-
-    public enum SymbolChaosToken {
-        Skull(InterfaceConstants.CHAOS_SKULL),
-        Cultist(InterfaceConstants.CHAOS_CULTIST),
-        Tablet(InterfaceConstants.CHAOS_TABLET),
-        ElderThing(InterfaceConstants.CHAOS_ELDERTHING);
-
-        private final String interfaceLanguageKey;
-
-        SymbolChaosToken(String interfaceLanguageKey) {
-            this.interfaceLanguageKey = interfaceLanguageKey;
-        }
-
-        @Override
-        public String toString() {
-            return Language.string(interfaceLanguageKey);
-        }
-    }
-
     private final ScenarioReferenceFieldsModel scenarioReferenceFieldsModel = new ScenarioReferenceFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
@@ -154,6 +95,65 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
 
         public void setTrackingBox(String trackingBox) {
             this.trackingBox = trackingBox;
+        }
+    }
+
+    public static class SymbolChaosTokenInfo {
+        private String rules;
+        private SymbolChaosToken combineWith;
+
+        @Property("Rules")
+        public String getRules() {
+            return rules;
+        }
+
+        public void setRules(String rules) {
+            this.rules = rules;
+        }
+
+        @Property("CombineWith")
+        public SymbolChaosToken getCombineWith() {
+            return combineWith;
+        }
+
+        public void setCombineWith(SymbolChaosToken combineWith) {
+            this.combineWith = combineWith;
+        }
+    }
+
+    public enum Difficulty {
+        EasyStandard(GameConstants.DIFFICULTY_FRONT), HardExpert(GameConstants.DIFFICULTY_BACK);
+
+        private final String languageKey;
+
+        Difficulty(String languageKey) {
+            this.languageKey = languageKey;
+        }
+
+        public String getLanguageKey() {
+            return languageKey;
+        }
+
+        public String toString() {
+            return Language.gstring(languageKey);
+        }
+    }
+
+    public enum SymbolChaosToken {
+        Skull(InterfaceConstants.CHAOS_SKULL),
+        Cultist(InterfaceConstants.CHAOS_CULTIST),
+        Tablet(InterfaceConstants.CHAOS_TABLET),
+        ElderThing(InterfaceConstants.CHAOS_ELDERTHING);
+
+        private final String interfaceLanguageKey;
+
+        SymbolChaosToken(String interfaceLanguageKey) {
+            this.interfaceLanguageKey = interfaceLanguageKey;
+        }
+
+        @Override
+        public String toString() {
+            return Language.string(interfaceLanguageKey);
         }
     }
 }
