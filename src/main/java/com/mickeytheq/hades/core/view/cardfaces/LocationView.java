@@ -21,7 +21,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
-public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView, HasCollectionView, HasEncounterSetView {
+public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView, HasCollectionView, HasEncounterSetView, HasArtPortraitView {
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
     private CollectionView collectionView;
@@ -35,7 +35,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
 
@@ -52,6 +52,11 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     @Override
     public LocationFieldsView getLocationsFieldView() {
         return locationFieldsView;
+    }
+
+    @Override
+    public PortraitView getArtPortraitView() {
+        return portraitView;
     }
 
     @Override

@@ -726,6 +726,8 @@ public class InterfaceConstants {
     public static final String RELICSOFTHEPAST = "Hades-RelicsOfThePast";
     // English value: Check selected collections
     public static final String PREF_CHECKCOLLECTIONS = "Hades-Pref-CheckCollections";
+    // English value: Portrait options
+    public static final String PORTRAIT_OPTIONS = "Hades-Portrait-Options";
     // English value: Return to Heart of the Elders
     public static final String RETURNTOHEARTOFTHEELDERS = "Hades-ReturnToHeartOfTheElders";
     // English value: Subtitle

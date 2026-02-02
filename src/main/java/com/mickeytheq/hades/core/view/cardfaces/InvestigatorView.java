@@ -45,7 +45,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override

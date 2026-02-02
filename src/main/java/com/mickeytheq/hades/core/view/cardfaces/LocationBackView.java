@@ -31,7 +31,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
 
@@ -78,7 +78,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         JPanel mainPanel = MigLayoutUtils.createVerticalFlowOrganiserPanel(
                 generalPanel,
-                portraitView.createStandardArtPanel(editorContext));
+                portraitView.createStandardArtPanel(editorContext, true));
 
         // add the panel to the main tab control
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n

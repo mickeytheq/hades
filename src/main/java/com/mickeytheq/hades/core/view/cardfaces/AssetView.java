@@ -42,7 +42,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
     }
 
     @Override

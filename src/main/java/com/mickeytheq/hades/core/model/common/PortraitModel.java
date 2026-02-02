@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
+import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,6 +12,7 @@ public class PortraitModel implements EmptyEntityDiscriminator {
     private double scale = 1.0;
     private double rotation = 0;
     private String artist;
+    private boolean copyOtherFace = false;
 
 
     private ImageProxy image = ImageProxy.createEmpty();
@@ -69,6 +71,15 @@ public class PortraitModel implements EmptyEntityDiscriminator {
         this.artist = artist;
     }
 
+    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    public boolean isCopyOtherFace() {
+        return copyOtherFace;
+    }
+
+    public void setCopyOtherFace(boolean copyOtherFace) {
+        this.copyOtherFace = copyOtherFace;
+    }
+
     @Override
     public boolean isEmpty() {
         // if the image is set then this is not null
@@ -76,6 +87,9 @@ public class PortraitModel implements EmptyEntityDiscriminator {
             return false;
 
         if (!StringUtils.isEmpty(artist))
+            return false;
+
+        if (copyOtherFace)
             return false;
 
         // otherwise any pan/scale settings are irrelevant and we can skip the entire entity

@@ -21,6 +21,7 @@ public class LocationBack extends BaseCardFaceModel implements HasCommonCardFiel
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
         // by default copy the other side of the card
         locationFieldsModel.setCopyOtherFace(true);
+        portraitModel.setCopyOtherFace(true);
     }
 
     @Property(CardModelPropertyNames.GENERAL)

@@ -9,6 +9,7 @@ import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
+import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
@@ -41,10 +42,12 @@ public class PortraitView {
     public static final URL BLANK_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/resources/spacers/empty1x1.png");
     public static final URL DEFAULT_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/portrait/DefaultTexture.jp2");
     private final PortraitModel portraitModel;
+    private final CardFaceView cardFaceView;
     private final Dimension portraitDrawDimension;
 
     private final URL defaultImageResource;
 
+    private JCheckBox copyOtherFaceEditor;
     private JTextField artistEditor;
 
     // the local transient image - ideally we would always rely on the model's image but when using a default
@@ -59,8 +62,9 @@ public class PortraitView {
     // allows automatic scaling of a new image to an appropriate size
     //
     // the exact draw region/rectangle is only needed when painting
-    private PortraitView(PortraitModel portraitModel, Dimension portraitDrawDimension, URL defaultImageResource) {
+    private PortraitView(PortraitModel portraitModel, CardFaceView cardFaceView, Dimension portraitDrawDimension, URL defaultImageResource) {
         this.portraitModel = portraitModel;
+        this.cardFaceView = cardFaceView;
         this.portraitDrawDimension = portraitDrawDimension;
         this.defaultImageResource = defaultImageResource;
 
@@ -74,14 +78,14 @@ public class PortraitView {
 
     // create a new PortraitView with the given model and draw dimension which defaults to a blank image when
     // no source is provided by the model
-    public static PortraitView createWithBlankImage(PortraitModel portraitModel, Dimension portraitDrawDimension) {
-        return new PortraitView(portraitModel, portraitDrawDimension, BLANK_PORTRAIT_IMAGE_RESOURCE);
+    public static PortraitView createWithBlankImage(PortraitModel portraitModel, CardFaceView cardFaceView, Dimension portraitDrawDimension) {
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension, BLANK_PORTRAIT_IMAGE_RESOURCE);
     }
 
     // create a new PortraitView with the given model and draw dimension which defaults to a standard/default image when
     // no source is provided by the model
-    public static PortraitView createWithDefaultImage(PortraitModel portraitModel, Dimension portraitDrawDimension) {
-        return new PortraitView(portraitModel, portraitDrawDimension, DEFAULT_PORTRAIT_IMAGE_RESOURCE);
+    public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, Dimension portraitDrawDimension) {
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension, DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
     private void installDefaultImage() {
@@ -112,26 +116,42 @@ public class PortraitView {
         return portraitDrawDimension;
     }
 
+    public BufferedImage getImage() {
+        return image;
+    }
+
     public void createEditors(EditorContext editorContext) {
         artistEditor = EditorUtils.createTextField(30);
         EditorUtils.bindTextComponent(artistEditor, editorContext.wrapConsumerWithMarkedChanged(portraitModel::setArtist));
         artistEditor.setText(portraitModel.getArtist());
+
+        copyOtherFaceEditor = EditorUtils.createCheckBox();
+        EditorUtils.bindToggleButton(copyOtherFaceEditor, editorContext.wrapConsumerWithMarkedChanged(portraitModel::setCopyOtherFace));
+        copyOtherFaceEditor.setSelected(portraitModel.isCopyOtherFace());
     }
 
     public JPanel createStandardArtPanel(EditorContext editorContext) {
+        return createStandardArtPanel(editorContext, false);
+    }
+
+    public JPanel createStandardArtPanel(EditorContext editorContext, boolean copyOtherFaceOption) {
         // have a zero inset as to avoid a double-spaced margin as this panel is usually embedded within other panels
         JPanel artistWithPortraitPanel = MigLayoutUtils.createOrganiserPanel();
+
+        JPanel artistPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.PORTRAIT_OPTIONS));
+        if (copyOtherFaceOption) {
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(artistPanel, Language.string(InterfaceConstants.COPY_OTHER_FACE), copyOtherFaceEditor);
+        }
+
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
+        artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
 
         PortraitPanel portraitPanel = createPortraitPanel(editorContext, Language.string(InterfaceConstants.PORTRAIT));
 
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
-        JPanel artistPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.ARTIST));
-        MigLayoutUtils.addLabelledComponentWrapGrowPush(artistPanel, Language.string(InterfaceConstants.ARTIST), artistEditor);
-
-        artistWithPortraitPanel.add(artistPanel, "wrap, pushx, growx");
-
         return artistWithPortraitPanel;
+
     }
 
     private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(2.37, 86.70, 20.49, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
@@ -189,7 +209,18 @@ public class PortraitView {
     public void paint(PaintContext paintContext, Rectangle drawRegion, boolean inverted) {
         Graphics2D g = paintContext.getGraphics();
 
+        // if copying the other face delegate to its paint function
+        if (portraitModel.isCopyOtherFace()) {
+            Optional<PortraitView> otherFacePortraitView = cardFaceView.getOtherFaceView()
+                    .filter(o -> o instanceof HasArtPortraitView).map(o -> (((HasArtPortraitView)o).getArtPortraitView()));
+
+            otherFacePortraitView.ifPresent(portraitView -> portraitView.paint(paintContext, drawRegion, inverted));
+
+            return;
+        }
+
         BufferedImage image = this.image;
+
         if (image == null) {
             return;
         }

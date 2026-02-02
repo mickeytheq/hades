@@ -10,10 +10,11 @@ public class LocationBackMigrator {
         LocationBack locationBack = new LocationBack();
 
         MigrationUtils.populateCommonCardFields(context, locationBack.getCommonCardFieldsModel());
-//        MigrationUtils.populateCollection(context, locationBack.getCollectionModel());
-//        MigrationUtils.populateEncounterSet(context, locationBack.getEncounterSetModel());
         MigrationUtils.populateArt(context, locationBack.getPortraitModel());
         MigrationUtils.populateLocationFields(context, locationBack.getLocationFieldsModel());
+
+        // by default location backs copy their image
+        locationBack.getPortraitModel().setCopyOtherFace(true);
 
         return locationBack;
     }

@@ -21,8 +21,10 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,9 +102,9 @@ public class ProjectMigrator {
             // it might be an image or another important element
             if (!MemberUtils.isPathEonFile(sourceFile)) {
                 try {
-                    Files.copy(sourceFile, targetFile);
+                    Files.copy(sourceFile, targetFile, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    logger.error("Error doing straightforward copy of '" + sourceFile + "' to '" + targetFile + "'");
+                    logger.error("Error doing straightforward copy of '" + sourceFile + "' to '" + targetFile + "'", e);
                     continue;
                 }
 
