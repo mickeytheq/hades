@@ -183,7 +183,7 @@ public class LocationFieldsView {
     private static final List<LocationIconInfo> LOCATION_ICON_INFOS = new ArrayList<>();
     private static final Map<String, LocationIconInfo> LOCATION_ICON_INFO_MAP;
 
-    private static final BufferedImage LOCATION_BASE_IMAGE = ImageUtils.loadImage("/icons/location/location_base.png");
+    private static final BufferedImage LOCATION_BASE_IMAGE = ImageUtils.loadImageReadOnly("/icons/location/location_base.png");
 
     // tint values copied from AHLCG plugin
     // for some reason the Strange Eons encoding of tints multiplies/divides the h-value by 360 when it is saved/loaded
@@ -247,7 +247,7 @@ public class LocationFieldsView {
     private static Icon createLocationEditorIcon(String iconResourceName, BufferedImage baseImage) {
         Graphics2D graphics2D = baseImage.createGraphics();
         try {
-            BufferedImage iconImage = ImageUtils.loadImage("/icons/location/location_" + iconResourceName + ".png");
+            BufferedImage iconImage = ImageUtils.loadImageReadOnly("/icons/location/location_" + iconResourceName + ".png");
             graphics2D.drawImage(iconImage, 4, 4, null);
 
             return ImageUtilities.createIconForSize(baseImage, 12);
@@ -260,7 +260,7 @@ public class LocationFieldsView {
     private static BufferedImage createLocationPaintImage(String iconResourceName, BufferedImage baseImage) {
         Graphics2D graphics2D = baseImage.createGraphics();
         try {
-            BufferedImage iconImage = ImageUtils.loadImage("/icons/location/location_" + iconResourceName + ".png");
+            BufferedImage iconImage = ImageUtils.loadImageReadOnly("/icons/location/location_" + iconResourceName + ".png");
             graphics2D.drawImage(iconImage, 5, 5, null);
 
             return baseImage;
@@ -318,7 +318,7 @@ public class LocationFieldsView {
     public void paintLocationIcons(PaintContext paintContext) {
         // paint the location background for the location icon but only for the location front template
         if (!LocationFieldsModel.NONE_VALUE.equals(getModel().getLocationIcon())) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/location_circle.png"), paintContext.toPixelRect(CIRCLE_OVERLAY_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/location_circle.png"), paintContext.toPixelRect(CIRCLE_OVERLAY_DRAW_REGION));
         }
 
         LocationFieldsModel otherFaceModel = getOtherFaceModel();

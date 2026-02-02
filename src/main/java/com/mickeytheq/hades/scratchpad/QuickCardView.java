@@ -90,13 +90,13 @@ public class QuickCardView {
             EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
             encounterSetInfo.setDisplayName("Rats");
             encounterSetInfo.setTag("rats");
-            encounterSetInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImage("/test/AHLCG-Rats.png")));
+            encounterSetInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImageReadOnly("/test/AHLCG-Rats.png")));
             config.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
 
             CollectionInfo collectionInfo = new CollectionInfo();
             collectionInfo.setDisplayName("Rats");
             collectionInfo.setTag("rats");
-            collectionInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImage("/test/AHLCG-Rats.png")));
+            collectionInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImageReadOnly("/test/AHLCG-Rats.png")));
             config.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
 
             return config;

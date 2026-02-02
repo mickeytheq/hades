@@ -46,7 +46,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/act_agenda/act_back.png");
+        return ImageUtils.loadImageReadOnly("/templates/act_agenda/act_back.png");
     }
 
     @Override

@@ -46,7 +46,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/act_agenda/agenda_back.png");
+        return ImageUtils.loadImageReadOnly("/templates/act_agenda/agenda_back.png");
     }
 
     @Override

@@ -54,7 +54,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/act_agenda/act.png");
+        return ImageUtils.loadImageReadOnly("/templates/act_agenda/act.png");
     }
 
     @Override

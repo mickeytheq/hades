@@ -55,7 +55,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/scenario/scenario_reference.png");
+        return ImageUtils.loadImageReadOnly("/templates/scenario/scenario_reference.png");
     }
 
     @Override
@@ -371,7 +371,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             for (ScenarioReference.SymbolChaosToken token : tokens) {
                 // draw the token image
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage("/overlays/chaos_tokens/chaos_" + getChaosTokenResourceName(token) + ".png"),
+                        ImageUtils.loadImageReadOnly("/overlays/chaos_tokens/chaos_" + getChaosTokenResourceName(token) + ".png"),
                         new Rectangle(chaosTokenXPosition, (int)yPosition, tokenDiameterInPixels, tokenDiameterInPixels));
 
                 yPosition = yPosition + tokenDiameterInPixels + verticalGapInPixels;
@@ -399,7 +399,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             return;
 
         // background image
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/scenario_reference/scenario_reference_tracker_box.png"), paintContext.toPixelRect(TRACKING_BOX_DRAW_REGION));
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/scenario_reference/scenario_reference_tracker_box.png"), paintContext.toPixelRect(TRACKING_BOX_DRAW_REGION));
 
         // title
         MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();

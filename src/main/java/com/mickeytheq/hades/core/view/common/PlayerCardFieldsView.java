@@ -193,13 +193,13 @@ public class PlayerCardFieldsView {
             Integer level = getModel().getLevel();
             if (level == null) {
                 ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/no_level.png")),
+                        ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/no_level.png")),
                         paintContext.toPixelRect(NO_LEVEL_DRAW_REGION));
             } else if (level == 0) {
                 // do nothing for level 0
             } else {
                 ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImage(getClass().getResource("/overlays/level_" + getModel().getLevel() + ".png")),
+                        ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/level_" + getModel().getLevel() + ".png")),
                         paintContext.toPixelRect(LEVEL_DRAW_REGION));
             }
         }
@@ -254,14 +254,14 @@ public class PlayerCardFieldsView {
             // paint the skill box
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
+                    ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
                     paintContext.toPixelRect(SKILL_BOX_DRAW_REGIONS.get(i))
             );
 
             // paint the skill icon
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
-                    ImageUtils.loadImage(getClass().getResource(getSkillIconResource(skillIcon))),
+                    ImageUtils.loadImageReadOnly(getClass().getResource(getSkillIconResource(skillIcon))),
                     paintContext.toPixelRect(SKILL_ICON_DRAW_REGIONS.get(i))
             );
         }

@@ -55,7 +55,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     protected BufferedImage getTemplateImage() {
         InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorClass();
 
-        return ImageUtils.loadImage("/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png");
+        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png");
     }
 
     @Override

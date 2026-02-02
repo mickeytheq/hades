@@ -63,7 +63,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     @Override
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage(getClass().getResource(getTemplateResource()));
+        return ImageUtils.loadImageReadOnly(getClass().getResource(getTemplateResource()));
     }
 
     private String getTemplateResource() {
@@ -218,7 +218,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
 
             Rectangle rectangle = paintContext.toPixelRect(drawRegions.get(i));
 
@@ -237,7 +237,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
-        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
+        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -248,7 +248,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
             paintEncounterOrBasicWeaknessOverlay(paintContext);
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }
 

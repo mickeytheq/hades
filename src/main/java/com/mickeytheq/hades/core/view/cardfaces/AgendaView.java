@@ -54,7 +54,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/act_agenda/agenda.png");
+        return ImageUtils.loadImageReadOnly("/templates/act_agenda/agenda.png");
     }
 
     @Override

@@ -88,7 +88,7 @@ public class PortraitView {
         // install the default image
         // note that we do not set the model's image to this when installing a default as default images are not persisted
         // instead we set the model image to null
-        image = ImageUtils.loadImage(defaultImageResource);
+        image = ImageUtils.loadImageReadOnly(defaultImageResource);
         portraitModel.getImage().set(null);
         calculateImageDefaults();
     }
@@ -277,7 +277,7 @@ public class PortraitView {
                 return;
             }
 
-            installImage(ImageUtils.loadImage(sourceUrl));
+            installImage(ImageUtils.loadImageReadOnly(sourceUrl));
 
             changeListener.run();
         }

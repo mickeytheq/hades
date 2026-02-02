@@ -66,7 +66,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     // TODO: story template image is half-resolution
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/investigator/investigator_" + getModel().getInvestigatorClass().name().toLowerCase() + ".png");
+        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_" + getModel().getInvestigatorClass().name().toLowerCase() + ".png");
     }
 
     @Override
@@ -274,7 +274,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     }
 
     private BufferedImage createStencilImage(BufferedImage source) {
-        BufferedImage stencilImage = ImageUtilities.resample(ImageUtils.loadImage("/overlays/investigator_mask.png"), source.getWidth(), source.getHeight());
+        BufferedImage stencilImage = ImageUtilities.resample(ImageUtils.loadImageReadOnly("/overlays/investigator_mask.png"), source.getWidth(), source.getHeight());
 
         BufferedImage destinationImage = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 

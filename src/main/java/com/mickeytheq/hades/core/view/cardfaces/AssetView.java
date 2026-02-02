@@ -18,8 +18,6 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ASSET)
@@ -64,7 +62,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
     @Override
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage(getClass().getResource(getTemplateResource()));
+        return ImageUtils.loadImageReadOnly(getClass().getResource(getTemplateResource()));
     }
 
     private String getTemplateResource() {
@@ -227,12 +225,12 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         paintSlots(paintContext);
 
         if (!getModel().getHealth().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/health_base.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/health_base.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
             PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), getModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
 
         if (!getModel().getSanity().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImage("/overlays/sanity_base.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/sanity_base.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
             PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), getModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
     }
@@ -262,7 +260,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImage(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
 
             Rectangle rectangle = paintContext.toPixelRect(CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount));
 
@@ -277,7 +275,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }
 
@@ -310,7 +308,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private void paintSlot(PaintContext paintContext, RectangleEx drawRegion, Asset.AssetSlot assetSlot) {
         PaintUtils.paintBufferedImage(
                 paintContext.getGraphics(),
-                ImageUtils.loadImage(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
+                ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
                 paintContext.toPixelRect(drawRegion)
         );
     }

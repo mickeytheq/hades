@@ -56,7 +56,7 @@ public class CommonCardFieldsView {
         // TODO: what about the helper tooltips for the legal traits etc
         titleEditor = EditorUtils.createTextField(30);
         subtitleEditor = EditorUtils.createTextField(30);
-        uniqueEditor = new JToggleButton(ImageUtilities.createIconForSize(ImageUtils.loadImage(ImageUtils.UNIQUE_STAR_ICON_RESOURCE), 12));
+        uniqueEditor = new JToggleButton(ImageUtilities.createIconForSize(ImageUtils.loadImageReadOnly(ImageUtils.UNIQUE_STAR_ICON_RESOURCE), 12));
 
         copyOtherFaceTitlesEditor = EditorUtils.createCheckBox();
         copyOtherFaceTitlesEditor.addChangeListener(e -> {

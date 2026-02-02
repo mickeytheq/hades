@@ -66,7 +66,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         templatePath = templatePath + ".png";
 
-        return ImageUtils.loadImage(templatePath);
+        return ImageUtils.loadImageReadOnly(templatePath);
     }
 
     @Override

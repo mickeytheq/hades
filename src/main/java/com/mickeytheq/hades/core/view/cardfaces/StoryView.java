@@ -51,7 +51,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
 
     @Override
     protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage("/templates/story/story_default.png");
+        return ImageUtils.loadImageReadOnly("/templates/story/story_default.png");
     }
 
     @Override

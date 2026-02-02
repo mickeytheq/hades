@@ -19,7 +19,6 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.Optional;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION_BACK)
 public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView {
@@ -53,7 +52,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         templatePath = templatePath + ".png";
 
-        return ImageUtils.loadImage(templatePath);
+        return ImageUtils.loadImageReadOnly(templatePath);
     }
 
     @Override

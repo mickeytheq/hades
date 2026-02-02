@@ -62,7 +62,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
     @Override
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage(getClass().getResource(getTemplateResource()));
+        return ImageUtils.loadImageReadOnly(getClass().getResource(getTemplateResource()));
     }
 
     // TODO: story_skill template is missing
@@ -191,7 +191,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     }
 
     private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
-        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
+        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -202,7 +202,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
             paintEncounterOrBasicWeaknessOverlay(paintContext);
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }
 

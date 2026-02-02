@@ -158,7 +158,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     }
 
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage(getTemplateResource());
+        return ImageUtils.loadImageReadOnly(getTemplateResource());
     }
 
     private String getTemplateResource() {
@@ -234,7 +234,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
             if (weaknessType == WeaknessType.Basic) {
-                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
             } else {
                 encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
                 encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
@@ -284,8 +284,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_DRAW_REGION), getModel().getHealth(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(EVADE_DRAW_REGION), getModel().getEvade(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
-        BufferedImage damageIcon = ImageUtils.loadImage("/overlays/damage.png");
-        BufferedImage horrorIcon = ImageUtils.loadImage("/overlays/horror.png");
+        BufferedImage damageIcon = ImageUtils.loadImageReadOnly("/overlays/damage.png");
+        BufferedImage horrorIcon = ImageUtils.loadImageReadOnly("/overlays/horror.png");
 
         IntStream.rangeClosed(1, getModel().getDamage()).forEach(o -> {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), damageIcon, paintContext.toPixelRect(DAMAGE_DRAW_REGIONS.get(o - 1)));

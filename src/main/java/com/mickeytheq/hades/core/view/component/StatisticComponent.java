@@ -24,7 +24,7 @@ public class StatisticComponent extends JPanel {
     public StatisticComponent() {
         textField = EditorUtils.createTextField(20);
 
-        BufferedImage image = ImageUtils.loadImage(ImageUtils.PER_INVESTIGATOR_ICON_RESOURCE);
+        BufferedImage image = ImageUtils.loadImageReadOnly(ImageUtils.PER_INVESTIGATOR_ICON_RESOURCE);
         Icon icon = ImageUtilities.createIconForSize(image, 12);
         perInvestigatorButton = new JToggleButton(icon, false);
 

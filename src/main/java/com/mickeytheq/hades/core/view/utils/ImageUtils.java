@@ -22,31 +22,41 @@ public class ImageUtils {
                 .build(CacheLoader.from(ImageUtils::loadImageWithNoCaching));
     }
 
-    public static final Image HADES_PURPLE_H_IMAGE = ImageUtils.loadImage("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH);
+    public static final Image HADES_PURPLE_H_IMAGE = ImageUtils.loadImageReadOnly("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH);
     public static final Icon HADES_PURPLE_H_ICON = new ImageIcon(HADES_PURPLE_H_IMAGE);
     public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
     public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");
     public static final URL EMPTY_IMAGE = ImageUtils.class.getResource("/resources/spacers/empty1x1.png");
 
-    public static BufferedImage loadImage(String absoluteResourcePath) {
+    // load an image that can be used for read-only purposes
+    // the image returned may be a shared cached copy so must not be altered
+    // if a write image is required use deepCopy() on the returned value
+    public static BufferedImage loadImageReadOnly(String absoluteResourcePath) {
         URL resourceUrl = ImageUtils.class.getResource(absoluteResourcePath);
 
         if (resourceUrl == null)
             throw new RuntimeException("Image at absolute resource path '" + absoluteResourcePath + "' does not exist");
 
-        return loadImage(resourceUrl);
+        return loadImageReadOnly(resourceUrl);
     }
 
     // loads an image, caching on the URL as a key
-    public static BufferedImage loadImage(URL urlToImage) {
+    // see above about read-only conditions of the returned image
+    public static BufferedImage loadImageReadOnly(URL urlToImage) {
         if (urlToImage == null)
             throw new NullPointerException("URL passed to loadImage() was null");
 
         BufferedImage bufferedImage = IMAGE_CACHE.getUnchecked(urlToImage);
 
-        // BufferedImage is mutable so pass a copy back to the caller to avoid
-        // damaging the cache state
-        return deepCopy(bufferedImage);
+        return bufferedImage;
+    }
+
+    public static BufferedImage loadImageWritable(String absoluteResourcePath) {
+        return deepCopy(loadImageReadOnly(absoluteResourcePath));
+    }
+
+    public static BufferedImage loadImageWritable(URL urlToImage) {
+        return deepCopy(loadImageReadOnly(urlToImage));
     }
 
     public static BufferedImage deepCopy(BufferedImage toCopy) {

@@ -24,7 +24,7 @@ public class PlayerCardBackView extends BaseCardFaceView<PlayerCardBack> {
 
     @Override
     public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImage(getClass().getResource("/templates/AHLCG-PlayerBack.jp2"));
+        return ImageUtils.loadImageReadOnly(getClass().getResource("/templates/AHLCG-PlayerBack.jp2"));
     }
 
     @Override

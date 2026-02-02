@@ -105,7 +105,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         else
             templateUrl = DEFAULT_TEMPLATE_RESOURCE;
 
-        return ImageUtils.loadImage(templateUrl);
+        return ImageUtils.loadImageReadOnly(templateUrl);
     }
 
     @Override
@@ -146,10 +146,10 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         WeaknessType weaknessType = getModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(BASIC_WEAKNESS_OVERLAY_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
+            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(BASIC_WEAKNESS_OVERLAY_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
 
             if (weaknessType == WeaknessType.Basic) {
-                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImage(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
+                ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
             }
             else {
                 encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));

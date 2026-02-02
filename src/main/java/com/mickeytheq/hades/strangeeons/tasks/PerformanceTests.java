@@ -4,12 +4,22 @@ import ca.cgjennings.apps.arkham.AbstractGameComponentEditor;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.model.Card;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.strangeeons.util.GameComponentUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import resources.ResourceKit;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class PerformanceTests {
@@ -55,5 +65,37 @@ public class PerformanceTests {
         stopWatch.stop();
 
         return stopWatch;
+    }
+
+    public static StopWatch performPaintTest(Path hadesFile, int iterations) {
+
+        ProjectContext projectContext = StandardProjectContext.getContextForContentPath(hadesFile);
+        Card card = CardIO.readCard(hadesFile, projectContext);
+        CardView cardView = CardFaces.createCardView(card, projectContext);
+
+        // clear out cold start issues
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+
+        StopWatch stopWatch = StopWatch.createStarted();
+
+        for (int i = 0; i < iterations; i++) {
+            CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+        }
+
+        stopWatch.stop();
+
+        return stopWatch;
+    }
+
+    public static void main(String[] args) {
+        Bootstrapper.initaliseOutsideStrangeEons();
+
+        int iterations = 1000;
+        Path path = Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades");
+
+        StopWatch stopWatch = PerformanceTests.performPaintTest(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades"), iterations);
+        System.out.println("Ran " + iterations + " iterations of test on '" + path + "' in " + stopWatch.formatTime());
     }
 }
