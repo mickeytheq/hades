@@ -71,11 +71,11 @@ public class QuickCardView {
 //        event();
 //        skill();
 //        treacheryTreachery();
-//            location();
+            location();
 //            random();
 //            agenda();
 //            act();
-            enemy();
+//            enemy();
 //            scenarioReference();
 //            story();
         });
@@ -275,6 +275,7 @@ public class QuickCardView {
         Location model = new Location();
         model.getCommonCardFieldsModel().setTitle("Location");
         model.getCommonCardFieldsModel().setRules("Rules");
+        model.getCommonCardFieldsModel().setVictory("Victory 1");
         model.getLocationFieldsModel().setShroud(new Statistic("2", false));
         model.getLocationFieldsModel().setClues(new Statistic("2", true));
 

@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
+import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -7,10 +8,7 @@ import com.mickeytheq.hades.core.model.cardfaces.Location;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
-import com.mickeytheq.hades.core.view.utils.ImageUtils;
-import com.mickeytheq.hades.core.view.utils.MarkupUtils;
-import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -127,6 +125,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(16.09, 6.60, 32.34, 3.56);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
     private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
+    private static final RectangleEx VICTORY_DRAW_REGION = RectangleEx.millimetres(49.00, 74.5, 13.00, 4.00);
     public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.40, 41.69, 4.74, 4.74);
 
     @Override
@@ -140,7 +139,10 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        // victory is painted separate from the body on locations
+        commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE, false);
+        paintVictory(paintContext);
+        commonCardFieldsView.paintCopyright(paintContext);
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
@@ -167,6 +169,20 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         pageShapeBuilder.lineTo(new Point2D.Double(0.074, 0.0));
 
         return pageShapeBuilder.build();
+    }
+
+    private void paintVictory(PaintContext paintContext) {
+        String victory = getModel().getCommonCardFieldsModel().getVictory();
+
+        if (StringUtils.isEmpty(victory))
+            return;
+
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getVictoryTextStyle());
+        markupRenderer.setLineTightness(0.7f);
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
+        markupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getVictory());
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(VICTORY_DRAW_REGION));
     }
 }
 

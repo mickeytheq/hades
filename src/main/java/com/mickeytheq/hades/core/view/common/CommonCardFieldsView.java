@@ -249,11 +249,15 @@ public class CommonCardFieldsView {
     }
 
     public void paintBody(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape bodyPageShape) {
-        String bodyString = composeBodyString();
+        paintBody(paintContext, bodyDrawRegion, bodyPageShape, true);
+    }
+
+    public void paintBody(PaintContext paintContext, Rectangle bodyDrawRegion, PageShape bodyPageShape, boolean includeVictory) {
+        String bodyString = composeBodyString(includeVictory);
         PaintUtils.paintBodyText(paintContext, bodyString, bodyDrawRegion, bodyPageShape);
     }
 
-    private String composeBodyString() {
+    private String composeBodyString(boolean includeVictory) {
         StringBuilder sb = new StringBuilder();
 
         if (StringUtils.isEmpty(model.getTraits())) {
@@ -309,13 +313,15 @@ public class CommonCardFieldsView {
 
         addSpacing(sb, model.getAfterFlavourTextSpacing());
 
-        if (!StringUtils.isEmpty(model.getVictory())) {
-            if (sb.length() > 0)
-                sb.append("\n");
-            sb.append("<center>");
-            sb.append("<vic>");
-            sb.append(model.getVictory());
-            sb.append("</vic>");
+        if (includeVictory) {
+            if (!StringUtils.isEmpty(model.getVictory())) {
+                if (sb.length() > 0)
+                    sb.append("\n");
+                sb.append("<center>");
+                sb.append("<vic>");
+                sb.append(model.getVictory());
+                sb.append("</vic>");
+            }
         }
 
         return sb.toString();
