@@ -198,7 +198,13 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         // title
         // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
-        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
+        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
+
+        // specialist cards don't support a subtitle
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
+        if (playerCardType != PlayerCardType.Specialist && playerCardType != PlayerCardType.StoryWeakness) {
+            commonCardFieldsView.paintSubtitle(paintContext, paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
+        }
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
 
