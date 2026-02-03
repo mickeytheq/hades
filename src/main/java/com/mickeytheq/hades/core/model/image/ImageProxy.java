@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.model.image;
 
+import com.mickeytheq.hades.core.model.entity.NeedsDeepCopy;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 
 import java.awt.image.BufferedImage;
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 // delegates loading/saving to the provided ImagePersister
 // provides lazy loading of images so that loading a container such as a Card/CardFaceModel does not
 // load all the heavy image data immediately
-public class ImageProxy {
+public class ImageProxy implements NeedsDeepCopy {
     private final ImagePersister imagePersister;
 
     // the identifier provided by the ImagePersister when an image is saved
@@ -47,6 +48,11 @@ public class ImageProxy {
     public void set(BufferedImage newImage) {
         if (newImage == null && image == null)
             return;
+
+        // if the image is changed we wiped the cached identifier
+        // identifiers correlate with the persisted image so when the image is changed a new identifier must be generated
+        // this also allows copying of ImageProxies without changing the identifier
+        identifier = null;
 
         image = newImage;
         loaded = true;
@@ -87,5 +93,12 @@ public class ImageProxy {
 
     private static ImagePersister getImagePersister() {
         return ProjectContexts.getCurrentContext().getImagePersister();
+    }
+
+    // ImageProxies aren't shared between different owners
+    // identifiers can be shared as once an identifier is assigned it never changes
+    @Override
+    public Object deepCopy() {
+        return new ImageProxy(imagePersister, identifier);
     }
 }

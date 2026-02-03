@@ -21,10 +21,8 @@ import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
-import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,32 +41,32 @@ public class JsonCardSerialiser {
     private static final String UNIQUE_ID_FIELD_NAME = "UniqueId";
     private static final String COMMENTS_FIELD_NAME = "Comments";
     private static final String VERSION_FIELD_NAME = "Version";
-    private static final String METADATA_FIELD_NAME = "Metadata";
+    private static final String AUDIT_FIELD_NAME = "Audit";
     private static final String LAST_MODIFIED_FIELD_NAME = "LastModified";
     private static final String HADES_SOFTWARE_VERSION = "HadesSoftwareVersion";
 
     private static final int CURRENT_CARD_VERSION = 1;
 
-    private static final Map<Class<?>, ValueSerialiser<?>> valueSerialisers = new HashMap<>();
+    private static final Map<Class<?>, ValueSerialiser<?>> VALUE_SERIALISERS = new HashMap<>();
 
     static {
-        valueSerialisers.put(String.class, new StringSerialiser());
+        VALUE_SERIALISERS.put(String.class, new StringSerialiser());
 
-        valueSerialisers.put(Integer.class, new IntegerSerialiser());
-        valueSerialisers.put(Integer.TYPE, new IntegerSerialiser());
+        VALUE_SERIALISERS.put(Integer.class, new IntegerSerialiser());
+        VALUE_SERIALISERS.put(Integer.TYPE, new IntegerSerialiser());
 
-        valueSerialisers.put(Double.class, new DoubleSerialiser());
-        valueSerialisers.put(Double.TYPE, new DoubleSerialiser());
+        VALUE_SERIALISERS.put(Double.class, new DoubleSerialiser());
+        VALUE_SERIALISERS.put(Double.TYPE, new DoubleSerialiser());
 
-        valueSerialisers.put(Boolean.class, new BooleanSerialiser());
-        valueSerialisers.put(Boolean.TYPE, new BooleanSerialiser());
+        VALUE_SERIALISERS.put(Boolean.class, new BooleanSerialiser());
+        VALUE_SERIALISERS.put(Boolean.TYPE, new BooleanSerialiser());
 
-        valueSerialisers.put(Distance.class, new DistanceSerialiser());
-        valueSerialisers.put(Statistic.class, new StatisticSerialiser());
-        valueSerialisers.put(URL.class, new UrlSerialiser());
-        valueSerialisers.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
-        valueSerialisers.put(CollectionInfo.class, new CollectionInfoSerialiser());
-        valueSerialisers.put(ImageProxy.class, new ImageProxySerialiser());
+        VALUE_SERIALISERS.put(Distance.class, new DistanceSerialiser());
+        VALUE_SERIALISERS.put(Statistic.class, new StatisticSerialiser());
+        VALUE_SERIALISERS.put(URL.class, new UrlSerialiser());
+        VALUE_SERIALISERS.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
+        VALUE_SERIALISERS.put(CollectionInfo.class, new CollectionInfoSerialiser());
+        VALUE_SERIALISERS.put(ImageProxy.class, new ImageProxySerialiser());
     }
 
     public static ObjectNode serialiseCard(Card card) {
@@ -93,8 +91,8 @@ public class JsonCardSerialiser {
         if (!StringUtils.isEmpty(card.getComments()))
             cardNode.put(COMMENTS_FIELD_NAME, card.getComments());
 
-        // metadata block
-        ObjectNode metadataObjectNode = cardNode.putObject(METADATA_FIELD_NAME);
+        // audit trail block
+        ObjectNode metadataObjectNode = cardNode.putObject(AUDIT_FIELD_NAME);
         metadataObjectNode.put(LAST_MODIFIED_FIELD_NAME, ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         metadataObjectNode.put(HADES_SOFTWARE_VERSION, VersionUtils.getVersion());
 
@@ -228,7 +226,7 @@ public class JsonCardSerialiser {
                 return;
             }
 
-            ValueSerialiser valueSerialiser = valueSerialisers.get(value.getClass());
+            ValueSerialiser valueSerialiser = VALUE_SERIALISERS.get(value.getClass());
 
             if (valueSerialiser == null)
                 throw new RuntimeException("Value '" + value + "' of class '" + propertyMetadata.getPropertyClass().getName() + "' from property '" + propertyName + "' is not supported by any value serialiser");
@@ -293,7 +291,7 @@ public class JsonCardSerialiser {
                 return;
             }
 
-            ValueSerialiser<?> valueSerialiser = valueSerialisers.get(propertyMetadata.getPropertyClass());
+            ValueSerialiser<?> valueSerialiser = VALUE_SERIALISERS.get(propertyMetadata.getPropertyClass());
 
             if (valueSerialiser == null)
                 throw new RuntimeException("No value serialiser found for raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");

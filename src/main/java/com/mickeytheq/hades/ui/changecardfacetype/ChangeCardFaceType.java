@@ -5,9 +5,7 @@ import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
-import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
-import com.mickeytheq.hades.core.model.entity.EntityMetadata;
-import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
+import com.mickeytheq.hades.core.model.entity.*;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -43,7 +41,7 @@ public class ChangeCardFaceType {
 
             CardFaceModel targetCardFaceModel = CardFaces.createFaceModelForTypeCode(targetCardFaceInfo.getTypeCode(), projectContext);
 
-            copy(sourceCardFaceModel, targetCardFaceModel);
+            EntityUtils.copyEntity(sourceCardFaceModel, targetCardFaceModel);
 
             sourceCard.setCardFaceModel(cardFaceSide, targetCardFaceModel);
 
@@ -53,64 +51,6 @@ public class ChangeCardFaceType {
             logger.info("Update card file at '" + cardPath + "' with new values");
             return null;
         });
-    }
-
-    private void copy(CardFaceModel sourceCardFaceModel, CardFaceModel targetFaceModel) {
-        new CardCopier(sourceCardFaceModel, targetFaceModel).copy();
-    }
-
-    static class CardCopier {
-        private final CardFaceModel sourceModel;
-        private final CardFaceModel targetModel;
-
-        public CardCopier(CardFaceModel sourceModel, CardFaceModel targetModel) {
-            this.sourceModel = sourceModel;
-            this.targetModel = targetModel;
-        }
-
-        public void copy() {
-            EntityMetadata sourceMetadata = AnnotatedEntityMetadataBuilder.build(sourceModel.getClass());
-            EntityMetadata targetMetadata = AnnotatedEntityMetadataBuilder.build(targetModel.getClass());
-
-            copyEntity(sourceMetadata, sourceModel, targetMetadata, targetModel);
-        }
-
-        private void copyEntity(EntityMetadata fromEntityMetadata, Object fromEntity, EntityMetadata toEntityMetadata, Object toEntity) {
-            for (PropertyMetadata property : fromEntityMetadata.getProperties()) {
-                Optional<PropertyMetadata> targetPropertyOpt = toEntityMetadata.findProperty(property.getName());
-
-                if (targetPropertyOpt.isPresent())
-                    copyProperty(property, fromEntity, targetPropertyOpt.get(), toEntity);
-                else
-                    logger.info("Skipped property '" + property.getName() + "' on entity type '" + fromEntity.getClass() + " as there was no equivalent on the target class '" + toEntityMetadata.getEntityClass() + "'");
-            }
-        }
-
-        private void copyProperty(PropertyMetadata fromProperty, Object fromEntity, PropertyMetadata toProperty, Object toEntity) {
-            Object fromPropertyValue = fromProperty.getPropertyValue(fromEntity);
-
-            if (!fromProperty.getPropertyClass().equals(toProperty.getPropertyClass())) {
-                logger.info("Skipped property '" + fromProperty.getName() + "' on entity type '" + fromEntity.getClass() + "' with value '" + fromPropertyValue + "' although there was a property with a matching name the classes were different");
-                return;
-            }
-
-            // value -> value, just do a straight reference copy as
-            // value types are immutable
-            if (fromProperty.isValue() && toProperty.isValue()) {
-                toProperty.setPropertyValue(toEntity, fromPropertyValue);
-                logger.info("Copied property '" + fromProperty.getName() + "' on entity type '" + fromEntity.getClass() + "' with value '" + fromPropertyValue + "'");
-                return;
-            }
-
-            if (fromProperty.isEntity() && toProperty.isEntity()) {
-                Object toPropertyValue = toProperty.getPropertyValue(toEntity);
-
-                copyEntity(fromProperty.asEntity(), fromPropertyValue, toProperty.asEntity(), toPropertyValue);
-                return;
-            }
-
-            logger.info("Skipped property '" + fromProperty.getName() + "' on entity type '" + fromEntity.getClass() + "' with value '" + fromPropertyValue + "' although there was a property with a matching name they were different fundamental types (e.g. entity vs value");
-        }
     }
 
     static class ChangeCardFaceTypeDialog extends DialogWithButtons {
