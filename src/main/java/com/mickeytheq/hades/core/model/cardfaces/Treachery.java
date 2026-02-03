@@ -7,7 +7,7 @@ import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
-@Model(typeCode = "Treachery")
+@Model(typeCode = "Treachery", version = 1)
 public class Treachery extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private final TreacheryFieldsModel treacheryFieldsModel = new TreacheryFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();

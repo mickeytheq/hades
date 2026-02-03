@@ -21,7 +21,10 @@ import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
 import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
@@ -34,6 +37,8 @@ import java.util.Map;
  * Handles converting a generic JSON object tree from/to a Card entity
  */
 public class JsonCardSerialiser {
+    private static final Logger logger = LogManager.getLogger(JsonCardSerialiser.class);
+
     private static final String FRONT_FACE_FIELD_NAME = "Front";
     private static final String BACK_FACE_FIELD_NAME = "Back";
     private static final String CARD_FACE_TYPE_FIELD_NAME = "Type";
@@ -48,6 +53,8 @@ public class JsonCardSerialiser {
     private static final int CURRENT_CARD_VERSION = 1;
 
     private static final Map<Class<?>, ValueSerialiser<?>> VALUE_SERIALISERS = new HashMap<>();
+
+    private static final Map<MultiKey<Object>, CardFaceModelUpgrader> CARD_FACE_MODEL_UPGRADERS = new HashMap<>();
 
     static {
         VALUE_SERIALISERS.put(String.class, new StringSerialiser());
@@ -67,6 +74,25 @@ public class JsonCardSerialiser {
         VALUE_SERIALISERS.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
         VALUE_SERIALISERS.put(CollectionInfo.class, new CollectionInfoSerialiser());
         VALUE_SERIALISERS.put(ImageProxy.class, new ImageProxySerialiser());
+    }
+
+    public static void registerCardFaceModelUpgrader(String typeCode, int fromVersion, int toVersion, CardFaceModelUpgrader upgrader) {
+        if (toVersion != fromVersion + 1)
+            throw new RuntimeException("Versions must be sequential with no gaps");
+
+        CARD_FACE_MODEL_UPGRADERS.put(new MultiKey<>(typeCode, fromVersion, toVersion), upgrader);
+    }
+
+    private static CardFaceModelUpgrader getCardFaceModelUpgrader(String typeCode, int fromVersion, int toVersion) {
+        if (toVersion != fromVersion + 1)
+            throw new RuntimeException("Versions must be sequential with no gaps");
+
+        CardFaceModelUpgrader upgrader = CARD_FACE_MODEL_UPGRADERS.get(new MultiKey<Object>(typeCode, fromVersion, toVersion));
+
+        if (upgrader == null)
+            throw new RuntimeException("No card face model upgrader exists to upgrade card face of type '" + typeCode + "' from version " + fromVersion + " to " + toVersion);
+
+        return upgrader;
     }
 
     public static ObjectNode serialiseCard(Card card) {
@@ -100,8 +126,9 @@ public class JsonCardSerialiser {
     }
 
     private static void serialiseCardFace(CardFaceModel cardFaceModel, ObjectMapper objectMapper, ObjectNode faceNode) {
-        String typeCode = CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass()).getTypeCode();
-        faceNode.put(CARD_FACE_TYPE_FIELD_NAME, typeCode);
+        CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass());
+        faceNode.put(CARD_FACE_TYPE_FIELD_NAME, cardFaceInfo.getTypeCode());
+        faceNode.put(VERSION_FIELD_NAME, cardFaceInfo.getVersion());
 
         new Serialiser(objectMapper).serialise(cardFaceModel, faceNode);
     }
@@ -159,17 +186,67 @@ public class JsonCardSerialiser {
     }
 
     private static CardFaceModel deserialiseCardFace(ObjectMapper objectMapper, ObjectNode faceNode) {
-        // remove the type field here - if it is left then the latter serialisation code
-        // will treat it as an unhandled field
-        JsonNode typeField = faceNode.remove(CARD_FACE_TYPE_FIELD_NAME);
+        // remove the type and version fields here
+        // if left then the latter serialisation code will treat it as an unhandled field
+        JsonNode typeCodeNode = faceNode.remove(CARD_FACE_TYPE_FIELD_NAME);
 
-        String typeCode = typeField.asText();
+        if (typeCodeNode == null)
+            throw new RuntimeException("No " + CARD_FACE_TYPE_FIELD_NAME + " field found on card face node '" + faceNode.toPrettyString() + "'");
 
+        if (!typeCodeNode.isTextual())
+            throw new RuntimeException(CARD_FACE_TYPE_FIELD_NAME + " field should be text but is not. JSON node '" + faceNode.toPrettyString() + "'");
+
+        String typeCode = typeCodeNode.asText();
+
+        JsonNode versionNode = faceNode.remove(VERSION_FIELD_NAME);
+
+        if (versionNode == null)
+            throw new RuntimeException("No " + VERSION_FIELD_NAME + " field found on card face node '" + faceNode.toPrettyString() + "'");
+
+        if (!versionNode.isIntegralNumber())
+            throw new RuntimeException(VERSION_FIELD_NAME + " field should be integer but is not. JSON node '" + faceNode.toPrettyString() + "'");
+
+        int deserialisingCardVersion = versionNode.asInt();
+
+        // look up the card face information
+        CardFaceTypeRegister cardFaceTypeRegister = CardFaceTypeRegister.get();
+        CardFaceTypeRegister.CardFaceInfo cardFaceInfo = cardFaceTypeRegister.getInfoForTypeCode(typeCode);
+
+        // check the version and perform any upgrades
+        checkCardFaceVersion(faceNode, cardFaceInfo, deserialisingCardVersion);
+
+        // do the serialisation
         CardFaceModel cardFaceModel = CardFaces.createFaceModelForTypeCode(typeCode, ProjectContexts.getCurrentContext());
 
         new Deserialiser(objectMapper).deserialise(faceNode, cardFaceModel);
 
         return cardFaceModel;
+    }
+
+    private static void checkCardFaceVersion(ObjectNode faceNode, CardFaceTypeRegister.CardFaceInfo cardFaceInfo, int deserialisingCardVersion) {
+        int modelVersion = cardFaceInfo.getVersion();
+        String typeCode = cardFaceInfo.getTypeCode();
+
+        if (deserialisingCardVersion > modelVersion)
+            throw new RuntimeException("Found a card face with type code '" + typeCode + "' whose version " + deserialisingCardVersion + " is greater than the current model version " + modelVersion + ". JSON node '" + faceNode.toPrettyString() + "'");
+
+        // versions the same, nothing to do
+        if (deserialisingCardVersion == modelVersion)
+            return;
+
+        // otherwise an upgrade is required
+        int currentVersion = deserialisingCardVersion;
+
+        // perform step-by-step upgrades until the model version is reached
+        while (currentVersion < modelVersion) {
+            int upgradeToVersion = currentVersion + 1;
+            CardFaceModelUpgrader upgrader = getCardFaceModelUpgrader(typeCode, currentVersion, upgradeToVersion);
+            upgrader.upgrade(ProjectContexts.getCurrentContext(), faceNode);
+
+            logger.info("Upgraded card of type '" + typeCode + "' from version " + currentVersion + " to version " + upgradeToVersion);
+
+            currentVersion++;
+        }
     }
 
     private static class Serialiser {

@@ -8,9 +8,11 @@ import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
+import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
-@Model(typeCode = "ScenarioReference")
+@Model(typeCode = "ScenarioReference", version = 1)
 public class ScenarioReference extends BaseCardFaceModel implements HasCommonCardFieldsModel {
     private final ScenarioReferenceFieldsModel scenarioReferenceFieldsModel = new ScenarioReferenceFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
@@ -98,7 +100,7 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
         }
     }
 
-    public static class SymbolChaosTokenInfo {
+    public static class SymbolChaosTokenInfo implements EmptyEntityDiscriminator {
         private String rules;
         private SymbolChaosToken combineWith;
 
@@ -118,6 +120,11 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
 
         public void setCombineWith(SymbolChaosToken combineWith) {
             this.combineWith = combineWith;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return StringUtils.isEmpty(rules) && combineWith == null;
         }
     }
 

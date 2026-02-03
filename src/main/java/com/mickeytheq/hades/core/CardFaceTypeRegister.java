@@ -82,7 +82,7 @@ public class CardFaceTypeRegister {
         if (view == null)
             throw new RuntimeException("View class '" + cardFaceViewClass.getName() + "' does not have the @View annotation");
 
-        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, model.typeCode(), view.interfaceLanguageKey());
+        CardFaceInfo cardFaceInfo = new CardFaceInfo(cardFaceModelClass, cardFaceViewClass, model.typeCode(), model.version(), view.interfaceLanguageKey());
 
         return cardFaceInfo;
     }
@@ -91,12 +91,14 @@ public class CardFaceTypeRegister {
         private final Class<? extends CardFaceModel> cardFaceModelClass;
         private final Class<? extends CardFaceView> cardFaceViewClass;
         private final String typeCode;
+        private final int version;
         private final String interfaceLanguageKey;
 
-        public CardFaceInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass, String typeCode, String interfaceLanguageKey) {
+        public CardFaceInfo(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass, String typeCode, int version, String interfaceLanguageKey) {
             this.cardFaceModelClass = cardFaceModelClass;
             this.cardFaceViewClass = cardFaceViewClass;
             this.typeCode = typeCode;
+            this.version = version;
             this.interfaceLanguageKey = interfaceLanguageKey;
         }
 
@@ -110,6 +112,10 @@ public class CardFaceTypeRegister {
 
         public String getTypeCode() {
             return typeCode;
+        }
+
+        public int getVersion() {
+            return version;
         }
 
         public String getInterfaceLanguageKey() {

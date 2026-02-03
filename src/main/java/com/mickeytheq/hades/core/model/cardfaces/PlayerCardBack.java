@@ -5,7 +5,7 @@ import com.mickeytheq.hades.core.model.BaseCardFaceModel;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
-@Model(typeCode = "PlayerCardBack")
+@Model(typeCode = "PlayerCardBack", version = 1)
 public class PlayerCardBack extends BaseCardFaceModel {
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {

@@ -23,7 +23,7 @@ public class ScenarioReferenceMigrator {
 
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
 
-        scenarioReference.getScenarioReferenceFieldsModel().setTrackingBox(settingsAccessor.getRawSettingsValue("TrackerBox"));
+        scenarioReference.getScenarioReferenceFieldsModel().setTrackingBox(StringUtils.defaultIfEmpty(settingsAccessor.getRawSettingsValue("TrackerBox"), null));
 
         populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getSkull(), SettingsFieldNames.CHAOS_TOKEN_SKULL);
         populateChaosSymbolInfo(settingsAccessor, scenarioReference.getScenarioReferenceFieldsModel().getCultist(), SettingsFieldNames.CHAOS_TOKEN_CULTIST);

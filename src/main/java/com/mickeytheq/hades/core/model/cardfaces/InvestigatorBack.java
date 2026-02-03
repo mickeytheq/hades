@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Model(typeCode = "InvestigatorBack")
+@Model(typeCode = "InvestigatorBack", version = 1)
 public class InvestigatorBack implements CardFaceModel {
     public static class InvestigatorBackSection implements EmptyEntityDiscriminator {
         private String header;

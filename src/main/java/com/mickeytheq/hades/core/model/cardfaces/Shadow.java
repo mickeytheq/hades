@@ -7,7 +7,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 // a card face that shadows another card face for rendering purposes
-@Model(typeCode = "Shadow")
+@Model(typeCode = "Shadow", version = 1)
 public class Shadow implements CardFaceModel {
     private String shadowCardId;
     private CardFaceSide shadowSide = CardFaceSide.Front;
