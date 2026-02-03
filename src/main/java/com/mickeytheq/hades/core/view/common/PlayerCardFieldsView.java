@@ -12,7 +12,9 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
+import org.mozilla.javascript.tools.debugger.Dim;
 import resources.Language;
 
 import javax.swing.*;
@@ -220,23 +222,26 @@ public class PlayerCardFieldsView {
                 true);
     }
 
+    private static final DimensionEx SKILL_BOX_SIZE = DimensionEx.millimetres(8.47, 6.43);
 
     private static final List<RectangleEx> SKILL_BOX_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(0, 14.22, 8.47, 6.43),
-            RectangleEx.millimetres(0, 21.34, 8.47, 6.43),
-            RectangleEx.millimetres(0, 28.45, 8.47, 6.43),
-            RectangleEx.millimetres(0, 35.56, 8.47, 6.43),
-            RectangleEx.millimetres(0, 42.67, 8.47, 6.43),
-            RectangleEx.millimetres(0, 49.78, 8.47, 6.43)
+            RectangleEx.millimetres(0, 14.22, SKILL_BOX_SIZE),
+            RectangleEx.millimetres(0, 21.34, SKILL_BOX_SIZE),
+            RectangleEx.millimetres(0, 28.45, SKILL_BOX_SIZE),
+            RectangleEx.millimetres(0, 35.56, SKILL_BOX_SIZE),
+            RectangleEx.millimetres(0, 42.67, SKILL_BOX_SIZE),
+            RectangleEx.millimetres(0, 49.78, SKILL_BOX_SIZE)
     );
 
+    private static final DimensionEx SKILL_ICON_SIZE = DimensionEx.millimetres(4.23, 4.4);
+
     private static final List<RectangleEx> SKILL_ICON_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(1.78, 15.07, 4.23, 4.4),
-            RectangleEx.millimetres(1.78, 22.18, 4.23, 4.4),
-            RectangleEx.millimetres(1.78, 29.29, 4.23, 4.4),
-            RectangleEx.millimetres(1.78, 36.41, 4.23, 4.4),
-            RectangleEx.millimetres(1.78, 43.52, 4.23, 4.4),
-            RectangleEx.millimetres(1.78, 50.63, 4.23, 4.4)
+            RectangleEx.millimetres(1.78, 15.07, SKILL_ICON_SIZE),
+            RectangleEx.millimetres(1.78, 22.18, SKILL_ICON_SIZE),
+            RectangleEx.millimetres(1.78, 29.29, SKILL_ICON_SIZE),
+            RectangleEx.millimetres(1.78, 36.41, SKILL_ICON_SIZE),
+            RectangleEx.millimetres(1.78, 43.52, SKILL_ICON_SIZE),
+            RectangleEx.millimetres(1.78, 50.63, SKILL_ICON_SIZE)
     );
 
     // TODO: at the moment there's a list of box regions and icon regions
@@ -269,10 +274,10 @@ public class PlayerCardFieldsView {
 
     private String getSkillIconResource(PlayerCardSkillIcon skillIcon) {
         PlayerCardType playerCardType = getModel().getCardType();
-        String resource = "/overlays/skill_icon_" + skillIcon.name().toLowerCase();
+        String resource = "/icons/skill_icons/" + skillIcon.name().toLowerCase();
 
         if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            resource = resource + "_weakness";
+            resource = resource + "_monochrome";
 
         resource = resource + ".png";
 
