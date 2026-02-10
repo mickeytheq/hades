@@ -67,6 +67,7 @@ public class Card {
         return backFaceModel != null;
     }
 
+    @Property("Metadata")
     public CardMetadataModel getCardMetadataModel() {
         return cardMetadataModel;
     }

@@ -151,6 +151,9 @@ public class JsonCardSerialiser {
         // audit fields are generated on serialisation but not mapped to the Card model
         objectNode.remove(AUDIT_FIELD_NAME);
 
+        // remove the version
+        objectNode.remove(VERSION_FIELD_NAME);
+
         // card fields
         Card card = new Card();
 
