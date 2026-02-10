@@ -1,23 +1,22 @@
 package com.mickeytheq.hades.core.project.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mickeytheq.hades.core.model.image.ImageProxy;
 
-import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.UUID;
 
-public class TaggedImageInfo {
+public class ScenarioConfiguration {
     @JsonProperty("UniqueId")
     private String uniqueId = UUID.randomUUID().toString();
-
-    @JsonProperty("Tag")
-    private String tag;
 
     @JsonProperty("DisplayName")
     private String displayName;
 
-    @JsonProperty("Image")
-    private ImageProxy image = ImageProxy.createEmpty();
+    @JsonProperty("Cycle")
+    private String cycleUniqueId;
+
+    @JsonProperty("EncounterSets")
+    private List<String> encounterSetUniqueIds;
 
     public String getUniqueId() {
         return uniqueId;
@@ -25,14 +24,6 @@ public class TaggedImageInfo {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
     }
 
     public String getDisplayName() {
@@ -43,15 +34,19 @@ public class TaggedImageInfo {
         this.displayName = displayName;
     }
 
-    public ImageProxy getImage() {
-        return image;
+    public String getCycleUniqueId() {
+        return cycleUniqueId;
     }
 
-    public void setImage(ImageProxy image) {
-        this.image = image;
+    public void setCycleUniqueId(String cycleUniqueId) {
+        this.cycleUniqueId = cycleUniqueId;
     }
 
-    public String toString() {
-        return displayName;
+    public List<String> getEncounterSetUniqueIds() {
+        return encounterSetUniqueIds;
+    }
+
+    public void setEncounterSetUniqueIds(List<String> encounterSetUniqueIds) {
+        this.encounterSetUniqueIds = encounterSetUniqueIds;
     }
 }

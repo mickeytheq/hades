@@ -1,12 +1,12 @@
 package com.mickeytheq.hades.core.project.ui;
 
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 
 import javax.swing.*;
 import java.util.List;
 
-public class EncounterSetsPanel extends BaseEncounterSetsCollectionPanel<EncounterSetInfo> {
+public class EncounterSetsPanel extends BaseEncounterSetsCollectionPanel<EncounterSetConfiguration> {
     private final ProjectConfiguration projectConfiguration;
 
     public EncounterSetsPanel(ProjectConfiguration projectConfiguration) {
@@ -15,19 +15,19 @@ public class EncounterSetsPanel extends BaseEncounterSetsCollectionPanel<Encount
 
     @Override
     protected boolean performAdd() {
-        EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
+        EncounterSetConfiguration encounterSetConfiguration = new EncounterSetConfiguration();
 
-        if (!openEditorDialog(encounterSetInfo))
+        if (!openEditorDialog(encounterSetConfiguration))
             return false;
 
-        projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+        projectConfiguration.getEncounterSetConfigurations().add(encounterSetConfiguration);
         projectConfiguration.save();
 
         return true;
     }
 
     @Override
-    protected boolean performEdit(EncounterSetInfo entity) {
+    protected boolean performEdit(EncounterSetConfiguration entity) {
         if (!openEditorDialog(entity))
             return false;
 
@@ -36,18 +36,18 @@ public class EncounterSetsPanel extends BaseEncounterSetsCollectionPanel<Encount
     }
 
     @Override
-    protected boolean performDelete(EncounterSetInfo entity) {
+    protected boolean performDelete(EncounterSetConfiguration entity) {
         if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this encounter set", "Delete encounter set", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
             return false;
 
-        projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().remove(entity);
+        projectConfiguration.getEncounterSetConfigurations().remove(entity);
         projectConfiguration.save();
 
         return true;
     }
 
     @Override
-    protected List<EncounterSetInfo> getEntityList() {
-        return projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos();
+    protected List<EncounterSetConfiguration> getEntityList() {
+        return projectConfiguration.getEncounterSetConfigurations();
     }
 }

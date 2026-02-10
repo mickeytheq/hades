@@ -4,7 +4,7 @@ import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.EncounterSetModel;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceOrientation;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -33,7 +33,7 @@ public class EncounterSetView {
     private final CardFaceView cardFaceView;
 
     private JCheckBox copyOtherFaceEditor;
-    private JComboBox<EncounterSetInfo> encounterSetEditor;
+    private JComboBox<EncounterSetConfiguration> encounterSetEditor;
     private JTextField numberEditor;
     private JTextField totalEditor;
 
@@ -52,8 +52,8 @@ public class EncounterSetView {
         // encounter
         encounterSetEditor = EditorUtils.createNullableComboBox();
 
-        for (EncounterSetInfo encounterSetInfo : projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos()) {
-            encounterSetEditor.addItem(encounterSetInfo);
+        for (EncounterSetConfiguration encounterSetConfiguration : projectConfiguration.getEncounterSetConfigurations()) {
+            encounterSetEditor.addItem(encounterSetConfiguration);
         }
 
         numberEditor = EditorUtils.createTextField(8);
@@ -70,12 +70,12 @@ public class EncounterSetView {
         });
 
         EditorUtils.bindToggleButton(copyOtherFaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyOtherFace));
-        EditorUtils.bindComboBox(encounterSetEditor, editorContext.wrapConsumerWithMarkedChanged(model::setEncounterSet));
+        EditorUtils.bindComboBox(encounterSetEditor, editorContext.wrapConsumerWithMarkedChanged(model::setEncounterSetConfiguration));
         EditorUtils.bindTextComponent(numberEditor, editorContext.wrapConsumerWithMarkedChanged(model::setNumber));
         EditorUtils.bindTextComponent(totalEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTotal));
 
         copyOtherFaceEditor.setSelected(model.isCopyOtherFace());
-        encounterSetEditor.setSelectedItem(model.getEncounterSet());
+        encounterSetEditor.setSelectedItem(model.getEncounterSetConfiguration());
         numberEditor.setText(model.getNumber());
         totalEditor.setText(model.getTotal());
     }
@@ -100,10 +100,10 @@ public class EncounterSetView {
 
         EncounterSetModel modelToUse = modelOpt.get();
 
-        if (modelToUse.getEncounterSet() == null)
+        if (modelToUse.getEncounterSetConfiguration() == null)
             return;
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), modelToUse.getEncounterSet().getImage().get(), encounterPortraitDrawRegion);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), modelToUse.getEncounterSetConfiguration().getImage().get(), encounterPortraitDrawRegion);
     }
 
     public void paintEncounterNumbers(PaintContext paintContext, CardFaceOrientation orientation) {

@@ -5,7 +5,7 @@ import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CollectionModel;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceOrientation;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -40,7 +40,7 @@ public class CollectionView {
     private final CardFaceView cardFaceView;
 
     private JCheckBox copyOtherFaceEditor;
-    private JComboBox<CollectionInfo> collectionEditor;
+    private JComboBox<CollectionConfiguration> collectionEditor;
     private JTextField numberEditor;
 
     public CollectionView(CollectionModel model, CardFaceView cardFaceView) {
@@ -58,8 +58,8 @@ public class CollectionView {
         // collection
         collectionEditor = EditorUtils.createNullableComboBox();
 
-        for (CollectionInfo collectionInfo : projectConfiguration.getCollectionConfiguration().getCollectionInfos()) {
-            collectionEditor.addItem(collectionInfo);
+        for (CollectionConfiguration collectionConfiguration : projectConfiguration.getCollectionConfigurations()) {
+            collectionEditor.addItem(collectionConfiguration);
         }
 
         numberEditor = EditorUtils.createTextField(8);
@@ -74,11 +74,11 @@ public class CollectionView {
         });
 
         EditorUtils.bindToggleButton(copyOtherFaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyOtherFace));
-        EditorUtils.bindComboBox(collectionEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCollection));
+        EditorUtils.bindComboBox(collectionEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCollectionConfiguration));
         EditorUtils.bindTextComponent(numberEditor, editorContext.wrapConsumerWithMarkedChanged(model::setNumber));
 
         copyOtherFaceEditor.setSelected(model.isCopyOtherFace());
-        collectionEditor.setSelectedItem(model.getCollection());
+        collectionEditor.setSelectedItem(model.getCollectionConfiguration());
         numberEditor.setText(model.getNumber());
     }
 
@@ -110,13 +110,13 @@ public class CollectionView {
 
         CollectionModel model = modelOpt.get();
 
-        if (model.getCollection() == null)
+        if (model.getCollectionConfiguration() == null)
             return;
 
         // collection icon sometimes needs inverting
         // the source icon is always black but the background on most cards is black as well therefore we want the icon inverted to white
         // this isn't always the case therefore it is at the discretion of the owning card face to decide
-        BufferedImage collectionImage = model.getCollection().getImage().get();
+        BufferedImage collectionImage = model.getCollectionConfiguration().getImage().get();
 
         if (paintInverted) {
             BufferedImageOp inversionOp = new InversionFilter();

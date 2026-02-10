@@ -37,12 +37,16 @@ public class FontInstallManager {
         fontInstallManager.addRequiredFontInfo("ArnoPro-Italic", fontInstallDirectory.resolve("arnopro-italic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-italic-font/f64432.htm"));
         fontInstallManager.addRequiredFontInfo("ArnoPro-BoldItalic", fontInstallDirectory.resolve("arnopro-bolditalic.otf"), UrlUtils.fromString("https://www.dafontfree.net/arno-pro-bold-italic-font/f64427.htm"));
 
+        logger.info("Trying to load ArnoPro fonts...");
+
         fontInstallManager.tryLoadFontsQuietly();
 
         if (fontInstallManager.isAllFontsInstalled()) {
-            logger.debug("All required fonts detected as installed");
+            logger.info("All ArnoPro required fonts detected as installed");
             return true;
         }
+
+        logger.info("One or more ArnoPro fonts are missing. Launching font setup...");
 
         return fontInstallManager.showFontSetupDialog();
     }

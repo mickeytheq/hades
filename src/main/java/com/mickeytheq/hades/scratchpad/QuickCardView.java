@@ -9,14 +9,13 @@ import com.mickeytheq.hades.core.global.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
-import com.mickeytheq.hades.core.model.common.WeaknessType;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.model.image.NothingImagePersister;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
@@ -34,7 +33,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.StringWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,12 +64,12 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
-        asset();
+//        asset();
 //            investigator();
 //        event();
 //        skill();
 //        treacheryTreachery();
-//            location();
+            location();
 //            random();
 //            agenda();
 //            act();
@@ -87,17 +85,17 @@ public class QuickCardView {
         ProjectConfiguration projectConfiguration = ProjectContexts.withContextReturn(temporaryProjectContext, () -> {
             ProjectConfiguration config = new ProjectConfiguration();
 
-            EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
+            EncounterSetConfiguration encounterSetInfo = new EncounterSetConfiguration();
             encounterSetInfo.setDisplayName("Rats");
             encounterSetInfo.setTag("rats");
             encounterSetInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImageReadOnly("/test/AHLCG-Rats.png")));
-            config.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+            config.getEncounterSetConfigurations().add(encounterSetInfo);
 
-            CollectionInfo collectionInfo = new CollectionInfo();
+            CollectionConfiguration collectionInfo = new CollectionConfiguration();
             collectionInfo.setDisplayName("Rats");
             collectionInfo.setTag("rats");
             collectionInfo.setImage(ImageProxy.createStatic(ImageUtils.loadImageReadOnly("/test/AHLCG-Rats.png")));
-            config.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
+            config.getCollectionConfigurations().add(collectionInfo);
 
             return config;
         });

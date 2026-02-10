@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CollectionModel implements EmptyEntityDiscriminator {
     private boolean copyOtherFace = false;
-    private CollectionInfo collection;
+    private CollectionConfiguration collectionConfiguration;
     private String number;
 
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
@@ -22,7 +22,7 @@ public class CollectionModel implements EmptyEntityDiscriminator {
 
     @Override
     public boolean isEmpty() {
-        if (collection != null)
+        if (collectionConfiguration != null)
             return false;
 
         if (!StringUtils.isEmpty(number))
@@ -53,11 +53,11 @@ public class CollectionModel implements EmptyEntityDiscriminator {
     }
 
     @Property(CardModelPropertyNames.COLLECTION)
-    public CollectionInfo getCollection() {
-        return collection;
+    public CollectionConfiguration getCollectionConfiguration() {
+        return collectionConfiguration;
     }
 
-    public void setCollection(CollectionInfo collection) {
-        this.collection = collection;
+    public void setCollectionConfiguration(CollectionConfiguration collectionConfiguration) {
+        this.collectionConfiguration = collectionConfiguration;
     }
 }

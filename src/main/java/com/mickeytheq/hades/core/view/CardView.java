@@ -69,8 +69,8 @@ public class CardView {
         JTextArea commentsEditor = new JTextArea();
         commentsEditor.setLineWrap(true);
 
-        EditorUtils.bindTextComponent(commentsEditor, editorContext.wrapConsumerWithMarkedChanged(s -> getCard().setComments(s)));
-        commentsEditor.setText(getCard().getComments());
+        EditorUtils.bindTextComponent(commentsEditor, editorContext.wrapConsumerWithMarkedChanged(s -> getCard().getCardMetadataModel().setComments(s)));
+        commentsEditor.setText(getCard().getCardMetadataModel().getComments());
 
         JScrollPane scrollPane = new JScrollPane(commentsEditor);
 

@@ -3,8 +3,8 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration;
 import ca.cgjennings.apps.arkham.component.DefaultPortrait;
 import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.common.*;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.util.shape.Unit;
@@ -15,8 +15,6 @@ import org.apache.commons.lang3.Strings;
 import java.util.Optional;
 
 public class MigrationUtils {
-    private static final double PORTRAIT_SCALE_ADJUST_FACTOR = 2.0;
-
     public static Statistic parseStatistic(SettingsAccessor settingsAccessor, String valueSetting, String perInvestigatorSetting) {
         String value = settingsAccessor.getString(valueSetting);
 
@@ -124,8 +122,8 @@ public class MigrationUtils {
 
         model.setNumber(settingsAccessor.getString(SettingsFieldNames.COLLECTION_NUMBER));
 
-        CollectionInfo collectionInfo = findOrCreateCollection(context);
-        model.setCollection(collectionInfo);
+        CollectionConfiguration collectionConfiguration = findOrCreateCollection(context);
+        model.setCollectionConfiguration(collectionConfiguration);
     }
 
     public static void populateEncounterSet(CardFaceMigrationContext context, EncounterSetModel model) {
@@ -140,11 +138,11 @@ public class MigrationUtils {
         model.setNumber(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_NUMBER));
         model.setTotal(settingsAccessor.getString(SettingsFieldNames.ENCOUNTER_TOTAL));
 
-        EncounterSetInfo encounterSetInfo = findOrCreateEncounterSet(context);
-        model.setEncounterSet(encounterSetInfo);
+        EncounterSetConfiguration encounterSetConfiguration = findOrCreateEncounterSet(context);
+        model.setEncounterSetConfiguration(encounterSetConfiguration);
     }
 
-    private static CollectionInfo findOrCreateCollection(CardFaceMigrationContext context) {
+    private static CollectionConfiguration findOrCreateCollection(CardFaceMigrationContext context) {
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
         ProjectConfiguration projectConfiguration = context.getProjectConfiguration();
 
@@ -165,18 +163,18 @@ public class MigrationUtils {
             if (StringUtils.isEmpty(tag) || StringUtils.isEmpty(displayName))
                 return null;
 
-            Optional<CollectionInfo> collectionInfoOpt = projectConfiguration.getCollectionConfiguration().findCollectionInfo(tag);
+            Optional<CollectionConfiguration> collectionInfoOpt = projectConfiguration.getCollectionConfigurations().stream().filter(o -> o.getDisplayName().equals(displayName)).findAny();
 
             if (collectionInfoOpt.isPresent()) {
                 return collectionInfoOpt.get();
             }
 
-            CollectionInfo collectionInfo = new CollectionInfo();
+            CollectionConfiguration collectionInfo = new CollectionConfiguration();
             collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
             collectionInfo.getImage().set(portrait.getImage());
 
-            projectConfiguration.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
+            projectConfiguration.getCollectionConfigurations().add(collectionInfo);
             projectConfiguration.save();
 
             return collectionInfo;
@@ -197,19 +195,19 @@ public class MigrationUtils {
             // the portrait always contains the image
             DefaultPortrait portrait = PortraitUtils.getCollectionPortrait(context.getDIY());
 
-            CollectionInfo collectionInfo = new CollectionInfo();
+            CollectionConfiguration collectionInfo = new CollectionConfiguration();
             collectionInfo.setTag(tag);
             collectionInfo.setDisplayName(displayName);
             collectionInfo.getImage().set(portrait.getImage());
 
-            projectConfiguration.getCollectionConfiguration().getCollectionInfos().add(collectionInfo);
+            projectConfiguration.getCollectionConfigurations().add(collectionInfo);
             projectConfiguration.save();
 
             return collectionInfo;
         }
     }
 
-    private static EncounterSetInfo findOrCreateEncounterSet(CardFaceMigrationContext context) {
+    private static EncounterSetConfiguration findOrCreateEncounterSet(CardFaceMigrationContext context) {
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();
         ProjectConfiguration projectConfiguration = context.getProjectConfiguration();
 
@@ -227,18 +225,18 @@ public class MigrationUtils {
             String displayName = FilenameUtils.getBaseName(portrait.getSource());
             String tag = StringUtils.deleteWhitespace(displayName);
 
-            Optional<EncounterSetInfo> optional = projectConfiguration.getEncounterSetConfiguration().findEncounterSetInfo(tag);
+            Optional<EncounterSetConfiguration> optional = projectConfiguration.getEncounterSetConfigurations().stream().filter(o -> o.getDisplayName().equals(displayName)).findAny();
 
             if (optional.isPresent()) {
                 return optional.get();
             }
 
-            EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
+            EncounterSetConfiguration encounterSetInfo = new EncounterSetConfiguration();
             encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
             encounterSetInfo.getImage().set(portrait.getImage());
 
-            projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+            projectConfiguration.getEncounterSetConfigurations().add(encounterSetInfo);
             projectConfiguration.save();
 
             return encounterSetInfo;
@@ -259,12 +257,12 @@ public class MigrationUtils {
             // the portrait always contains the image
             DefaultPortrait portrait = PortraitUtils.getEncounterSetPortrait(context.getDIY());
 
-            EncounterSetInfo encounterSetInfo = new EncounterSetInfo();
+            EncounterSetConfiguration encounterSetInfo = new EncounterSetConfiguration();
             encounterSetInfo.setTag(tag);
             encounterSetInfo.setDisplayName(displayName);
             encounterSetInfo.getImage().set(portrait.getImage());
 
-            projectConfiguration.getEncounterSetConfiguration().getEncounterSetInfos().add(encounterSetInfo);
+            projectConfiguration.getEncounterSetConfigurations().add(encounterSetInfo);
             projectConfiguration.save();
 
             return encounterSetInfo;

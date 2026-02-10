@@ -5,6 +5,8 @@ import ca.cgjennings.io.protocols.MappedURLHandler;
 import ca.cgjennings.ui.theme.HydraTheme;
 import ca.cgjennings.ui.theme.Theme;
 import com.mickeytheq.hades.util.FontUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import resources.Language;
 
 import javax.swing.*;
@@ -13,6 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 
 public class Bootstrapper {
+    private static final Logger logger = LogManager.getLogger(Bootstrapper.class);
+
     // used for testing outside Strange Eons
     public static void initaliseOutsideStrangeEons() {
         JPEG2000.registerServiceProviders(true);
@@ -52,11 +56,15 @@ public class Bootstrapper {
     }
 
     public static void initialise() {
+        logger.info("Bootstrapping Hades requirements...");
+
         loadFonts();
         loadLanguageFiles();
     }
 
     private static void loadFonts() {
+        logger.info("Loading fonts...");
+
         FontUtils.loadFont("/fonts/AHLCGSymbol.ttf");
         FontUtils.loadFont("/fonts/Arkhamic.ttf");
 
@@ -72,6 +80,8 @@ public class Bootstrapper {
     }
 
     private static void loadLanguageFiles() {
+        logger.info("Loading language files...");
+
         Language.getGame().addStrings("/language/Hades-Game");
         Language.getInterface().addStrings("/language/Hades-Interface");
     }

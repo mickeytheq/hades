@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.model;
 
+import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 import java.nio.file.Path;
@@ -15,11 +16,12 @@ public class Card {
     private String id = UUID.randomUUID().toString();
     private CardFaceModel frontFaceModel;
     private CardFaceModel backFaceModel;
-    private String comments;
+    private final CardMetadataModel cardMetadataModel = new CardMetadataModel();
 
     public Card() {
     }
 
+    @Property("UniqueId")
     public String getId() {
         return id;
     }
@@ -61,15 +63,11 @@ public class Card {
             setBackFaceModel(cardFaceModel);
     }
 
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
     public boolean hasBack() {
         return backFaceModel != null;
+    }
+
+    public CardMetadataModel getCardMetadataModel() {
+        return cardMetadataModel;
     }
 }

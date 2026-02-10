@@ -3,8 +3,8 @@ package com.mickeytheq.hades.core.model.entity;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyValueDiscriminator;
 
@@ -205,10 +205,10 @@ public class AnnotatedEntityMetadataBuilder {
         if (ImageProxy.class.isAssignableFrom(propertyType))
             return true;
 
-        if (EncounterSetInfo.class.isAssignableFrom(propertyType))
+        if (EncounterSetConfiguration.class.isAssignableFrom(propertyType))
             return true;
 
-        if (CollectionInfo.class.isAssignableFrom(propertyType))
+        if (CollectionConfiguration.class.isAssignableFrom(propertyType))
             return true;
 
         if (Distance.class.isAssignableFrom(propertyType))

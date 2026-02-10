@@ -22,9 +22,12 @@ import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
 import com.mickeytheq.hades.util.VersionUtils;
+import com.mickeytheq.hades.util.log4j.Log4JUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.FileAppender;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -52,9 +55,10 @@ public class HadesPlugin extends AbstractPlugin {
 
     @Override
     public boolean initializePlugin(PluginContext context) {
+        logger.info("Initialising Hades plugin version " + VersionUtils.getVersion());
+
         // TODO: do we need to register anything?
         //        Game.register("Hades", "Arkham Horror: LCG");
-
         try {
             Bootstrapper.initialise();
 
@@ -70,12 +74,13 @@ public class HadesPlugin extends AbstractPlugin {
             forceViewQualityToHighWithNoAutomaticChanging();
 
             Actions.register(new HadesActionTree(), Actions.PRIORITY_IMPORT_EXPORT);
-
-            return true;
         } catch (Exception e) {
-            logger.fatal("Failed to initialise Hades plugin", e);
-            throw e;
+            logger.error("Failed to initialise Hades plugin", e);
+            return false;
         }
+
+        logger.info("Initialisation of Hades plugin complete");
+        return true;
     }
 
     private boolean checkFonts() {
@@ -93,6 +98,8 @@ public class HadesPlugin extends AbstractPlugin {
     // it would be slightly cleaner to reflectively call ViewQuality.set() but this results in a permanent change as it
     // updates the Strange Eons settings
     private void forceViewQualityToHighWithNoAutomaticChanging() {
+        logger.info("Setting view quality to always be High...");
+
         try {
             Field field = ViewQuality.class.getDeclaredField("auto");
             field.setAccessible(true);
@@ -107,6 +114,8 @@ public class HadesPlugin extends AbstractPlugin {
     }
 
     private void installHadesFileType() {
+        logger.info("Installing Hades file type...");
+
         // register a custom metadata source to describe the hades files
         // by default SE will try to run resources.ResourceKit.getGameComponentFromFile to get this information
         // but hades files are not .eon components so this needs overriding
@@ -184,6 +193,8 @@ public class HadesPlugin extends AbstractPlugin {
     }
 
     private void installKeyboardShortcuts() {
+        logger.info("Installing keyboard shortcuts...");
+
         installNewCardKeyboardShortcut();
         installQuickSearchKeyboardShortcut();
         installOpenLogKeyboardShortcut();
@@ -250,6 +261,8 @@ public class HadesPlugin extends AbstractPlugin {
     }
 
     private void installCardDatabaseUpdater() {
+        logger.info("Installing card database listeners...");
+
         StrangeEons.getWindow().addProjectEventListener(new CardDatabaseProjectEventListener());
     }
 

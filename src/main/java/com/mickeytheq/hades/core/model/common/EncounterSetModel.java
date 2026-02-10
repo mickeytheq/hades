@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class EncounterSetModel implements EmptyEntityDiscriminator {
     private boolean copyOtherFace = false;
-    private EncounterSetInfo encounterSet;
+    private EncounterSetConfiguration encounterSetConfiguration;
     private String number;
     private String total;
 
@@ -23,7 +23,7 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
 
     @Override
     public boolean isEmpty() {
-        if (encounterSet != null)
+        if (encounterSetConfiguration != null)
             return false;
 
         if (!StringUtils.isEmpty(number))
@@ -66,11 +66,11 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
     }
 
     @Property(CardModelPropertyNames.ENCOUNTER_SET)
-    public EncounterSetInfo getEncounterSet() {
-        return encounterSet;
+    public EncounterSetConfiguration getEncounterSetConfiguration() {
+        return encounterSetConfiguration;
     }
 
-    public void setEncounterSet(EncounterSetInfo encounterSet) {
-        this.encounterSet = encounterSet;
+    public void setEncounterSetConfiguration(EncounterSetConfiguration encounterSetConfiguration) {
+        this.encounterSetConfiguration = encounterSetConfiguration;
     }
 }

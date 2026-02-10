@@ -7,6 +7,7 @@ import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
+import com.mickeytheq.hades.core.model.CardMetadataModel;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
@@ -16,8 +17,8 @@ import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
-import com.mickeytheq.hades.core.project.configuration.CollectionInfo;
-import com.mickeytheq.hades.core.project.configuration.EncounterSetInfo;
+import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
+import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
@@ -56,6 +57,8 @@ public class JsonCardSerialiser {
 
     private static final Map<MultiKey<Object>, CardFaceModelUpgrader> CARD_FACE_MODEL_UPGRADERS = new HashMap<>();
 
+    private static final EntityMetadata CARD_ENTITY_METADATA = AnnotatedEntityMetadataBuilder.build(Card.class);
+
     static {
         VALUE_SERIALISERS.put(String.class, new StringSerialiser());
 
@@ -71,8 +74,8 @@ public class JsonCardSerialiser {
         VALUE_SERIALISERS.put(Distance.class, new DistanceSerialiser());
         VALUE_SERIALISERS.put(Statistic.class, new StatisticSerialiser());
         VALUE_SERIALISERS.put(URL.class, new UrlSerialiser());
-        VALUE_SERIALISERS.put(EncounterSetInfo.class, new EncounterSetInfoSerialiser());
-        VALUE_SERIALISERS.put(CollectionInfo.class, new CollectionInfoSerialiser());
+        VALUE_SERIALISERS.put(EncounterSetConfiguration.class, new EncounterSetConfigurationSerialiser());
+        VALUE_SERIALISERS.put(CollectionConfiguration.class, new CollectionConfigurationSerialiser());
         VALUE_SERIALISERS.put(ImageProxy.class, new ImageProxySerialiser());
     }
 
@@ -101,6 +104,9 @@ public class JsonCardSerialiser {
 
         cardNode.put(VERSION_FIELD_NAME, CURRENT_CARD_VERSION);
 
+        // serialise the card fields
+        new Serialiser(objectMapper).serialiseEntity(CARD_ENTITY_METADATA, card, cardNode);
+
         // front face
         ObjectNode frontFaceNode = cardNode.putObject(FRONT_FACE_FIELD_NAME);
         serialiseCardFace(card.getFrontFaceModel(), objectMapper, frontFaceNode);
@@ -110,12 +116,6 @@ public class JsonCardSerialiser {
             ObjectNode backFaceNode = cardNode.putObject(BACK_FACE_FIELD_NAME);
             serialiseCardFace(card.getBackFaceModel(), objectMapper, backFaceNode);
         }
-
-        // general fields
-        cardNode.put(UNIQUE_ID_FIELD_NAME, card.getId());
-
-        if (!StringUtils.isEmpty(card.getComments()))
-            cardNode.put(COMMENTS_FIELD_NAME, card.getComments());
 
         // audit trail block
         ObjectNode metadataObjectNode = cardNode.putObject(AUDIT_FIELD_NAME);
@@ -130,7 +130,8 @@ public class JsonCardSerialiser {
         faceNode.put(CARD_FACE_TYPE_FIELD_NAME, cardFaceInfo.getTypeCode());
         faceNode.put(VERSION_FIELD_NAME, cardFaceInfo.getVersion());
 
-        new Serialiser(objectMapper).serialise(cardFaceModel, faceNode);
+        EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(cardFaceModel.getClass());
+        new Serialiser(objectMapper).serialiseEntity(entityMetadata, cardFaceModel, faceNode);
     }
 
     public static Card deserialiseCard(ObjectNode objectNode) {
@@ -138,22 +139,27 @@ public class JsonCardSerialiser {
 
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();
 
+        // before beginning deserialisation remove nodes that are handled by separate serialisation or not deserialised at all
+        // this is necessary as the deserialisation will error if there are fields that aren't mapped anywhere
+        //
+        // for example the front/back card faces are deserialised separately from the Card itself. this is because the card faces
+        // have individual version control so must be done on their own so any upgrading can be done independently of the other face
+        // and the card itself
+        ObjectNode frontFaceNode = (ObjectNode)objectNode.remove(FRONT_FACE_FIELD_NAME);
+        ObjectNode backFaceNode = (ObjectNode)objectNode.remove(BACK_FACE_FIELD_NAME);
+
+        // audit fields are generated on serialisation but not mapped to the Card model
+        objectNode.remove(AUDIT_FIELD_NAME);
+
+        // card fields
         Card card = new Card();
 
-        // general fields
-        card.setId(objectNode.get(UNIQUE_ID_FIELD_NAME).asText());
+        // do the Card deserialisation. see above about this being separate from the card faces
+        new Deserialiser(objectMapper).deserialiseEntity(CARD_ENTITY_METADATA, objectNode, card);
 
-        JsonNode commentsNode = objectNode.get(COMMENTS_FIELD_NAME);
-
-        if (commentsNode != null)
-            card.setComments(commentsNode.asText());
-
-        ObjectNode frontFaceNode = (ObjectNode)objectNode.get(FRONT_FACE_FIELD_NAME);
-
+        // deserialise the card faces
         CardFaceModel frontFaceModel = deserialiseCardFace(objectMapper, frontFaceNode);
         card.setFrontFaceModel(frontFaceModel);
-
-        ObjectNode backFaceNode = (ObjectNode)objectNode.get(BACK_FACE_FIELD_NAME);
 
         if (backFaceNode != null) {
             CardFaceModel backFaceModel = deserialiseCardFace(objectMapper, backFaceNode);
@@ -218,7 +224,8 @@ public class JsonCardSerialiser {
         // do the serialisation
         CardFaceModel cardFaceModel = CardFaces.createFaceModelForTypeCode(typeCode, ProjectContexts.getCurrentContext());
 
-        new Deserialiser(objectMapper).deserialise(faceNode, cardFaceModel);
+        EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(cardFaceModel.getClass());
+        new Deserialiser(objectMapper).deserialiseEntity(entityMetadata, faceNode, cardFaceModel);
 
         return cardFaceModel;
     }
@@ -258,13 +265,7 @@ public class JsonCardSerialiser {
             this.projectContext = ProjectContexts.getCurrentContext();
         }
 
-        public void serialise(CardFaceModel cardFaceModel, ObjectNode faceNode) {
-            EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(cardFaceModel.getClass());
-
-            serialiseEntity(entityMetadata, cardFaceModel, faceNode);
-        }
-
-        private void serialiseEntity(EntityMetadata entityMetadata, Object entity, ObjectNode currentNode) {
+        public void serialiseEntity(EntityMetadata entityMetadata, Object entity, ObjectNode currentNode) {
             for (PropertyMetadata propertyMetadata : entityMetadata.getProperties()) {
                 Object value = propertyMetadata.getPropertyValue(entity);
 
@@ -325,13 +326,7 @@ public class JsonCardSerialiser {
             projectContext = ProjectContexts.getCurrentContext();
         }
 
-        public void deserialise(ObjectNode faceNode, CardFaceModel cardFaceModel) {
-            EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(cardFaceModel.getClass());
-
-            deserialiseEntity(entityMetadata, faceNode, cardFaceModel);
-        }
-
-        private void deserialiseEntity(EntityMetadata entityMetadata, ObjectNode currentNode, Object entity) {
+        public void deserialiseEntity(EntityMetadata entityMetadata, ObjectNode currentNode, Object entity) {
             Iterator<String> fieldNames = currentNode.fieldNames();
             while (fieldNames.hasNext()) {
                 String fieldName = fieldNames.next();
