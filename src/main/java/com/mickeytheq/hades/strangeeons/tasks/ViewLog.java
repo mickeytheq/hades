@@ -4,7 +4,7 @@ import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.project.Member;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.util.log4j.GlobalMemoryAppender;
 import com.mickeytheq.hades.util.log4j.Log4JUtils;
@@ -34,7 +34,7 @@ public class ViewLog extends BaseTaskAction {
         new LogView().showDialog();
     }
 
-    static class LogView extends DialogWithButtons {
+    static class LogView extends DialogEx {
         public LogView() {
             super(StrangeEons.getWindow(), false);
 
@@ -73,7 +73,7 @@ public class ViewLog extends BaseTaskAction {
 
             setContentComponent(mainPanel);
 
-            addDialogClosingButton("Close", 0, () -> true);
+            addCloseButton();
         }
     }
 }

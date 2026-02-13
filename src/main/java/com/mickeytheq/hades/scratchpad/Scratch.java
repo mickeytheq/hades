@@ -1,63 +1,89 @@
 package com.mickeytheq.hades.scratchpad;
 
-import com.google.common.collect.Lists;
-import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
-import com.mickeytheq.hades.ui.LoggingLevel;
-import com.mickeytheq.hades.ui.ProgressDialog;
-import com.mickeytheq.hades.util.log4j.GlobalMemoryAppender;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
+import com.mickeytheq.hades.ui.DialogEx;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Scratch {
     public static void main(String[] args) throws Exception {
-        String str = "YESURTF";
+        JPanel panel = MigLayoutUtils.createDialogPanel();
+        JTextField validatingTextField = new JTextField(50);
 
-        str = translateWord(str, -8);
+        Component component = wrapWithValidationIcon(validatingTextField, () -> !StringUtils.isEmpty(validatingTextField.getText()));
 
-        System.out.println(str);
+        panel.add(new JLabel("Label for component: "));
+        panel.add(component, "growx, pushx");
+
+        DialogEx dialogEx = new DialogEx(null, false);
+        dialogEx.setContentComponent(panel);
+        dialogEx.addOkCancelButtons(() -> {
+            walkComponentHierarchy(dialogEx, c -> {
+                if (!(c instanceof JComponent))
+                    return;
+
+                JComponent jComponent = (JComponent)c;
+
+                Object validation = jComponent.getClientProperty("VALIDATION");
+
+                if (validation == null)
+                    return;
+
+                JLabel validationIcon = (JLabel)jComponent.getClientProperty("VALIDATION_ICON");
+
+                Supplier<Boolean> validator = (Supplier<Boolean>)validation;
+                boolean valid = validator.get();
+
+                validationIcon.setVisible(!valid);
+                validationIcon.setToolTipText("Text is empty");
+
+                jComponent.revalidate();
+            });
+
+            return false;
+        });
+
+        dialogEx.showDialog();
     }
 
-    private static List<String> untranslatedWords = Lists.newArrayList(
-            "THE", "UNJHJX", "YHKF", "N", "XIPMF",
-            "YMJ", "LTQJR", "PBMRF", "MH", "AXUT",
-            "NY", "MJYUEM", "BML", "GTFX",
-            "RJYFQ", "YAEMUO"
-    );
+    public static Component wrapWithValidationIcon(JComponent component, Supplier<Boolean> validator) {
+        JPanel panel = MigLayoutUtils.createOrganiserPanel();
+        panel.add(component);
 
-    private static void translateCyclicRotatingCipher() {
-        int shift = 0;
-        for (String untranslatedWord : untranslatedWords) {
-            String translated = translateWord(untranslatedWord, shift);
-            System.out.println(translated);
-
-            int lastChar = translated.charAt(translated.length() - 1);
-
-            shift = (lastChar - 'A') % 26 + 1;
+        Image errorIcon = null;
+        try {
+            errorIcon = ImageIO.read(Scratch.class.getResource("/icons/application_icons/icons8-cancel-16.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        JLabel validationIcon = new JLabel();
+        validationIcon.setIcon(new ImageIcon(errorIcon));
+        validationIcon.setVisible(false);
+
+        panel.add(validationIcon, "aligny center, hidemode 3");
+
+        component.putClientProperty("VALIDATION", validator);
+        component.putClientProperty("VALIDATION_ICON", validationIcon);
+
+        return panel;
     }
 
-    private static String translateWord(String untranslated, int shift) {
-        StringBuilder sb = new StringBuilder();
+    public static void walkComponentHierarchy(Component component, Consumer<Component> consumer) {
+        consumer.accept(component);
 
-        for (int i = 0; i < untranslated.length(); i++) {
-            int newChar = shiftChar(untranslated.charAt(i), shift);
-            sb.append((char)newChar);
+        if (component instanceof Container) {
+            Container container = (Container)component;
+
+            for (Component containerComponent : container.getComponents()) {
+                walkComponentHierarchy(containerComponent, consumer);
+            }
         }
-
-        return sb.toString();
-    }
-
-    private static int shiftChar(int ch, int shift) {
-        ch = ch - shift;
-
-        if (ch < 'A')
-            ch = ch + 26;
-
-        if (ch > 'Z')
-            ch = ch - 26;
-
-        return ch;
     }
 }

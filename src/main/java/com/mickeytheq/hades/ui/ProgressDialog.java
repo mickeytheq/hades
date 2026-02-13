@@ -19,7 +19,7 @@ public class ProgressDialog {
 
     private JTextArea logTextArea;
     private JButton closeButton;
-    private DialogWithButtons dialogWithButtons;
+    private DialogEx dialogEx;
 
     public ProgressDialog(LoggingLevel loggingLevel) {
         this.loggingLevel = loggingLevel;
@@ -33,11 +33,11 @@ public class ProgressDialog {
         JPanel panel = MigLayoutUtils.createTitledPanel("Log");
         panel.add(scrollPane, "wrap, pushx, growx, growy, pushy");
 
-        dialogWithButtons = new DialogWithButtons((Frame)null, false);
-        dialogWithButtons.setContentComponent(panel);
-        dialogWithButtons.setTitle("Progress");
+        dialogEx = new DialogEx((Frame)null, false);
+        dialogEx.setContentComponent(panel);
+        dialogEx.setTitle("Progress");
 
-        closeButton = dialogWithButtons.addDialogClosingButton("Close", 0, () -> Boolean.TRUE);
+        closeButton = dialogEx.addCloseButton();
         closeButton.setEnabled(false);
     }
 
@@ -45,7 +45,7 @@ public class ProgressDialog {
         AtomicReference<T> reference = new AtomicReference<>();
 
         // when a progress dialog is shown begin execution
-        dialogWithButtons.addComponentListener(new ComponentAdapter() {
+        dialogEx.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
                 execute(callable, reference::set);
@@ -60,7 +60,7 @@ public class ProgressDialog {
                 () -> {
                     // show the dialog which will make the componentShown event above trigger and start the work
                     // we want done within the dialog - this will block here until the dialog is closed
-                    dialogWithButtons.showDialog();
+                    dialogEx.showDialog();
                 });
 
         // return the result

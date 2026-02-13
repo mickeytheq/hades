@@ -26,7 +26,7 @@ import com.mickeytheq.hades.generator.CardFaceGenerator;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 
 import javax.swing.*;
 import java.awt.*;
@@ -538,9 +538,9 @@ public class QuickCardView {
         }
 
         private void showJson(JFrame frame, String jsonString) {
-            DialogWithButtons dialog = new DialogWithButtons(frame, false);
+            DialogEx dialog = new DialogEx(frame, false);
             dialog.setTitle("JSON view");
-            dialog.addDialogClosingButton("Close", 0, () -> Boolean.TRUE);
+            dialog.addCloseButton();
 
             JTextArea textArea = new JTextArea(50, 100);
             textArea.setText(jsonString);

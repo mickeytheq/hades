@@ -12,7 +12,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
-import java.util.Optional;
 
 public class ChangeCardFaceType {
     private static final Logger logger = LogManager.getLogger(ChangeCardFaceType.class);
@@ -31,7 +30,7 @@ public class ChangeCardFaceType {
         Card sourceCard = CardIO.readCard(cardPath, projectContext);
 
         ChangeCardFaceTypeDialog dialog = new ChangeCardFaceTypeDialog(StrangeEons.getWindow(), sourceCard);
-        if (dialog.showDialog() != DialogWithButtons.OK_OPTION)
+        if (dialog.showDialog() != DialogEx.OK_OPTION)
             return;
 
         new ProgressDialog(LoggingLevel.Normal).runWithinProgressDialog(() -> {
@@ -53,7 +52,7 @@ public class ChangeCardFaceType {
         });
     }
 
-    static class ChangeCardFaceTypeDialog extends DialogWithButtons {
+    static class ChangeCardFaceTypeDialog extends DialogEx {
         private final Card sourceCard;
         private final JComboBox<CardFaceSide> cardFaceSideEditor;
         private final JComboBox<CardFaceTypeRegister.CardFaceInfo> targetFaceTypeEditor;

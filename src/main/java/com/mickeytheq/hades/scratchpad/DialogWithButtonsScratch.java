@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.scratchpad;
 
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -26,18 +26,18 @@ public class DialogWithButtonsScratch {
         panel.add(panel1);
         panel.add(panel2);
 
-        DialogWithButtons dialogWithButtons = new DialogWithButtons((Frame)null, true);
-        dialogWithButtons.setContentComponent(panel);
-        dialogWithButtons.addDialogClosingButton("OK", 1, () -> Boolean.TRUE);
-        dialogWithButtons.addDialogClosingButton("Cancel", 2, () -> Boolean.TRUE);
-        dialogWithButtons.addButton("Help", e -> { JOptionPane.showMessageDialog(dialogWithButtons, "Help!"); } );
-        dialogWithButtons.addButton("Change Label", e -> {
+        DialogEx dialogEx = new DialogEx((Frame)null, true);
+        dialogEx.setContentComponent(panel);
+        dialogEx.addDialogClosingButtonWithValidation("OK", 1, () -> Boolean.TRUE);
+        dialogEx.addDialogClosingButton("Cancel", 2);
+        dialogEx.addHelpButton("Help", e -> { JOptionPane.showMessageDialog(dialogEx, "Help!"); } );
+        dialogEx.addOtherButton("Change Label", e -> {
             panel2.removeAll();
             panel2.add(new JLabel(StringUtils.repeat("M", new Random().nextInt(100))));
             panel2.revalidate();
             panel2.repaint();
         } );
 
-        int resultCode = dialogWithButtons.showDialog();
+        int resultCode = dialogEx.showDialog();
     }
 }

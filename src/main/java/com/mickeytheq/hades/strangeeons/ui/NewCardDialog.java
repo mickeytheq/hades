@@ -1,22 +1,20 @@
 package com.mickeytheq.hades.strangeeons.ui;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
-import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import java.util.Comparator;
 import java.util.Optional;
 
-public class NewCardDialog extends DialogWithButtons {
+public class NewCardDialog extends DialogEx {
     private JComboBox<BothFacesOption> bothFacesOptionEditor;
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> frontFaceOptionEditor;
     private JComboBox<CardFaceTypeRegister.CardFaceInfo> backFaceOptionEditor;
@@ -125,7 +123,7 @@ public class NewCardDialog extends DialogWithButtons {
 
         setContentComponent(mainPanel);
 
-        addDialogClosingButton("Create", DialogWithButtons.OK_OPTION, () -> {
+        addOkCancelButtons("Create", "Cancel", () -> {
             if (StringUtils.isEmpty(filenameEditor.getText())) {
                 JOptionPane.showMessageDialog(this, "Please specify a filename", "No filename", JOptionPane.ERROR_MESSAGE);
                 return false;
@@ -133,8 +131,6 @@ public class NewCardDialog extends DialogWithButtons {
 
             return true;
         });
-
-        addDialogClosingButton("Cancel", DialogWithButtons.CANCEL_OPTION, () -> Boolean.TRUE);
 
         pack();
     }

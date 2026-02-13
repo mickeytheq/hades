@@ -8,13 +8,12 @@ import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.gamecomponent.CardGameComponent;
 import com.mickeytheq.hades.strangeeons.ui.NewCardDialog;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 
 import java.io.File;
 
@@ -47,7 +46,7 @@ public class NewCard extends BaseTaskAction {
         // launch the dialog to select config for the new card
         NewCardDialog newCardDialog = new NewCardDialog();
         newCardDialog.setLocationRelativeTo(StrangeEons.getWindow());
-        if (newCardDialog.showDialog() != DialogWithButtons.OK_OPTION)
+        if (newCardDialog.showDialog() != DialogEx.OK_OPTION)
             return;
 
         Class<? extends CardFaceModel> backFaceModelClass = newCardDialog.getSelectedBackFace()

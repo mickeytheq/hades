@@ -11,9 +11,6 @@ import java.util.Objects;
 public class MigLayoutUtils {
     private static boolean DEBUG = false;
 
-    // fix the width of spacing editors
-    public static final String SPACING_EDITOR_CONSTRAINTS = "wrap, width 50:50:50";
-
     public static void setDebug(boolean debug) {
         DEBUG = debug;
     }

@@ -9,7 +9,7 @@ import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
@@ -21,12 +21,10 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProjectMigrator {
     private static final Logger logger = LogManager.getLogger(ProjectMigrator.class);
@@ -155,12 +153,12 @@ public class ProjectMigrator {
             MigLayoutUtils.addLabel(panel, "Target directory: ");
             panel.add(fileChooser);
 
-            DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
-            dialogWithButtons.setContentComponent(panel);
-            dialogWithButtons.setTitle("Migration options");
-            dialogWithButtons.addOkCancelButtons(() -> {
+            DialogEx dialogEx = new DialogEx(StrangeEons.getWindow(), true);
+            dialogEx.setContentComponent(panel);
+            dialogEx.setTitle("Migration options");
+            dialogEx.addOkCancelButtons(() -> {
                 if (fileChooser.getSelectedFile().getAbsolutePath().equals(StrangeEons.getOpenProject().getFile().getAbsolutePath())) {
-                    JOptionPane.showMessageDialog(dialogWithButtons,
+                    JOptionPane.showMessageDialog(dialogEx,
                             "Migrating into the same directory as the open Strange Eons project would overwrite all source files. Please choose another directory",
                             "Invalid export directory", JOptionPane.ERROR_MESSAGE);
                     return false;
@@ -169,7 +167,7 @@ public class ProjectMigrator {
                 return true;
             });
 
-            return dialogWithButtons.showDialog() == DialogWithButtons.OK_OPTION;
+            return dialogEx.showDialog() == DialogEx.OK_OPTION;
         }
 
         public FileChooser getFileChooser() {

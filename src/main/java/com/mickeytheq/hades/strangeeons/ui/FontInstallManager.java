@@ -1,10 +1,8 @@
 package com.mickeytheq.hades.strangeeons.ui;
 
-import ca.cgjennings.apps.arkham.StrangeEons;
 import ca.cgjennings.apps.arkham.plugins.BundleInstaller;
-import ca.cgjennings.apps.arkham.plugins.PluginBundle;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
 import com.mickeytheq.hades.util.FontUtils;
@@ -18,7 +16,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
@@ -57,12 +54,12 @@ public class FontInstallManager {
 
     // return true if the dialog was completed successfully
     public boolean showFontSetupDialog() {
-        return new FontSetupDialog().showDialog() != DialogWithButtons.CANCEL_OPTION;
+        return new FontSetupDialog().showDialog() != DialogEx.CANCEL_OPTION;
     }
 
     class FontSetupDialog {
         private final Map<FontSourceInfo, JTextField> fontNameStatusMap = new HashMap<>();
-        private final DialogWithButtons dialogWithButtons;
+        private final DialogEx dialogEx;
         public FontSetupDialog() {
             JPanel panel = MigLayoutUtils.createTitledPanel("Required fonts");
 
@@ -123,19 +120,19 @@ public class FontInstallManager {
             // TODO: have buttons to open the target folder and navigate to the download page
 
             // dialog
-            dialogWithButtons = new DialogWithButtons((Frame)null, false);
-            dialogWithButtons.setContentComponent(panel);
-            dialogWithButtons.setTitle("Font setup");
-            dialogWithButtons.setResizable(false);
+            dialogEx = new DialogEx((Frame)null, false);
+            dialogEx.setContentComponent(panel);
+            dialogEx.setTitle("Font setup");
+            dialogEx.setResizable(false);
 
-            dialogWithButtons.addButton("Refresh", e -> {
+            dialogEx.addOtherButton("Refresh", e -> {
                 updateFontStatus();
             });
 
-            dialogWithButtons.addDialogClosingButton("Continue", DialogWithButtons.OK_OPTION, () -> {
+            dialogEx.addDialogClosingButtonWithValidation("Continue", DialogEx.OK_OPTION, () -> {
                 if (!isAllFontsInstalled()) {
                     // if fonts aren't ready make sure the user is happy to continue
-                    return JOptionPane.showConfirmDialog(dialogWithButtons,
+                    return JOptionPane.showConfirmDialog(dialogEx,
                             "Not all fonts are installed and Hades will not function correctly. Are you sure you wish to continue?",
                             "Fonts not installed",
                             JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
@@ -148,7 +145,7 @@ public class FontInstallManager {
         }
 
         public int showDialog() {
-            return dialogWithButtons.showDialog();
+            return dialogEx.showDialog();
         }
 
         public void updateFontStatus() {

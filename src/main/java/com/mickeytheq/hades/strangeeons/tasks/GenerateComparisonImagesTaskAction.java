@@ -15,7 +15,7 @@ import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.ui.LoggingLevel;
 import com.mickeytheq.hades.ui.ProgressDialog;
@@ -33,11 +33,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
     private static final Logger logger = LogManager.getLogger(GenerateComparisonImagesTaskAction.class);
@@ -211,12 +209,12 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Hades project root directory: ", hadesDirectoryChooser);
             MigLayoutUtils.addLabelledComponentWrapGrowPush(panel, "Output directory: ", outputDirectoryChooser);
 
-            DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
-            dialogWithButtons.setContentComponent(panel);
-            dialogWithButtons.setTitle("Migration options");
-            dialogWithButtons.addOkCancelButtons(() -> Boolean.TRUE);
+            DialogEx dialogEx = new DialogEx(StrangeEons.getWindow(), true);
+            dialogEx.setContentComponent(panel);
+            dialogEx.setTitle("Migration options");
+            dialogEx.addOkCancelButtons(() -> Boolean.TRUE);
 
-            return dialogWithButtons.showDialog() == DialogWithButtons.OK_OPTION;
+            return dialogEx.showDialog() == DialogEx.OK_OPTION;
         }
 
         public FileChooser getAhlcgDirectoryChooser() {

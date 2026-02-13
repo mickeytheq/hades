@@ -5,9 +5,9 @@ import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import com.mickeytheq.hades.core.project.configuration.TaggedImageInfo;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.EntityTablePanel;
-import org.apache.commons.lang3.StringUtils;
+import com.mickeytheq.hades.ui.validation.Validators;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo> extends EntityTablePanel<T> {
+public abstract class TaggedImageInfoPanel<T extends TaggedImageInfo> extends EntityTablePanel<T> {
     @Override
     protected void configureTableModel(DefaultTableModel tableModel) {
         tableModel.addColumn("Tag");
@@ -42,20 +42,10 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
     protected boolean openEditorDialog(TaggedImageInfo taggedImageInfo) {
         EditTaggedImageInfoPanel panel = new EditTaggedImageInfoPanel(taggedImageInfo);
 
-        DialogWithButtons dialogWithButtons = new DialogWithButtons(StrangeEons.getWindow(), true);
-        dialogWithButtons.setTitle("Edit item");
-        dialogWithButtons.setContentComponent(panel);
-        dialogWithButtons.addOkCancelButtons(() -> {
-            if (StringUtils.isEmpty(taggedImageInfo.getTag())) {
-                JOptionPane.showMessageDialog(this, "Please specify a tag", "Missing tag", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            if (StringUtils.isEmpty(taggedImageInfo.getDisplayName())) {
-                JOptionPane.showMessageDialog(this, "Please specify a display name", "Missing display name", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
+        DialogEx dialogEx = new DialogEx(StrangeEons.getWindow(), true);
+        dialogEx.setTitle("Edit item");
+        dialogEx.setContentComponent(panel);
+        dialogEx.addOkCancelButtons(() -> {
             Optional<T> duplicate = getEntityList().stream()
                     .filter(o -> o != taggedImageInfo)
                     .filter(o -> o.getTag().equals(taggedImageInfo.getTag()))
@@ -69,9 +59,9 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
             return true;
         });
 
-        int result = dialogWithButtons.showDialog();
+        int result = dialogEx.showDialog();
 
-        return result == DialogWithButtons.OK_OPTION;
+        return result == DialogEx.OK_OPTION;
     }
 
     static class EditTaggedImageInfoPanel extends JPanel {
@@ -113,8 +103,8 @@ public abstract class BaseEncounterSetsCollectionPanel<T extends TaggedImageInfo
 
             JPanel optionsPanel = MigLayoutUtils.createTitledPanel("Options");
 
-            MigLayoutUtils.addLabelledComponentWrapGrowPush(optionsPanel, "Tag", tagEditor);
-            MigLayoutUtils.addLabelledComponentWrapGrowPush(optionsPanel, "Display name", displayNameEditor);
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(optionsPanel, "Tag", Validators.required(tagEditor));
+            MigLayoutUtils.addLabelledComponentWrapGrowPush(optionsPanel, "Display name", Validators.required(displayNameEditor));
             MigLayoutUtils.addLabelledComponentWrapGrowPush(optionsPanel, "Icon", selectImageButton);
 
             JPanel imagePanel = MigLayoutUtils.createTitledPanel("Image/icon");

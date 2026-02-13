@@ -6,7 +6,7 @@ import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.CardFaceViewComponent;
-import com.mickeytheq.hades.ui.DialogWithButtons;
+import com.mickeytheq.hades.ui.DialogEx;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CardReviewDialog extends DialogWithButtons {
+public class CardReviewDialog extends DialogEx {
     private final ItemSource<CardView> cardViewIterator;
     private JLabel totalDisplay;
     private JPanel imagePanel;

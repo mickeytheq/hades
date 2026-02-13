@@ -1,49 +1,59 @@
 package com.mickeytheq.hades.core.project.ui;
 
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 
 import javax.swing.*;
 import java.util.List;
 
-public class CollectionsPanel extends BaseEncounterSetsCollectionPanel<CollectionConfiguration> {
+public class CollectionsPanel extends TaggedImageInfoPanel<CollectionConfiguration> {
+    private final ProjectContext projectContext;
     private final ProjectConfiguration projectConfiguration;
 
-    public CollectionsPanel(ProjectConfiguration projectConfiguration) {
-        this.projectConfiguration = projectConfiguration;
+    public CollectionsPanel(ProjectContext projectContext) {
+        this.projectContext = projectContext;
+        this.projectConfiguration = projectContext.getProjectConfiguration();
     }
 
     @Override
     protected boolean performAdd() {
-        CollectionConfiguration collectionConfiguration = new CollectionConfiguration();
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            CollectionConfiguration collectionConfiguration = new CollectionConfiguration();
 
-        if (!openEditorDialog(collectionConfiguration))
-            return false;
+            if (!openEditorDialog(collectionConfiguration))
+                return false;
 
-        projectConfiguration.getCollectionConfigurations().add(collectionConfiguration);
-        projectConfiguration.save();
+            projectConfiguration.getCollectionConfigurations().add(collectionConfiguration);
+            projectConfiguration.save();
 
-        return true;
+            return true;
+        });
     }
 
     @Override
     protected boolean performEdit(CollectionConfiguration entity) {
-        if (!openEditorDialog(entity))
-            return false;
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            if (!openEditorDialog(entity))
+                return false;
 
-        projectConfiguration.save();
-        return true;
+            projectConfiguration.save();
+            return true;
+        });
     }
 
     @Override
     protected boolean performDelete(CollectionConfiguration entity) {
-        if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this collection", "Delete collection", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
-            return false;
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this collection", "Delete collection", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+                return false;
 
-        projectConfiguration.getCollectionConfigurations().remove(entity);
-        projectConfiguration.save();
+            projectConfiguration.getCollectionConfigurations().remove(entity);
+            projectConfiguration.save();
 
-        return true;
+            return true;
+        });
     }
 
     @Override

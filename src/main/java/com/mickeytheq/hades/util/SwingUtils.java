@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.util.function.Consumer;
 
 public class SwingUtils {
     public static DefaultTableModel createNonEditableModel() {
@@ -42,5 +43,18 @@ public class SwingUtils {
         JRootPane root = dialog.getRootPane();
         root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ESCAPE_STROKE, CLOSE_DIALOG_ACTION);
         root.getActionMap().put(CLOSE_DIALOG_ACTION, dispatchClosing);
+    }
+
+    // walks a swing component hierarchy, depth first
+    public static void walkComponentHierarchy(Component component, Consumer<Component> consumer) {
+        consumer.accept(component);
+
+        if (component instanceof Container) {
+            Container container = (Container)component;
+
+            for (Component containerComponent : container.getComponents()) {
+                walkComponentHierarchy(containerComponent, consumer);
+            }
+        }
     }
 }

@@ -21,8 +21,7 @@ public class OpenProjectConfiguration extends BaseTaskAction {
     @Override
     public boolean performOnSelection(Member[] members) {
         ProjectContext projectContext = StandardProjectContext.getContextForContentPath(StrangeEons.getOpenProject().getFile().toPath());
-        ProjectConfiguration projectConfiguration = projectContext.getProjectConfiguration();
-        ProjectConfigurationDialog.openDialog(StrangeEons.getWindow(), projectConfiguration);
+        ProjectConfigurationDialog.openDialog(StrangeEons.getWindow(), projectContext);
 
         return true;
     }
