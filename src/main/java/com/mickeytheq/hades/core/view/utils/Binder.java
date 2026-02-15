@@ -1,2 +1,67 @@
-package com.mickeytheq.hades.core.view.utils;public class Binder {
+package com.mickeytheq.hades.core.view.utils;
+
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+import java.util.function.Consumer;
+
+/**
+ * utility class for creating bindings between swing components and java objects/fields/methods
+  */
+public class Binder {
+    private Runnable callOnAnyChange;
+
+    private static final Consumer<JComponent> MARK_CHANGED = EditorUtils::markChanged;
+
+    public static Binder create() {
+        return new Binder();
+    }
+
+    public Binder onAnyChange(Runnable callOnAnyChange) {
+        this.callOnAnyChange = callOnAnyChange;
+        return this;
+    }
+
+    public Binder textComponent(JTextComponent editor, Consumer<String> consumer) {
+        EditorUtils.bindTextComponent(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
+    public <T> Binder comboBox(JComboBox<T> editor, Consumer<T> consumer) {
+        EditorUtils.bindComboBox(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
+    public Binder spinner(JSpinner editor, Consumer<Integer> consumer) {
+        EditorUtils.bindSpinner(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
+    public Binder spinnerDouble(JSpinner editor, Consumer<Double> consumer) {
+        EditorUtils.bindSpinnerDouble(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
+    public Binder toggleButton(JToggleButton editor, Consumer<Boolean> consumer) {
+        EditorUtils.bindToggleButton(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
+    private <T> Consumer<T> wrapEditorChanged(JComponent component, Consumer<T> consumer) {
+        Consumer<T> wrapped = wrapWithMarkChanged(component, consumer);
+
+        if (callOnAnyChange == null)
+            return wrapped;
+
+        return t -> {
+            wrapped.accept(t);
+            callOnAnyChange.run();
+        };
+    }
+
+    private <T> Consumer<T> wrapWithMarkChanged(JComponent component, Consumer<T> consumer) {
+        return t -> {
+            consumer.accept(t);
+            MARK_CHANGED.accept(component);
+        };
+    }
 }

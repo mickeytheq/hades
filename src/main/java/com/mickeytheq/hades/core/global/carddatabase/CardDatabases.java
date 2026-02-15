@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.core.global;
+package com.mickeytheq.hades.core.global.carddatabase;
 
 public class CardDatabases {
     private static CardDatabase cardDatabase = new CardDatabaseImpl();

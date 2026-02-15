@@ -1,4 +1,4 @@
-package com.mickeytheq.hades.core.global;
+package com.mickeytheq.hades.core.global.carddatabase;
 
 import com.mickeytheq.hades.core.model.Card;
 import org.apache.logging.log4j.LogManager;
