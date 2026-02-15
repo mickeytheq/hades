@@ -3,8 +3,8 @@ package com.mickeytheq.hades.strangeeons.gamecomponent;
 import ca.cgjennings.apps.arkham.*;
 import ca.cgjennings.apps.arkham.project.Member;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.global.CardDatabase;
-import com.mickeytheq.hades.core.global.CardDatabases;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.EditorContext;
@@ -19,7 +19,6 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Objects;
 
 import static resources.Language.string;

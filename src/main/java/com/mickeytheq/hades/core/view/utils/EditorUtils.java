@@ -6,16 +6,18 @@ import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
+import com.mickeytheq.hades.util.SwingUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class EditorUtils {
     public static final String DEFAULT_NULL_COMBO_BOX_DISPLAY = "(None)"; // TODO: i18n
-    public static final String COPY_FRONT = "(Copy front)"; // TODO: i18n
 
     public static JTextField createTextField(int columns) {
         JTextField textFieldEditor = new JTextField(columns);
@@ -128,6 +130,12 @@ public class EditorUtils {
         });
     }
 
+    public static void bindSpinnerDouble(JSpinner spinner, Consumer<Double> consumer) {
+        spinner.addChangeListener(e -> {
+            consumer.accept((Double)spinner.getValue());
+        });
+    }
+
     static class NullDisplayRenderer<E> implements ListCellRenderer<E> {
         private final ListCellRenderer<? super E> renderer;
         private final String nullDisplay;
@@ -148,5 +156,32 @@ public class EditorUtils {
 
             return component;
         }
+    }
+
+    private static final Object MARKED_CHANGED_CLIENT_PROPERTY = new Object();
+
+    public static void markChanged(JComponent component) {
+        component.putClientProperty(MARKED_CHANGED_CLIENT_PROPERTY, MARKED_CHANGED_CLIENT_PROPERTY);
+    }
+
+    public static boolean isMarkChanged(JComponent component) {
+        return component.getClientProperty(MARKED_CHANGED_CLIENT_PROPERTY) != null;
+    }
+
+    public static boolean isMarkChangedHierarchy(Component component) {
+        AtomicBoolean somethingChanged = new AtomicBoolean(false);
+
+        SwingUtils.walkComponentHierarchy(component, c -> {
+            if (!(component instanceof JComponent))
+                return;
+
+            JComponent jComponent = (JComponent)component;
+
+            if (isMarkChanged(jComponent)) {
+                somethingChanged.set(true);
+            }
+        });
+
+        return somethingChanged.get();
     }
 }

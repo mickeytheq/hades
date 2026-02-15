@@ -90,6 +90,10 @@ public class CardGameComponent extends AbstractGameComponent {
 
             this.cardFaceView = cardFaceView;
 
+            // TODO: get the system-wide default PPI, probably 300 or 600
+            // TODO: get the system-wide desired bleed margin, in points
+            // TODO: ask the CardFaceView to provide template information for that PPI - dimension, available bleed margin etc
+
             currentDimension = cardFaceView.getDimension();
 
             // the only things the 'template' image is used for in our scenario is the

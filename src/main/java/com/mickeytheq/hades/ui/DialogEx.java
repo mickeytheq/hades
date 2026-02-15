@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.ui;
 
+import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.validation.Validators;
 
@@ -64,8 +65,8 @@ public class DialogEx extends JDialog {
     }
 
     public void addOkCancelButtons(String okText, String cancelText, Supplier<Boolean> okValidator) {
-        addDialogClosingButtonWithValidation(okText, OK_OPTION, okValidator);
-        addDialogClosingButton(cancelText, CANCEL_OPTION);
+        addCommitChangesButton(okText, OK_OPTION, okValidator);
+        addDiscardChangesButton(cancelText, CANCEL_OPTION);
     }
 
     public JButton addCloseButton() {
@@ -73,16 +74,26 @@ public class DialogEx extends JDialog {
     }
 
     public JButton addCloseButton(String closeText) {
-        return addDialogClosingButton(closeText, CLOSE_OPTION);
+        return addDiscardChangesButton(closeText, CLOSE_OPTION);
     }
 
     /**
-     * adds an ok/confirm button that will perform no validation and simply close the dialog.
+     * adds a button that is intended to discard changes, e.g. a cancel button.
+     * when pressed a check will be performed to see if there are any changes and if so the user will be prompt to confirm
      * {@link DialogEx#showDialog()} method will return the given result code
      */
-    public JButton addDialogClosingButton(String buttonText, int buttonResultCode) {
+    public JButton addDiscardChangesButton(String buttonText, int buttonResultCode) {
         JButton button = new JButton(buttonText);
         button.addActionListener(e -> {
+            // check if something has changed in this dialog
+            // if it has ask the user to confirm the closing of the dialog and losing the changes
+            if (EditorUtils.isMarkChangedHierarchy(this)) {
+                if (JOptionPane.showConfirmDialog(this,
+                        "Changes have been made. Are you sure you want to lose these changed?",
+                        "Confirm discard changes", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION)
+                    return;
+            }
+
             dialogResultCode = buttonResultCode;
             setVisible(false);
             dispose();
@@ -97,17 +108,10 @@ public class DialogEx extends JDialog {
      * then perform validation as specified by the parameter
      * if all validation is passed the dialog will be close and the {@link DialogEx#showDialog()} method will return the given result code
      */
-    public JButton addDialogClosingButtonWithValidation(String buttonText, int buttonResultCode, Supplier<Boolean> validateSupplier) {
+    public JButton addCommitChangesButton(String buttonText, int buttonResultCode, Supplier<Boolean> validateSupplier) {
         JButton button = new JButton(buttonText);
         button.addActionListener(e -> {
-            // execute the validation on any components
-            // if any failures do not close the dialog
-            if (!Validators.validateComponentHierarchy(this))
-                return;
-
-            Boolean validated = validateSupplier.get();
-
-            if (!validated)
+            if (!performValidation(validateSupplier))
                 return;
 
             dialogResultCode = buttonResultCode;
@@ -179,5 +183,19 @@ public class DialogEx extends JDialog {
         setVisible(true);
 
         return dialogResultCode;
+    }
+
+    private boolean performValidation(Supplier<Boolean> validator) {
+        // execute the validation on any components
+        // if any failures do not close the dialog
+        if (!Validators.validateComponentHierarchy(this))
+            return false;
+
+        Boolean validated = validator.get();
+
+        if (!validated)
+            return false;
+
+        return true;
     }
 }

@@ -129,7 +129,7 @@ public class FontInstallManager {
                 updateFontStatus();
             });
 
-            dialogEx.addDialogClosingButtonWithValidation("Continue", DialogEx.OK_OPTION, () -> {
+            dialogEx.addCommitChangesButton("Continue", DialogEx.OK_OPTION, () -> {
                 if (!isAllFontsInstalled()) {
                     // if fonts aren't ready make sure the user is happy to continue
                     return JOptionPane.showConfirmDialog(dialogEx,

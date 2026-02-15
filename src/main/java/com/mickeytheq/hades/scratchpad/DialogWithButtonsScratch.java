@@ -28,8 +28,8 @@ public class DialogWithButtonsScratch {
 
         DialogEx dialogEx = new DialogEx((Frame)null, true);
         dialogEx.setContentComponent(panel);
-        dialogEx.addDialogClosingButtonWithValidation("OK", 1, () -> Boolean.TRUE);
-        dialogEx.addDialogClosingButton("Cancel", 2);
+        dialogEx.addCommitChangesButton("OK", 1, () -> Boolean.TRUE);
+        dialogEx.addDiscardChangesButton("Cancel", 2);
         dialogEx.addHelpButton("Help", e -> { JOptionPane.showMessageDialog(dialogEx, "Help!"); } );
         dialogEx.addOtherButton("Change Label", e -> {
             panel2.removeAll();
