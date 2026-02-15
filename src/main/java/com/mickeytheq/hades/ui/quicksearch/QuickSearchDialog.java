@@ -2,9 +2,9 @@ package com.mickeytheq.hades.ui.quicksearch;
 
 import ca.cgjennings.ui.DocumentEventAdapter;
 import com.mickeytheq.hades.core.CardFaces;
-import com.mickeytheq.hades.core.global.BasicCardDatabase;
-import com.mickeytheq.hades.core.global.CardDatabase;
-import com.mickeytheq.hades.core.global.CardDatabases;
+import com.mickeytheq.hades.core.global.carddatabase.BasicCardDatabase;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.Asset;
 import com.mickeytheq.hades.core.model.cardfaces.Event;

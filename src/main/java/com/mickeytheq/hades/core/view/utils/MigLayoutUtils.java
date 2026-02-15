@@ -89,11 +89,21 @@ public class MigLayoutUtils {
 
     // adds a label followed by a component and wrap to the next row
     public static void addLabelledComponentWrapGrowPush(JPanel panel, String labelText, Component component) {
+        addLabelledComponentWrapGrowPush(panel, labelText, component, null);
+    }
+
+    // adds a label followed by a component and wrap to the next row
+    public static void addLabelledComponentWrapGrowPush(JPanel panel, String labelText, Component component, String additionalConstraints) {
         assertMigLayout(panel);
 
         addLabel(panel, labelText);
 
-        panel.add(component, "wrap, growx, pushx");
+        String constraints = "wrap, growx, pushx";
+
+        if (!StringUtils.isEmpty(additionalConstraints))
+            constraints = constraints + ", " + additionalConstraints;
+
+        panel.add(component, constraints);
     }
 
     public static void addLabelledComponent(JPanel panel, String labelText, Component component, String constraints) {

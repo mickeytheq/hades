@@ -6,6 +6,7 @@ public class HadesActionTree extends TaskActionTree {
     public HadesActionTree() {
         add(new NewCard());
         add(new OpenProjectConfiguration());
+        add(new OpenGlobalConfiguration());
 //        add(new ReviewCardsTaskAction());
 //        add(new CompareCardsTaskAction());
         add(new MigrateTaskAction());

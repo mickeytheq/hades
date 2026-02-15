@@ -14,6 +14,13 @@ public class UnitConversionUtils {
         return getConversionRatio(fromUnit, toUnit, null) * value;
     }
 
+    public static double convertUnit(Unit fromUnit, Unit toUnit, double value, double dpi) {
+        if (fromUnit == toUnit)
+            return value;
+
+        return getConversionRatio(fromUnit, toUnit, dpi) * value;
+    }
+
     public static double getConversionRatio(Unit fromUnit, Unit toUnit, Double dpi) {
         if (fromUnit == toUnit)
             return 1.0;

@@ -5,12 +5,19 @@ import ca.cgjennings.apps.arkham.plugins.AbstractPlugin;
 import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
 import ca.cgjennings.apps.arkham.project.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mickeytheq.hades.core.CardFaces;
-import com.mickeytheq.hades.core.global.CardDatabase;
-import com.mickeytheq.hades.core.global.CardDatabases;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
+import com.mickeytheq.hades.core.global.configuration.GlobalConfiguration;
+import com.mickeytheq.hades.core.global.configuration.GlobalConfigurationProvider;
+import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
+import com.mickeytheq.hades.core.global.ui.GlobalConfigurationDialog;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
+import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ui.ProjectConfigurationDialog;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.serialise.CardIO;
@@ -21,13 +28,14 @@ import com.mickeytheq.hades.strangeeons.tasks.ViewLog;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
+import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
-import com.mickeytheq.hades.util.log4j.Log4JUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.Level;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.appender.FileAppender;
+import resources.RawSettings;
+import resources.Settings;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -70,6 +78,8 @@ public class HadesPlugin extends AbstractPlugin {
             installCardDatabaseUpdater();
 
             installKeyboardShortcuts();
+
+            installGlobalConfiguration();
 
             forceViewQualityToHighWithNoAutomaticChanging();
 
@@ -198,6 +208,8 @@ public class HadesPlugin extends AbstractPlugin {
         installNewCardKeyboardShortcut();
         installQuickSearchKeyboardShortcut();
         installOpenLogKeyboardShortcut();
+        installOpenProjectConfigurationKeyboardShortcut();
+        installOpenGlobalConfigurationKeyboardShortcut();
     }
 
     private void installNewCardKeyboardShortcut() {
@@ -260,6 +272,49 @@ public class HadesPlugin extends AbstractPlugin {
         });
     }
 
+    private void installOpenProjectConfigurationKeyboardShortcut() {
+        StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
+
+        KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_DOWN_MASK);
+
+        final String COMMAND_KEY = "HadesOpenProjectConfiguration";
+
+        appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, COMMAND_KEY);
+        appWindow.getRootPane().getActionMap().put(COMMAND_KEY, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Project project = StrangeEons.getOpenProject();
+
+                if (project == null)
+                    return;
+
+                ProjectContext projectContext = StandardProjectContext.getContextForContentPath(project.getFile().toPath());
+                ProjectConfigurationDialog.openDialog(appWindow, projectContext);
+            }
+        });
+    }
+
+    private void installOpenGlobalConfigurationKeyboardShortcut() {
+        StrangeEonsAppWindow appWindow = StrangeEons.getWindow();
+
+        KeyStroke altN = KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.ALT_DOWN_MASK);
+
+        final String COMMAND_KEY = "HadesOpenGlobalConfiguration";
+
+        appWindow.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(altN, COMMAND_KEY);
+        appWindow.getRootPane().getActionMap().put(COMMAND_KEY, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Project project = StrangeEons.getOpenProject();
+
+                if (project == null)
+                    return;
+
+                GlobalConfigurationDialog.openDialog(appWindow);
+            }
+        });
+    }
+
     private void installCardDatabaseUpdater() {
         logger.info("Installing card database listeners...");
 
@@ -305,6 +360,46 @@ public class HadesPlugin extends AbstractPlugin {
             logger.debug("Unregistering all cards in card database for project with root path '" + project.getFile().toPath() + "'");
 
             cardDatabase.unregister(project);
+        }
+    }
+
+    private void installGlobalConfiguration() {
+        GlobalConfigurations.setProvider(new StrangeEonsGlobalConfigurationProvider());
+    }
+
+    static class StrangeEonsGlobalConfigurationProvider implements GlobalConfigurationProvider {
+        private static final String SETTINGS_KEY = "HADES_GLOBAL_CONFIGURATION_JSON";
+
+        private final Settings settings = Settings.getUser();
+        private final ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper(false);
+
+        @Override
+        public GlobalConfiguration load() {
+            String json = settings.get(SETTINGS_KEY);
+
+            if (StringUtils.isEmpty(json))
+                return new GlobalConfiguration();
+
+            try {
+                return objectMapper.readValue(new StringReader(json), GlobalConfiguration.class);
+            } catch (IOException e) {
+                logger.error("Error loading global configuration from Strange Eons settings. Resetting to defaults", e);
+                return new GlobalConfiguration();
+            }
+        }
+
+        @Override
+        public void save(GlobalConfiguration globalConfiguration) {
+            StringWriter stringWriter = new StringWriter();
+            try {
+                objectMapper.writeValue(stringWriter, globalConfiguration);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            settings.set(SETTINGS_KEY, stringWriter.toString());
+
+            RawSettings.writeUserSettingsImmediately();
         }
     }
 }
