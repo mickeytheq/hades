@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Act;
@@ -15,6 +16,7 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -45,8 +47,8 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/act_agenda/act_back.png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/act_agenda/act_back.png", CardFaceOrientation.Landscape));
     }
 
     @Override
@@ -117,7 +119,7 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // title - vertical orientation
         commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
