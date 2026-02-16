@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Location;
@@ -17,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION)
 public class LocationView extends BaseCardFaceView<Location> implements HasLocationFieldsView, HasCollectionView, HasEncounterSetView, HasArtPortraitView {
@@ -58,7 +60,11 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+    }
+
+    private String getTemplateResource() {
         String templatePath = "/templates/location/location";
 
         boolean hasSubtitle = !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle());
@@ -69,7 +75,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         templatePath = templatePath + ".png";
 
-        return ImageUtils.loadImageReadOnly(templatePath);
+        return templatePath;
     }
 
     @Override
@@ -133,7 +139,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         // paint the main/art portrait first as it sits behind the card template
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 

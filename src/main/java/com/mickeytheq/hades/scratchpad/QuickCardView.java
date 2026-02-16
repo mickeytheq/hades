@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.scratchpad;
 
+import ca.cgjennings.apps.arkham.AbstractViewer;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.google.common.collect.Lists;
@@ -20,6 +21,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.generator.CardFaceGenerator;
@@ -27,6 +29,12 @@ import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.ui.DialogEx;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +48,8 @@ import java.util.ListIterator;
 
 public class QuickCardView {
     public static void main(String[] args) {
+        System.setProperty("log4j.configurationFile", "log4j2-console-only.json");
+
         new QuickCardView().run();
     }
 
@@ -68,8 +78,8 @@ public class QuickCardView {
 //            investigator();
 //        event();
 //        skill();
-//        treacheryTreachery();
-            location();
+        treacheryTreachery();
+//            location();
 //            random();
 //            agenda();
 //            act();
@@ -260,9 +270,7 @@ public class QuickCardView {
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
 
-        Treachery back = new Treachery();
-        model.getCommonCardFieldsModel().setTitle("Back Rat Swarm");
-        model.getCommonCardFieldsModel().setRules("<rev> Back rules.");
+        PlayerCardBack back = new PlayerCardBack();
 
         Card card = CardFaces.createCardModel(model, back);
 
@@ -498,7 +506,7 @@ public class QuickCardView {
 
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(mainPanel);
-            frame.setPreferredSize(new Dimension(2000, 1400));
+            frame.setPreferredSize(new Dimension(2400, 1400));
             frame.pack();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setVisible(true);
@@ -520,21 +528,16 @@ public class QuickCardView {
             }
 
             // create editors
-            final Renderer backRendererFinal = backRenderer;
-
-            EditorContext editorContext = new EditorContextImpl(editTabbedPane, () -> {
-                frontRenderer.repaint();
-
-                if (backRendererFinal != null)
-                    backRendererFinal.repaint();
-            });
-
-            currentCardView.getFrontFaceView().createEditors(editorContext);
+            currentCardView.getFrontFaceView().createEditors(createEditorContext(frontRenderer));
             if (currentCardView.hasBack()) {
-                currentCardView.getBackFaceView().createEditors(editorContext);
+                currentCardView.getBackFaceView().createEditors(createEditorContext(backRenderer));
             }
 
             currentCardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
+        }
+
+        private EditorContext createEditorContext(Renderer renderer) {
+            return new EditorContextImpl(editTabbedPane, renderer::markChanged);
         }
 
         private void showJson(JFrame frame, String jsonString) {
@@ -556,58 +559,35 @@ public class QuickCardView {
         }
     }
 
-    class Renderer extends JPanel {
+    static class Renderer extends AbstractViewer {
         private final CardFaceView cardFaceView;
+        private boolean needRefresh = true;
+        private BufferedImage bufferedImage;
+
         public Renderer(CardFaceView cardFaceView) {
             this.cardFaceView = cardFaceView;
         }
 
         @Override
-        protected void paintComponent(Graphics graphics) {
-            super.paintComponent(graphics);
+        protected BufferedImage getCurrentImage() {
+            if (!needRefresh)
+                return bufferedImage;
 
-            Graphics2D g = (Graphics2D)graphics;
+            StopWatch stopWatch = StopWatch.createStarted();
+            bufferedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, 600);
 
-            BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
-            cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardFaceView, bufferedImage));
+            long millis = stopWatch.getTime();
 
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            System.out.println("Rendered in " + millis + "ms");
 
-            g.drawImage(bufferedImage, 0, 0, null);
-        }
-    }
+            needRefresh = false;
 
-    private class PaintContextImpl extends BasePaintContext {
-        private final BufferedImage bufferedImage;
-        private final Graphics2D graphics2D;
-        private final double dpi = 300;
-
-        public PaintContextImpl(RenderTarget renderTarget, CardFaceView cardFaceView, BufferedImage bufferedImage) {
-            super(renderTarget, cardFaceView);
-            this.bufferedImage = bufferedImage;
-            this.graphics2D = bufferedImage.createGraphics();
-
-            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            graphics2D.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            return bufferedImage;
         }
 
-        @Override
-        public Graphics2D getGraphics() {
-            return graphics2D;
-        }
-
-        @Override
-        public double getRenderingDpi() {
-            return dpi;
-        }
-
-        @Override
-        public ProjectContext getProjectContext() {
-            return projectContext;
+        private void markChanged() {
+            needRefresh = true;
+            repaint();
         }
     }
 

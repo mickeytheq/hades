@@ -61,8 +61,8 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     }
 
     @Override
-    public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly(getClass().getResource(getTemplateResource()));
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
     }
 
     // TODO: story_skill template is missing
@@ -145,7 +145,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_SKILL).toUpperCase());

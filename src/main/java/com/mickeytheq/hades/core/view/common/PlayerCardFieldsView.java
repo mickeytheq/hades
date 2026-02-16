@@ -211,7 +211,7 @@ public class PlayerCardFieldsView {
     private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimetres(3.05, 2.29, 6.77, 6.43);
 
     public void paintCost(PaintContext paintContext) {
-        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getRenderingDpi(),
+        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getTemplateInfo().getResolutionInPixelsPerInch(),
                 getModel().getCost(),
                 paintContext.toPixelRect(COST_DRAW_REGION),
                 COST_FONT,

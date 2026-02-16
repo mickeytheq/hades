@@ -5,18 +5,30 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.BasePaintContext;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.core.view.TemplateInfo;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.scratchpad.QuickCardView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 // swing component that renders a card face
 public class CardFaceViewComponent extends JPanel {
     private final CardFaceView cardFaceView;
+    private final TemplateInfo templateInfo;
 
-    public CardFaceViewComponent(CardFaceView cardFaceView) {
+    public CardFaceViewComponent(CardFaceView cardFaceView, int desiredResolution) {
         this.cardFaceView = cardFaceView;
+
+        Optional<TemplateInfo> templateInfo = cardFaceView.getCompatibleTemplateInfo(desiredResolution);
+
+        if (!templateInfo.isPresent()) {
+            throw new RuntimeException("No template available for card face view with resolution " + desiredResolution);
+        }
+
+        this.templateInfo = templateInfo.get();
     }
 
     @Override
@@ -36,12 +48,7 @@ public class CardFaceViewComponent extends JPanel {
         if (cardFaceView == null)
             return;
 
-        BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
-        cardFaceView.paint(new PaintContextImpl(RenderTarget.PREVIEW, cardFaceView, bufferedImage));
-
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        BufferedImage bufferedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, templateInfo.getResolutionInPixelsPerInch());
 
         int x = (getWidth() - bufferedImage.getWidth()) / 2;
         int y = (getHeight() - bufferedImage.getHeight()) / 2;
@@ -51,36 +58,11 @@ public class CardFaceViewComponent extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return cardFaceView.getDimension();
-    }
+        Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(300);
 
-    private class PaintContextImpl extends BasePaintContext {
-        private final Graphics2D graphics2D;
-        private final double dpi = 300;
+        if (!templateInfoOptional.isPresent())
+            throw new RuntimeException("No template image available");
 
-        public PaintContextImpl(RenderTarget renderTarget, CardFaceView cardFaceView, BufferedImage bufferedImage) {
-            super(renderTarget, cardFaceView);
-            this.graphics2D = bufferedImage.createGraphics();
-
-            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            graphics2D.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        }
-
-        @Override
-        public Graphics2D getGraphics() {
-            return graphics2D;
-        }
-
-        @Override
-        public double getRenderingDpi() {
-            return dpi;
-        }
-
-        @Override
-        public ProjectContext getProjectContext() {
-            return cardFaceView.getCardView().getProjectContext();
-        }
+        return new Dimension(templateInfoOptional.get().getWidthInPixels(), templateInfoOptional.get().getHeightInPixels());
     }
 }

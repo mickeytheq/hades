@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ACT)
 public class ActView extends BaseCardFaceView<Act> implements HasCollectionView, HasEncounterSetView {
@@ -53,8 +54,8 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/act_agenda/act.png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/act_agenda/act.png", CardFaceOrientation.Landscape));
     }
 
     @Override
@@ -139,7 +140,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // title
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

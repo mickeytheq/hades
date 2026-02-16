@@ -16,7 +16,7 @@ public class GlobalConfigurationDialog extends DialogEx {
         GlobalConfiguration globalConfiguration = GlobalConfigurations.get();
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Card preview", new PreviewPanel(globalConfiguration.getCardPreview())); // TODO: i18n
+        tabbedPane.addTab("Card preview", new PreviewPanel(globalConfiguration.getCardPreviewConfiguration())); // TODO: i18n
 
         setContentComponent(tabbedPane);
 

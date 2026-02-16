@@ -6,11 +6,11 @@ public class GlobalConfiguration {
     private CardPreviewConfiguration cardPreviewConfiguration = new CardPreviewConfiguration();
 
     @JsonProperty("CardPreview")
-    public CardPreviewConfiguration getCardPreview() {
+    public CardPreviewConfiguration getCardPreviewConfiguration() {
         return cardPreviewConfiguration;
     }
 
-    public void setCardPreview(CardPreviewConfiguration cardPreviewConfiguration) {
+    public void setCardPreviewConfiguration(CardPreviewConfiguration cardPreviewConfiguration) {
         this.cardPreviewConfiguration = cardPreviewConfiguration;
     }
 }

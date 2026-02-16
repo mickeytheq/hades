@@ -107,7 +107,7 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         }
     }
 
-    private List<BufferedImage> createHadesImages(Path cardPath, ProjectContext projectContext, RenderTarget renderTarget, double dpi) {
+    private List<BufferedImage> createHadesImages(Path cardPath, ProjectContext projectContext, RenderTarget renderTarget, int dpi) {
         if (!Files.exists(cardPath))
             return Lists.newArrayList(null, null);
 

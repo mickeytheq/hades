@@ -5,17 +5,19 @@ import ca.cgjennings.apps.arkham.component.AbstractGameComponent;
 import ca.cgjennings.apps.arkham.dialog.ErrorDialog;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
+import com.mickeytheq.hades.core.global.configuration.CardPreviewConfiguration;
+import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
 import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.view.BasePaintContext;
-import com.mickeytheq.hades.core.view.CardFaceView;
-import com.mickeytheq.hades.core.view.CardView;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 // the StrangeEons 'GameComponent' implementation
 // the main purposes is to act as a bridge between StrangeEons and its specifics (AbstractGameComponentEditor, Sheet etc)
@@ -24,11 +26,9 @@ public class CardGameComponent extends AbstractGameComponent {
     private static final Logger logger = LogManager.getLogger(CardGameComponent.class);
 
     private final CardView cardView;
-    private final ProjectContext projectContext;
 
-    public CardGameComponent(CardView cardView, ProjectContext projectContext) {
+    public CardGameComponent(CardView cardView) {
         this.cardView = cardView;
-        this.projectContext = projectContext;
 
         // TODO: name should be the actual title?
         setNameImpl("Card");
@@ -36,10 +36,6 @@ public class CardGameComponent extends AbstractGameComponent {
 
     public CardView getCardView() {
         return cardView;
-    }
-
-    public ProjectContext getProjectContext() {
-        return projectContext;
     }
 
     @Override
@@ -80,48 +76,88 @@ public class CardGameComponent extends AbstractGameComponent {
         }
     }
 
-    private class CardSheet extends Sheet<CardGameComponent> {
+    private static class CardSheet extends Sheet<CardGameComponent> {
         private final CardFaceView cardFaceView;
 
-        private Dimension currentDimension;
+        private final int desiredResolutionInPpi;
+
+        private TemplateInfo currentTemplateInfo;
 
         public CardSheet(CardGameComponent gameComponent, CardFaceView cardFaceView) {
             super(gameComponent);
 
             this.cardFaceView = cardFaceView;
 
-            // TODO: get the system-wide default PPI, probably 300 or 600
-            // TODO: get the system-wide desired bleed margin, in points
-            // TODO: ask the CardFaceView to provide template information for that PPI - dimension, available bleed margin etc
+            CardPreviewConfiguration cardPreviewConfiguration = GlobalConfigurations.get().getCardPreviewConfiguration();
 
-            currentDimension = cardFaceView.getDimension();
+            this.desiredResolutionInPpi = cardPreviewConfiguration.getDesiredPreviewResolutionPpi();
 
-            // the only things the 'template' image is used for in our scenario is the
-            BufferedImage template = new BufferedImage((int) currentDimension.getWidth(), (int) currentDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            // ask the CardFaceView to provide template information for that PPI - dimension, available bleed margin etc
+            Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(desiredResolutionInPpi);
 
+            // if no template is suitable then show an error picture instead
+            if (!templateInfoOptional.isPresent()) {
+                setTemplate(CardFaceViewUtils.createMissingTemplateImage(cardFaceView, desiredResolutionInPpi), desiredResolutionInPpi);
+                return;
+            }
+
+            currentTemplateInfo = templateInfoOptional.get();
+
+            setTemplate(currentTemplateInfo);
+
+            // TODO: set user bleed margin
+        }
+
+        private void setTemplate(TemplateInfo templateInfo) {
+            // the only things the 'template' image is used for in our scenario is the size but the Sheet API requires a full image
+            BufferedImage template = new BufferedImage(templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), BufferedImage.TYPE_INT_ARGB);
+
+            setTemplate(template, desiredResolutionInPpi);
+        }
+
+        private void setTemplate(BufferedImage template, int ppi) {
             // BUG: strange eons code has a bug in the parameter checking of initializeTemplate where the class variable is checked for null
             // rather than the parameter being passed in. workaround this by setting it first
             setExpansionSymbolKey("dummy");
-            initializeTemplate("dummy", template, "dummy", 300.0, 1.0);
+            initializeTemplate("dummy", template, "dummy", ppi, 1.0);
         }
 
         @Override
         public double getBleedMargin() {
-            return 0.0;
+            if (currentTemplateInfo == null)
+                return 0.0;
+
+            return currentTemplateInfo.getAvailableBleedMarginInPoints();
+        }
+
+        private boolean needToRecreateTemplateBuffer(TemplateInfo templateInfo) {
+            if (currentTemplateInfo.getHeightInPixels() != templateInfo.getHeightInPixels())
+                return true;
+
+            if (currentTemplateInfo.getWidthInPixels() != templateInfo.getWidthInPixels())
+                return true;
+
+            return false;
         }
 
         @Override
         protected void paintSheet(RenderTarget renderTarget) {
-            Dimension newDimension = cardFaceView.getDimension();
+            Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(desiredResolutionInPpi);
+
+            if (!templateInfoOptional.isPresent()) {
+                paintNoTemplateImage();
+                return;
+            }
+
+            TemplateInfo templateInfo = templateInfoOptional.get();
 
             // check for dimension change - not common but if it has happened we need to update the 'template image' of the sheet
             // so the new painting will use the correct size
             // this will occur if a card face has variable dimensions based on editor settings, for example a ShadowView
-            if (!newDimension.equals(currentDimension)) {
-                currentDimension = newDimension;
+            if (needToRecreateTemplateBuffer(templateInfo)) {
+                currentTemplateInfo = templateInfo;
 
-                BufferedImage template = new BufferedImage((int) currentDimension.getWidth(), (int) currentDimension.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                replaceTemplateImage(template);
+                setTemplate(currentTemplateInfo);
             }
 
             StopWatch stopWatch = StopWatch.createStarted();
@@ -132,7 +168,7 @@ public class CardGameComponent extends AbstractGameComponent {
                 // so we have to clear it first to paint onto a blank canvas
                 g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
 
-                PaintContext paintContext = new PaintContextImpl(g, renderTarget, cardFaceView, this);
+                PaintContext paintContext = new PaintContextImpl(g, renderTarget, cardFaceView, currentTemplateInfo);
 
                 // delegate to the card view to do the painting
                 cardFaceView.paint(paintContext);
@@ -148,31 +184,33 @@ public class CardGameComponent extends AbstractGameComponent {
                 g.dispose();
             }
         }
+
+        private void paintNoTemplateImage() {
+            Graphics2D g = createGraphics();
+            try {
+                g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
+                BufferedImage missingTemplateImage = CardFaceViewUtils.createMissingTemplateImage(cardFaceView, desiredResolutionInPpi);
+                g.drawImage(missingTemplateImage, 0, 0, missingTemplateImage.getWidth(), missingTemplateImage.getHeight(), null);
+            } catch (Exception e) {
+                ErrorDialog.displayError("Error painting sheet for card face", e);
+                logger.error(e.getMessage(), e);
+                throw e;
+            } finally {
+                g.dispose();
+            }
+        }
     }
 
-    class PaintContextImpl extends BasePaintContext {
+    static class PaintContextImpl extends BasePaintContext {
         private final Graphics2D g;
-        private final Sheet<CardGameComponent> sheet;
-
-        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardFaceView cardFaceView, Sheet<CardGameComponent> sheet) {
-            super(renderTarget, cardFaceView);
+        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardFaceView cardFaceView, TemplateInfo templateInfo) {
+            super(renderTarget, cardFaceView, templateInfo);
             this.g = g;
-            this.sheet = sheet;
         }
 
         @Override
-        public Graphics2D getGraphics() {
+        protected Graphics2D getDestinationGraphics() {
             return g;
-        }
-
-        @Override
-        public double getRenderingDpi() {
-            return sheet.getTemplateResolution();
-        }
-
-        @Override
-        public ProjectContext getProjectContext() {
-            return projectContext;
         }
     }
 }

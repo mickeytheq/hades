@@ -24,15 +24,38 @@ public interface PaintContext {
     // used to select quality vs speed
     RenderTarget getRenderTarget();
 
-    // desired resolution of the rendering
-    double getRenderingDpi();
+    // the template information to render
+    TemplateInfo getTemplateInfo();
+
+    // switches the painting context to only rendering inside the bleed/on to the card content OR including the bleed
+    //
+    // when called with true
+    // - the drawing region is the entire template including bleed
+    //
+    // when called with false
+    // - the drawing region is the portion of the template excluding the bleed bleed
+    // - the origin (0,0) becomes the top left corner of the template as if it had no bleed, e.g. what actually makes up the card content
+    // - any drawing outside the card content/into the bleed will be ignored
+    //
+    // this PaintContext starts in the state as-if this method had been called with 'true'
+    //
+    // when painting content that is exclusive to the card interior such as labels, text etc this should be set to false first so that
+    // the coordinate system can work off the top left point of the real card content rather than the template. then if the bleed margin of the template
+    // is changed nothing needs to be altered in the core painting
+    //
+    // when painting content that may spill into the bleed margin, such as the template itself or background art this should be done
+    // when this is in 'true' mode. that painting code must then be bleed margin aware and position elements accordingly
+    void setRenderingIncludeBleedRegion(boolean includeBleed);
+
+    // paints the template image onto the Graphics2D of this PaintContext
+    void paintTemplate();
 
     default int millimetersToPixels(double millimeters) {
-        return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getRenderingDpi() + 0.5);
+        return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getTemplateInfo().getResolutionInPixelsPerInch() + 0.5);
     }
 
     default Rectangle toPixelRect(RectangleEx rectangleEx) {
-        return rectangleEx.toPixelRectangle(getRenderingDpi());
+        return rectangleEx.toPixelRectangle(getTemplateInfo().getResolutionInPixelsPerInch());
     }
 
     //

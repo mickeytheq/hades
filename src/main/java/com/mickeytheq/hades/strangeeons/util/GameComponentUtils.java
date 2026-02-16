@@ -20,7 +20,7 @@ public class GameComponentUtils {
 
             Card card = CardIO.readCard(path, projectContext);
             CardView cardView = CardFaces.createCardView(card, projectContext);
-            CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
+            CardGameComponent cardGameComponent = new CardGameComponent(cardView);
             return cardGameComponent;
         }
         else {

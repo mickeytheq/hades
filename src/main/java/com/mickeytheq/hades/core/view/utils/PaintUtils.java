@@ -307,7 +307,7 @@ public class PaintUtils {
             Stroke oldStroke = g.getStroke();
 
             // TODO: configurable stroke width?
-            g.setStroke(new BasicStroke(1.0f * (float) paintContext.getRenderingDpi() / 72f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g.setStroke(new BasicStroke(1.0f * (float) paintContext.getTemplateInfo().getResolutionInPixelsPerInch() / 72f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g.setPaint(outlineColour);
             g.draw(shape);
             g.setStroke(oldStroke);

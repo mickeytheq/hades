@@ -158,8 +158,9 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         return comboBox;
     }
 
-    public BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly(getTemplateResource());
+    @Override
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
     }
 
     private String getTemplateResource() {
@@ -198,7 +199,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_ENEMY).toUpperCase());

@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Investigator;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
@@ -21,6 +22,7 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.INVESTIGATOR)
 public class InvestigatorView extends BaseCardFaceView<Investigator> implements HasCollectionView, HasEncounterSetView {
@@ -63,10 +65,14 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         return StringUtils.defaultIfEmpty(getModel().getCommonCardFieldsModel().getTitle(), null);
     }
 
-    // TODO: story template image is half-resolution
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_" + getModel().getInvestigatorFieldsModel().getInvestigatorClass().name().toLowerCase() + ".png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Landscape));
+    }
+
+    // TODO: story template image is half-resolution
+    private String getTemplateResource() {
+        return "/templates/investigator/investigator_" + getModel().getInvestigatorFieldsModel().getInvestigatorClass().name().toLowerCase() + ".png";
     }
 
     @Override
@@ -185,7 +191,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template - unlike most other card types do this first as the template has the background
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // special handling for fading
         paintArtPortrait(paintContext);

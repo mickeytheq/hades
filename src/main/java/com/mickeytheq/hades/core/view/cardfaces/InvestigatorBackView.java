@@ -6,10 +6,8 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.InvestigatorBack;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.InvestigatorClass;
-import com.mickeytheq.hades.core.view.BaseCardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.View;
 import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.common.PortraitView;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
@@ -24,6 +22,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @View(interfaceLanguageKey = InterfaceConstants.INVESTIGATORBACK)
@@ -52,10 +51,14 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Landscape));
+    }
+
+    private String getTemplateResource() {
         InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass();
 
-        return ImageUtils.loadImageReadOnly("/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png");
+        return "/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png";
     }
 
     @Override
@@ -110,7 +113,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // titles
         PaintUtils.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUnique());

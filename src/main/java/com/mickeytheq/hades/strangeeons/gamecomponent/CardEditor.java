@@ -80,7 +80,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         CardGameComponent cardGameComponent = getGameComponent();
 
-        CardIO.writeCard(path, cardGameComponent.getCardView().getCard(), cardGameComponent.getProjectContext());
+        CardIO.writeCard(path, cardGameComponent.getCardView().getCard(), cardGameComponent.getCardView().getProjectContext());
         cardGameComponent.markSaved();
 
         RecentFiles.addRecentDocument(getFile());
@@ -209,7 +209,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
         @Override
         public ProjectContext getProjectContext() {
-            return getGameComponent().getProjectContext();
+            return getGameComponent().getCardView().getProjectContext();
         }
 
         @Override

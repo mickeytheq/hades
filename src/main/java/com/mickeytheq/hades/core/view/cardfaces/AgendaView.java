@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.AGENDA)
 public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectionView, HasEncounterSetView {
@@ -53,8 +54,8 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/act_agenda/agenda.png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/act_agenda/agenda.png", CardFaceOrientation.Landscape));
     }
 
     @Override
@@ -133,7 +134,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // title
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

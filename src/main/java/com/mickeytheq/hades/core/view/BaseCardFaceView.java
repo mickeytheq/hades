@@ -2,9 +2,9 @@ package com.mickeytheq.hades.core.view;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardFaceView {
     private CardView cardView;
@@ -43,13 +43,11 @@ public abstract class BaseCardFaceView<M extends CardFaceModel> implements CardF
     }
 
     @Override
-    public Dimension getDimension() {
-        BufferedImage image = getTemplateImage();
-
-        return new Dimension(image.getWidth(), image.getHeight());
+    public Optional<TemplateInfo> getCompatibleTemplateInfo(int desiredResolutionInPpi) {
+        return getAvailableTemplateInfos().stream().filter(o -> o.getResolutionInPixelsPerInch() == desiredResolutionInPpi).findAny();
     }
 
-    protected abstract BufferedImage getTemplateImage();
+    protected abstract List<TemplateInfo> getAvailableTemplateInfos();
 
     @Override
     public String getBriefDisplayString() {

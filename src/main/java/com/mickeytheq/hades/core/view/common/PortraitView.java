@@ -19,6 +19,9 @@ import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import resources.Language;
 
 import javax.swing.*;
@@ -39,6 +42,8 @@ import java.util.*;
 //
 // some of the code was lifted from Strange Eons and a lot of unused elements stripped out
 public class PortraitView {
+    private static final Logger logger = LogManager.getLogger(PortraitView.class);
+
     public static final URL BLANK_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/resources/spacers/empty1x1.png");
     public static final URL DEFAULT_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/portrait/DefaultTexture.jp2");
     private final PortraitModel portraitModel;
@@ -207,6 +212,14 @@ public class PortraitView {
     }
 
     public void paint(PaintContext paintContext, Rectangle drawRegion, boolean inverted) {
+        StopWatch stopWatch = StopWatch.createStarted();
+        doPaint(paintContext, drawRegion, inverted);
+
+        if (logger.isTraceEnabled())
+            logger.trace("Painting of art portrait completed in " + stopWatch.getTime() + "ms");
+    }
+
+    private void doPaint(PaintContext paintContext, Rectangle drawRegion, boolean inverted) {
         Graphics2D g = paintContext.getGraphics();
 
         // if copying the other face delegate to its paint function

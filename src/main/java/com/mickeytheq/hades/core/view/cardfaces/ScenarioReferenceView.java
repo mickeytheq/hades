@@ -54,8 +54,8 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/scenario/scenario_reference.png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/scenario/scenario_reference.png", CardFaceOrientation.Portrait));
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
     @Override
     public void paint(PaintContext paintContext) {
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         // this painting logic is significantly different to other cards as instead of painting elements in specific
         // regions the content falls vertically down the page

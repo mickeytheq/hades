@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Story;
 import com.mickeytheq.hades.core.view.*;
@@ -18,6 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.function.Supplier;
 
 @View(interfaceLanguageKey = InterfaceConstants.STORY)
@@ -50,8 +52,8 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        return ImageUtils.loadImageReadOnly("/templates/story/story_default.png");
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/story/story_default.png", CardFaceOrientation.Portrait));
     }
 
     @Override
@@ -102,7 +104,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 

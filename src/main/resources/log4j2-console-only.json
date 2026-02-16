@@ -1,0 +1,22 @@
+{
+  "Configuration": {
+    "Appenders": {
+      "Console": {
+        "name": "Console"
+      }
+    },
+    "Loggers": {
+      "Root": {
+        "level": "INFO"
+      },
+      "Logger": {
+        "name": "com.mickeytheq.hades",
+        "level": "TRACE",
+        "AppenderRef": {
+          "ref": "Console"
+        }
+      }
+    }
+  }
+}
+

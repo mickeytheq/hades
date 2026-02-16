@@ -2,9 +2,8 @@ package com.mickeytheq.hades.core.view.common;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
-import com.mickeytheq.hades.core.view.BasePaintContext;
-import com.mickeytheq.hades.core.view.CardFaceView;
-import com.mickeytheq.hades.core.view.EditorContext;
+import com.google.common.collect.Lists;
+import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.MultiSectionRenderer;
@@ -15,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 // some utility methods that cards faces want to share but don't strictly belong to another utility class
@@ -123,23 +124,63 @@ public class CardFaceViewUtils {
         }
     }
 
-    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, double dpi) {
-        BufferedImage bufferedImage = new BufferedImage((int) cardFaceView.getDimension().getWidth(), (int) cardFaceView.getDimension().getHeight(), BufferedImage.TYPE_INT_ARGB);
+    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi) {
+        Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(ppi);
+
+        if (!templateInfoOptional.isPresent())
+            return createMissingTemplateImage(cardFaceView, ppi);
+
+        TemplateInfo templateInfo = templateInfoOptional.get();
+
+        BufferedImage bufferedImage = new BufferedImage(templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = bufferedImage.createGraphics();
         try {
             renderTarget.applyTo(graphics2D);
 
-            cardFaceView.paint(new BasePaintContext(renderTarget, cardFaceView) {
+            cardFaceView.paint(new BasePaintContext(renderTarget, cardFaceView, templateInfo) {
                 @Override
-                public Graphics2D getGraphics() {
+                protected Graphics2D getDestinationGraphics() {
                     return graphics2D;
                 }
-
-                @Override
-                public double getRenderingDpi() {
-                    return dpi;
-                }
             });
+        }
+        finally {
+            graphics2D.dispose();
+        }
+
+        return bufferedImage;
+    }
+
+    public static BufferedImage createMissingTemplateImage(CardFaceView cardFaceView, int ppi) {
+        List<String> textStrings = Lists.newArrayList(
+                "No template available for",
+                "card face view '" + cardFaceView.getTitle() + "'",
+                "of type '" + cardFaceView.getClass().getSimpleName() + "'",
+                "for desired PPI " + ppi);
+
+        BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        try {
+            graphics2D.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            graphics2D.setColor(new Color(255, 200, 200));
+            graphics2D.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+
+            graphics2D.setColor(Color.BLACK);
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(24.0f));
+
+            int yPos = 100;
+
+            for (String textString : textStrings) {
+                int width = graphics2D.getFontMetrics().stringWidth(textString);
+                int height = graphics2D.getFontMetrics().getHeight();
+
+                graphics2D.drawString(textString, bufferedImage.getWidth() / 2 - width / 2, yPos);
+
+                yPos = (int)(yPos + height * 1.5f);
+            }
         }
         finally {
             graphics2D.dispose();

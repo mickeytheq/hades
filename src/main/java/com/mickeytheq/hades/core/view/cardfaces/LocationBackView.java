@@ -19,6 +19,7 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION_BACK)
 public class LocationBackView extends BaseCardFaceView<LocationBack> implements HasLocationFieldsView {
@@ -41,7 +42,11 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+    }
+
+    private String getTemplateResource() {
         String templatePath = "/templates/location/location_back";
 
         boolean hasSubtitle = !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle());
@@ -52,7 +57,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         templatePath = templatePath + ".png";
 
-        return ImageUtils.loadImageReadOnly(templatePath);
+        return templatePath;
     }
 
     @Override
@@ -115,7 +120,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
         // paint the main/art portrait first as it sits behind the card template
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
 
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 

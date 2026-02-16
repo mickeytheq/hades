@@ -18,6 +18,7 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Optional;
 
 @View(interfaceLanguageKey = InterfaceConstants.SHADOW)
@@ -30,19 +31,16 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
     }
 
     @Override
-    public Dimension getDimension() {
-        // a default dimension when no card is selected
-        // when this changes the owning framework will detect the change automatically before a repaint occurs
+    public Optional<TemplateInfo> getCompatibleTemplateInfo(int desiredResolutionInPpi) {
         if (shadowingFaceView == null)
-            return new Dimension(1, 1);
+            return Optional.empty();
 
-        return shadowingFaceView.getDimension();
+        return shadowingFaceView.getCompatibleTemplateInfo(desiredResolutionInPpi);
     }
 
     @Override
-    protected BufferedImage getTemplateImage() {
-        // not implemented for shadows as we override to the top level getDimension() so this should never be called
-        throw new UnsupportedOperationException();
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        return null;
     }
 
     @Override

@@ -82,7 +82,7 @@ public class NewCard extends BaseTaskAction {
         CardView cardView = CardFaces.createCardView(card, projectContext);
 
         // create the game component and its editor and attach the editor to the Strange Eons window
-        CardGameComponent cardGameComponent = new CardGameComponent(cardView, projectContext);
+        CardGameComponent cardGameComponent = new CardGameComponent(cardView);
         AbstractGameComponentEditor<CardGameComponent> editor = cardGameComponent.createDefaultEditor();
         editor.setFile(f);
         editor.save();

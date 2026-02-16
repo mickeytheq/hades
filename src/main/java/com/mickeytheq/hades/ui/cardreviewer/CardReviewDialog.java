@@ -119,7 +119,7 @@ public class CardReviewDialog extends DialogEx {
         totalDisplay.setText((cardViewIterator.getCurrentIndex() + 1) + "/" + cardViewIterator.getTotal());
 
         imagePanel.removeAll();
-        imagePanel.add(new CardFaceViewComponent(cardViewIterator.getCurrent().getFrontFaceView()), "grow, push");
+        imagePanel.add(new CardFaceViewComponent(cardViewIterator.getCurrent().getFrontFaceView(), 300), "grow, push");
     }
 
     public static void main(String[] args) throws Exception {

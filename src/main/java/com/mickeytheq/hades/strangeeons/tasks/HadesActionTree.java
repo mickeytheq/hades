@@ -16,7 +16,7 @@ public class HadesActionTree extends TaskActionTree {
 //        add(new PerformanceSuite());
 //        add(new LoadGameComponentPerformanceTest());
 //        add(new LoadEditorPerformanceTest());
-//        add(new PaintingPerformanceTest());
+        add(new PaintingPerformanceTest());
     }
 
     @Override

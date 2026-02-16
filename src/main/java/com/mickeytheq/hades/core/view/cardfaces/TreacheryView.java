@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
@@ -14,13 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
-    private static final URL DEFAULT_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/treachery.png");
-    private static final URL WEAKNESS_TEMPLATE_RESOURCE = Treachery.class.getResource("/templates/treachery/weakness_treachery.png");
+    private static final String STANDARD_TEMPLATE_RESOURCE = "/templates/treachery/treachery.png";
+    private static final String STANDARD_TEMPLATE_RESOURCE_600 = "/templates/treachery/treachery_600.png";
+    private static final String WEAKNESS_TEMPLATE_RESOURCE = "/templates/treachery/weakness_treachery.png";
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
@@ -98,14 +100,16 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         CardFaceViewUtils.createEncounterSetCollectionTab(editorContext, encounterSetView, collectionView);
     }
 
-    public BufferedImage getTemplateImage() {
-        URL templateUrl;
-        if (getModel().getTreacheryFieldsModel().getWeaknessType() != null)
-            templateUrl = WEAKNESS_TEMPLATE_RESOURCE;
-        else
-            templateUrl = DEFAULT_TEMPLATE_RESOURCE;
-
-        return ImageUtils.loadImageReadOnly(templateUrl);
+    @Override
+    protected List<TemplateInfo> getAvailableTemplateInfos() {
+        if (getModel().getTreacheryFieldsModel().getWeaknessType() != null) {
+            return Lists.newArrayList(TemplateInfos.createStandard300(WEAKNESS_TEMPLATE_RESOURCE, CardFaceOrientation.Portrait));
+        } else {
+            return Lists.newArrayList(
+                    TemplateInfos.createStandard300(STANDARD_TEMPLATE_RESOURCE, CardFaceOrientation.Portrait),
+                    TemplateInfos.createStandard600(STANDARD_TEMPLATE_RESOURCE_600, CardFaceOrientation.Portrait)
+            );
+        }
     }
 
     @Override
@@ -114,7 +118,9 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_TREACHERY).toUpperCase());
@@ -150,8 +156,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
             if (weaknessType == WeaknessType.Basic) {
                 ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
-            }
-            else {
+            } else {
                 encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
                 encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             }

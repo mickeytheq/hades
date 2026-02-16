@@ -47,13 +47,9 @@ public interface CardFaceView {
     String getTitle();
 
     /**
-     * Returns the dimension of the card face being drawn
-     *
-     * This should be relatively cheap to execute over multiple calls as it is called before each paint to check for
-     * changes to the template size. For example if a real image is being loaded to establish the dimensions caching should
-     * be used so subsequent calls are not as expensive when the sizing isn't changing
+     * Selects a template information from those available using a PPI hint to do the selection
      */
-    Dimension getDimension();
+    Optional<TemplateInfo> getCompatibleTemplateInfo(int desiredResolutionInPpi);
 
     /**
      * Instructs the view to build editor controls for a user to interact with the model.

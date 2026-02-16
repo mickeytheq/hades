@@ -58,7 +58,7 @@ public class PerformanceTests {
             Sheet[] sheets = gameComponent.createDefaultSheets();
 
             for (Sheet sheet : sheets) {
-                BufferedImage bufferedImage = sheet.paint(RenderTarget.EXPORT, 300);
+                BufferedImage bufferedImage = sheet.paint(RenderTarget.EXPORT, 600);
             }
         }
 
