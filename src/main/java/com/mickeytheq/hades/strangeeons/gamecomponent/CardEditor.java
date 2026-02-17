@@ -7,7 +7,9 @@ import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import org.apache.commons.lang3.StringUtils;
@@ -34,28 +36,43 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         // delegate to the individual card faces to create editor controls to go in the editor
         JTabbedPane editorTabbedPane = new JTabbedPane();
 
-        EditorContext editorContext = new EditorContextImpl(editorTabbedPane, CardFaceSide.Front);
-        cardGameComponent.getCardView().getFrontFaceView().createEditors(editorContext);
+        previewPane = new JTabbedPane();
+
+        createEditorAndViewerForCardFaceView(editorTabbedPane, Language.string(InterfaceConstants.FRONT), cardGameComponent.getCardView().getFrontFaceView());
 
         if (cardGameComponent.getCardView().hasBack()) {
-            editorContext = new EditorContextImpl(editorTabbedPane, CardFaceSide.Back);
-            cardGameComponent.getCardView().getBackFaceView().createEditors(editorContext);
+            createEditorAndViewerForCardFaceView(editorTabbedPane, Language.string(InterfaceConstants.BACK), cardGameComponent.getCardView().getBackFaceView());
         }
 
-        cardGameComponent.getCardView().addCommentsTab(new EditorContextImpl(editorTabbedPane, null));
-
-        // TODO: decide whether to have encounter set info created by the 'card' rather than the face
-        // TODO: or delegate to the face. however having different encounter set info on the front and back would be quite whacky although perhaps we should make this possible but not the default
-        // TODO: same goes for collection although I think this is more certain to be 'card' level
-
-        previewPane = new JTabbedPane();
-        initializeSheetViewers(previewPane);
+        cardGameComponent.getCardView().addCommentsTab(new EditorContextImpl(editorTabbedPane, null, null));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editorTabbedPane, previewPane);
 
         getContentPane().add(splitPane);
 
         pack();
+    }
+
+    /**
+     * the default StrangeEons approach for the preview is to use the {@link ca.cgjennings.apps.arkham.sheet.Sheet} base class and add implementation details on top with a sub-class
+     * however performance testing has shown that somewhere in the SheetViewer class there is a significant performance penalty on two fronts
+     * 1. painting to the buffered image hosted by the sheet is much slower than it should be (e.g. 100-200ms to paint the template vs 10-20ms). it is not clear
+     *    why this performance is so different. loading the Sheet alone and doing painting performance tests did not show this slowdown which suggests
+     *    the issue is somewhere in the SheetViewer
+     * 2. when the mouse moves in the preview window the preview pane is repainted. while the Sheet caches the image so a full re-paint of the card
+     *    face doesn't happen there is still a significant performance hit incurred by how the {@link SheetViewer} scales that sheet image
+     *
+     * instead a simple {@link AbstractViewer) implementation {@link CardFaceViewViewer) is used that does not have these
+     * performance issues
+     */
+    private void createEditorAndViewerForCardFaceView(JTabbedPane editorTabbedPane, String previewLabel, CardFaceView cardFaceView) {
+        // creates the viewer to show the rendered card face in the preview pane
+        CardFaceViewViewer viewer = new CardFaceViewViewer(cardFaceView);
+        previewPane.addTab(previewLabel, viewer);
+
+        // creates editors to change the card face details and attaches the viewer to be told when something changes
+        EditorContext editorContext = new EditorContextImpl(editorTabbedPane, cardFaceView.getCardFaceSide(), viewer);
+        cardFaceView.createEditors(editorContext);
     }
 
     @Override
@@ -152,18 +169,6 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         // in conjunction with rerenderSheetViewers below this gives us much better response times in the UI
     }
 
-    private void rerenderSheetViewers() {
-        // effectively a re-implementation of SheetViewer.rerenderImage but that's package private
-        if (viewers == null)
-            return;
-
-        for (SheetViewer viewer : viewers) {
-            if (viewer.isShowing()) {
-                viewer.repaint();
-            }
-        }
-    }
-
     private void updateTitle() {
         // update the title that shows in the UI tab for the card to the front face's title
         String title = getGameComponent().getCardView().getFrontFaceView().getTitle();
@@ -179,14 +184,12 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
     private class EditorContextImpl implements EditorContext {
         private final JTabbedPane tabbedPane;
         private final CardFaceSide cardFaceSide;
+        private final CardFaceViewViewer viewer;
 
-        private final int sheetIndex;
-
-        public EditorContextImpl(JTabbedPane tabbedPane, CardFaceSide cardFaceSide) {
+        public EditorContextImpl(JTabbedPane tabbedPane, CardFaceSide cardFaceSide, CardFaceViewViewer viewer) {
             this.tabbedPane = tabbedPane;
             this.cardFaceSide = cardFaceSide;
-
-            sheetIndex = cardFaceSide == CardFaceSide.Front ? 0 : 1;
+            this.viewer = viewer;
         }
 
         @Override
@@ -217,12 +220,12 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             // check if the title needs updating
             updateTitle();
 
-            // this will mark the sheet as needing repainting the next time a repaint check is done and also
-            // tell the SE framework that the content has changed so it will show as un-saved in the UI
-            getGameComponent().markChanged(sheetIndex);
+            // mark the game component as unsaved
+            getGameComponent().markUnsavedChanges();
 
-            // on any change tell the sheet(s) to repaint
-            rerenderSheetViewers();
+            // tell the corresponding viewer to update/refresh
+            if (viewer != null)
+                viewer.markChanged();
         }
     }
 }

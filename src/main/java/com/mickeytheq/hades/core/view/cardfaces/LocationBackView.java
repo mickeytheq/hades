@@ -8,17 +8,13 @@ import com.mickeytheq.hades.core.model.cardfaces.LocationBack;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
-import com.mickeytheq.hades.core.view.utils.ImageUtils;
-import com.mickeytheq.hades.core.view.utils.MarkupUtils;
-import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.LOCATION_BACK)

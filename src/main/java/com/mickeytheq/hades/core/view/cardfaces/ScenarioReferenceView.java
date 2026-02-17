@@ -15,7 +15,6 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.font.TextAttribute;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;

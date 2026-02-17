@@ -9,7 +9,7 @@ import com.mickeytheq.hades.serialise.ValueSerialiser;
 public class EncounterSetConfigurationSerialiser implements ValueSerialiser<EncounterSetConfiguration> {
     @Override
     public void serialiseValue(String fieldName, ObjectNode currentNode, EncounterSetConfiguration value, ProjectContext projectContext) {
-        currentNode.put(fieldName, value.getTag());
+        currentNode.put(fieldName, value.getUniqueId());
     }
 
     @Override

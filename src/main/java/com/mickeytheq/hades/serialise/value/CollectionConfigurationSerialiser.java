@@ -9,7 +9,7 @@ import com.mickeytheq.hades.serialise.ValueSerialiser;
 public class CollectionConfigurationSerialiser implements ValueSerialiser<CollectionConfiguration> {
     @Override
     public void serialiseValue(String fieldName, ObjectNode currentNode, CollectionConfiguration value, ProjectContext projectContext) {
-        currentNode.put(fieldName, value.getTag());
+        currentNode.put(fieldName, value.getUniqueId());
     }
 
     @Override

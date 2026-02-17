@@ -9,7 +9,7 @@ import com.mickeytheq.hades.core.global.configuration.CardPreviewConfiguration;
 import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,6 +75,10 @@ public class CardGameComponent extends AbstractGameComponent {
         }
     }
 
+    // this class is partially defunct as the CardEditor implements previews without using the Sheet concept.
+    // however core Strange Eons concepts such as export and print are currently tied to use Sheets
+    // it is possible to replace these functions in the CardEditor by overriding export/print methods at which
+    // point this may be able to be removed entirely
     private static class CardSheet extends Sheet<CardGameComponent> {
         private final CardFaceView cardFaceView;
 

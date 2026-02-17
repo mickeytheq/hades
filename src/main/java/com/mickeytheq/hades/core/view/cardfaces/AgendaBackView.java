@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;

@@ -11,7 +11,7 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
-import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;

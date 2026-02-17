@@ -1,7 +1,5 @@
 package com.mickeytheq.hades.scratchpad;
 
-import ca.cgjennings.apps.arkham.AbstractViewer;
-import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.global.carddatabase.BasicCardDatabase;
@@ -21,7 +19,7 @@ import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.Statistic;
-import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.generator.CardFaceGenerator;
@@ -29,16 +27,9 @@ import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.ui.DialogEx;
-import org.apache.commons.lang3.time.StopWatch;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.StringWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -518,26 +509,26 @@ public class QuickCardView {
             editTabbedPane.removeAll();
 
             // create renderers
-            Renderer frontRenderer = new Renderer(currentCardView.getFrontFaceView());
-            drawTabbedPane.addTab("Front", frontRenderer);
+            CardFaceViewViewer frontCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getFrontFaceView());
+            drawTabbedPane.addTab("Front", frontCardFaceViewViewer);
 
-            Renderer backRenderer = null;
+            CardFaceViewViewer backCardFaceViewViewer = null;
             if (currentCardView.hasBack()) {
-                backRenderer = new Renderer(currentCardView.getBackFaceView());
-                drawTabbedPane.addTab("Back", backRenderer);
+                backCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getBackFaceView());
+                drawTabbedPane.addTab("Back", backCardFaceViewViewer);
             }
 
             // create editors
-            currentCardView.getFrontFaceView().createEditors(createEditorContext(frontRenderer));
+            currentCardView.getFrontFaceView().createEditors(createEditorContext(frontCardFaceViewViewer));
             if (currentCardView.hasBack()) {
-                currentCardView.getBackFaceView().createEditors(createEditorContext(backRenderer));
+                currentCardView.getBackFaceView().createEditors(createEditorContext(backCardFaceViewViewer));
             }
 
             currentCardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
         }
 
-        private EditorContext createEditorContext(Renderer renderer) {
-            return new EditorContextImpl(editTabbedPane, renderer::markChanged);
+        private EditorContext createEditorContext(CardFaceViewViewer cardFaceViewViewer) {
+            return new EditorContextImpl(editTabbedPane, cardFaceViewViewer::markChanged);
         }
 
         private void showJson(JFrame frame, String jsonString) {
@@ -556,38 +547,6 @@ public class QuickCardView {
             dialog.setPreferredSize(new Dimension(1000, 800));
 
             dialog.showDialog();
-        }
-    }
-
-    static class Renderer extends AbstractViewer {
-        private final CardFaceView cardFaceView;
-        private boolean needRefresh = true;
-        private BufferedImage bufferedImage;
-
-        public Renderer(CardFaceView cardFaceView) {
-            this.cardFaceView = cardFaceView;
-        }
-
-        @Override
-        protected BufferedImage getCurrentImage() {
-            if (!needRefresh)
-                return bufferedImage;
-
-            StopWatch stopWatch = StopWatch.createStarted();
-            bufferedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, 600);
-
-            long millis = stopWatch.getTime();
-
-            System.out.println("Rendered in " + millis + "ms");
-
-            needRefresh = false;
-
-            return bufferedImage;
-        }
-
-        private void markChanged() {
-            needRefresh = true;
-            repaint();
         }
     }
 

@@ -9,12 +9,11 @@ import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.view.CardView;
-import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.strangeeons.util.GameComponentUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import resources.ResourceKit;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -58,7 +57,7 @@ public class PerformanceTests {
             Sheet[] sheets = gameComponent.createDefaultSheets();
 
             for (Sheet sheet : sheets) {
-                BufferedImage bufferedImage = sheet.paint(RenderTarget.EXPORT, 600);
+                BufferedImage bufferedImage = sheet.paint(RenderTarget.PREVIEW, 600);
             }
         }
 

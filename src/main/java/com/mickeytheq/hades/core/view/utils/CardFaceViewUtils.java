@@ -1,10 +1,13 @@
-package com.mickeytheq.hades.core.view.common;
+package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.core.view.common.CollectionView;
+import com.mickeytheq.hades.core.view.common.EncounterSetView;
+import com.mickeytheq.hades.core.view.common.StorySectionView;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.MultiSectionRenderer;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
