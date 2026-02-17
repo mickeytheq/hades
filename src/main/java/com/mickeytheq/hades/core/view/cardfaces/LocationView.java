@@ -139,7 +139,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         // paint the main/art portrait first as it sits behind the card template
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 

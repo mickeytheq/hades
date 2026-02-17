@@ -104,7 +104,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 

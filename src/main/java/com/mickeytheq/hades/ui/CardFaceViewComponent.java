@@ -1,13 +1,9 @@
 package com.mickeytheq.hades.ui;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
-import com.mickeytheq.hades.core.project.ProjectContext;
-import com.mickeytheq.hades.core.view.BasePaintContext;
 import com.mickeytheq.hades.core.view.CardFaceView;
-import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.core.view.TemplateInfo;
 import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
-import com.mickeytheq.hades.scratchpad.QuickCardView;
 
 import javax.swing.*;
 import java.awt.*;

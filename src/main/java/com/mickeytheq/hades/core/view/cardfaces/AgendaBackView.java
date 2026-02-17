@@ -119,7 +119,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         // title - vertical orientation
         commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

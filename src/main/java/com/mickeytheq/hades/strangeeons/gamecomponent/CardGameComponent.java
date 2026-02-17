@@ -7,7 +7,6 @@ import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import com.mickeytheq.hades.core.global.configuration.CardPreviewConfiguration;
 import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
-import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.CardFaceViewUtils;
@@ -168,7 +167,7 @@ public class CardGameComponent extends AbstractGameComponent {
                 // so we have to clear it first to paint onto a blank canvas
                 g.clearRect(0, 0, getTemplateWidth(), getTemplateHeight());
 
-                PaintContext paintContext = new PaintContextImpl(g, renderTarget, cardFaceView, currentTemplateInfo);
+                PaintContext paintContext = new DefaultPaintContext(g, renderTarget, cardFaceView, currentTemplateInfo);
 
                 // delegate to the card view to do the painting
                 cardFaceView.paint(paintContext);
@@ -198,19 +197,6 @@ public class CardGameComponent extends AbstractGameComponent {
             } finally {
                 g.dispose();
             }
-        }
-    }
-
-    static class PaintContextImpl extends BasePaintContext {
-        private final Graphics2D g;
-        public PaintContextImpl(Graphics2D g, RenderTarget renderTarget, CardFaceView cardFaceView, TemplateInfo templateInfo) {
-            super(renderTarget, cardFaceView, templateInfo);
-            this.g = g;
-        }
-
-        @Override
-        protected Graphics2D getDestinationGraphics() {
-            return g;
         }
     }
 }

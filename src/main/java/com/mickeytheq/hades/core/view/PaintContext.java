@@ -54,6 +54,7 @@ public interface PaintContext {
         return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getTemplateInfo().getResolutionInPixelsPerInch() + 0.5);
     }
 
+    // creates a Rectangle in pixel units for the given input rectangle which may be in other units
     default Rectangle toPixelRect(RectangleEx rectangleEx) {
         return rectangleEx.toPixelRectangle(getTemplateInfo().getResolutionInPixelsPerInch());
     }
@@ -62,7 +63,7 @@ public interface PaintContext {
     // markup methods
     //
 
-    // creates a MarkupRenderer with a resolution that matches the current sheet/template
+    // creates a MarkupRenderer with a resolution that matches the current template
     MarkupRenderer createMarkupRenderer();
 
     //

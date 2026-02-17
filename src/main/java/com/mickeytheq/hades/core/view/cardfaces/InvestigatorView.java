@@ -191,7 +191,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     @Override
     public void paint(PaintContext paintContext) {
         // draw the template - unlike most other card types do this first as the template has the background
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         // special handling for fading
         paintArtPortrait(paintContext);

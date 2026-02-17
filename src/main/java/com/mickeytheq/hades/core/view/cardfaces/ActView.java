@@ -140,7 +140,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         // title
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

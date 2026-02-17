@@ -6,6 +6,6 @@ id = CATALOGUEID{a1849934-40a7-4f97-ad1a-cd6eda8944b4:2026-02-02-16-35-00-00}
 
 catalog-name = Hades
 catalog-credit = MickeyTheQ
-catalog-description = Plugin that allows Arkham Horror LCG content to get created in Strange Eons
+catalog-description = Plugin that allows Arkham Horror LCG content to be created in Strange Eons
 
 com.mickeytheq.hades.strangeeons.plugin.HadesPlugin

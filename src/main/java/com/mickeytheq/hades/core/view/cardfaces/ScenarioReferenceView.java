@@ -114,7 +114,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
 
     @Override
     public void paint(PaintContext paintContext) {
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         // this painting logic is significantly different to other cards as instead of painting elements in specific
         // regions the content falls vertically down the page

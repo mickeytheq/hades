@@ -199,7 +199,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
-        paintContext.getGraphics().drawImage(paintContext.getTemplateInfo().getTemplateImage(), 0, 0, null);
+        paintContext.paintTemplate();
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_ENEMY).toUpperCase());

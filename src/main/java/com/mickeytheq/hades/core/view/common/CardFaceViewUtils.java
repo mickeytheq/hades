@@ -137,12 +137,7 @@ public class CardFaceViewUtils {
         try {
             renderTarget.applyTo(graphics2D);
 
-            cardFaceView.paint(new BasePaintContext(renderTarget, cardFaceView, templateInfo) {
-                @Override
-                protected Graphics2D getDestinationGraphics() {
-                    return graphics2D;
-                }
-            });
+            cardFaceView.paint(new DefaultPaintContext(graphics2D, renderTarget, cardFaceView, templateInfo));
         }
         finally {
             graphics2D.dispose();

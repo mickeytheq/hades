@@ -9,10 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
-public abstract class BasePaintContext implements PaintContext {
-    private static final Logger logger = LogManager.getLogger(BasePaintContext.class);
+public class DefaultPaintContext implements PaintContext {
+    private static final Logger logger = LogManager.getLogger(DefaultPaintContext.class);
 
     private final RenderTarget renderTarget;
     private final CardFaceView cardFaceView;
@@ -21,13 +20,14 @@ public abstract class BasePaintContext implements PaintContext {
     private final Graphics2D originalGraphics2D;
     private Graphics2D currentGraphics2D;
 
-    public BasePaintContext(RenderTarget renderTarget, CardFaceView cardFaceView, TemplateInfo templateInfo) {
+    public DefaultPaintContext(Graphics2D graphics2D, RenderTarget renderTarget, CardFaceView cardFaceView, TemplateInfo templateInfo) {
+        this.originalGraphics2D = graphics2D;
         this.renderTarget = renderTarget;
         this.cardFaceView = cardFaceView;
         this.templateInfo = templateInfo;
 
-        this.originalGraphics2D = getDestinationGraphics();
-        this.currentGraphics2D = originalGraphics2D;
+        // start off with the graphics being set as passed in
+        this.currentGraphics2D = this.originalGraphics2D;
     }
 
     @Override
@@ -39,8 +39,6 @@ public abstract class BasePaintContext implements PaintContext {
     public Graphics2D getGraphics() {
         return currentGraphics2D;
     }
-
-    protected abstract Graphics2D getDestinationGraphics();
 
     @Override
     public void setRenderingIncludeBleedRegion(boolean includeBleedRegion) {
@@ -54,9 +52,13 @@ public abstract class BasePaintContext implements PaintContext {
         if (currentGraphics2D != originalGraphics2D)
             return;
 
+        // if there's no bleed margin in the template this operation has no effect
+        if (templateInfo.getAvailableBleedMarginInPixels() == 0)
+            return;
+
         // create a new graphics from the original one that incorporates a transform and clip to exclude the bleed margin
-        int bleedMargin = getTemplateInfo().getAvailableBleedMarginInPixels();
-        currentGraphics2D = (Graphics2D) originalGraphics2D.create(bleedMargin, bleedMargin, getTemplateInfo().getWidthInPixelsWithoutBleed(), getTemplateInfo().getHeightInPixelsWithoutBleed());
+        int bleedMargin = templateInfo.getAvailableBleedMarginInPixels();
+        currentGraphics2D = (Graphics2D) originalGraphics2D.create(bleedMargin, bleedMargin, templateInfo.getWidthInPixelsWithoutBleed(), templateInfo.getHeightInPixelsWithoutBleed());
     }
 
     public void paintTemplate() {
@@ -77,7 +79,7 @@ public abstract class BasePaintContext implements PaintContext {
 
     @Override
     public MarkupRenderer createMarkupRenderer() {
-        MarkupRenderer markupRenderer = new MarkupRenderer(getTemplateInfo().getResolutionInPixelsPerInch());
+        MarkupRenderer markupRenderer = new MarkupRenderer(templateInfo.getResolutionInPixelsPerInch());
 
         // fullname is always the front title
         // fullnameb always the back title
