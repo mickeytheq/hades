@@ -1,6 +1,9 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -123,15 +126,19 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(21.00, 5.00, 5.0, 5.0);
     private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(44.53, 51.39, 0.00, 3.39);
 
-    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI), Lists.newArrayList(
-            new Point2D.Double(0.0, 0.0),
-            new Point2D.Double(0.0, 1.00),
-            new Point2D.Double(0.715, 1.00),
-            new Point2D.Double(0.83, 0.957),
-            new Point2D.Double(0.83, 0.82),
-            new Point2D.Double(1.0, 0.82),
-            new Point2D.Double(1.0, 0.0)
-    ));
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(ActView::createBodyPageShape));
+
+    private static PageShape createBodyPageShape(int ppi) {
+        return MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(ppi), Lists.newArrayList(
+                new Point2D.Double(0.0, 0.0),
+                new Point2D.Double(0.0, 1.00),
+                new Point2D.Double(0.715, 1.00),
+                new Point2D.Double(0.83, 0.957),
+                new Point2D.Double(0.83, 0.82),
+                new Point2D.Double(1.0, 0.82),
+                new Point2D.Double(1.0, 0.0)
+        ));
+    }
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -154,7 +161,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         collectionView.paintCollectionImage(paintContext, paintContext.toPixelRect(COLLECTION_PORTRAIT_DRAW_REGION), true);
         collectionView.paintCollectionNumber(paintContext, paintContext.toPixelRect(COLLECTION_NUMBER_DRAW_REGION));
 
-        actCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        actCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
         commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getActFieldsModel().getClues(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);

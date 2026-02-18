@@ -1,6 +1,9 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -98,15 +101,19 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(23.37, 47.07, 16.93, 2.37);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.01, 0.68, 40.98, 4.91);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
-    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI),
-            Lists.newArrayList(
-                    new Point2D.Double(0.111, 0.000),
-                    new Point2D.Double(0.0, 0.204),
-                    new Point2D.Double(0.0, 1.0),
-                    new Point2D.Double(1.0, 1.0),
-                    new Point2D.Double(1.0, 0.204),
-                    new Point2D.Double(0.889, 0.0)
-            ));
+
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(ppi ->
+            MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(ppi),
+                    Lists.newArrayList(
+                            new Point2D.Double(0.111, 0.000),
+                            new Point2D.Double(0.0, 0.204),
+                            new Point2D.Double(0.0, 1.0),
+                            new Point2D.Double(1.0, 1.0),
+                            new Point2D.Double(1.0, 0.204),
+                            new Point2D.Double(0.889, 0.0)
+                    ))));
+
+
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = LocationView.ENCOUNTER_PORTRAIT_DRAW_REGION;
 
     @Override
@@ -122,7 +129,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         portraitView.paintArtist(paintContext);
 

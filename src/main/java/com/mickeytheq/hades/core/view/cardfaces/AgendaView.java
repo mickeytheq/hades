@@ -1,6 +1,9 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -118,14 +121,18 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(61.64, 5.00, 5.0, 5.0);
     private static final RectangleEx DOOM_DRAW_REGION = RectangleEx.millimetres(43.60, 51.39, 0.00, 3.39);
 
-    private static final PageShape BODY_PAGE_SHAPE = MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI), Lists.newArrayList(
-            new Point2D.Double(0.0, 0.0),
-            new Point2D.Double(0.0, 0.80),
-            new Point2D.Double(0.148, 0.80),
-            new Point2D.Double(0.148, 1.0),
-            new Point2D.Double(1.0, 1.0),
-            new Point2D.Double(1.0, 0.0)
-    ));
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(AgendaView::createBodyPageShape));
+
+    private static PageShape createBodyPageShape(int ppi) {
+        return MarkupUtils.createStraightLinePathingPageShape(BODY_DRAW_REGION.toPixelRectangle(ppi), Lists.newArrayList(
+                new Point2D.Double(0.0, 0.0),
+                new Point2D.Double(0.0, 0.80),
+                new Point2D.Double(0.148, 0.80),
+                new Point2D.Double(0.148, 1.0),
+                new Point2D.Double(1.0, 1.0),
+                new Point2D.Double(1.0, 0.0)
+        ));
+    }
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -148,7 +155,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Landscape);
 
-        agendaCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        agendaCommonFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         commonCardFieldsView.paintCopyright(paintContext, paintContext.toPixelRect(COPYRIGHT_DRAW_REGION));
 

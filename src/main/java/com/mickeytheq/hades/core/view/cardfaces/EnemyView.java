@@ -2,6 +2,9 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -50,7 +53,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
     private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 17.61, 57.23, 27.94);
-    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
+
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(EnemyView::createBodyPageShape));
 
     @Override
     public void initialiseView() {
@@ -225,7 +229,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
         commonCardFieldsView.paintSubtitle(paintContext, paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -255,7 +259,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(WEAKNESS_SUBTYPE_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
@@ -301,8 +305,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         });
     }
 
-    private static PageShape createBodyPageShape() {
-        Rectangle bodyRectangle = BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI);
+    private static PageShape createBodyPageShape(int ppi) {
+        Rectangle bodyRectangle = BODY_DRAW_REGION.toPixelRectangle(ppi);
 
         MarkupUtils.PageShapeBuilder pageShapeBuilder = MarkupUtils.createPageShapeBuilder(bodyRectangle);
 

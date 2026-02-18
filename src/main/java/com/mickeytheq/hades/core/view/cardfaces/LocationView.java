@@ -2,6 +2,9 @@ package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -127,7 +130,8 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.01, 0.68, 40.98, 4.91);
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(16.09, 6.60, 32.34, 3.56);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
-    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
+
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(LocationView::createBodyPageShape));
     private static final RectangleEx VICTORY_DRAW_REGION = RectangleEx.millimetres(49.00, 74.5, 13.00, 4.00);
     public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.40, 41.69, 4.74, 4.74);
 
@@ -145,7 +149,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 
         // victory is painted separate from the body on locations
-        commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPE, false);
+        commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()), false);
         paintVictory(paintContext);
         commonCardFieldsView.paintCopyright(paintContext);
 
@@ -161,7 +165,9 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         locationFieldsView.paintShroudAndClues(paintContext);
     }
 
-    private static PageShape createBodyPageShape(Rectangle drawRegion) {
+    private static PageShape createBodyPageShape(int ppi) {
+        Rectangle drawRegion = BODY_DRAW_REGION.toPixelRectangle(ppi);
+
         MarkupUtils.PageShapeBuilder pageShapeBuilder = MarkupUtils.createPageShapeBuilder(drawRegion);
 
         pageShapeBuilder.moveTo(new Point2D.Double(0.074, 0.0));

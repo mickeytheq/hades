@@ -14,25 +14,25 @@ public class UnitConversionUtils {
         return getConversionRatio(fromUnit, toUnit, null) * value;
     }
 
-    public static double convertUnit(Unit fromUnit, Unit toUnit, double value, double dpi) {
+    public static double convertUnit(Unit fromUnit, Unit toUnit, double value, double ppi) {
         if (fromUnit == toUnit)
             return value;
 
-        return getConversionRatio(fromUnit, toUnit, dpi) * value;
+        return getConversionRatio(fromUnit, toUnit, ppi) * value;
     }
 
-    public static double getConversionRatio(Unit fromUnit, Unit toUnit, Double dpi) {
+    public static double getConversionRatio(Unit fromUnit, Unit toUnit, Double ppi) {
         if (fromUnit == toUnit)
             return 1.0;
 
-        if (dpi == null && (fromUnit == Unit.Pixel || toUnit == Unit.Pixel))
-            throw new IllegalArgumentException("Cannot convert to/from Pixel unit without DPI being specified");
+        if (ppi == null && (fromUnit == Unit.Pixel || toUnit == Unit.Pixel))
+            throw new IllegalArgumentException("Cannot convert to/from Pixel unit without PPI being specified");
 
         if (fromUnit == Unit.Millimetre && toUnit == Unit.Pixel)
-            return INCHES_PER_MILLIMETER * dpi;
+            return INCHES_PER_MILLIMETER * ppi;
 
         if (fromUnit == Unit.Point && toUnit == Unit.Pixel)
-            return dpi / POINTS_PER_INCH;
+            return ppi / POINTS_PER_INCH;
 
         if (fromUnit == Unit.Millimetre && toUnit == Unit.Point)
             return POINTS_PER_MILLIMETER;
@@ -41,10 +41,10 @@ public class UnitConversionUtils {
             return 1 / POINTS_PER_MILLIMETER;
 
         if (fromUnit == Unit.Pixel && toUnit == Unit.Millimetre)
-            return 1 / (INCHES_PER_MILLIMETER * dpi);
+            return 1 / (INCHES_PER_MILLIMETER * ppi);
 
         if (fromUnit == Unit.Pixel && toUnit == Unit.Point)
-            return POINTS_PER_INCH / dpi;
+            return POINTS_PER_INCH / ppi;
 
         throw new UnsupportedOperationException("Unsupported unit conversion from " + fromUnit + " to " + toUnit);
     }

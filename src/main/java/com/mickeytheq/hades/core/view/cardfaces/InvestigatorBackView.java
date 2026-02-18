@@ -1,6 +1,9 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.InvestigatorBack;
@@ -123,7 +126,10 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         // sections
         String markupText = composeSectionString();
 
-        PaintUtils.paintBodyText(paintContext, markupText, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_SHAPES.get(getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass()));
+        InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass();
+
+        PaintUtils.paintBodyText(paintContext, markupText, paintContext.toPixelRect(BODY_DRAW_REGION),
+                BODY_PAGE_SHAPE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()).get(investigatorClass));
 
         portraitView.paintArtist(paintContext);
     }
@@ -170,14 +176,18 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
         return sb.toString();
     }
 
-    private static final Map<InvestigatorClass, PageShape> BODY_PAGE_SHAPES;
+    private static final LoadingCache<Integer, Map<InvestigatorClass, PageShape>> BODY_PAGE_SHAPE_CACHE;
 
     static {
-        BODY_PAGE_SHAPES = new HashMap<>();
+        BODY_PAGE_SHAPE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(InvestigatorBackView::createPageShapes));
+    }
 
-        Rectangle bodyRectangle = BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI);
+    private static Map<InvestigatorClass, PageShape> createPageShapes(int ppi) {
+        Map<InvestigatorClass, PageShape> bodyPageShapes = new HashMap<>();
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Guardian, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
+        Rectangle bodyRectangle = BODY_DRAW_REGION.toPixelRectangle(ppi);
+
+        bodyPageShapes.put(InvestigatorClass.Guardian, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.337, 0.566),
@@ -189,7 +199,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Seeker, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
+        bodyPageShapes.put(InvestigatorClass.Seeker, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.322, 0.585),
@@ -201,7 +211,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Mystic, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
+        bodyPageShapes.put(InvestigatorClass.Mystic, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.315, 0.544),
@@ -213,7 +223,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 0.0)
                 )));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Rogue, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
+        bodyPageShapes.put(InvestigatorClass.Rogue, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.355, 0.000),
                         new Point2D.Double(0.326, 0.511),
@@ -226,9 +236,9 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                 )));
 
         // survivor and mystic are the same
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Survivor, BODY_PAGE_SHAPES.get(InvestigatorClass.Mystic));
+        bodyPageShapes.put(InvestigatorClass.Survivor, bodyPageShapes.get(InvestigatorClass.Mystic));
 
-        BODY_PAGE_SHAPES.put(InvestigatorClass.Neutral, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
+        bodyPageShapes.put(InvestigatorClass.Neutral, MarkupUtils.createStraightLinePathingPageShape(bodyRectangle,
                 Lists.newArrayList(
                         new Point2D.Double(0.400, 0.000),
                         new Point2D.Double(0.357, 0.468),
@@ -237,5 +247,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
                         new Point2D.Double(1.0, 1.000),
                         new Point2D.Double(1.0, 0.0)
                 )));
+
+        return bodyPageShapes;
     }
 }

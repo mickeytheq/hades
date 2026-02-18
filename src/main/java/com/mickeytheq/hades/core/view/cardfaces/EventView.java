@@ -1,6 +1,10 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
@@ -129,7 +133,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(29.29, 43.69, 5.08, 5.08);
     private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(27.43, 41.83, 9.14, 8.97);
 
-    private static final PageShape BODY_PAGE_SHAPE = createBodyPageShape();
+    private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(EventView::createBodyPageShape));
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -148,7 +152,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         Rectangle bodyDrawRegion = getBodyDrawRegion(paintContext);
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_SHAPE);
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, bodyDrawRegion, BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
@@ -247,7 +251,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         }
     }
 
-    private static PageShape createBodyPageShape() {
+    private static PageShape createBodyPageShape(int resolutionPpi) {
         List<Point2D> pathPoints = Lists.newArrayList(
                 new Point2D.Double(0.0, 0.0),
                 new Point2D.Double(-0.054, 0.333),
@@ -264,7 +268,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
                 new Point2D.Double(0.047, 0.993)
         );
 
-        MarkupUtils.PageShapeBuilder pageShapeBuilder = new MarkupUtils.PageShapeBuilder(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI));
+        MarkupUtils.PageShapeBuilder pageShapeBuilder = new MarkupUtils.PageShapeBuilder(BODY_DRAW_REGION.toPixelRectangle(resolutionPpi));
 
         ListIterator<Point2D> pathPointIterator = pathPoints.listIterator();
         ListIterator<Point2D> bezierPointIterator = bezierPoints.listIterator();
@@ -278,7 +282,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         // second reverse the X-axis on the mapper function and reverse the draw process
         // this has the effect or creating a left/right mirror region
-        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI)));
+        pageShapeBuilder.setMapToDrawRegionCoordinatesFunction(MarkupUtils.createRatioIntoDrawRegionMapperInvertX(BODY_DRAW_REGION.toPixelRectangle(resolutionPpi)));
 
         // move across to the bottom right corner
         pageShapeBuilder.lineTo(pathPointIterator.previous());

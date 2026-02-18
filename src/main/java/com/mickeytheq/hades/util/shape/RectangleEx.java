@@ -41,6 +41,12 @@ public class RectangleEx {
                 UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getHeight()));
     }
 
+    // creates a rectangle where the resulting draw region will be centred horizontally in the total painting region which
+    // must be supplied externally
+    public static RectangleEx millimetresHorizontalCentred(double topY, double width, double height) {
+        return new RectangleEx(Unit.Millimetre, -9999, XRelativeTo.Centred, topY, YRelativeTo.Top, width, height);
+    }
+
     public Rectangle toPixelRectangle(double dpi) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
         return new Rectangle((int) (x * conversionRatio + 0.5), (int) (y * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
@@ -54,7 +60,7 @@ public class RectangleEx {
     }
 
     public enum XRelativeTo {
-        Left, Right
+        Left, Right, Centred
     }
 
     public enum YRelativeTo {
