@@ -38,6 +38,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class QuickCardView {
+    private static final int RESOLUTION_PPI = 300;
+    private static final int DESIRED_BLEED_IN_PIXELS = 0;
+
     public static void main(String[] args) {
         System.setProperty("log4j.configurationFile", "log4j2-console-only.json");
 
@@ -65,11 +68,11 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
-//        asset();
+        asset();
 //            investigator();
 //        event();
 //        skill();
-        treacheryTreachery();
+//        treacheryTreachery();
 //            location();
 //            random();
 //            agenda();
@@ -509,12 +512,12 @@ public class QuickCardView {
             editTabbedPane.removeAll();
 
             // create renderers
-            CardFaceViewViewer frontCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getFrontFaceView(), 600, 0);
+            CardFaceViewViewer frontCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getFrontFaceView(), RESOLUTION_PPI, DESIRED_BLEED_IN_PIXELS);
             drawTabbedPane.addTab("Front", frontCardFaceViewViewer);
 
             CardFaceViewViewer backCardFaceViewViewer = null;
             if (currentCardView.hasBack()) {
-                backCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getBackFaceView(), 600, 0);
+                backCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getBackFaceView(), RESOLUTION_PPI, DESIRED_BLEED_IN_PIXELS);
                 drawTabbedPane.addTab("Back", backCardFaceViewViewer);
             }
 

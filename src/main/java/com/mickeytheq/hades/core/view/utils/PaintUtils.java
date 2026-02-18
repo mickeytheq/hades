@@ -5,6 +5,8 @@ import ca.cgjennings.layout.PageShape;
 import ca.cgjennings.layout.TextStyle;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.PaintContext;
+import com.mickeytheq.hades.util.shape.Unit;
+import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -306,8 +308,10 @@ public class PaintUtils {
 
             Stroke oldStroke = g.getStroke();
 
+            double strokeSizeInPoints = 1;
+
             // TODO: configurable stroke width?
-            g.setStroke(new BasicStroke(1.0f * (float) paintContext.getTemplateInfo().getResolutionInPixelsPerInch() / 72f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g.setStroke(new BasicStroke((float) UnitConversionUtils.convertUnit(Unit.Point, Unit.Pixel, strokeSizeInPoints, paintContext.getResolutionInPixelsPerInch()), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g.setPaint(outlineColour);
             g.draw(shape);
             g.setStroke(oldStroke);

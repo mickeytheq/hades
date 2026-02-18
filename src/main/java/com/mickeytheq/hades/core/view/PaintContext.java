@@ -24,8 +24,7 @@ public interface PaintContext {
     // used to select quality vs speed
     RenderTarget getRenderTarget();
 
-    // the template information to render
-    TemplateInfo getTemplateInfo();
+    int getResolutionInPixelsPerInch();
 
     // switches the painting context to only rendering inside the bleed/on to the card content OR including the bleed
     //
@@ -51,12 +50,12 @@ public interface PaintContext {
     void paintTemplate();
 
     default int millimetersToPixels(double millimeters) {
-        return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getTemplateInfo().getResolutionInPixelsPerInch() + 0.5);
+        return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getResolutionInPixelsPerInch() + 0.5);
     }
 
     // creates a Rectangle in pixel units for the given input rectangle which may be in other units
     default Rectangle toPixelRect(RectangleEx rectangleEx) {
-        return rectangleEx.toPixelRectangle(getTemplateInfo().getResolutionInPixelsPerInch());
+        return rectangleEx.toPixelRectangle(getResolutionInPixelsPerInch());
     }
 
     //

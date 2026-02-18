@@ -31,11 +31,6 @@ public class DefaultPaintContext implements PaintContext {
     }
 
     @Override
-    public TemplateInfo getTemplateInfo() {
-        return templateInfo;
-    }
-
-    @Override
     public Graphics2D getGraphics() {
         return currentGraphics2D;
     }
@@ -66,10 +61,15 @@ public class DefaultPaintContext implements PaintContext {
 
         StopWatch stopWatch = StopWatch.createStarted();
 
-        getTemplateInfo().paintTemplate(graphics2D);
+        templateInfo.paintTemplate(graphics2D);
 
         if (logger.isTraceEnabled())
             logger.trace("Painting of template completed in " + stopWatch.getTime() + "ms");
+    }
+
+    @Override
+    public int getResolutionInPixelsPerInch() {
+        return templateInfo.getResolutionInPixelsPerInch();
     }
 
     @Override
