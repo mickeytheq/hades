@@ -5,6 +5,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
+import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -66,8 +67,10 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
      * performance issues
      */
     private void createEditorAndViewerForCardFaceView(JTabbedPane editorTabbedPane, String previewLabel, CardFaceView cardFaceView) {
+        int resolutionPpi = GlobalConfigurations.get().getCardPreviewConfiguration().getDesiredPreviewResolutionPpi();
+
         // creates the viewer to show the rendered card face in the preview pane
-        CardFaceViewViewer viewer = new CardFaceViewViewer(cardFaceView);
+        CardFaceViewViewer viewer = new CardFaceViewViewer(cardFaceView, resolutionPpi);
         previewPane.addTab(previewLabel, viewer);
 
         // creates editors to change the card face details and attaches the viewer to be told when something changes
