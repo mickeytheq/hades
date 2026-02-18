@@ -509,12 +509,12 @@ public class QuickCardView {
             editTabbedPane.removeAll();
 
             // create renderers
-            CardFaceViewViewer frontCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getFrontFaceView(), 600);
+            CardFaceViewViewer frontCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getFrontFaceView(), 600, 0);
             drawTabbedPane.addTab("Front", frontCardFaceViewViewer);
 
             CardFaceViewViewer backCardFaceViewViewer = null;
             if (currentCardView.hasBack()) {
-                backCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getBackFaceView(), 600);
+                backCardFaceViewViewer = new CardFaceViewViewer(currentCardView.getBackFaceView(), 600, 0);
                 drawTabbedPane.addTab("Back", backCardFaceViewViewer);
             }
 

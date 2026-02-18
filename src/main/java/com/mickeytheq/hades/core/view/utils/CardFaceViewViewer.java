@@ -21,15 +21,17 @@ public class CardFaceViewViewer extends AbstractViewer {
 
     private final CardFaceView cardFaceView;
     private final int resolutionPpi;
+    private final int desiredBleedMarginInPixels;
 
     private boolean needRefresh = true;
 
     // the rendered image that is cached and re-painted if markChanged is called
     private BufferedImage cachedImage;
 
-    public CardFaceViewViewer(CardFaceView cardFaceView, int resolutionPpi) {
+    public CardFaceViewViewer(CardFaceView cardFaceView, int resolutionPpi, int desiredBleedMarginInPixels) {
         this.cardFaceView = cardFaceView;
         this.resolutionPpi = resolutionPpi;
+        this.desiredBleedMarginInPixels = desiredBleedMarginInPixels;
     }
 
     // override just to adding timing for debugging
@@ -39,6 +41,7 @@ public class CardFaceViewViewer extends AbstractViewer {
         super.paintComponent(g1);
 
         drawLabel((Graphics2D) g1, resolutionPpi + " PPI", 2);
+        drawLabel((Graphics2D) g1, desiredBleedMarginInPixels + " target bleed pixels", 3);
 
         logger.trace("paintComponent of " + CardFaceViewViewer.class.getSimpleName() + " completed in " + stopWatch.getTime() + "ms");
     }
@@ -49,7 +52,7 @@ public class CardFaceViewViewer extends AbstractViewer {
             return cachedImage;
 
         StopWatch stopWatch = StopWatch.createStarted();
-        cachedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, resolutionPpi);
+        cachedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, resolutionPpi, desiredBleedMarginInPixels);
         logger.trace("Painted card face view to local buffer in " + stopWatch.getTime() + "ms");
 
         needRefresh = false;

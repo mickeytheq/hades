@@ -5,6 +5,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
+import com.mickeytheq.hades.core.global.configuration.CardPreviewConfiguration;
 import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
@@ -13,6 +14,8 @@ import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.util.shape.Unit;
+import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
@@ -67,10 +70,16 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
      * performance issues
      */
     private void createEditorAndViewerForCardFaceView(JTabbedPane editorTabbedPane, String previewLabel, CardFaceView cardFaceView) {
-        int resolutionPpi = GlobalConfigurations.get().getCardPreviewConfiguration().getDesiredPreviewResolutionPpi();
+        CardPreviewConfiguration cardPreviewConfiguration = GlobalConfigurations.get().getCardPreviewConfiguration();
+
+        int resolutionPpi = cardPreviewConfiguration.getDesiredPreviewResolutionPpi();
+
+        // set the desired bleed margin. this is zero if showing bleed margin is disabled
+        int desiredBleedMarginInPixels = cardPreviewConfiguration.isShowBleedMargin() ?
+                (int)UnitConversionUtils.convertUnit(Unit.Point, Unit.Pixel, cardPreviewConfiguration.getDesiredBleedMarginInPoints(), resolutionPpi) : 0;
 
         // creates the viewer to show the rendered card face in the preview pane
-        CardFaceViewViewer viewer = new CardFaceViewViewer(cardFaceView, resolutionPpi);
+        CardFaceViewViewer viewer = new CardFaceViewViewer(cardFaceView, resolutionPpi, desiredBleedMarginInPixels);
         previewPane.addTab(previewLabel, viewer);
 
         // creates editors to change the card face details and attaches the viewer to be told when something changes

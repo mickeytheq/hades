@@ -73,14 +73,14 @@ public class PerformanceTests {
         CardView cardView = CardFaces.createCardView(card, projectContext);
 
         // clear out cold start issues
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
 
         StopWatch stopWatch = StopWatch.createStarted();
 
         for (int i = 0; i < iterations; i++) {
-            CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+            CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
         }
 
         stopWatch.stop();

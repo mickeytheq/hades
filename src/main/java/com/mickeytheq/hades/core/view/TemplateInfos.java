@@ -1,9 +1,12 @@
 package com.mickeytheq.hades.core.view;
 
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import com.mickeytheq.hades.util.shape.Unit;
+import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.function.Supplier;
 
 public class TemplateInfos {
     private static final int BLEED_600_PIXELS = 72;
@@ -14,10 +17,10 @@ public class TemplateInfos {
 
     public static TemplateInfo createStandard600(String resourcePath, CardFaceOrientation orientation) {
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, resourcePath);
+            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
         else {
-            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, resourcePath);
+            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
     }
 
@@ -26,10 +29,10 @@ public class TemplateInfos {
 
     public static TemplateInfo createStandard300(String resourcePath, CardFaceOrientation orientation) {
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, resourcePath);
+            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
         else {
-            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, resourcePath);
+            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
     }
 
@@ -38,14 +41,14 @@ public class TemplateInfos {
         private final int ppi;
         private final int bleedMarginInPixels;
         private final double bleedMarginInPoints;
-        private final String resourcePath;
+        private final Supplier<BufferedImage> bufferedImageSupplier;
 
-        public TemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, String resourcePath) {
+        public TemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier) {
             this.dimension = dimension;
             this.ppi = ppi;
             this.bleedMarginInPixels = bleedMarginInPixels;
             this.bleedMarginInPoints = bleedMarginInPoints;
-            this.resourcePath = resourcePath;
+            this.bufferedImageSupplier = bufferedImageSupplier;
         }
 
         @Override
@@ -74,8 +77,37 @@ public class TemplateInfos {
         }
 
         @Override
-        public BufferedImage getTemplateImage() {
-            return ImageUtils.loadImageReadOnly(resourcePath);
+        public void paintTemplate(Graphics2D graphics2D) {
+            graphics2D.drawImage(bufferedImageSupplier.get(), 0, 0, getWidthInPixels(), getHeightInPixels(), null);
+        }
+
+        @Override
+        public TemplateInfo withBleedMarginInPixels(int desiredBleedMarginInPixels) {
+            // bound the desired bleed margin with the available bleed margin on the upper end and 0 on the lower end
+            int targetBleedInPixels = Math.min(desiredBleedMarginInPixels, bleedMarginInPixels);
+            targetBleedInPixels = Math.max(0, targetBleedInPixels);
+
+            // calculate the offset into the raw template image that should be drawn when the template is painted
+            // this is just the difference between the available template bleed margin and the desired bleed margin
+            int drawingOffset = bleedMarginInPixels - targetBleedInPixels;
+
+            int newTemplateWidth = getWidthInPixelsWithoutBleed() + targetBleedInPixels * 2;
+            int newTemplateHeight = getHeightInPixelsWithoutBleed() + targetBleedInPixels * 2;
+
+            // provide a new template info with the new values it will act as if it is a template with the desired bleed
+            // margin with the same PPI and the painting logic draw accordingly
+            return new TemplateInfoImpl(new Dimension(newTemplateWidth, newTemplateHeight), ppi,
+                    targetBleedInPixels, UnitConversionUtils.convertUnit(Unit.Pixel, Unit.Point, targetBleedInPixels, ppi),
+                    bufferedImageSupplier) {
+                @Override
+                public void paintTemplate(Graphics2D graphics2D) {
+                    // draw the template image into the top corner of the destination but offsetting the source rectangle
+                    // by the amount of bleed margin that has been removed
+                    // note that this drawImage() method uses specifies the top left and bottom right corners instead of top left and width/height
+                    graphics2D.drawImage(bufferedImageSupplier.get(), 0, 0, newTemplateWidth, newTemplateHeight,
+                            drawingOffset, drawingOffset, drawingOffset + newTemplateWidth, drawingOffset + newTemplateHeight, null);
+                }
+            };
         }
     }
 }

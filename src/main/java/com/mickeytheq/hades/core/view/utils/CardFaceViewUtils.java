@@ -127,13 +127,15 @@ public class CardFaceViewUtils {
         }
     }
 
-    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi) {
+    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int bleedMarginInPixels) {
         Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(ppi);
 
         if (!templateInfoOptional.isPresent())
             return createMissingTemplateImage(cardFaceView, ppi);
 
-        TemplateInfo templateInfo = templateInfoOptional.get();
+        TemplateInfo sourceTemplateInfo = templateInfoOptional.get();
+
+        TemplateInfo templateInfo = sourceTemplateInfo.withBleedMarginInPixels(bleedMarginInPixels);
 
         BufferedImage bufferedImage = new BufferedImage(templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = bufferedImage.createGraphics();

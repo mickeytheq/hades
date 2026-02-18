@@ -29,5 +29,7 @@ public interface TemplateInfo {
 
     double getAvailableBleedMarginInPoints();
 
-    BufferedImage getTemplateImage();
+    void paintTemplate(Graphics2D graphics2D);
+
+    TemplateInfo withBleedMarginInPixels(int bleedMarginInPixels);
 }

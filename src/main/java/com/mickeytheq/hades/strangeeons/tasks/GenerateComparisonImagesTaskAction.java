@@ -114,11 +114,11 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
         Card card = CardIO.readCard(cardPath, projectContext);
         CardView cardView = CardFaces.createCardView(card, projectContext);
 
-        BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi);
+        BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi, 0);
 
         BufferedImage hadesBackImage = null;
         if (cardView.hasBack())
-            hadesBackImage = CardFaceViewUtils.paintCardFace(cardView.getBackFaceView(), renderTarget, dpi);
+            hadesBackImage = CardFaceViewUtils.paintCardFace(cardView.getBackFaceView(), renderTarget, dpi, 0);
 
         return Lists.newArrayList(hadesFrontImage, hadesBackImage);
     }

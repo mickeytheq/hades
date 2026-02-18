@@ -44,7 +44,7 @@ public class CardFaceViewComponent extends JPanel {
         if (cardFaceView == null)
             return;
 
-        BufferedImage bufferedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, templateInfo.getResolutionInPixelsPerInch());
+        BufferedImage bufferedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, templateInfo.getResolutionInPixelsPerInch(), 0);
 
         int x = (getWidth() - bufferedImage.getWidth()) / 2;
         int y = (getHeight() - bufferedImage.getHeight()) / 2;

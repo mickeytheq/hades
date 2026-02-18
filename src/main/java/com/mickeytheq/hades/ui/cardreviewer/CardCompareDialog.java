@@ -142,7 +142,7 @@ public class CardCompareDialog extends DialogEx {
         ProjectContext projectContext = StandardProjectContext.getContextForContentPath(currentPath);
         Card card = CardIO.readCard(currentPath, projectContext);
         CardView cardView = CardFaces.createCardView(card, projectContext);
-        BufferedImage hadesImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300);
+        BufferedImage hadesImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
 
         // load the equivalent SE card
         Path relativePath = hadesRoot.relativize(currentPath);
