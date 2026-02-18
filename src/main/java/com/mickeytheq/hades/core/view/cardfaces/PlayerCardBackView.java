@@ -23,7 +23,7 @@ public class PlayerCardBackView extends BaseCardFaceView<PlayerCardBack> {
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/backs/player_card_back.png", CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600("/templates/backs/player_card_back", CardFaceOrientation.Portrait);
     }
 
     @Override

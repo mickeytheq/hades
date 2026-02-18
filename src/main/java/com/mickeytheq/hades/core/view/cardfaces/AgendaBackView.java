@@ -47,7 +47,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/act_agenda/agenda_back.png", CardFaceOrientation.Landscape));
+        return TemplateInfos.createStandard300And600("/templates/act_agenda/agenda_back", CardFaceOrientation.Landscape);
     }
 
     @Override
@@ -119,6 +119,8 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
     public void paint(PaintContext paintContext) {
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // title - vertical orientation
         commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

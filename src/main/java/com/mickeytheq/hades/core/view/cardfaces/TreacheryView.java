@@ -20,9 +20,8 @@ import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
-    private static final String STANDARD_TEMPLATE_RESOURCE = "/templates/treachery/treachery.png";
-    private static final String STANDARD_TEMPLATE_RESOURCE_600 = "/templates/treachery/treachery_600.png";
-    private static final String WEAKNESS_TEMPLATE_RESOURCE = "/templates/treachery/weakness_treachery.png";
+    private static final String STANDARD_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery";
+    private static final String WEAKNESS_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/weakness_treachery";
     private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
@@ -50,7 +49,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -102,20 +101,20 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
+        String resourcePathPrefix;
         if (getModel().getTreacheryFieldsModel().getWeaknessType() != null) {
-            return Lists.newArrayList(TemplateInfos.createStandard300(WEAKNESS_TEMPLATE_RESOURCE, CardFaceOrientation.Portrait));
+            resourcePathPrefix = WEAKNESS_TEMPLATE_RESOURCE_PREFIX;
         } else {
-            return Lists.newArrayList(
-                    TemplateInfos.createStandard300(STANDARD_TEMPLATE_RESOURCE, CardFaceOrientation.Portrait),
-                    TemplateInfos.createStandard600(STANDARD_TEMPLATE_RESOURCE_600, CardFaceOrientation.Portrait)
-            );
+            resourcePathPrefix = STANDARD_TEMPLATE_RESOURCE_PREFIX;
         }
+
+        return TemplateInfos.createStandard300And600(resourcePathPrefix, CardFaceOrientation.Portrait);
     }
 
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
-//        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
+        portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         // draw the template
         paintContext.paintTemplate();

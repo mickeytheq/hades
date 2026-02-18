@@ -37,7 +37,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
             throw new RuntimeException("Investigator Back card face is only supported when the front is an investigator");
         }
 
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -113,6 +113,8 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
 
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // titles
         PaintUtils.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), getInvestigatorFront().getModel().getCommonCardFieldsModel().getTitle(), getInvestigatorFront().getModel().getCommonCardFieldsModel().isUnique());

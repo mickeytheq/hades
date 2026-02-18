@@ -1,11 +1,13 @@
 package com.mickeytheq.hades.core.view;
 
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.util.shape.Unit;
 import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class TemplateInfos {
@@ -15,7 +17,9 @@ public class TemplateInfos {
 
     private static final double BLEED_600_POINTS = BLEED_600_PIXELS / 600.0 * 72.0;
 
-    public static TemplateInfo createStandard600(String resourcePath, CardFaceOrientation orientation) {
+    public static TemplateInfo createStandard600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation orientation) {
+        String resourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 600, "png");
+
         if (orientation == CardFaceOrientation.Portrait) {
             return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
@@ -27,13 +31,40 @@ public class TemplateInfos {
     private static final Dimension PORTRAIT_300 = new Dimension(750, 1050);
     private static final Dimension LANDSCAPE_300 = new Dimension(1050, 750);
 
-    public static TemplateInfo createStandard300(String resourcePath, CardFaceOrientation orientation) {
+    public static TemplateInfo createStandard300(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation orientation) {
+        String templateResourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 300, "png");
+
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         }
         else {
-            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         }
+    }
+
+    // the convention for resource paths is <prefix>_<ppi>.png
+    private static String getTemplateResourcePath(String resourcePathPrefixWithoutPpiOrExtension, int ppi, String extension) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(resourcePathPrefixWithoutPpiOrExtension);
+
+        // TODO: update when _300 versions are generated to always add the ppi
+        if (ppi == 600) {
+            sb.append("_");
+            sb.append(ppi);
+        }
+
+        sb.append(".");
+        sb.append(extension);
+
+        return sb.toString();
+    }
+
+    // convience method to generate the standard 300 and 600 templates
+    public static List<TemplateInfo> createStandard300And600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation cardFaceOrientation) {
+        return Lists.newArrayList(
+                createStandard300(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation),
+                createStandard600(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation)
+        );
     }
 
     static class TemplateInfoImpl implements TemplateInfo {

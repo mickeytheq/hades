@@ -47,7 +47,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -195,6 +195,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         // special handling for fading
         paintArtPortrait(paintContext);
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
 

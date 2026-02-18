@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class QuickCardView {
-    private static final int RESOLUTION_PPI = 300;
-    private static final int DESIRED_BLEED_IN_PIXELS = 0;
+    private static final int RESOLUTION_PPI = 600;
+    private static final int DESIRED_BLEED_IN_PIXELS = 72;
 
     public static void main(String[] args) {
         System.setProperty("log4j.configurationFile", "log4j2-console-only.json");
@@ -68,16 +68,16 @@ public class QuickCardView {
 
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
-        asset();
+//        asset();
 //            investigator();
 //        event();
 //        skill();
-//        treacheryTreachery();
+//        treachery();
 //            location();
 //            random();
 //            agenda();
 //            act();
-//            enemy();
+            enemy();
 //            scenarioReference();
 //            story();
         });
@@ -259,7 +259,7 @@ public class QuickCardView {
         displayEditor(card);
     }
 
-    private void treacheryTreachery() {
+    private void treachery() {
         Treachery model = new Treachery();
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");

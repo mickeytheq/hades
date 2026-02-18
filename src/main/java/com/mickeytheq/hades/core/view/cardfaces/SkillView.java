@@ -38,7 +38,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), false);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -58,16 +58,12 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
     // TODO: story_skill template is missing
-    private String getTemplateResource() {
-        return "/templates/skill/skill_" + getTemplateName() + ".png";
-    }
-
-    private String getTemplateName() {
-        return playerCardFieldsView.getTemplateName();
+    private String getTemplateResourcePrefix() {
+        return "/templates/skill/skill_" + playerCardFieldsView.getTemplateName();
     }
 
     @Override
@@ -142,6 +138,8 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_SKILL).toUpperCase());

@@ -57,7 +57,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -160,10 +160,10 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
-    private String getTemplateResource() {
+    private String getTemplateResourcePrefix() {
         StringBuilder sb = new StringBuilder();
         sb.append("/templates/enemy/enemy");
 
@@ -188,8 +188,6 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
             sb.append("_subtitle");
         }
 
-        sb.append(".png");
-
         return sb.toString();
     }
 
@@ -200,6 +198,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_ENEMY).toUpperCase());

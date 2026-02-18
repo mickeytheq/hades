@@ -43,9 +43,14 @@ public class RectangleEx {
 
     public Rectangle toPixelRectangle(double dpi) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
+        return new Rectangle((int) (x * conversionRatio + 0.5), (int) (y * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
+    }
+
+    public Dimension toPixelDimension(double dpi) {
+        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
 
         // add 0.5 as this has the same effect as rounding to the nearest whole number with the int cast
-        return new Rectangle((int) (x * conversionRatio + 0.5), (int) (y * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
+        return new Dimension((int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
     }
 
     public enum XRelativeTo {

@@ -40,7 +40,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
         playerCardFieldsView = new PlayerCardFieldsView(getModel().getPlayerCardFieldsModel(), true);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -60,15 +60,11 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
-    private String getTemplateResource() {
-        return "/templates/event/event_" + getTemplateName() + ".png";
-    }
-
-    private String getTemplateName() {
-        return playerCardFieldsView.getTemplateName();
+    private String getTemplateResourcePrefix() {
+        return "/templates/event/event_" + playerCardFieldsView.getTemplateName();
     }
 
     @Override
@@ -142,6 +138,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_EVENT).toUpperCase());

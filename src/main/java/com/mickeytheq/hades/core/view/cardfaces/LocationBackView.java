@@ -28,7 +28,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     @Override
     public void initialiseView() {
         commonCardFieldsView = new CommonCardFieldsView(getModel().getCommonCardFieldsModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
         locationFieldsView = new LocationFieldsView(getModel().getLocationFieldsModel(), this);
     }
 
@@ -39,10 +39,10 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
-    private String getTemplateResource() {
+    private String getTemplateResourcePrefix() {
         String templatePath = "/templates/location/location_back";
 
         boolean hasSubtitle = !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle());
@@ -50,8 +50,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
         if (hasSubtitle) {
             templatePath = templatePath + "_subtitle";
         }
-
-        templatePath = templatePath + ".png";
 
         return templatePath;
     }
@@ -117,6 +115,8 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
         portraitView.paintArtPortrait(paintContext, paintContext.toPixelRect(ART_PORTRAIT_DRAW_REGION));
 
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 

@@ -39,7 +39,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
         actCommonFieldsView = new StorySectionView(getModel().getStorySectionModel());
         collectionView = new CollectionView(getModel().getCollectionModel(), this);
         encounterSetView = new EncounterSetView(getModel().getEncounterSetModel(), this);
-        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION.toPixelRectangle(CardFaceViewUtils.HARDCODED_DPI).getSize());
+        portraitView = PortraitView.createWithDefaultImage(getModel().getPortraitModel(), this, ART_PORTRAIT_DRAW_REGION);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/act_agenda/act.png", CardFaceOrientation.Landscape));
+        return TemplateInfos.createStandard300And600("/templates/act_agenda/act", CardFaceOrientation.Landscape);
     }
 
     @Override
@@ -140,6 +140,8 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
 
         // draw the template
         paintContext.paintTemplate();
+
+        paintContext.setRenderingIncludeBleedRegion(false);
 
         // title
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));

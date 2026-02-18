@@ -102,6 +102,8 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         // draw the template
         paintContext.paintTemplate();
 
+        paintContext.setRenderingIncludeBleedRegion(false);
+
         commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         // unlike normal cards the footer fields such as copyright/collection info are in black not white

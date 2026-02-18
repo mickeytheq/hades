@@ -33,7 +33,7 @@ public interface PaintContext {
     // - the drawing region is the entire template including bleed
     //
     // when called with false
-    // - the drawing region is the portion of the template excluding the bleed bleed
+    // - the drawing region is the portion of the template excluding the bleed margin
     // - the origin (0,0) becomes the top left corner of the template as if it had no bleed, e.g. what actually makes up the card content
     // - any drawing outside the card content/into the bleed will be ignored
     //

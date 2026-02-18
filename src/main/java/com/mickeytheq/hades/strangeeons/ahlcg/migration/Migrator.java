@@ -288,13 +288,6 @@ public class Migrator {
         public SettingsAccessor getSettingsAccessor() {
             return settingsAccessor;
         }
-
-        @Override
-        public double convertPixelSize(double pixelSize) {
-            // for now this is a simple doubling but may need to be more sophisticated if the ratio between
-            // input and output changes or is dynamic, e.g. Hades/Strange Eons changing template size and/or supporting different resolutions
-            return pixelSize * PIXEL_MULTIPLIER;
-        }
     }
 
     static class SettingsAccessorImpl implements SettingsAccessor {

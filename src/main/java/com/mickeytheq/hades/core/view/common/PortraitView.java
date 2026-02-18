@@ -41,8 +41,25 @@ import java.util.*;
 // which has all the persistent state
 //
 // some of the code was lifted from Strange Eons and a lot of unused elements stripped out
+//
+// one important element is that portraits are used in two ways
+// 1 - editing which is positioning an image within the available draw space
+// 2 - painting the portrait
+// there is a challenge with (1) because this requires positioning an element defined in pixels (the art image) in a space that
+// is not defined in pixels (the draw region on the card). these two are only consistent for a given resolution PPI so that the
+// latter can be translated to a pixel value.
+// because there can be multiple templates used with different resolutions,e.g. 300 or 600 PPI if portraits are configured,
+// this means that a portrait will only paint (2) correctly sized and positioned if the resolution used to position it is the same
+// as the one painting it.
+// to solve this we adopt a 'default' PPI which is used for (1) above and set the pan/scale values accordingly. when painting
+// we scale those values to the painting PPI. for example if the default PPI was 300 and the painting PPI was 600 the pan/scale values
+// would be doubled
 public class PortraitView {
     private static final Logger logger = LogManager.getLogger(PortraitView.class);
+
+    // the PPI used as noted above to define the image draw region for the purposes of editing/positioning the art image
+    // note that this value CANNOT be changed unless migration occurs to adjust the existing portrait values to match
+    public static final int ASSUMED_PERSISTENCE_PPI = 600;
 
     public static final URL BLANK_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/resources/spacers/empty1x1.png");
     public static final URL DEFAULT_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/portrait/DefaultTexture.jp2");
@@ -83,14 +100,14 @@ public class PortraitView {
 
     // create a new PortraitView with the given model and draw dimension which defaults to a blank image when
     // no source is provided by the model
-    public static PortraitView createWithBlankImage(PortraitModel portraitModel, CardFaceView cardFaceView, Dimension portraitDrawDimension) {
-        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension, BLANK_PORTRAIT_IMAGE_RESOURCE);
+    public static PortraitView createWithBlankImage(PortraitModel portraitModel, CardFaceView cardFaceView, RectangleEx portraitDrawRegion) {
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(ASSUMED_PERSISTENCE_PPI), BLANK_PORTRAIT_IMAGE_RESOURCE);
     }
 
     // create a new PortraitView with the given model and draw dimension which defaults to a standard/default image when
     // no source is provided by the model
-    public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, Dimension portraitDrawDimension) {
-        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension, DEFAULT_PORTRAIT_IMAGE_RESOURCE);
+    public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, RectangleEx portraitDrawRegion) {
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
     private void installDefaultImage() {
@@ -263,6 +280,12 @@ public class PortraitView {
         double panX = portraitModel.getPanX();
         double panY = portraitModel.getPanY();
         double scale = portraitModel.getScale();
+
+        // perform the scaling as noted above by apply a scaling factor to account for the default vs painting PPI
+        double resolutionScalingFactor = (double)paintContext.getResolutionInPixelsPerInch() / ASSUMED_PERSISTENCE_PPI;
+        panX = panX * resolutionScalingFactor;
+        panY = panY * resolutionScalingFactor;
+        scale = scale * resolutionScalingFactor;
 
         final double scaledWidth = image.getWidth() * scale;
         final double scaledHeight = image.getHeight() * scale;
