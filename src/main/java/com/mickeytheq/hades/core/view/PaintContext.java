@@ -24,6 +24,7 @@ public interface PaintContext {
     // used to select quality vs speed
     RenderTarget getRenderTarget();
 
+    // returns the resolution being rendered
     int getResolutionInPixelsPerInch();
 
     // switches the painting context to only rendering inside the bleed/on to the card content OR including the bleed
@@ -49,6 +50,7 @@ public interface PaintContext {
     // paints the template image onto the Graphics2D of this PaintContext
     void paintTemplate();
 
+    // convenience method to convert millimeters to pixels using the context's resolution
     default int millimetersToPixels(double millimeters) {
         return (int)Math.round(millimeters / PaintUtils.MILLIMETERS_PER_INCH * getResolutionInPixelsPerInch() + 0.5);
     }
