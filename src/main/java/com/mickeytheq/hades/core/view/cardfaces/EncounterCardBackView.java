@@ -1,12 +1,9 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
-import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
 import com.mickeytheq.hades.core.view.*;
-import com.mickeytheq.hades.core.view.utils.ImageUtils;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.ENCOUNTERCARDBACK)
@@ -23,7 +20,7 @@ public class EncounterCardBackView extends BaseCardFaceView<EncounterCardBack> {
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/backs/encounter_card_back.png", CardFaceOrientation.Portrait));
+        return TemplateInfos.createStandard300And600("/templates/backs/encounter_card_back", CardFaceOrientation.Portrait);
     }
 
     @Override
