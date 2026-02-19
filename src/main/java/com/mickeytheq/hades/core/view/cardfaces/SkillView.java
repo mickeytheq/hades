@@ -34,7 +34,6 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private PortraitView portraitView;
 
     private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.37, 6.77, 61.93, 53.46);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 43.77, 4.74, 4.74);
 
     @Override
     public void initialiseView() {
@@ -131,6 +130,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(58.53, 34.37, 2.54);
     private static final RectangleEx ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(53.71, 0, PaintConstants.ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE);
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.BASIC_WEAKNESS_ICON_SIZE);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.ENCOUNTER_SET_ICON_SIZE);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(SkillView::createBodyPageShape));
 
