@@ -157,18 +157,22 @@ public class PlayerCardFieldsView {
     private static final RectangleEx LEVEL_DRAW_REGION = RectangleEx.millimetres(2.54, 6.43, 7.79, 3.73);
     private static final RectangleEx LEVEL_CIRCLE_DRAW_REGION = RectangleEx.millimetres(1.75, 0.95, 10.25, 10.25);
 
-    public void paintLevel(PaintContext paintContext) {
+    public void paintLevelCircleAndPips(PaintContext paintContext) {
         String resourceName = "/overlays/level_circle/" + getLevelCircleOverlayResourcePrefix();
 
         resourceName = resourceName + ".png";
 
-        ImageUtils.drawImage(paintContext.getGraphics(),
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(),
                 ImageUtils.loadImageReadOnly(resourceName),
                 paintContext.toPixelRect(LEVEL_CIRCLE_DRAW_REGION));
 
         // draw the level pips
+        paintLevelPips(paintContext);
+    }
+
+    public void paintLevelPips(PaintContext paintContext) {
         if (getModel().hasLevel()) {
-            ImageUtils.drawImage(paintContext.getGraphics(),
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(),
                     ImageUtils.loadImageReadOnly("/overlays/level_" + getModel().getLevel() + ".png"),
                     paintContext.toPixelRect(LEVEL_DRAW_REGION));
         }

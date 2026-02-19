@@ -105,10 +105,6 @@ public class ImageUtils {
         }
     }
 
-    public static void drawImage(Graphics2D g, BufferedImage bufferedImage, Rectangle rectangle) {
-        g.drawImage(bufferedImage, (int)rectangle.getX(), (int)rectangle.getY(), (int)rectangle.getWidth(), (int)rectangle.getHeight(), null);
-    }
-
     public static final URL BASIC_WEAKNESS_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-BasicWeakness.png");
 
     private static class SvgImageKey {

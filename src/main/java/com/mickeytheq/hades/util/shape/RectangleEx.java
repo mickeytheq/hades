@@ -68,16 +68,19 @@ public class RectangleEx {
     // creates a new RectangleEx with the same units as this one where the
     // position of the new rectangle is centred on this rectangle
     public RectangleEx centreOn(double newWidth, double newHeight) {
-        double centreExistingX;
+        double newX;
 
-        if (xRelativeTo == XRelativeTo.Left)
-            centreExistingX = x + width / 2;
-        else
-            centreExistingX = UNDEFINED;
+        if (xRelativeTo == XRelativeTo.Left) {
+            double centreExistingX = x + width / 2;
+            newX = centreExistingX - newWidth / 2;
+        }
+        else {
+            newX = UNDEFINED;
+        }
 
         double centreExistingY = y + height / 2;
 
-        return new RectangleEx(unit, centreExistingX, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
+        return new RectangleEx(unit, newX, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
     }
 
     public Rectangle toPixelRectangle(double ppi, Rectangle templateRegionInPixels) {

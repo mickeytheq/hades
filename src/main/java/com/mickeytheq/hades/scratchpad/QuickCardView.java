@@ -70,8 +70,8 @@ public class QuickCardView {
 //            shadow();
 //            investigator();
 //            asset();
-        event();
-//        skill();
+//        event();
+        skill();
 //        treachery();
 //            location();
 //            random();

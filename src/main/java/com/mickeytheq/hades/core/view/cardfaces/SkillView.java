@@ -13,6 +13,7 @@ import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.37, 6.77, 58.93, 50.46);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.37, 6.77, 61.93, 53.46);
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 43.77, 4.74, 4.74);
 
     @Override
@@ -64,7 +65,6 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
-    // TODO: story_skill template is missing
     private String getTemplateResourcePrefix() {
         return "/templates/skill/skill_" + playerCardFieldsView.getDefaultResourcePrefix();
     }
@@ -124,13 +124,13 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.56, 10.67, 6.43, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(12.36, 2.71, 49.78, 4.91);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(6.27, 59.44, 50.97, 24.55);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(6.27, 62.65, 50.97, 21.17);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 58.93, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(54.86, 2.20, 5.08, 5.08);
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(52.83, 0.51, 9.14, 8.97);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.36, 10.57, 6.43, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(12.36, 2.41, 49.78, 4.91);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(6.27, 59.00, 50.97, 24.55);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(6.27, 62.15, 50.97, 21.17);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(58.53, 34.37, 2.54);
+    private static final RectangleEx ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(53.71, 0, PaintConstants.ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.BASIC_WEAKNESS_ICON_SIZE);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(SkillView::createBodyPageShape));
 
@@ -158,12 +158,15 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
         portraitView.paintArtist(paintContext);
 
+        playerCardFieldsView.paintEncounterSetIconCircle(paintContext, paintContext.toPixelRect(ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION));
+
         paintEncounterContent(paintContext);
 
         // weakness labels
         paintWeaknessContent(paintContext);
 
-        playerCardFieldsView.paintLevel(paintContext);
+        paintSkillOverlay(paintContext);
+        playerCardFieldsView.paintLevelPips(paintContext);
 
         playerCardFieldsView.paintSkillIcons(paintContext);
     }
@@ -181,14 +184,8 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
         if (!getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails())
             return;
 
-        paintEncounterOrBasicWeaknessOverlay(paintContext);
-
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
-    }
-
-    private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
-        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -198,9 +195,22 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
-            paintEncounterOrBasicWeaknessOverlay(paintContext);
-            ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
+    }
+
+    private static final DimensionEx SKILL_OVERLAY_SIZE = DimensionEx.millimetres(10.245, 10.245);
+    private static final RectangleEx SKILL_OVERLAY_DRAW_REGION = RectangleEx.millimetres(1.26, 0.95, SKILL_OVERLAY_SIZE);
+
+    private void paintSkillOverlay(PaintContext paintContext) {
+        String resource = "/overlays/level_circle/skill";
+        if (!getModel().getPlayerCardFieldsModel().hasLevel()) {
+            resource = resource + "_unleveled";
+        }
+
+        resource = resource + ".png";
+
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(resource), paintContext.toPixelRect(SKILL_OVERLAY_DRAW_REGION));
     }
 
     private static PageShape createBodyPageShape(int ppi) {
