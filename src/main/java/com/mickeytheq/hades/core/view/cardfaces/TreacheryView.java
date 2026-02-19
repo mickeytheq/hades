@@ -20,7 +20,7 @@ import java.util.List;
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
     private static final String STANDARD_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery";
-    private static final String WEAKNESS_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/weakness_treachery";
+    private static final String WEAKNESS_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery_weakness";
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
@@ -77,7 +77,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
         weaknessTypeEditor.setSelectedItem(getModel().getTreacheryFieldsModel().getWeaknessType());
 
-        JPanel generalPanel = MigLayoutUtils.createTitledPanel("General");
+        JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
 
         commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false, false);
 
