@@ -68,7 +68,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private String getTemplateResourcePrefix() {
-        return "/templates/event/event_" + playerCardFieldsView.getTemplateName();
+        return "/templates/event/event_" + playerCardFieldsView.getDefaultResourcePrefix();
     }
 
     @Override

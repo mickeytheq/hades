@@ -66,7 +66,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
     // TODO: story_skill template is missing
     private String getTemplateResourcePrefix() {
-        return "/templates/skill/skill_" + playerCardFieldsView.getTemplateName();
+        return "/templates/skill/skill_" + playerCardFieldsView.getDefaultResourcePrefix();
     }
 
     @Override

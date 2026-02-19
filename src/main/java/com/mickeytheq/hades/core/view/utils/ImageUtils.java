@@ -3,6 +3,8 @@ package com.mickeytheq.hades.core.view.utils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.mickeytheq.hades.util.svg.SvgUtils;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,15 +13,25 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 
 public class ImageUtils {
     private static final LoadingCache<URL, BufferedImage> IMAGE_CACHE;
+    private static final LoadingCache<SvgImageKey, BufferedImage> SVG_IMAGE_CACHE;
 
     static {
         IMAGE_CACHE = CacheBuilder.newBuilder()
                 .softValues()
                 .build(CacheLoader.from(ImageUtils::loadImageWithNoCaching));
+
+        // the svg image cache needs to key on width/height as images are scaled from the SVG raw
+        // TODO: instead of doing the scaling here could instead have the SVG document loaded here and
+        // TODO: return a container instead of a BufferedImage. the container would then perform the scaling as needed
+        SVG_IMAGE_CACHE = CacheBuilder.newBuilder()
+                .softValues()
+                .build(CacheLoader.from(ImageUtils::loadSvgImageWithNoCachingUsingKey));
     }
 
     public static final Image HADES_PURPLE_H_IMAGE = ImageUtils.loadImageReadOnly("/icons/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH);
@@ -46,9 +58,16 @@ public class ImageUtils {
         if (urlToImage == null)
             throw new NullPointerException("URL passed to loadImage() was null");
 
-        BufferedImage bufferedImage = IMAGE_CACHE.getUnchecked(urlToImage);
+        return IMAGE_CACHE.getUnchecked(urlToImage);
+    }
 
-        return bufferedImage;
+    public static BufferedImage loadSvgImageReadOnly(String absoluteResourcePath, int width, int height) {
+        URL resourceUrl = ImageUtils.class.getResource(absoluteResourcePath);
+
+        if (resourceUrl == null)
+            throw new RuntimeException("Image at absolute resource path '" + absoluteResourcePath + "' does not exist");
+
+        return SVG_IMAGE_CACHE.getUnchecked(new SvgImageKey(resourceUrl, width, height));
     }
 
     public static BufferedImage loadImageWritable(String absoluteResourcePath) {
@@ -74,10 +93,58 @@ public class ImageUtils {
         }
     }
 
+    private static BufferedImage loadSvgImageWithNoCachingUsingKey(SvgImageKey svgImageKey) {
+        return loadSvgImageWithNoCaching(svgImageKey.getUrl(), svgImageKey.getWidth(), svgImageKey.getHeight());
+    }
+
+    public static BufferedImage loadSvgImageWithNoCaching(URL urlToImage, int width, int height) {
+        try (InputStream inputStream = urlToImage.openStream()) {
+            return SvgUtils.toBufferedImage(inputStream, width, height);
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading SVG image from URL: " + urlToImage.toExternalForm(), e);
+        }
+    }
+
     public static void drawImage(Graphics2D g, BufferedImage bufferedImage, Rectangle rectangle) {
         g.drawImage(bufferedImage, (int)rectangle.getX(), (int)rectangle.getY(), (int)rectangle.getWidth(), (int)rectangle.getHeight(), null);
     }
 
     public static final URL BASIC_WEAKNESS_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-BasicWeakness.png");
 
+    private static class SvgImageKey {
+        private final URL url;
+        private final int width;
+        private final int height;
+
+        public SvgImageKey(URL url, int width, int height) {
+            this.url = url;
+            this.width = width;
+            this.height = height;
+        }
+
+        public URL getUrl() {
+            return url;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) return true;
+            if (!(object instanceof SvgImageKey)) return false;
+            SvgImageKey that = (SvgImageKey) object;
+            return width == that.width && height == that.height && Objects.equals(url, that.url);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(url, width, height);
+        }
+    }
 }

@@ -33,8 +33,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(1.69, 6.77, 60.62, 43.69);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(55.71, 1.69, 5.08, 5.08);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(9.77, 60.62, 43.69);
 
     @Override
     public void initialiseView() {
@@ -69,26 +68,20 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         String templateResource = "/templates/asset/asset_" + getTemplateName();
 
         // assets templates have the subtitle overlay already built in so switch template when a subtitle is present
-        if (canHaveSubtitleTemplate() && !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
+        if (canHaveSubtitle() && !StringUtils.isEmpty(getModel().getCommonCardFieldsModel().getSubtitle()))
             templateResource = templateResource + "_subtitle";
 
         return templateResource;
     }
 
     private String getTemplateName() {
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
-
-        // special template for story weakness instead of the regular weakness
-        if (playerCardType == PlayerCardType.StoryWeakness)
-            return "story_weakness";
-
-        return playerCardFieldsView.getTemplateName();
+        return playerCardFieldsView.getDefaultResourcePrefix();
     }
 
-    private boolean canHaveSubtitleTemplate() {
+    private boolean canHaveSubtitle() {
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
 
-        if (playerCardType == PlayerCardType.StoryWeakness || playerCardType == PlayerCardType.Specialist)
+        if (playerCardType == PlayerCardType.StoryWeakness)
             return false;
 
         return true;
@@ -176,12 +169,10 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.22, 10.84, 6.43, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 2.87, 40.30, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(11.51, 7.35, 40.30, 3.73);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 54.19, 56.90, 22.71);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 50.97, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(55.71, 50.97, 34.37, 2.54);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.32, 10.54, 6.43, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(2.37, 40.30, 4.91);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(7.05, 40.30, 3.73);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(54.19, 56.90, 22.71);
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -196,34 +187,41 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         // label
         PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_ASSET).toUpperCase());
 
-        // title
-        // TODO: for multi-class cards the title position may need to be shifted left somewhat - see Bruiser as an example
-        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
-
         // specialist cards don't support a subtitle
-        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
-        if (playerCardType != PlayerCardType.Specialist && playerCardType != PlayerCardType.StoryWeakness) {
+        if (canHaveSubtitle()) {
             commonCardFieldsView.paintSubtitle(paintContext, paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
         }
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION));
-
-        if (getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails()) {
-            encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
-        }
 
         portraitView.paintArtist(paintContext);
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
-        paintClassSymbols(paintContext);
+        // the multi class painting returns the left most X position occupied by a class symbol
+        int leftMostClassSymbolXPosition = paintMultiClassSymbols(paintContext);
+
+        Rectangle titleDrawRegion = paintContext.toPixelRect(TITLE_DRAW_REGION);
+
+        // if needed - reduce the title draw region by an amount
+        if (getModel().getPlayerCardFieldsModel().isMultiClass()) {
+            // do this by intersecting the default draw region by a region that only goes up to where the class symbols were painted
+            titleDrawRegion = titleDrawRegion.intersection(new Rectangle(0, 0, leftMostClassSymbolXPosition, Integer.MAX_VALUE));
+        }
+
+        commonCardFieldsView.paintTitle(paintContext, titleDrawRegion);
+
+        paintEncounterSetIconCircle(paintContext);
 
         paintWeaknessContent(paintContext);
 
-        playerCardFieldsView.paintLevel(paintContext);
+        if (getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails()) {
+            encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
+            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        }
 
+        playerCardFieldsView.paintLevel(paintContext);
         playerCardFieldsView.paintCost(paintContext);
 
         playerCardFieldsView.paintSkillIcons(paintContext);
@@ -248,34 +246,57 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
             RectangleEx.millimetres(54.02, 0.34, 8.81, 8.81)
     );
 
-    private void paintClassSymbols(PaintContext paintContext) {
+    private int paintMultiClassSymbols(PaintContext paintContext) {
+        if (!getModel().getPlayerCardFieldsModel().isMultiClass())
+            return Integer.MAX_VALUE;
+
         List<PlayerCardClass> playerCardClasses = getModel().getPlayerCardFieldsModel().getPlayerCardClasses();
-
-        // no class symbols if no classes
-        if (playerCardClasses.isEmpty())
-            return;
-
-        // for a single class the symbol is integrated into the template
-        if (playerCardClasses.size() == 1)
-            return;
 
         // we want the symbols right justified on the card but in the correct order as specified by the individual fields
         // so we calculate a number of symbols to skip which should be 0 or 1
         int skipSymbolRegionsCount = 3 - playerCardClasses.size();
 
+        int leftMostEdge = Integer.MAX_VALUE;
+
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png");
 
             Rectangle rectangle = paintContext.toPixelRect(CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount));
 
+            leftMostEdge = Math.min((int)rectangle.getX(), leftMostEdge);
+
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), classSymbol, rectangle);
+        }
+
+        // return the left most x position/edge of the painted class symbols which will be used to confine
+        // the drawing space for the title
+        return leftMostEdge;
+    }
+
+    private static final RectangleEx ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(53.71, 0, 10.245, 10.245);
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(50.87, 34.37, 2.54);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(6.00, 6.00);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(5.08, 5.08);
+
+    // paints the circle to contain encounter set icon or basic weakness icon
+    private void paintEncounterSetIconCircle(PaintContext paintContext) {
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
+
+        // for basic and story weaknesses an overlay is required for the encounter icon or basic weakness icon
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.StoryWeakness) {
+            BufferedImage overlay = ImageUtils.loadImageReadOnly("/overlays/encounter_set_container/weakness.png");
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), overlay, paintContext.toPixelRect(ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION));
+            return;
         }
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
+
+        if (!playerCardType.isWeakness())
+            return;
 
         if (playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());

@@ -14,7 +14,6 @@ import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
-import org.mozilla.javascript.tools.debugger.Dim;
 import resources.Language;
 
 import javax.swing.*;
@@ -42,37 +41,6 @@ public class PlayerCardFieldsView {
     public PlayerCardFieldsView(PlayerCardFieldsModel playerCardFieldsModel, boolean showCost) {
         this.playerCardFieldsModel = playerCardFieldsModel;
         this.showCost = showCost;
-    }
-
-    public String getTemplateName() {
-        PlayerCardType playerCardType = getModel().getCardType();
-        List<PlayerCardClass> cardClasses = getModel().getPlayerCardClasses();
-
-        if (playerCardType == PlayerCardType.Standard) {
-            if (cardClasses.size() > 1)
-                return "multi";
-            else
-                return cardClasses.get(0).name().toLowerCase();
-        }
-
-        switch (playerCardType) {
-            case Neutral:
-                return "neutral";
-
-            case Specialist:
-                return "specialist";
-
-            case Story:
-                return "story";
-
-            case StoryWeakness:
-            case Weakness:
-            case BasicWeakness:
-                return "weakness";
-
-            default:
-                throw new RuntimeException("Unsupported player card type " + playerCardType.name());
-        }
     }
 
     public PlayerCardFieldsModel getModel() {
@@ -186,29 +154,36 @@ public class PlayerCardFieldsView {
     }
 
     private static final RectangleEx LEVEL_DRAW_REGION = RectangleEx.millimetres(2.54, 6.43, 7.79, 3.73);
-    private static final RectangleEx NO_LEVEL_DRAW_REGION = RectangleEx.millimetres(1.35, 0.85, 10.16, 9.82);
+    private static final RectangleEx LEVEL_CIRCLE_DRAW_REGION = RectangleEx.millimetres(1.75, 0.95, 10.25, 10.25);
 
     public void paintLevel(PaintContext paintContext) {
-        PlayerCardType playerCardType = getModel().getCardType();
+        String resourceName = "/overlays/level_circle/" + getLevelCircleOverlayResourcePrefix();
 
-        if (playerCardType == PlayerCardType.Standard || playerCardType == PlayerCardType.Story || playerCardType == PlayerCardType.Neutral || playerCardType == PlayerCardType.Specialist) {
-            Integer level = getModel().getLevel();
-            if (level == null) {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/no_level.png")),
-                        paintContext.toPixelRect(NO_LEVEL_DRAW_REGION));
-            } else if (level == 0) {
-                // do nothing for level 0
-            } else {
-                ImageUtils.drawImage(paintContext.getGraphics(),
-                        ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/level_" + getModel().getLevel() + ".png")),
-                        paintContext.toPixelRect(LEVEL_DRAW_REGION));
-            }
+        resourceName = resourceName + ".png";
+
+        ImageUtils.drawImage(paintContext.getGraphics(),
+                ImageUtils.loadImageReadOnly(resourceName),
+                paintContext.toPixelRect(LEVEL_CIRCLE_DRAW_REGION));
+
+        // draw the level pips
+        if (getModel().hasLevel()) {
+            ImageUtils.drawImage(paintContext.getGraphics(),
+                    ImageUtils.loadImageReadOnly("/overlays/level_" + getModel().getLevel() + ".png"),
+                    paintContext.toPixelRect(LEVEL_DRAW_REGION));
         }
     }
 
+    private String getLevelCircleOverlayResourcePrefix() {
+        String prefix = getDefaultResourcePrefix();
+
+        if (!getModel().hasLevel())
+            prefix = prefix + "_unleveled";
+
+        return prefix;
+    }
+
     private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 15);
-    private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimetres(3.05, 2.29, 6.77, 6.43);
+    private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimetres(3.35, 2.09, 6.77, 6.43);
 
     public void paintCost(PaintContext paintContext) {
         PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getResolutionInPixelsPerInch(),
@@ -259,7 +234,7 @@ public class PlayerCardFieldsView {
             // paint the skill box
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
-                    ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/skill_box_" + getSkillBoxName() + ".png")),
+                    ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/skill_box_" + getDefaultResourcePrefix() + ".png")),
                     paintContext.toPixelRect(SKILL_BOX_DRAW_REGIONS.get(i))
             );
 
@@ -284,17 +259,25 @@ public class PlayerCardFieldsView {
         return resource;
     }
 
-    private String getSkillBoxName() {
+    // gets a resource prefix typically used in the name of images to be loaded
+    // for example the asset templates are named using this convention so the AssetView can call this to do most of
+    // the work when locating the template
+    public String getDefaultResourcePrefix() {
         PlayerCardType playerCardType = getModel().getCardType();
 
-        if (getModel().getPlayerCardClasses().size() > 2)
-            return "multi";
+        if (playerCardType.isWeakness())
+            return "weakness";
 
+        // story cards render as neutral cards - story sometimes needs additional overlays, handled elsewhere
+        if (playerCardType == PlayerCardType.Story)
+            return "neutral";
+
+        if (getModel().isMultiClass())
+            return "multiclass";
+
+        // single class - must be only one in the list
         if (playerCardType == PlayerCardType.Standard)
             return getModel().getPlayerCardClasses().get(0).name().toLowerCase();
-
-        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.Weakness || playerCardType == PlayerCardType.StoryWeakness)
-            return "weakness";
 
         return playerCardType.name().toLowerCase();
     }

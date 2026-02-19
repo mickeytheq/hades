@@ -6,7 +6,7 @@ import resources.Language;
 public enum PlayerCardType {
     Standard(InterfaceConstants.STANDARD, false, false),
     Neutral(InterfaceConstants.CLASS_NEUTRAL, false, false),
-    Specialist(InterfaceConstants.CLASS_SPECIALIST, false, false),
+//    Specialist(InterfaceConstants.CLASS_SPECIALIST, false, false),
     Story(InterfaceConstants.STORY, true, false),
     StoryWeakness(InterfaceConstants.WKNTYPE_STORYWEAKNESS, true, true),
     Weakness(InterfaceConstants.WKNTYPE_WEAKNESS, false, true),

@@ -53,6 +53,18 @@ public class RectangleEx {
         return toPixelRectangle(ppi, null);
     }
 
+    // creates a new RectangleEx with the same units as this one where the
+    // position of the new rectangle is centred on this rectangle
+    public RectangleEx centreOn(double newWidth, double newHeight) {
+        if (xRelativeTo != XRelativeTo.Left)
+            throw new RuntimeException("Can only created a centred rectangle from an absolute positioned rectangle");
+
+        double centreExistingX = x + width / 2;
+        double centreExistingY = y + height / 2;
+
+        return new RectangleEx(unit, centreExistingX - newWidth / 2, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
+    }
+
     public Rectangle toPixelRectangle(double ppi, Rectangle templateRegionInPixels) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
         int pixelWidth = (int) (width * conversionRatio + 0.5);

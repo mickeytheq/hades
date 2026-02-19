@@ -149,6 +149,22 @@ public class PlayerCardFieldsModel {
         return cardClasses;
     }
 
+    public boolean isMultiClass() {
+        if (cardType != PlayerCardType.Standard)
+            return false;
+
+        return getPlayerCardClasses().size() > 1;
+    }
+
+    // returns true if this card has a level and the level is valid in this context
+    public boolean hasLevel() {
+        // story and weakness cards never have a level
+        if (cardType == PlayerCardType.Story || cardType.isWeakness())
+            return false;
+
+        return level != null;
+    }
+
     // primarily for testing
     public void setPlayerCardClasses(List<PlayerCardClass> playerCardClasses) {
         if (playerCardClasses.size() > 3)
