@@ -35,8 +35,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 63.50, 48.77);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.46, 43.77, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 69.50, 54.77);
 
     @Override
     public void initialiseView() {
@@ -126,12 +125,14 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     }
 
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.56, 10.67, 6.10, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 51.48, 50.29, 4.91);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(7.45, 57.23, 48.77, 26.75);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(7.45, 59.61, 48.77, 24.21);
-    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetres(14.56, 56.39, 34.37, 2.54);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(29.29, 43.69, 5.08, 5.08);
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(27.43, 41.83, 9.14, 8.97);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.18, 50.29, 4.91);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(7.00, 57.23, 48.77, 26.75);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(7.00, 59.61, 48.77, 24.21);
+
+    private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(56.39, 34.37, 2.54);
+    private static final RectangleEx ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.03, PaintConstants.ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.BASIC_WEAKNESS_ICON_SIZE);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.ENCOUNTER_SET_ICON_SIZE);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(EventView::createBodyPageShape));
 
@@ -161,6 +162,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
         // player card icons
         paintClassSymbols(paintContext);
+
+        playerCardFieldsView.paintEncounterSetIconCircle(paintContext, paintContext.toPixelRect(ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION));
 
         paintEncounterContent(paintContext);
 
@@ -229,14 +232,8 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         if (!getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails())
             return;
 
-        paintEncounterOrBasicWeaknessOverlay(paintContext);
-
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
-    }
-
-    private void paintEncounterOrBasicWeaknessOverlay(PaintContext paintContext) {
-        ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/encounter_event.png")), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -246,7 +243,6 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_WEAKNESS).toUpperCase());
         } else if (playerCardType == PlayerCardType.BasicWeakness) {
             PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(WEAKNESS_LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_BASICWEAKNESS).toUpperCase());
-            paintEncounterOrBasicWeaknessOverlay(paintContext);
             ImageUtils.drawImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
         }
     }

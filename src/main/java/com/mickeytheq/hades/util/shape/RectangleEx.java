@@ -49,20 +49,35 @@ public class RectangleEx {
         return new RectangleEx(Unit.Millimetre, UNDEFINED, XRelativeTo.Centred, topY, YRelativeTo.Top, width, height);
     }
 
+    public static RectangleEx millimetresHorizontallyCentred(double topY, DimensionEx size) {
+        double ratio = UnitConversionUtils.getConversionRatio(Unit.Millimetre, size.getUnit(), null);
+
+        return new RectangleEx(Unit.Millimetre, UNDEFINED, XRelativeTo.Centred, topY, YRelativeTo.Top, size.getWidth() * ratio, size.getHeight() * ratio);
+    }
+
     public Rectangle toPixelRectangle(double ppi) {
         return toPixelRectangle(ppi, null);
+    }
+
+    public RectangleEx centreOn(DimensionEx size) {
+        double ratio = UnitConversionUtils.getConversionRatio(unit, size.getUnit(), null);
+
+        return centreOn(ratio * size.getWidth(), ratio * size.getHeight());
     }
 
     // creates a new RectangleEx with the same units as this one where the
     // position of the new rectangle is centred on this rectangle
     public RectangleEx centreOn(double newWidth, double newHeight) {
-        if (xRelativeTo != XRelativeTo.Left)
-            throw new RuntimeException("Can only created a centred rectangle from an absolute positioned rectangle");
+        double centreExistingX;
 
-        double centreExistingX = x + width / 2;
+        if (xRelativeTo == XRelativeTo.Left)
+            centreExistingX = x + width / 2;
+        else
+            centreExistingX = UNDEFINED;
+
         double centreExistingY = y + height / 2;
 
-        return new RectangleEx(unit, centreExistingX - newWidth / 2, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
+        return new RectangleEx(unit, centreExistingX, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
     }
 
     public Rectangle toPixelRectangle(double ppi, Rectangle templateRegionInPixels) {

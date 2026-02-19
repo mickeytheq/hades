@@ -18,6 +18,7 @@ import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -280,5 +281,23 @@ public class PlayerCardFieldsView {
             return getModel().getPlayerCardClasses().get(0).name().toLowerCase();
 
         return playerCardType.name().toLowerCase();
+    }
+
+    // paints the circle to contain encounter set icon or basic weakness icon
+    public void paintEncounterSetIconCircle(PaintContext paintContext, Rectangle drawRegion) {
+        PlayerCardType playerCardType = getModel().getCardType();
+
+        // for basic and story weaknesses an overlay is required for the encounter icon or basic weakness icon
+        if (playerCardType == PlayerCardType.BasicWeakness || playerCardType == PlayerCardType.StoryWeakness) {
+            BufferedImage overlay = ImageUtils.loadImageReadOnly("/overlays/encounter_set_container/weakness.png");
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), overlay, drawRegion);
+            return;
+        }
+
+        if (playerCardType == PlayerCardType.Story) {
+            BufferedImage overlay = ImageUtils.loadImageReadOnly("/overlays/encounter_set_container/story.png");
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), overlay, drawRegion);
+            return;
+        }
     }
 }
