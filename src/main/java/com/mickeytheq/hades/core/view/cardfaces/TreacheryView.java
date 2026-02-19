@@ -21,7 +21,6 @@ import java.util.List;
 public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
     private static final String STANDARD_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery";
     private static final String WEAKNESS_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/weakness_treachery";
-    private static final URL BASIC_WEAKNESS_OVERLAY_RESOURCE = Treachery.class.getResource("/overlays/encounter_asset.png");
 
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
@@ -34,12 +33,11 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(0.00, 58.25, 53.46);
 
     // locations to draw other elements
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(48.13, 17.61, 2.37);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(48.23, 17.61, 2.37);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.69, 50.63, 4.91);
     private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(57.57, 53.85, 27.09);
     private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(60.45, 53.85, 24.55);
 
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.15, 11.18, 6.94);
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(42.84, 4.74, 4.74);
     private static final RectangleEx WEAKNESS_SUBTYPE_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(56.77, 33.87, 2.88);
 
@@ -150,8 +148,6 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         WeaknessType weaknessType = getModel().getTreacheryFieldsModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(BASIC_WEAKNESS_OVERLAY_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_OVERLAY_DRAW_REGION));
-
             if (weaknessType == WeaknessType.Basic) {
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
             } else {

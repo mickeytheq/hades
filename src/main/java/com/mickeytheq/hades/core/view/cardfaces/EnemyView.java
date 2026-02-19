@@ -44,14 +44,14 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private JComboBox<Integer> horrorEditor;
 
     // locations to draw portraits
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.38, 46.40, 4.74, 4.74);
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 40.81, 63.50, 48.09);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(46.20, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 40.81, 69.50, 51.09);
 
     // locations to draw other elements
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(26.29, 51.90, 10.33, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(10.50, 0.85, 42.67, 4.57);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
-    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetres(6.77, 5.84, 49.61, 3.39);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.70, 10.33, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(1.15, 42.67, 4.57);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(5.54, 49.61, 3.39);
+    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(5.64, 49.61, 3.39);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 17.61, 57.23, 27.94);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(EnemyView::createBodyPageShape));
@@ -273,16 +273,16 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private static final DimensionEx HORROR_ICON_SIZE = DAMAGE_ICON_SIZE;
 
     private static final List<RectangleEx> DAMAGE_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(22.35, 49.00, DAMAGE_ICON_SIZE),
-            RectangleEx.millimetres(18.46, 47.91, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(22.35, 48.70, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(18.46, 47.81, DAMAGE_ICON_SIZE),
             RectangleEx.millimetres(14.56, 46.38, DAMAGE_ICON_SIZE),
             RectangleEx.millimetres(11.01, 44.35, DAMAGE_ICON_SIZE),
             RectangleEx.millimetres(7.62, 41.98, DAMAGE_ICON_SIZE)
     );
 
     private static final List<RectangleEx> HORROR_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(37.42, 49.00, HORROR_ICON_SIZE),
-            RectangleEx.millimetres(41.32, 47.91, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(37.42, 48.70, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(41.32, 47.81, HORROR_ICON_SIZE),
             RectangleEx.millimetres(45.21, 46.38, HORROR_ICON_SIZE),
             RectangleEx.millimetres(48.77, 44.35, HORROR_ICON_SIZE),
             RectangleEx.millimetres(52.15, 41.98, HORROR_ICON_SIZE)
