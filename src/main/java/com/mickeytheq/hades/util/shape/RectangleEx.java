@@ -12,6 +12,8 @@ import java.awt.*;
 //
 // if the template size and therefore DPI was changed to 600 - the calculation would result in a pixel output double the amount
 public class RectangleEx {
+    private static final double UNDEFINED = Double.MIN_VALUE;
+
     private final Unit unit;
     private final double x;
     private final XRelativeTo xRelativeTo;
@@ -43,27 +45,47 @@ public class RectangleEx {
 
     // creates a rectangle where the resulting draw region will be centred horizontally in the total painting region which
     // must be supplied externally
-    public static RectangleEx millimetresHorizontalCentred(double topY, double width, double height) {
-        return new RectangleEx(Unit.Millimetre, -9999, XRelativeTo.Centred, topY, YRelativeTo.Top, width, height);
+    public static RectangleEx millimetresHorizontallyCentred(double topY, double width, double height) {
+        return new RectangleEx(Unit.Millimetre, UNDEFINED, XRelativeTo.Centred, topY, YRelativeTo.Top, width, height);
     }
 
-    public Rectangle toPixelRectangle(double dpi) {
-        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
-        return new Rectangle((int) (x * conversionRatio + 0.5), (int) (y * conversionRatio + 0.5), (int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
+    public Rectangle toPixelRectangle(double ppi) {
+        return toPixelRectangle(ppi, null);
     }
 
-    public Dimension toPixelDimension(double dpi) {
-        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, dpi);
+    public Rectangle toPixelRectangle(double ppi, Rectangle templateRegionInPixels) {
+        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
+        int pixelWidth = (int) (width * conversionRatio + 0.5);
+
+        int pixelX;
+
+        if (xRelativeTo == XRelativeTo.Centred) {
+             if (templateRegionInPixels == null)
+                 throw new RuntimeException("Cannot resolve Centred rectangle without a draw region");
+
+            pixelX = (int)(templateRegionInPixels.width / 2 - pixelWidth / 2);
+        }
+        else {
+            pixelX = (int)(x * conversionRatio + 0.5);
+        }
+
+        return new Rectangle(pixelX, (int) (y * conversionRatio + 0.5), pixelWidth, (int) (height * conversionRatio + 0.5));
+    }
+
+    public Dimension toPixelDimension(double ppi) {
+        double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
 
         // add 0.5 as this has the same effect as rounding to the nearest whole number with the int cast
         return new Dimension((int) (width * conversionRatio + 0.5), (int) (height * conversionRatio + 0.5));
     }
 
+    // describes how to interpret/calculate the x position
     public enum XRelativeTo {
-        Left, Right, Centred
+        Left, // absolute distance from the left edge of the draw region
+        Centred  // centred in the template rather than an absolute position
     }
 
     public enum YRelativeTo {
-        Top, Bottom
+        Top // absolute distance from the top edge of the draw region
     }
 }

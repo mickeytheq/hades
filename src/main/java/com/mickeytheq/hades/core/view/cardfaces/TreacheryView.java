@@ -1,7 +1,6 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
-import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
@@ -31,18 +30,18 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private PortraitView portraitView;
 
     // locations to draw portraits
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.63, 43.01, 4.74, 4.74);
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.88, 0.00, 58.25, 50.46);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(43.01, 4.74, 4.74);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(0.00, 58.25, 53.46);
 
     // locations to draw other elements
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(23.20, 48.43, 17.61, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.60, 51.99, 50.63, 4.91);
-    private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(5.08, 57.57, 53.85, 27.09);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(5.08, 60.45, 53.85, 24.55);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(48.13, 17.61, 2.37);
+    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.69, 50.63, 4.91);
+    private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(57.57, 53.85, 27.09);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(60.45, 53.85, 24.55);
 
-    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetres(26.42, 41.15, 11.18, 6.94);
-    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetres(29.63, 42.84, 4.74, 4.74);
-    private static final RectangleEx WEAKNESS_SUBTYPE_DRAW_REGION = RectangleEx.millimetres(14.90, 57.07, 33.87, 2.88);
+    private static final RectangleEx BASIC_WEAKNESS_OVERLAY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.15, 11.18, 6.94);
+    private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(42.84, 4.74, 4.74);
+    private static final RectangleEx WEAKNESS_SUBTYPE_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(56.77, 33.87, 2.88);
 
     @Override
     public void initialiseView() {
@@ -171,7 +170,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         markupRenderer.setDefaultStyle(TextStyleUtils.getSubTypeTextStyle());
         markupRenderer.setAlignment(MarkupRenderer.LAYOUT_MIDDLE | MarkupRenderer.LAYOUT_CENTER);
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(WEAKNESS_SUBTYPE_DRAW_REGION));
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(WEAKNESS_SUBTYPE_LABEL_DRAW_REGION));
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION));
 

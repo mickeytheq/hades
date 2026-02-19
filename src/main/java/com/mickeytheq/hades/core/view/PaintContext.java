@@ -56,9 +56,7 @@ public interface PaintContext {
     }
 
     // creates a Rectangle in pixel units for the given input rectangle which may be in other units
-    default Rectangle toPixelRect(RectangleEx rectangleEx) {
-        return rectangleEx.toPixelRectangle(getResolutionInPixelsPerInch());
-    }
+    Rectangle toPixelRect(RectangleEx rectangleEx);
 
     //
     // markup methods

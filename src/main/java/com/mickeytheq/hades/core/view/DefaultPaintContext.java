@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.view;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,7 @@ public class DefaultPaintContext implements PaintContext {
 
     private final Graphics2D originalGraphics2D;
     private Graphics2D currentGraphics2D;
+    private Rectangle currentDrawRegion;
 
     public DefaultPaintContext(Graphics2D graphics2D, RenderTarget renderTarget, CardFaceView cardFaceView, TemplateInfo templateInfo) {
         this.originalGraphics2D = graphics2D;
@@ -28,6 +30,8 @@ public class DefaultPaintContext implements PaintContext {
 
         // start off with the graphics being set as passed in
         this.currentGraphics2D = this.originalGraphics2D;
+
+        calculateDrawRegion(true);
     }
 
     @Override
@@ -37,6 +41,8 @@ public class DefaultPaintContext implements PaintContext {
 
     @Override
     public void setRenderingIncludeBleedRegion(boolean includeBleedRegion) {
+        calculateDrawRegion(includeBleedRegion);
+
         // to include the bleed region in rendering just reset back to the original graphics
         if (includeBleedRegion) {
             currentGraphics2D = originalGraphics2D;
@@ -54,6 +60,16 @@ public class DefaultPaintContext implements PaintContext {
         // create a new graphics from the original one that incorporates a transform and clip to exclude the bleed margin
         int bleedMargin = templateInfo.getAvailableBleedMarginInPixels();
         currentGraphics2D = (Graphics2D) originalGraphics2D.create(bleedMargin, bleedMargin, templateInfo.getWidthInPixelsWithoutBleed(), templateInfo.getHeightInPixelsWithoutBleed());
+    }
+
+    // calculates a draw region as painting code sees it depending on the bleed mode
+    // the origin is always 0,0 as the graphics handles the shifting of the origin to the top left of the genuine card content
+    // so the only difference is the size of the region
+    private void calculateDrawRegion(boolean includeBleedRegion) {
+        if (includeBleedRegion)
+            this.currentDrawRegion = new Rectangle(0, 0, templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels());
+        else
+            this.currentDrawRegion = new Rectangle(0, 0, templateInfo.getWidthInPixelsWithoutBleed(), templateInfo.getHeightInPixelsWithoutBleed());
     }
 
     public void paintTemplate() {
@@ -75,6 +91,11 @@ public class DefaultPaintContext implements PaintContext {
     @Override
     public RenderTarget getRenderTarget() {
         return renderTarget;
+    }
+
+    @Override
+    public Rectangle toPixelRect(RectangleEx rectangleEx) {
+        return rectangleEx.toPixelRectangle(getResolutionInPixelsPerInch(), currentDrawRegion);
     }
 
     @Override
