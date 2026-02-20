@@ -34,7 +34,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private JTextField deckIdEditor;
     private StatisticComponent cluesEditor;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(37.25, 0.00, 51.65, 63.50);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(37.25, 0.00, 54.65, 69.50);
 
     @Override
     public void initialiseView() {
@@ -123,8 +123,8 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.00, 60.96, CollectionView.COLLECTION_IMAGE_SIZE);
     private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(46.00, 61.38, CollectionView.COLLECTION_NUMBER_SIZE);
 
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(21.00, 5.00, 5.0, 5.0);
-    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(44.53, 51.39, 0.00, 3.39);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(21.00, 5.00, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(44.73, 51.49, 0.00, 3.20);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(ActView::createBodyPageShape));
 

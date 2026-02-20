@@ -34,7 +34,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
     private JTextField deckIdEditor;
     private StatisticComponent doomEditor;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 51.65, 63.50);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 54.65, 69.50);
 
     @Override
     public void initialiseView() {

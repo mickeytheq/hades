@@ -107,7 +107,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.74, 15.66, 50.02, 8.47);
     private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimetres(21.84, 21.51, 19.30, 2.37);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(16.51, 26.42, 40.64, 51.65);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.51, 10.50, 5.0, 5.0);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.51, 10.50, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
     private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimetres(5.42, 62.82, 51.82, 15.58);
     private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimetres(7.45, 63.50, 47.41, 3.39);
 
@@ -359,7 +359,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             // - with tokens = 1 there is no adjustment
             // - with tokens = 3 then the first token needs to move a full height + a full spacer above
             // - with tokens = 2 then it is half of tokens = 2
-            int tokenDiameterInPixels = paintContext.millimetersToPixels(7);
+            int tokenDiameterInPixels = paintContext.millimetersToPixels(6.943);
             int verticalGapInPixels = paintContext.millimetersToPixels(1);
 
             // this gives the centre position of the first token
@@ -373,7 +373,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             for (ScenarioReference.SymbolChaosToken token : tokens) {
                 // draw the token image
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(),
-                        ImageUtils.loadImageReadOnly("/overlays/chaos_tokens/chaos_" + getChaosTokenResourceName(token) + ".png"),
+                        ImageUtils.loadImageReadOnly("/overlays/chaos_tokens/" + getChaosTokenResourceName(token) + ".png"),
                         new Rectangle(chaosTokenXPosition, (int)yPosition, tokenDiameterInPixels, tokenDiameterInPixels));
 
                 yPosition = yPosition + tokenDiameterInPixels + verticalGapInPixels;
