@@ -4,6 +4,7 @@ import ca.cgjennings.layout.MarkupRenderer;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Story;
+import com.mickeytheq.hades.core.model.common.PlayerCardClass;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
@@ -49,7 +50,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300("/templates/story/story_default.png", CardFaceOrientation.Portrait));
+        return Lists.newArrayList(TemplateInfos.createStandard300And600("/templates/story/story_" + getModel().getStoryFieldsModel().getPlayerCardClass().name().toLowerCase(), CardFaceOrientation.Portrait));
     }
 
     @Override
@@ -66,8 +67,13 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         encounterSetView.createEditors(editorContext);
         collectionView.createEditors(editorContext);
 
+        JComboBox<PlayerCardClass> cardClassEditor = EditorUtils.createEnumComboBox(PlayerCardClass.class);
+        EditorUtils.bindComboBox(cardClassEditor, editorContext.wrapConsumerWithMarkedChanged(getModel().getStoryFieldsModel()::setPlayerCardClass));
+        cardClassEditor.setSelectedItem(getModel().getStoryFieldsModel().getPlayerCardClass());
+
         JPanel generalPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.GENERAL));
         commonCardFieldsView.addTitleEditorsToPanel(generalPanel, false, false, false);
+        MigLayoutUtils.addLabelledComponentWrapGrowPush(generalPanel, Language.string(InterfaceConstants.CLASS), cardClassEditor);
         commonCardFieldsView.addCopyrightEditorToPanel(generalPanel);
 
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), generalPanel);
@@ -90,8 +96,8 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
     }
 
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.43, 4.91, 43.01, 7.45);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(6.10, 18.12, 51.65, 66.89);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(51.48, 5.25, 6.10, 6.10);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(18.12, 51.65, 66.89);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(51.98, 5.75, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
     private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimetres(34.54, 82.72, EncounterSetView.ENCOUNTER_NUMBERS_SIZE);
     private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.31, 82.38, 2.20, 2.20);
     private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(45.30, 82.72, CollectionView.COLLECTION_NUMBER_SIZE);

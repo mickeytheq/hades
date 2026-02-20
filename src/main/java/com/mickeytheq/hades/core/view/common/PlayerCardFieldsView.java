@@ -58,6 +58,11 @@ public class PlayerCardFieldsView {
         playerCardClass2Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardClass.class);
         playerCardClass3Editor = EditorUtils.createEnumComboBoxNullable(PlayerCardClass.class);
 
+        // for UI purposes neutral is handled by the type not the class but the enum contains it, as it as a valid class
+        playerCardClass1Editor.removeItem(PlayerCardClass.Neutral);
+        playerCardClass2Editor.removeItem(PlayerCardClass.Neutral);
+        playerCardClass3Editor.removeItem(PlayerCardClass.Neutral);
+
         typeEditor.addItemListener(e -> {
             PlayerCardType playerCardType = (PlayerCardType) typeEditor.getSelectedItem();
 

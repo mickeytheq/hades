@@ -15,6 +15,7 @@ public class Story extends BaseCardFaceModel implements HasCommonCardFieldsModel
     private final StorySectionModel section3 = new StorySectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();
     private final CollectionModel collectionModel = new CollectionModel();
+    private final StoryFieldsModel storyFieldsModel = new StoryFieldsModel();
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
@@ -23,6 +24,11 @@ public class Story extends BaseCardFaceModel implements HasCommonCardFieldsModel
     @Property(CardModelPropertyNames.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
+    }
+
+    @Property("Story")
+    public StoryFieldsModel getStoryFieldsModel() {
+        return storyFieldsModel;
     }
 
     @Property(CardModelPropertyNames.STORY_SECTION_1)
@@ -48,5 +54,18 @@ public class Story extends BaseCardFaceModel implements HasCommonCardFieldsModel
     @Property(CardModelPropertyNames.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
+    }
+
+    public static class StoryFieldsModel {
+        private PlayerCardClass playerCardClass = PlayerCardClass.Neutral;
+
+        @Property("Class")
+        public PlayerCardClass getPlayerCardClass() {
+            return playerCardClass;
+        }
+
+        public void setPlayerCardClass(PlayerCardClass playerCardClass) {
+            this.playerCardClass = playerCardClass;
+        }
     }
 }

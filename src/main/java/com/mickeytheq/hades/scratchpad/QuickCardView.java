@@ -78,8 +78,8 @@ public class QuickCardView {
 //            agenda();
 //            act();
 //            enemy();
-            scenarioReference();
-//            story();
+//            scenarioReference();
+            story();
         });
     }
 
