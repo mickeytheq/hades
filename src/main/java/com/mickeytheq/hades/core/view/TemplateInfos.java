@@ -108,8 +108,8 @@ public class TemplateInfos {
         }
 
         @Override
-        public void paintTemplate(Graphics2D graphics2D) {
-            graphics2D.drawImage(bufferedImageSupplier.get(), 0, 0, getWidthInPixels(), getHeightInPixels(), null);
+        public BufferedImage getTemplateImage() {
+            return bufferedImageSupplier.get();
         }
     }
 }

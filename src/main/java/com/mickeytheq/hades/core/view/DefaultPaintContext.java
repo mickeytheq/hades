@@ -77,7 +77,7 @@ public class DefaultPaintContext implements PaintContext {
 
         StopWatch stopWatch = StopWatch.createStarted();
 
-        templateInfo.paintTemplate(graphics2D);
+        graphics2D.drawImage(templateInfo.getTemplateImage(), 0, 0, templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), null);
 
         if (logger.isTraceEnabled())
             logger.trace("Painting of template completed in " + stopWatch.getTime() + "ms");
