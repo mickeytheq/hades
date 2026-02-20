@@ -219,7 +219,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbols/" + playerCardClass.name().toLowerCase() + ".png"));
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly("/overlays/class_symbols/" + playerCardClass.name().toLowerCase() + ".png");
 
             Rectangle rectangle = paintContext.toPixelRect(drawRegions.get(i));
 

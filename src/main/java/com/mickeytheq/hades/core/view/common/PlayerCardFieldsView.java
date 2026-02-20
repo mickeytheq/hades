@@ -244,14 +244,14 @@ public class PlayerCardFieldsView {
             // paint the skill box
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
-                    ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/skill_box_" + getDefaultResourcePrefix() + ".png")),
+                    ImageUtils.loadImageReadOnly("/overlays/skill_box_" + getDefaultResourcePrefix() + ".png"),
                     paintContext.toPixelRect(SKILL_BOX_DRAW_REGIONS.get(i))
             );
 
             // paint the skill icon
             PaintUtils.paintBufferedImage(
                     paintContext.getGraphics(),
-                    ImageUtils.loadImageReadOnly(getClass().getResource(getSkillIconResource(skillIcon))),
+                    ImageUtils.loadImageReadOnly(getSkillIconResource(skillIcon)),
                     paintContext.toPixelRect(SKILL_ICON_DRAW_REGIONS.get(i))
             );
         }

@@ -34,7 +34,7 @@ public class ActView extends BaseCardFaceView<Act> implements HasCollectionView,
     private JTextField deckIdEditor;
     private StatisticComponent cluesEditor;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(37.25, 0.00, 54.65, 69.50);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(37.25, 0.00, 57.65, 69.50);
 
     @Override
     public void initialiseView() {
