@@ -326,7 +326,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private void paintSlot(PaintContext paintContext, RectangleEx drawRegion, Asset.AssetSlot assetSlot) {
         PaintUtils.paintBufferedImage(
                 paintContext.getGraphics(),
-                ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/asset_slot/" + getSlotName(assetSlot) + ".png")),
+                ImageUtils.loadImageReadOnly("/overlays/asset_slot/" + getSlotName(assetSlot) + ".png"),
                 paintContext.toPixelRect(drawRegion)
         );
     }
