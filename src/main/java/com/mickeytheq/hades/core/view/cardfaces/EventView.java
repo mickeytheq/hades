@@ -34,7 +34,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 0.00, 69.50, 54.77);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(0.00, 69.50, 51.47);
 
     @Override
     public void initialiseView() {
@@ -187,14 +187,14 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     // regions are from right to left
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_PAIR = Lists.newArrayList(
-            RectangleEx.millimetres(24.38, 43.35, 7.62, 7.62),
-            RectangleEx.millimetres(31.67, 43.35, 7.62, 7.62)
+            RectangleEx.millimetres(24.38, 43.35, PaintConstants.CLASS_SYMBOL_SIZE),
+            RectangleEx.millimetres(31.67, 43.35, PaintConstants.CLASS_SYMBOL_SIZE)
     );
 
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS_TRIPLE = Lists.newArrayList(
-            RectangleEx.millimetres(20.83, 43.35, 7.62, 7.62),
-            RectangleEx.millimetres(28.11, 43.35, 7.62, 7.62),
-            RectangleEx.millimetres(35.39, 43.35, 7.62, 7.62)
+            RectangleEx.millimetres(20.83, 43.35, PaintConstants.CLASS_SYMBOL_SIZE),
+            RectangleEx.millimetres(28.11, 43.35, PaintConstants.CLASS_SYMBOL_SIZE),
+            RectangleEx.millimetres(35.39, 43.35, PaintConstants.CLASS_SYMBOL_SIZE)
     );
 
     private void paintClassSymbols(PaintContext paintContext) {
@@ -219,7 +219,7 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png"));
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/class_symbols/" + playerCardClass.name().toLowerCase() + ".png"));
 
             Rectangle rectangle = paintContext.toPixelRect(drawRegions.get(i));
 

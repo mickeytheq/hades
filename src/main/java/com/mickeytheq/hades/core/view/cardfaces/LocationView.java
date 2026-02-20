@@ -29,7 +29,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 66.50, 49.57);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(7.11, 66.50, 49.57);
 
     @Override
     public void initialiseView() {

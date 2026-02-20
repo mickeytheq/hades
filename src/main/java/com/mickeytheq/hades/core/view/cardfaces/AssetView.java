@@ -11,6 +11,7 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
@@ -33,7 +34,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(9.77, 60.62, 43.69);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(6.77, 60.62, 43.69);
 
     @Override
     public void initialiseView() {
@@ -241,9 +242,9 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
     // regions are from right to left
     private static final List<RectangleEx> CLASS_SYMBOL_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(38.78, 0.34, 8.81, 8.81),
-            RectangleEx.millimetres(46.4, 0.34, 8.81, 8.81),
-            RectangleEx.millimetres(54.02, 0.34, 8.81, 8.81)
+            RectangleEx.millimetres(38.78, 0.34, PaintConstants.CLASS_SYMBOL_SIZE),
+            RectangleEx.millimetres(46.4, 0.34, PaintConstants.CLASS_SYMBOL_SIZE),
+            RectangleEx.millimetres(54.02, 0.34, PaintConstants.CLASS_SYMBOL_SIZE)
     );
 
     private int paintMultiClassSymbols(PaintContext paintContext) {
@@ -261,7 +262,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         for (int i = 0; i < playerCardClasses.size(); i++) {
             PlayerCardClass playerCardClass = playerCardClasses.get(i);
 
-            BufferedImage classSymbol = ImageUtils.loadImageReadOnly("/overlays/class_symbol_" + playerCardClass.name().toLowerCase() + ".png");
+            BufferedImage classSymbol = ImageUtils.loadImageReadOnly("/overlays/class_symbols/" + playerCardClass.name().toLowerCase() + ".png");
 
             Rectangle rectangle = paintContext.toPixelRect(CLASS_SYMBOL_REGIONS.get(i + skipSymbolRegionsCount));
 
@@ -294,9 +295,11 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         }
     }
 
+    private static final DimensionEx SLOT_IMAGE_SIZE = DimensionEx.millimetres(9.223, 9.223);
+
     private static final List<RectangleEx> SLOT_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(43.18, 76.88, 8.64, 8.81),
-            RectangleEx.millimetres(52.32, 76.88, 8.64, 8.81)
+            RectangleEx.millimetres(43.18, 76.88, SLOT_IMAGE_SIZE),
+            RectangleEx.millimetres(52.32, 76.88, SLOT_IMAGE_SIZE)
     );
 
     private void paintSlots(PaintContext paintContext) {
@@ -323,7 +326,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private void paintSlot(PaintContext paintContext, RectangleEx drawRegion, Asset.AssetSlot assetSlot) {
         PaintUtils.paintBufferedImage(
                 paintContext.getGraphics(),
-                ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/slot_" + getSlotName(assetSlot) + ".png")),
+                ImageUtils.loadImageReadOnly(getClass().getResource("/overlays/asset_slot/" + getSlotName(assetSlot) + ".png")),
                 paintContext.toPixelRect(drawRegion)
         );
     }

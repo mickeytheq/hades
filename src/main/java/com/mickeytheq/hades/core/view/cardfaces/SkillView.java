@@ -33,7 +33,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(2.37, 6.77, 61.93, 53.46);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(6.77, 61.93, 53.46);
 
     @Override
     public void initialiseView() {

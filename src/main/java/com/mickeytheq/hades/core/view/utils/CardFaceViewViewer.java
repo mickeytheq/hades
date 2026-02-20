@@ -7,6 +7,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -20,8 +21,9 @@ public class CardFaceViewViewer extends AbstractViewer {
     private static final Logger logger = LogManager.getLogger(CardFaceViewViewer.class);
 
     private final CardFaceView cardFaceView;
-    private final int resolutionPpi;
     private final int desiredBleedMarginInPixels;
+    private int resolutionPpi;
+    private boolean includeBleed = true;
 
     private boolean needRefresh = true;
 
@@ -32,6 +34,39 @@ public class CardFaceViewViewer extends AbstractViewer {
         this.cardFaceView = cardFaceView;
         this.resolutionPpi = resolutionPpi;
         this.desiredBleedMarginInPixels = desiredBleedMarginInPixels;
+
+        JMenu resolutionMenu = new JMenu("Resolution");
+
+        JMenuItem resolution300 = new JRadioButtonMenuItem("300", resolutionPpi == 300);
+        resolution300.addActionListener(e -> setResolutionPpi(300));
+        JMenuItem resolution600 = new JRadioButtonMenuItem("600", resolutionPpi == 600);
+        resolution600.addActionListener(e -> setResolutionPpi(600));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(resolution300);
+        buttonGroup.add(resolution600);
+
+        resolutionMenu.add(resolution300);
+        resolutionMenu.add(resolution600);
+
+        JMenuItem showBleedMargin = new JCheckBoxMenuItem("Include bleed", desiredBleedMarginInPixels > 0);
+        showBleedMargin.addActionListener(e -> setIncludeBleed(showBleedMargin.isSelected()));
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(resolutionMenu);
+        popupMenu.add(showBleedMargin);
+
+        setComponentPopupMenu(popupMenu);
+    }
+
+    private void setResolutionPpi(int newResolution) {
+        this.resolutionPpi = newResolution;
+        markChanged();
+    }
+
+    public void setIncludeBleed(boolean includeBleed) {
+        this.includeBleed = includeBleed;
+        markChanged();
     }
 
     // override just to adding timing for debugging
@@ -52,7 +87,7 @@ public class CardFaceViewViewer extends AbstractViewer {
             return cachedImage;
 
         StopWatch stopWatch = StopWatch.createStarted();
-        cachedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, resolutionPpi, desiredBleedMarginInPixels);
+        cachedImage = CardFaceViewUtils.paintCardFace(cardFaceView, RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0);
         logger.trace("Painted card face view to local buffer in " + stopWatch.getTime() + "ms");
 
         needRefresh = false;
