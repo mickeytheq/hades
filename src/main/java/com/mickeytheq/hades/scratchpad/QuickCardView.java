@@ -70,12 +70,12 @@ public class QuickCardView {
 //            shadow();
 //            investigator();
 //            asset();
-        event();
+//        event();
 //        skill();
 //        treachery();
 //            location();
 //            random();
-//            agenda();
+            agenda();
 //            act();
 //            enemy();
 //            scenarioReference();
