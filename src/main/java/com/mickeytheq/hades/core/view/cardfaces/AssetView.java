@@ -230,12 +230,12 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         paintSlots(paintContext);
 
         if (!getModel().getAssetFieldsModel().getHealth().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/health_base.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/stats/health.png"), paintContext.toPixelRect(HEALTH_SYMBOL_DRAW_REGION));
             PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_STATISTIC_DRAW_REGION), getModel().getAssetFieldsModel().getHealth(), PaintUtils.HEALTH_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
 
         if (!getModel().getAssetFieldsModel().getSanity().isEmpty()) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/sanity_base.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/stats/sanity.png"), paintContext.toPixelRect(SANITY_SYMBOL_DRAW_REGION));
             PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SANITY_STATISTIC_DRAW_REGION), getModel().getAssetFieldsModel().getSanity(), PaintUtils.SANITY_TEXT_OUTLINE_COLOUR, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         }
     }
@@ -335,8 +335,8 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         return assetSlot.name().toLowerCase();
     }
 
-    private static final RectangleEx HEALTH_SYMBOL_DRAW_REGION = RectangleEx.millimetres(24.72, 79.25, 5.25, 6.60);
+    private static final RectangleEx HEALTH_SYMBOL_DRAW_REGION = RectangleEx.millimetres(24.32, 79.25, 5.927, 7.197);
     private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(27.09, 80.69, 0.00, 2.96);
-    private static final RectangleEx SANITY_SYMBOL_DRAW_REGION = RectangleEx.millimetres(33.36, 79.76, 7.28, 6.10);
+    private static final RectangleEx SANITY_SYMBOL_DRAW_REGION = RectangleEx.millimetres(33.26, 79.76, 7.959, 6.731);
     private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(37.08, 80.69, 0.00, 2.96);
 }
