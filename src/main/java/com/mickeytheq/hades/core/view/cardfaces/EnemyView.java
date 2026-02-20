@@ -269,23 +269,23 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimetres(31.83, 9.82, 0.00, 2.96);
     private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimetres(43.77, 9.82, 0.00, 2.96);
 
-    private static final DimensionEx DAMAGE_ICON_SIZE = DimensionEx.millimetres(3.22, 3.29);
-    private static final DimensionEx HORROR_ICON_SIZE = DAMAGE_ICON_SIZE;
+    private static final DimensionEx DAMAGE_ICON_SIZE = DimensionEx.millimetres(2.752, 3.344);
+    private static final DimensionEx HORROR_ICON_SIZE = DimensionEx.millimetres(3.514, 2.963);
 
     private static final List<RectangleEx> DAMAGE_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(22.35, 48.70, DAMAGE_ICON_SIZE),
-            RectangleEx.millimetres(18.46, 47.81, DAMAGE_ICON_SIZE),
-            RectangleEx.millimetres(14.56, 46.38, DAMAGE_ICON_SIZE),
-            RectangleEx.millimetres(11.01, 44.35, DAMAGE_ICON_SIZE),
-            RectangleEx.millimetres(7.62, 41.98, DAMAGE_ICON_SIZE)
+            RectangleEx.millimetres(22.35, 48.10, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(18.46, 47.21, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(14.56, 45.75, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(11.01, 43.75, DAMAGE_ICON_SIZE),
+            RectangleEx.millimetres(7.62, 41.38, DAMAGE_ICON_SIZE)
     );
 
     private static final List<RectangleEx> HORROR_DRAW_REGIONS = Lists.newArrayList(
-            RectangleEx.millimetres(37.42, 48.70, HORROR_ICON_SIZE),
-            RectangleEx.millimetres(41.32, 47.81, HORROR_ICON_SIZE),
-            RectangleEx.millimetres(45.21, 46.38, HORROR_ICON_SIZE),
-            RectangleEx.millimetres(48.77, 44.35, HORROR_ICON_SIZE),
-            RectangleEx.millimetres(52.15, 41.98, HORROR_ICON_SIZE)
+            RectangleEx.millimetres(37.52, 48.50, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(41.42, 47.51, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(45.31, 46.03, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(48.87, 44.15, HORROR_ICON_SIZE),
+            RectangleEx.millimetres(52.25, 41.78, HORROR_ICON_SIZE)
     );
 
     private void paintStatistics(PaintContext paintContext) {
@@ -293,8 +293,8 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(HEALTH_DRAW_REGION), getModel().getEnemyFieldsModel().getHealth(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(EVADE_DRAW_REGION), getModel().getEnemyFieldsModel().getEvade(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
 
-        BufferedImage damageIcon = ImageUtils.loadImageReadOnly("/overlays/damage.png");
-        BufferedImage horrorIcon = ImageUtils.loadImageReadOnly("/overlays/horror.png");
+        BufferedImage damageIcon = ImageUtils.loadImageReadOnly("/overlays/stats/enemy_damage.png");
+        BufferedImage horrorIcon = ImageUtils.loadImageReadOnly("/overlays/stats/enemy_horror.png");
 
         IntStream.rangeClosed(1, getModel().getEnemyFieldsModel().getDamage()).forEach(o -> {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(), damageIcon, paintContext.toPixelRect(DAMAGE_DRAW_REGIONS.get(o - 1)));
