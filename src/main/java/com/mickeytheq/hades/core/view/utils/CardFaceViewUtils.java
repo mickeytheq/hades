@@ -119,16 +119,21 @@ public class CardFaceViewUtils {
         }
     }
 
-    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int bleedMarginInPixels) {
+    public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int requestedBleedMarginInPixels) {
+        CardFacePaintResult result = paintCardFaceFullDetails(cardFaceView, renderTarget, ppi, requestedBleedMarginInPixels);
+
+        return result.getBufferedImage();
+    }
+
+    public static CardFacePaintResult paintCardFaceFullDetails(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int requestedBleedMarginInPixels) {
         Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(ppi);
 
         if (!templateInfoOptional.isPresent())
-            return createMissingTemplateImage(cardFaceView, ppi);
+            return new CardFacePaintResult(createMissingTemplateImage(cardFaceView, ppi), 0);
 
-        TemplateInfo sourceTemplateInfo = templateInfoOptional.get();
+        TemplateInfo templateInfo = templateInfoOptional.get();
 
-        TemplateInfo templateInfo = sourceTemplateInfo.withBleedMarginInPixels(bleedMarginInPixels);
-
+        // this will paint the full template size including all possible bleed margin regardless of how much is requested
         BufferedImage bufferedImage = new BufferedImage(templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = bufferedImage.createGraphics();
         try {
@@ -140,7 +145,15 @@ public class CardFaceViewUtils {
             graphics2D.dispose();
         }
 
-        return bufferedImage;
+        // after all drawing is complete we need to return a sub-image of the BufferedImage which comprises the bleed margin that was requested
+        // this operation is cheap as creating a sub-image doesn't copy anything, it just provides a view on the existing image
+        int bleedMarginToKeep = Math.min(templateInfo.getAvailableBleedMarginInPixels(), requestedBleedMarginInPixels);
+        int bleedMarginToTrim = templateInfo.getAvailableBleedMarginInPixels() - bleedMarginToKeep;
+
+        BufferedImage bleedTrimmedBufferedImage = bufferedImage.getSubimage(bleedMarginToTrim, bleedMarginToTrim,
+                bufferedImage.getWidth() - bleedMarginToTrim * 2, bufferedImage.getHeight() - bleedMarginToTrim * 2);
+
+        return new CardFacePaintResult(bleedTrimmedBufferedImage, bleedMarginToKeep);
     }
 
     public static BufferedImage createMissingTemplateImage(CardFaceView cardFaceView, int ppi) {
