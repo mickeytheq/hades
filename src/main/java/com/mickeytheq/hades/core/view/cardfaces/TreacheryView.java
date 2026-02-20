@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
-import java.net.URL;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
@@ -133,7 +132,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
@@ -151,7 +150,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
             if (weaknessType == WeaknessType.Basic) {
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(BASIC_WEAKNESS_ICON_DRAW_REGION));
             } else {
-                encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+                encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
                 encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             }
         }

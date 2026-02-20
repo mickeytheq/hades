@@ -65,6 +65,27 @@ public class RectangleEx {
         return centreOn(ratio * size.getWidth(), ratio * size.getHeight());
     }
 
+    public RectangleEx nudgeLeft(double amount) {
+        if (xRelativeTo == XRelativeTo.Centred)
+            throw new RuntimeException("Can't nudge a centred rectangle");
+
+        return new RectangleEx(unit, x - amount, xRelativeTo, y, yRelativeTo, width, height);
+    }
+
+    public RectangleEx nudgeRight(double amount) {
+        if (xRelativeTo == XRelativeTo.Centred)
+            throw new RuntimeException("Can't nudge a centred rectangle");
+
+        return new RectangleEx(unit, x + amount, xRelativeTo, y, yRelativeTo, width, height);
+    }
+
+    public RectangleEx nudgeUp(double amount) {
+        return new RectangleEx(unit, x, xRelativeTo, y - amount, yRelativeTo, width, height);
+    }
+
+    public RectangleEx nudgeDown(double amount) {
+        return new RectangleEx(unit, x, xRelativeTo, y + amount, yRelativeTo, width, height);
+    }
     // creates a new RectangleEx with the same units as this one where the
     // position of the new rectangle is centred on this rectangle
     public RectangleEx centreOn(double newWidth, double newHeight) {

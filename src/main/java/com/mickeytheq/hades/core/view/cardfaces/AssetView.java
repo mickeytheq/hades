@@ -218,7 +218,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
 
         if (getModel().getPlayerCardFieldsModel().getCardType().isHasEncounterDetails()) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+            encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
 
         playerCardFieldsView.paintLevelCircleAndPips(paintContext);

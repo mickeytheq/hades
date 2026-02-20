@@ -5,7 +5,6 @@ import ca.cgjennings.layout.PageShape;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Location;
@@ -30,7 +29,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 63.50, 46.57);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 66.50, 49.57);
 
     @Override
     public void initialiseView() {
@@ -126,14 +125,10 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(23.37, 47.07, 16.93, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.01, 0.68, 40.98, 4.91);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(16.09, 6.60, 32.34, 3.56);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
-
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(LocationView::createBodyPageShape));
     private static final RectangleEx VICTORY_DRAW_REGION = RectangleEx.millimetres(49.00, 74.5, 13.00, 4.00);
-    public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.40, 41.69, 4.74, 4.74);
+
 
     @Override
     public void paint(PaintContext paintContext) {
@@ -144,9 +139,9 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         paintContext.setRenderingIncludeBleedRegion(false);
 
-        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LocationFieldsView.LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 
-        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION), paintContext.toPixelRect(SUBTITLE_DRAW_REGION));
+        commonCardFieldsView.paintTitles(paintContext, paintContext.toPixelRect(LocationFieldsView.TITLE_DRAW_REGION), paintContext.toPixelRect(LocationFieldsView.SUBTITLE_DRAW_REGION));
 
         // victory is painted separate from the body on locations
         commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()), false);
@@ -154,7 +149,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         commonCardFieldsView.paintCopyright(paintContext);
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(LocationFieldsView.ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         portraitView.paintArtist(paintContext);
 

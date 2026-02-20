@@ -26,7 +26,7 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 63.50, 46.57);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 7.11, 69.50, 46.57);
 
     @Override
     public void initialiseView() {
@@ -98,8 +98,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
         editorContext.addDisplayComponent(Language.string(InterfaceConstants.GENERAL), mainPanel);
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(23.37, 47.07, 16.93, 2.37);
-    private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(11.01, 0.68, 40.98, 4.91);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(3.39, 50.80, 56.90, 24.21);
 
     private static final LoadingCache<Integer, PageShape> BODY_PAGE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(ppi ->
@@ -114,8 +112,6 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
                     ))));
 
 
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = LocationView.ENCOUNTER_PORTRAIT_DRAW_REGION;
-
     @Override
     public void paint(PaintContext paintContext) {
         // paint the main/art portrait first as it sits behind the card template
@@ -125,25 +121,35 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
 
         paintContext.setRenderingIncludeBleedRegion(false);
 
-        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
+        PaintUtils.paintLabel(paintContext, paintContext.toPixelRect(LocationFieldsView.LABEL_DRAW_REGION), Language.gstring(GameConstants.LABEL_LOCATION).toUpperCase());
 
-        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
+        commonCardFieldsView.paintTitle(paintContext, paintContext.toPixelRect(LocationFieldsView.TITLE_DRAW_REGION));
 
         commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         portraitView.paintArtist(paintContext);
 
         paintCollectionImage(paintContext);
+        paintEncounterImage(paintContext);
 
         locationFieldsView.paintLocationIcons(paintContext);
     }
 
     private void paintCollectionImage(PaintContext paintContext) {
         // location backs don't have their own collection configuration and only the collection image is painted
-        // paint the collection image on the other face
+        // paint the collection image of the other face
         getOtherFaceView()
                 .filter(o -> o instanceof HasCollectionView)
                 .map(o -> ((HasCollectionView) o).getCollectionView())
                 .ifPresent(o -> o.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true));
+    }
+
+    private void paintEncounterImage(PaintContext paintContext) {
+        // location backs don't have their own encounter configuration and only the encounter image is painted
+        // paint the encounter image of the other face
+        getOtherFaceView()
+                .filter(o -> o instanceof HasEncounterSetView)
+                .map(o -> ((HasEncounterSetView) o).getEncounterSetView())
+                .ifPresent(o -> o.paintEncounterImage(paintContext, paintContext.toPixelRect(LocationFieldsView.ENCOUNTER_PORTRAIT_DRAW_REGION)));
     }
 }

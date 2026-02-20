@@ -185,7 +185,7 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
             return;
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {

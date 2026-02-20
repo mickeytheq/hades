@@ -1,7 +1,6 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
-import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Agenda;
@@ -126,7 +125,7 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
         commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         paintScenarioIndex(paintContext);
 

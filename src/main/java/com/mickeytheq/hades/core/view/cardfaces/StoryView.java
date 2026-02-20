@@ -113,7 +113,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
         collectionView.paintCollectionImage(paintContext, paintContext.toPixelRect(COLLECTION_PORTRAIT_DRAW_REGION), false);
 
         encounterSetView.paintEncounterNumbers(paintContext, paintContext.toPixelRect(ENCOUNTER_NUMBER_DRAW_REGION), TextStyleUtils.withAttribute(TextStyleUtils.getEncounterNumberTextStyle(), TextAttribute.FOREGROUND, Color.BLACK));
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         // do the body back of the card that has multiple sections with different layout requirements
         // use the multi-section renderer to handle the dynamic scaling

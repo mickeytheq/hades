@@ -92,7 +92,7 @@ public class EncounterSetView {
         return encounterDetailPanel;
     }
 
-    public void paintEncounterPortrait(PaintContext paintContext, Rectangle encounterPortraitDrawRegion) {
+    public void paintEncounterImage(PaintContext paintContext, Rectangle drawRegion) {
         Optional<EncounterSetModel> modelOpt = getModelToUse(getModel().isCopyOtherFace());
 
         if (!modelOpt.isPresent())
@@ -103,7 +103,7 @@ public class EncounterSetView {
         if (modelToUse.getEncounterSetConfiguration() == null)
             return;
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), modelToUse.getEncounterSetConfiguration().getImage().get(), encounterPortraitDrawRegion);
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), modelToUse.getEncounterSetConfiguration().getImage().get(), drawRegion);
     }
 
     public void paintEncounterNumbers(PaintContext paintContext, CardFaceOrientation orientation) {

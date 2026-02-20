@@ -222,7 +222,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
     }
 
     private void paintNonWeaknessContent(PaintContext paintContext) {
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
@@ -242,7 +242,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
             if (weaknessType == WeaknessType.Basic) {
                 PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(ImageUtils.BASIC_WEAKNESS_ICON_RESOURCE), paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
             } else {
-                encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+                encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
                 encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
             }
         }

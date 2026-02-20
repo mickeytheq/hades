@@ -10,9 +10,11 @@ import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.ui.DynamicListCellRenderer;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.text.WordUtils;
+import org.mozilla.javascript.tools.debugger.Dim;
 import resources.Language;
 
 import javax.swing.*;
@@ -183,60 +185,57 @@ public class LocationFieldsView {
     private static final List<LocationIconInfo> LOCATION_ICON_INFOS = new ArrayList<>();
     private static final Map<String, LocationIconInfo> LOCATION_ICON_INFO_MAP;
 
-    private static final BufferedImage LOCATION_BASE_IMAGE = ImageUtils.loadImageReadOnly("/icons/location/location_base.png");
-
     // tint values copied from AHLCG plugin
     // for some reason the Strange Eons encoding of tints multiplies/divides the h-value by 360 when it is saved/loaded
     // so the h-values that were previously specified in the .settings file need to be divided by 360 to get the correct value
     static {
-        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.NONE_VALUE, Language.string(InterfaceConstants.LOCICON_NONE), null, null));
-        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.EMPTY_VALUE, Language.string(InterfaceConstants.LOCICON_EMPTY), null, null));
-        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.COPY_OTHER_VALUE, Language.string(InterfaceConstants.COPY_OTHER_FACE), null, null));
+        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.NONE_VALUE, null, Language.string(InterfaceConstants.LOCICON_NONE), null));
+        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.EMPTY_VALUE, null, Language.string(InterfaceConstants.LOCICON_EMPTY), null));
+        LOCATION_ICON_INFOS.add(new LocationIconInfo(LocationFieldsModel.COPY_OTHER_VALUE, null, Language.string(InterfaceConstants.COPY_OTHER_FACE), null));
 
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CIRCLE, "circle", 50.0f / 360f, 0.71f, 0.78f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SQUARE, "square", -2.0f / 360f, 0.73f, 0.63f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TRIANGLE, "triangle", -150.0f / 360f, 0.41f, 0.35f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CROSS, "cross", 8.0f / 360f, 0.65f, 0.31f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DIAMOND, "diamond", 98.0f / 360f, 0.51f, 0.53f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SLASH, "slash", 40.0f / 360f, 0.54f, 0.46f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_T, "t", -123.0f / 360f, 0.39f, 0.24f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HOURGLASS, "hourglass", -20.0f / 360f, 0.55f, 0.30f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_MOON, "moon", -25.0f / 360f, 0.51f, 0.51f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DOUBLESLASH, "double_slash", 131.0f / 360f, 0.34f, 0.24f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HEART, "heart", 24.0f / 360f, 0.72f, 0.73f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_STAR, "star", -71.0f / 360f, 0.36f, 0.23f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_QUOTE, "quote", 23.0f / 360f, 0.64f, 0.47f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CLOVER, "clover", 123.0f / 360f, 0.23f, 0.44f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SPADE, "spade", -26.0f / 360f, 0.66f, 0.72f));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CIRCLE, "circle"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CLOVER, "clover"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CROSS, "cross"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DIAMOND, "diamond"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DOUBLESLASH, "double_slash"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HEART, "heart"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HOURGLASS, "hourglass"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_MOON, "moon"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_QUOTE, "quote"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SLASH, "slash"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SPADE, "spade"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SQUARE, "square"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_STAR, "star"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_T, "t"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TRIANGLE, "triangle"));
 
         // alternates
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TRIANGLEALT, "triangle_alt", 50.0f / 360f, 0.81f, 0.88f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CROSSALT, "cross_alt", -2.0f / 360f, 0.83f, 0.73f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DIAMONDALT, "diamond_alt", -150.0f / 360f, 0.51f, 0.45f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SLASHALT, "slash_alt", 8.0f / 360f, 0.75f, 0.51f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TALT, "t_alt", 98.0f / 360f, 0.61f, 0.63f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HOURGLASSALT, "hourglass_alt", 40.0f / 360f, 0.64f, 0.56f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_MOONALT, "moon_alt", -123.0f / 360f, 0.49f, 0.34f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DOUBLESLASHALT, "double_slash_alt", -20.0f / 360f, 0.65f, 0.40f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HEARTALT, "heart_alt", -25.0f / 360f, 0.61f, 0.61f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_STARALT, "star_alt", 131.0f / 360f, 0.44f, 0.34f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CIRCLEALT, "circle_alt", 24.0f / 360f, 0.82f, 0.83f));
-        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SQUAREALT, "square_alt", -71.0f / 360f, 0.46f, 0.33f));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TRIANGLEALT, "triangle_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CROSSALT, "cross_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DIAMONDALT, "diamond_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SLASHALT, "slash_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_TALT, "t_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HOURGLASSALT, "hourglass_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_MOONALT, "moon_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_DOUBLESLASHALT, "double_slash_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_HEARTALT, "heart_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_STARALT, "star_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_CIRCLEALT, "circle_alt"));
+        LOCATION_ICON_INFOS.add(createLocationIconInfo(InterfaceConstants.LOCICON_SQUAREALT, "square_alt"));
 
         LOCATION_ICON_INFO_MAP = LOCATION_ICON_INFOS.stream().collect(Collectors.toMap(LocationIconInfo::getValue, o -> o, (t, t2) -> t, LinkedHashMap::new));
     }
 
-    private static LocationIconInfo createLocationIconInfo(String languageKey, String iconResourceName, float hTint, float sTint, float bTint) {
-        TintFilter tintFilter = new TintFilter();
-        tintFilter.setFactors(hTint, sTint, bTint);
-        BufferedImage tintedImage = tintFilter.filter(LOCATION_BASE_IMAGE, null);
+    private static String getLocationIconResourcePath(String iconResourceName) {
+        return "/overlays/location/symbols/" + iconResourceName + ".svg";
+    }
 
-        Icon editorIcon = createLocationEditorIcon(iconResourceName, ImageUtils.deepCopy(tintedImage));
-        BufferedImage paintImage = createLocationPaintImage(iconResourceName, ImageUtils.deepCopy(tintedImage));
+    private static LocationIconInfo createLocationIconInfo(String languageKey, String iconResourceName) {
+        Icon editorIcon = new ImageIcon(ImageUtils.loadSvgImageReadOnly(getLocationIconResourcePath(iconResourceName), 12, 12));
 
         String uniqueName = createUnqiueNameFromIconResourceName(iconResourceName);
 
-        return new LocationIconInfo(uniqueName, Language.string(languageKey), editorIcon, paintImage);
+        return new LocationIconInfo(uniqueName, iconResourceName, Language.string(languageKey), editorIcon);
     }
 
     // double_slash -> DoubleSlash. consistent with existing names
@@ -247,7 +246,7 @@ public class LocationFieldsView {
     private static Icon createLocationEditorIcon(String iconResourceName, BufferedImage baseImage) {
         Graphics2D graphics2D = baseImage.createGraphics();
         try {
-            BufferedImage iconImage = ImageUtils.loadImageReadOnly("/icons/location/location_" + iconResourceName + ".png");
+            BufferedImage iconImage = ImageUtils.loadSvgImageReadOnly("/overlays/location/symbols/" + iconResourceName + ".svg", 12, 12);
             graphics2D.drawImage(iconImage, 4, 4, null);
 
             return ImageUtilities.createIconForSize(baseImage, 12);
@@ -260,7 +259,7 @@ public class LocationFieldsView {
     private static BufferedImage createLocationPaintImage(String iconResourceName, BufferedImage baseImage) {
         Graphics2D graphics2D = baseImage.createGraphics();
         try {
-            BufferedImage iconImage = ImageUtils.loadImageReadOnly("/icons/location/location_" + iconResourceName + ".png");
+            BufferedImage iconImage = ImageUtils.loadSvgImageReadOnly("/overlays/location/symbols/" + iconResourceName + ".svg", 12, 12);
             graphics2D.drawImage(iconImage, 5, 5, null);
 
             return baseImage;
@@ -272,19 +271,23 @@ public class LocationFieldsView {
 
     static class LocationIconInfo implements DynamicListCellRenderer.HasDisplay, DynamicListCellRenderer.HasIcon {
         private final String value;
+        private final String iconResourceName;
         private final String display;
         private final Icon editorIcon;
-        private final BufferedImage renderImage;
 
-        public LocationIconInfo(String value, String display, Icon editorIcon, BufferedImage renderImage) {
+        public LocationIconInfo(String value, String iconResourceName, String display, Icon editorIcon) {
             this.value = value;
+            this.iconResourceName = iconResourceName;
             this.display = display;
             this.editorIcon = editorIcon;
-            this.renderImage = renderImage;
         }
 
         public String getValue() {
             return value;
+        }
+
+        public String getIconResourceName() {
+            return iconResourceName;
         }
 
         public String getDisplay() {
@@ -300,26 +303,31 @@ public class LocationFieldsView {
             return editorIcon;
         }
 
-        public BufferedImage getRenderImage() {
-            return renderImage;
-        }
     }
 
-    private static final RectangleEx LOCATION_ICON_DRAW_REGION = RectangleEx.millimetres(2.37, 1.02, 6.10, 5.93);
-    private static final RectangleEx CONNECTION1_DRAW_REGION = RectangleEx.millimetres(11.35, 79.08, 5.93, 5.93);
-    private static final RectangleEx CONNECTION2_DRAW_REGION = RectangleEx.millimetres(18.29, 77.72, 5.93, 5.93);
-    private static final RectangleEx CONNECTION3_DRAW_REGION = RectangleEx.millimetres(25.23, 77.22, 5.93, 5.93);
-    private static final RectangleEx CONNECTION4_DRAW_REGION = RectangleEx.millimetres(32.17, 77.22, 5.93, 5.93);
-    private static final RectangleEx CONNECTION5_DRAW_REGION = RectangleEx.millimetres(39.12, 77.72, 5.93, 5.93);
-    private static final RectangleEx CONNECTION6_DRAW_REGION = RectangleEx.millimetres(46.06, 79.08, 5.93, 5.93);
-    
-    private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimetres(1.52, 0.17, 7.96, 7.79);
+    // shared values used in both LocationView and LocationBackView
+    public static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(47.00, 16.93, 2.37);
+    public static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(1.20, 40.98, 4.91);
+    public static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(6.40, 32.34, 3.56);
+    public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.49, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+
+    // negative as the overlay has a fair bit of transparent surrounding space which can clip outside the total draw region safely
+    private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimetres(0.10, -1.00, 10.58, 10.58);
+
+    private static final DimensionEx LOCATION_ICON_SIZE = DimensionEx.millimetres(5.884, 5.884);
+
+    // the circle overlay isn't perfectly centred in its source image so we have to nudge the icon slightly to centre it
+    private static final RectangleEx LOCATION_ICON_DRAW_REGION = CIRCLE_OVERLAY_DRAW_REGION.centreOn(LOCATION_ICON_SIZE).nudgeRight(0.1).nudgeUp(0.1);
+
+    private static final RectangleEx CONNECTION1_DRAW_REGION = RectangleEx.millimetres(11.35, 78.88, LOCATION_ICON_SIZE);
+    private static final RectangleEx CONNECTION2_DRAW_REGION = RectangleEx.millimetres(18.29, 77.52, LOCATION_ICON_SIZE);
+    private static final RectangleEx CONNECTION3_DRAW_REGION = RectangleEx.millimetres(25.23, 77.02, LOCATION_ICON_SIZE);
+    private static final RectangleEx CONNECTION4_DRAW_REGION = RectangleEx.millimetres(32.17, 77.02, LOCATION_ICON_SIZE);
+    private static final RectangleEx CONNECTION5_DRAW_REGION = RectangleEx.millimetres(39.12, 77.52, LOCATION_ICON_SIZE);
+    private static final RectangleEx CONNECTION6_DRAW_REGION = RectangleEx.millimetres(46.06, 78.88, LOCATION_ICON_SIZE);
 
     public void paintLocationIcons(PaintContext paintContext) {
-        // paint the location background for the location icon but only for the location front template
-        if (!LocationFieldsModel.NONE_VALUE.equals(getModel().getLocationIcon())) {
-            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly("/overlays/location_circle.png"), paintContext.toPixelRect(CIRCLE_OVERLAY_DRAW_REGION));
-        }
+        paintCircleOverlay(paintContext);
 
         LocationFieldsModel otherFaceModel = getOtherFaceModel();
 
@@ -330,6 +338,16 @@ public class LocationFieldsView {
         paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION4_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon4);
         paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION5_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon5);
         paintLocationIcon(paintContext, paintContext.toPixelRect(CONNECTION6_DRAW_REGION), otherFaceModel, LocationFieldsModel::getConnectionIcon6);
+    }
+
+    private void paintCircleOverlay(PaintContext paintContext) {
+        String resourcePath = "/overlays/location/icon_circle_" + cardFaceView.getCardFaceSide().name().toLowerCase() + ".png";
+
+        // paint the location circle for the location icon
+        if (!LocationFieldsModel.NONE_VALUE.equals(getModel().getLocationIcon())) {
+            PaintUtils.paintBufferedImage(paintContext.getGraphics(), ImageUtils.loadImageReadOnly(resourcePath),
+                    paintContext.toPixelRect(CIRCLE_OVERLAY_DRAW_REGION));
+        }
     }
 
     private LocationFieldsModel getOtherFaceModel() {
@@ -382,16 +400,22 @@ public class LocationFieldsView {
 
         LocationIconInfo locationIconInfo = getLocationIconInfoForValue(value);
 
-        PaintUtils.paintBufferedImage(paintContext.getGraphics(), locationIconInfo.getRenderImage(), drawRegion);
+        String resourcePath = getLocationIconResourcePath(locationIconInfo.getIconResourceName());
+        BufferedImage locationIconImage = ImageUtils.loadSvgImageReadOnly(resourcePath, (int)drawRegion.getWidth(), (int)drawRegion.getHeight());
+
+        PaintUtils.paintBufferedImage(paintContext.getGraphics(), locationIconImage, drawRegion);
     }
 
     // the widths are set to zero as statistic painting uses the height to size the statistic value and per investigator icon
     // so the x position is the centre-line for the shroud/clue circles and the text is centred on that position
-    private static final RectangleEx SHROUD_DRAW_REGION = RectangleEx.millimetres(5.93, 45.21, 0.00, 3.56);
-    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(57.66, 45.21, 0.00, 3.56);
+    private static final DimensionEx STATISTIC_SIZE = DimensionEx.millimetres(0.00, 3.56);
+
+    private static final RectangleEx SHROUD_DRAW_REGION = RectangleEx.millimetres(5.93, 45.00, STATISTIC_SIZE);
+    private static final RectangleEx CLUES_DRAW_REGION = RectangleEx.millimetres(57.66, 45.00, STATISTIC_SIZE);
 
     public void paintShroudAndClues(PaintContext paintContext) {
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(SHROUD_DRAW_REGION), getModel().getShroud(), Color.BLACK, PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR);
         PaintUtils.paintStatistic(paintContext, paintContext.toPixelRect(CLUES_DRAW_REGION), getModel().getClues(), PaintUtils.STATISTIC_LIGHT_TEXT_COLOUR, Color.BLACK);
     }
+
 }

@@ -39,7 +39,7 @@ import java.util.ListIterator;
 
 public class QuickCardView {
     private static final int RESOLUTION_PPI = 600;
-    private static final int DESIRED_BLEED_IN_PIXELS = 72;
+    private static final int DESIRED_BLEED_IN_PIXELS = 0;
 
     public static void main(String[] args) {
         System.setProperty("log4j.configurationFile", "log4j2-console-only.json");
@@ -71,9 +71,9 @@ public class QuickCardView {
 //            investigator();
 //            asset();
 //        event();
-        skill();
+//        skill();
 //        treachery();
-//            location();
+            location();
 //            random();
 //            agenda();
 //            act();

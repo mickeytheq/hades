@@ -148,7 +148,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
         commonCardFieldsView.paintTitleMultiline(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-        encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+        encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         portraitView.paintArtist(paintContext, paintContext.toPixelRect(ARTIST_DRAW_REGION));
 

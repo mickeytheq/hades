@@ -205,7 +205,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
 
         if (getModel().getInvestigatorFieldsModel().getInvestigatorClass() == InvestigatorClass.Story) {
             encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
-            encounterSetView.paintEncounterPortrait(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
+            encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
         }
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Landscape, true);
