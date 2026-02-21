@@ -37,8 +37,16 @@ public class DialogEx extends JDialog {
 
     private int dialogResultCode = -1;
 
+    private static Image DEFAULT_ICON_IMAGE;
+
+    public static void setDefaultIconImage(Image defaultIconImage) {
+        DEFAULT_ICON_IMAGE = defaultIconImage;
+    }
+
     public DialogEx(Frame frame, boolean trackDialogSizeToContent) {
         super(frame, true);
+
+        setIconImage(DEFAULT_ICON_IMAGE);
 
         this.trackDialogSizeToContent = trackDialogSizeToContent;
 

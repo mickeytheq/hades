@@ -27,6 +27,7 @@ import com.mickeytheq.hades.strangeeons.tasks.NewCard;
 import com.mickeytheq.hades.strangeeons.tasks.ViewLog;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
@@ -74,6 +75,8 @@ public class HadesPlugin extends AbstractPlugin {
                 return false;
 
             installHadesFileType();
+
+            installUiElements();
 
             installCardDatabaseUpdater();
 
@@ -200,6 +203,10 @@ public class HadesPlugin extends AbstractPlugin {
                 return new CardGameComponent(cardView);
             }
         });
+    }
+
+    private void installUiElements() {
+        DialogEx.setDefaultIconImage(ImageUtils.HADES_PURPLE_H_IMAGE);
     }
 
     private void installKeyboardShortcuts() {
