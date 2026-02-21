@@ -72,12 +72,12 @@ public class QuickCardView {
 //            asset();
 //        event();
 //        skill();
-//        treachery();
+        treachery();
 //            location();
 //            random();
 //            agenda();
 //            act();
-            enemy();
+//            enemy();
 //            scenarioReference();
 //            story();
         });

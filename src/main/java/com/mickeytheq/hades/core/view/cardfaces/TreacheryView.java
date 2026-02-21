@@ -18,9 +18,6 @@ import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
 public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCollectionView, HasEncounterSetView {
-    private static final String STANDARD_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery";
-    private static final String WEAKNESS_TEMPLATE_RESOURCE_PREFIX = "/templates/treachery/treachery_weakness";
-
     private JComboBox<WeaknessType> weaknessTypeEditor;
     private CommonCardFieldsView commonCardFieldsView;
     private EncounterSetView encounterSetView;
@@ -97,11 +94,15 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        String resourcePathPrefix;
+        String resourcePathPrefix = "/templates/treachery/treachery";
+
+        WeaknessType weaknessType = getModel().getTreacheryFieldsModel().getWeaknessType();
+
         if (getModel().getTreacheryFieldsModel().getWeaknessType() != null) {
-            resourcePathPrefix = WEAKNESS_TEMPLATE_RESOURCE_PREFIX;
-        } else {
-            resourcePathPrefix = STANDARD_TEMPLATE_RESOURCE_PREFIX;
+            resourcePathPrefix = resourcePathPrefix + "_weakness";
+
+            if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story)
+                resourcePathPrefix = resourcePathPrefix + "_encounter";
         }
 
         return TemplateInfos.createStandard300And600(resourcePathPrefix, CardFaceOrientation.Portrait);
@@ -141,9 +142,6 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
-        // draw the weakness overlay
-        // this is the circular area either the standard basic weakness icon goes in or the encounter icon
-        // for story weaknesses
         WeaknessType weaknessType = getModel().getTreacheryFieldsModel().getWeaknessType();
 
         if (weaknessType == WeaknessType.Basic || weaknessType == WeaknessType.Story) {
