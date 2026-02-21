@@ -62,7 +62,7 @@ public class ProjectMigrator {
     }
 
     private Path getMigrateToPath() {
-        return migrationOptions.getFileChooser().getSelectedFile().toPath();
+        return migrationOptions.getFileChooser().getSelectedPath();
     }
 
     private void doMigration(List<Member> members) {
@@ -145,7 +145,7 @@ public class ProjectMigrator {
 
         public boolean showDialog(Path suggestedMigrationTargetPath) {
             fileChooser = new FileChooser();
-            fileChooser.setSelectedFile(suggestedMigrationTargetPath.toFile());
+            fileChooser.setSelectedPathAndSensibleCurrentDirectory(suggestedMigrationTargetPath);
             fileChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             fileChooser.getTextField().setEnabled(false);
 
@@ -157,7 +157,7 @@ public class ProjectMigrator {
             dialogEx.setContentComponent(panel);
             dialogEx.setTitle("Migration options");
             dialogEx.addOkCancelButtons(() -> {
-                if (fileChooser.getSelectedFile().getAbsolutePath().equals(StrangeEons.getOpenProject().getFile().getAbsolutePath())) {
+                if (fileChooser.getSelectedPath().equals(StrangeEons.getOpenProject().getFile().toPath())) {
                     JOptionPane.showMessageDialog(dialogEx,
                             "Migrating into the same directory as the open Strange Eons project would overwrite all source files. Please choose another directory",
                             "Invalid export directory", JOptionPane.ERROR_MESSAGE);

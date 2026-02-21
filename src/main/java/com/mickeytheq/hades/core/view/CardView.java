@@ -56,7 +56,11 @@ public class CardView {
     }
 
     public Optional<CardFaceView> getOppositeFaceView(CardFaceSide side) {
-        if (side == CardFaceSide.Back)
+        return getCardFaceView(side == CardFaceSide.Front ? CardFaceSide.Back : CardFaceSide.Front);
+    }
+
+    public Optional<CardFaceView> getCardFaceView(CardFaceSide side) {
+        if (side == CardFaceSide.Front)
             return Optional.of(getFrontFaceView());
 
         if (!hasBack())

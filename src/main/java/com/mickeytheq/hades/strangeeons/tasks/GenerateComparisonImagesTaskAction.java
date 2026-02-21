@@ -187,7 +187,7 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
 
         public boolean showDialog() {
             ahlcgDirectoryChooser = new FileChooser();
-            ahlcgDirectoryChooser.setSelectedFile(StrangeEons.getOpenProject().getFile());
+            ahlcgDirectoryChooser.setSelectedPathAndSensibleCurrentDirectory(StrangeEons.getOpenProject().getFile().toPath());
             ahlcgDirectoryChooser.getFileChooser().setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             ahlcgDirectoryChooser.getTextField().setEnabled(false);
 
@@ -200,8 +200,8 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
             outputDirectoryChooser.getTextField().setEnabled(false);
 
             ahlcgDirectoryChooser.addActionListener(e -> {
-                hadesDirectoryChooser.setSelectedFile(new File(ahlcgDirectoryChooser.getSelectedFile() + "-hades"));
-                outputDirectoryChooser.setSelectedFile(new File(ahlcgDirectoryChooser.getSelectedFile() + "-compare-ahlcg-hades"));
+                hadesDirectoryChooser.setSelectedPathAndSensibleCurrentDirectory(Paths.get(ahlcgDirectoryChooser.getSelectedPath().toString() + "-hades"));
+                outputDirectoryChooser.setSelectedPathAndSensibleCurrentDirectory(Paths.get(ahlcgDirectoryChooser.getSelectedPath().toString() + "-compare-ahlcg-hades"));
             });
 
             JPanel panel = MigLayoutUtils.createTitledPanel("Options");

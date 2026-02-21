@@ -2,30 +2,40 @@ package com.mickeytheq.hades.strangeeons.gamecomponent;
 
 import ca.cgjennings.apps.arkham.*;
 import ca.cgjennings.apps.arkham.project.Member;
+import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.global.configuration.CardPreviewConfiguration;
 import com.mickeytheq.hades.core.global.configuration.GlobalConfigurations;
+import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
+import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
+import com.mickeytheq.hades.strangeeons.ui.ExportCardDialog;
+import com.mickeytheq.hades.ui.DialogEx;
 import com.mickeytheq.hades.util.shape.Unit;
 import com.mickeytheq.hades.util.shape.UnitConversionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 
 import static resources.Language.string;
 
@@ -120,6 +130,38 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
         Member member = StrangeEons.getOpenProject().findMember(getFile());
         if (member != null)
             StrangeEons.getWindow().getOpenProjectView().repaint(member);
+    }
+
+    @Override
+    protected void exportImpl() {
+        ExportCardDialog dialog = new ExportCardDialog(StrangeEons.getWindow());
+        if (dialog.showDialog() != DialogEx.OK_OPTION)
+            return;
+
+        exportFace(CardFaceSide.Front, dialog);
+        exportFace(CardFaceSide.Back, dialog);
+    }
+
+    private void exportFace(CardFaceSide cardFaceSide, ExportCardDialog dialog) {
+        Optional<CardFaceView> cardFaceViewOptional = getGameComponent().getCardView().getCardFaceView(cardFaceSide);
+
+        if (!cardFaceViewOptional.isPresent())
+            return;
+
+        Distance distance = dialog.getBleedMargin();
+        int bleedInPixels = (int)UnitConversionUtils.convertUnit(distance.getUnit(), Unit.Pixel, distance.getAmount(), dialog.getResolution());
+
+        BufferedImage image = CardFaceViewUtils.paintCardFace(cardFaceViewOptional.get(), RenderTarget.EXPORT, dialog.getResolution(), bleedInPixels);
+
+        Path outputDirectory = dialog.getOutputDirectory();
+        String filename = FilenameUtils.removeExtension(getFile().getName()) + "-" + cardFaceSide.name() + ".png";
+        Path outputPath = outputDirectory.resolve(filename);
+
+        try {
+            ImageIO.write(image, "png", outputPath.toFile());
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing output file when exporting", e);
+        }
     }
 
     @Override

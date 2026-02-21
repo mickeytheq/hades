@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.view.component;
 
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.util.shape.Unit;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 // UI control for editing a Distance object
 public class DistanceComponent extends JPanel {
@@ -18,13 +20,15 @@ public class DistanceComponent extends JPanel {
     private volatile boolean noEvents = false;
 
     public DistanceComponent() {
+        // by default don't include pixel for distance specification as when rendering content
+        this(Lists.newArrayList(Unit.Point, Unit.Millimetre));
+    }
+
+    public DistanceComponent(List<Unit> units) {
         valueEditor = new JSpinner(new SpinnerNumberModel(0, 0, Double.MAX_VALUE, 1));
 
-        // don't allow pixel for distance specification as it varies based on the context
-        // of the template/image being rendered
         unitEditor = new JComboBox<>();
-        unitEditor.addItem(Unit.Point);
-        unitEditor.addItem(Unit.Millimetre);
+        units.forEach(unitEditor::addItem);
 
         setLayout(new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().gridGap("0", "0").insets("0")));
 

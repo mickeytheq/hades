@@ -6,12 +6,14 @@ import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
+import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.util.SwingUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -133,6 +135,12 @@ public class EditorUtils {
     public static void bindSpinnerDouble(JSpinner spinner, Consumer<Double> consumer) {
         spinner.addChangeListener(e -> {
             consumer.accept((Double)spinner.getValue());
+        });
+    }
+
+    public static void bindFileChooser(FileChooser fileChooser, Consumer<Path> consumer) {
+        fileChooser.addActionListener(e -> {
+            consumer.accept(fileChooser.getSelectedPath());
         });
     }
 

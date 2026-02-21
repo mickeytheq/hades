@@ -45,7 +45,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
     // locations to draw portraits
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(46.20, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(40.81, 69.50, 51.09);
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(43.81, 69.50, 51.09);
 
     // locations to draw other elements
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.70, 10.33, 2.37);
@@ -265,9 +265,11 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
     }
 
-    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimetres(20.15, 9.82, 0.00, 2.96);
-    private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimetres(31.83, 9.82, 0.00, 2.96);
-    private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimetres(43.77, 9.82, 0.00, 2.96);
+    private static final DimensionEx STATISTIC_SIZE = DimensionEx.millimetres(0.00, 2.96);
+
+    private static final RectangleEx COMBAT_DRAW_REGION = RectangleEx.millimetres(20.15, 9.82, STATISTIC_SIZE);
+    private static final RectangleEx HEALTH_DRAW_REGION = RectangleEx.millimetres(31.83, 9.52, STATISTIC_SIZE);
+    private static final RectangleEx EVADE_DRAW_REGION = RectangleEx.millimetres(43.77, 9.82, STATISTIC_SIZE);
 
     private static final DimensionEx DAMAGE_ICON_SIZE = DimensionEx.millimetres(2.752, 3.344);
     private static final DimensionEx HORROR_ICON_SIZE = DimensionEx.millimetres(3.514, 2.963);
