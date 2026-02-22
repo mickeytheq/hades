@@ -17,6 +17,7 @@ import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import com.mickeytheq.hades.util.shape.RectangleEx;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.lang3.time.StopWatch;
@@ -309,12 +310,43 @@ public class PortraitView {
             final int y0 = (int) (regionY - centerY + panY);
             final int w = (int) (scaledWidth + 0.5d);
             final int h = (int) (scaledHeight + 0.5d);
-            g.drawImage(image, x0, y0, w, h, null);
+
+            BufferedImage scaledImage = getScaledImage(paintContext, image, w, h);
+
+            g.drawImage(scaledImage, x0, y0, w, h, null);
         }
 
         if (obeyClip) {
             g.setClip(oldClip);
         }
+    }
+
+    private MultiKey<Integer> lastScaledImageKey = new MultiKey<>(0, 0);
+    private BufferedImage lastScaledImage;
+
+    // it is the norm for an art portrait's image to be a different size to the region it is drawn into so scaling is required
+    // scaling is a moderately expensive operation so this caches the result of the scaling and returns the same scaled image on subsequent calls
+    // if the width and height do not change
+    // this is primarily important for UI interaction where the card is rendered repeatedly as the user makes edits
+    private BufferedImage getScaledImage(PaintContext paintContext, BufferedImage sourceImage, int width, int height) {
+        MultiKey<Integer> key = new MultiKey<>(width, height);
+
+        if (key.equals(lastScaledImageKey))
+            return lastScaledImage;
+
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = scaledImage.createGraphics();
+        try {
+            paintContext.getRenderTarget().applyTo(g);
+            g.drawImage(sourceImage, 0, 0, width, height, null);
+        } finally {
+            g.dispose();
+        }
+
+        lastScaledImage = scaledImage;
+        lastScaledImageKey = key;
+
+        return scaledImage;
     }
 
     private double computeDefaultImageScale(BufferedImage image) {
