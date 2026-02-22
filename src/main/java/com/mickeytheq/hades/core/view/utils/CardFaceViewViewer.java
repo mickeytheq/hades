@@ -117,6 +117,8 @@ public class CardFaceViewViewer extends AbstractViewer {
         if (!drawBleedBorder)
             return;
 
+        // draw a 2 pixel width border on the innermost pixels of the bleed margin. these borders are just outside the
+        // core card area so will not be visible when the card is painted with no bleed margin
         BufferedImage image = cardFacePaintResult.getBufferedImage();
         Graphics2D graphics2D = image.createGraphics();
         try {
@@ -129,10 +131,10 @@ public class CardFaceViewViewer extends AbstractViewer {
 
             graphics2D.drawRect(x, y, width, height);
 
-            x = cardFacePaintResult.getBleedMarginInPixels() - 2;
-            y = cardFacePaintResult.getBleedMarginInPixels() - 2;
-            width = cardFacePaintResult.getBufferedImage().getWidth() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 3;
-            height = cardFacePaintResult.getBufferedImage().getHeight() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 3;
+            x = x - 1;
+            y = y - 1;
+            width = width + 2;
+            height = height + 2;
 
             graphics2D.drawRect(x, y, width, height);
         } finally {
