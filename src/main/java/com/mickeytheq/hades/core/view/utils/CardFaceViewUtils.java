@@ -13,6 +13,7 @@ import com.mickeytheq.hades.core.view.utils.MultiSectionRenderer;
 import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -129,9 +130,11 @@ public class CardFaceViewUtils {
         Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(ppi);
 
         if (!templateInfoOptional.isPresent())
-            return new CardFacePaintResult(createMissingTemplateImage(cardFaceView, ppi), 0);
+            return new CardFacePaintResult(createMissingTemplateImage(cardFaceView, ppi), 0, 0);
 
         TemplateInfo templateInfo = templateInfoOptional.get();
+
+        StopWatch stopWatch = StopWatch.createStarted();
 
         // this will paint the full template size including all possible bleed margin regardless of how much is requested
         BufferedImage bufferedImage = new BufferedImage(templateInfo.getWidthInPixels(), templateInfo.getHeightInPixels(), BufferedImage.TYPE_INT_ARGB);
@@ -153,7 +156,9 @@ public class CardFaceViewUtils {
         BufferedImage bleedTrimmedBufferedImage = bufferedImage.getSubimage(bleedMarginToTrim, bleedMarginToTrim,
                 bufferedImage.getWidth() - bleedMarginToTrim * 2, bufferedImage.getHeight() - bleedMarginToTrim * 2);
 
-        return new CardFacePaintResult(bleedTrimmedBufferedImage, bleedMarginToKeep);
+        long paintTimeInMs = stopWatch.getTime();
+
+        return new CardFacePaintResult(bleedTrimmedBufferedImage, bleedMarginToKeep, paintTimeInMs);
     }
 
     public static BufferedImage createMissingTemplateImage(CardFaceView cardFaceView, int ppi) {

@@ -24,6 +24,7 @@ public class CardFaceViewViewer extends AbstractViewer {
     private final int desiredBleedMarginInPixels;
     private int resolutionPpi;
     private boolean includeBleed = true;
+    private boolean drawBleedBorder = false;
 
     private boolean needRefresh = true;
 
@@ -49,12 +50,16 @@ public class CardFaceViewViewer extends AbstractViewer {
         resolutionMenu.add(resolution300);
         resolutionMenu.add(resolution600);
 
-        JMenuItem showBleedMargin = new JCheckBoxMenuItem("Include bleed", desiredBleedMarginInPixels > 0);
-        showBleedMargin.addActionListener(e -> setIncludeBleed(showBleedMargin.isSelected()));
+        JMenuItem showBleedMarginMenuItem = new JCheckBoxMenuItem("Include bleed", desiredBleedMarginInPixels > 0);
+        showBleedMarginMenuItem.addActionListener(e -> setIncludeBleed(showBleedMarginMenuItem.isSelected()));
+
+        JMenuItem drawBleedBorderMenuItem = new JCheckBoxMenuItem("Draw bleed border", drawBleedBorder);
+        drawBleedBorderMenuItem.addActionListener(e -> setDrawBleedBorder(drawBleedBorderMenuItem.isSelected()));
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.add(resolutionMenu);
-        popupMenu.add(showBleedMargin);
+        popupMenu.add(showBleedMarginMenuItem);
+        popupMenu.add(drawBleedBorderMenuItem);
 
         setComponentPopupMenu(popupMenu);
     }
@@ -66,6 +71,11 @@ public class CardFaceViewViewer extends AbstractViewer {
 
     private void setIncludeBleed(boolean includeBleed) {
         this.includeBleed = includeBleed;
+        markChanged();
+    }
+
+    public void setDrawBleedBorder(boolean drawBleedBorder) {
+        this.drawBleedBorder = drawBleedBorder;
         markChanged();
     }
 
@@ -84,6 +94,7 @@ public class CardFaceViewViewer extends AbstractViewer {
 
         drawLabel((Graphics2D) g1, resolutionPpi + " PPI", 2);
         drawLabel((Graphics2D) g1, getActualBleedMarginInPixels() + " bleed pixels", 3);
+        drawLabel((Graphics2D) g1, cardFacePaintResult.getPaintTimeInMilliseconds() + "ms render time", 4);
 
         logger.trace("paintComponent of " + CardFaceViewViewer.class.getSimpleName() + " completed in " + stopWatch.getTime() + "ms");
     }
@@ -93,13 +104,40 @@ public class CardFaceViewViewer extends AbstractViewer {
         if (!needRefresh)
             return cardFacePaintResult.getBufferedImage();
 
-        StopWatch stopWatch = StopWatch.createStarted();
         cardFacePaintResult = CardFaceViewUtils.paintCardFaceFullDetails(cardFaceView, RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0);
-        logger.trace("Painted card face view to local buffer in " + stopWatch.getTime() + "ms");
+
+        paintBleedBorder();
 
         needRefresh = false;
 
         return cardFacePaintResult.getBufferedImage();
+    }
+
+    private void paintBleedBorder() {
+        if (!drawBleedBorder)
+            return;
+
+        BufferedImage image = cardFacePaintResult.getBufferedImage();
+        Graphics2D graphics2D = image.createGraphics();
+        try {
+            graphics2D.setColor(Color.RED);
+
+            int x = cardFacePaintResult.getBleedMarginInPixels() - 1;
+            int y = cardFacePaintResult.getBleedMarginInPixels() - 1;
+            int width = cardFacePaintResult.getBufferedImage().getWidth() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 1;
+            int height = cardFacePaintResult.getBufferedImage().getHeight() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 1;
+
+            graphics2D.drawRect(x, y, width, height);
+
+            x = cardFacePaintResult.getBleedMarginInPixels() - 2;
+            y = cardFacePaintResult.getBleedMarginInPixels() - 2;
+            width = cardFacePaintResult.getBufferedImage().getWidth() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 3;
+            height = cardFacePaintResult.getBufferedImage().getHeight() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 3;
+
+            graphics2D.drawRect(x, y, width, height);
+        } finally {
+            graphics2D.dispose();
+        }
     }
 
     public void markChanged() {
