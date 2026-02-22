@@ -53,7 +53,6 @@ public class DialogEx extends JDialog {
     public DialogEx(Frame frame, boolean trackDialogSizeToContent) {
         super(frame, true);
 
-        setTitle("Export options");
         setIconImage(DEFAULT_ICON_IMAGE);
 
         this.trackDialogSizeToContent = trackDialogSizeToContent;

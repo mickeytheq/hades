@@ -28,6 +28,8 @@ public class ExportCardDialog extends DialogEx {
     public ExportCardDialog(Frame frame) {
         super(frame, false);
 
+        setTitle("Export options");
+
         JComboBox<Integer> resolutionEditor = new JComboBox<>();
         resolutionEditor.addItem(300);
         resolutionEditor.addItem(600);
