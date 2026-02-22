@@ -33,16 +33,4 @@ public class JsonUtils {
 
         return mapper;
     }
-
-    public static byte[] serialiseBufferedImage(BufferedImage image) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", byteArrayOutputStream);
-        byte[] data = byteArrayOutputStream.toByteArray();
-
-        return data;
-    }
-
-    public static BufferedImage deserialiseBufferedImage(byte[] value) throws IOException {
-        return ImageIO.read(new ByteArrayInputStream(value));
-    }
 }
