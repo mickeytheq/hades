@@ -20,17 +20,17 @@ public class MarkupUtils {
     private static final Map<String, String> BODY_TAG_REPLACEMENT = new HashMap<>();
 
     static {
-        BODY_TAG_REPLACEMENT.put("HorizontalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 0.12in 1pt>");
-        BODY_TAG_REPLACEMENT.put("hs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 0.12in 1pt>");
+        BODY_TAG_REPLACEMENT.put("HorizontalSpacer", "<image res://spacers/empty1x1.png 0.12in 1pt>");
+        BODY_TAG_REPLACEMENT.put("hs", "<image res://spacers/empty1x1.png 0.12in 1pt>");
 
-        BODY_TAG_REPLACEMENT.put("LargeVerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 3.0pt>");
-        BODY_TAG_REPLACEMENT.put("lvs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 3pt>");
+        BODY_TAG_REPLACEMENT.put("LargeVerticalSpacer", "<image res://spacers/empty1x1.png 1pt 3.0pt>");
+        BODY_TAG_REPLACEMENT.put("lvs", "<image res://spacers/empty1x1.png 1pt 3pt>");
 
-        BODY_TAG_REPLACEMENT.put("VerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 1.5pt>");
-        BODY_TAG_REPLACEMENT.put("vs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 1.5pt>");
+        BODY_TAG_REPLACEMENT.put("VerticalSpacer", "<image res://spacers/empty1x1.png 1pt 1.5pt>");
+        BODY_TAG_REPLACEMENT.put("vs", "<image res://spacers/empty1x1.png 1pt 1.5pt>");
 
-        BODY_TAG_REPLACEMENT.put("SmallVerticalSpacer", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 0.5pt>");
-        BODY_TAG_REPLACEMENT.put("svs", "<image res://ArkhamHorrorLCG/images/empty1x1.png 1pt 0.5pt>");
+        BODY_TAG_REPLACEMENT.put("SmallVerticalSpacer", "<image res://spacers/empty1x1.png 1pt 0.5pt>");
+        BODY_TAG_REPLACEMENT.put("svs", "<image res://spacers/empty1x1.png 1pt 0.5pt>");
 
         // ripped from a live renderer in the existing plugin
         // some tags replaced with alternatives lower down to correct i18n
