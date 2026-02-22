@@ -1,8 +1,10 @@
 package com.mickeytheq.hades.ui;
 
+import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.validation.Validators;
+import resources.Language;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +39,11 @@ public class DialogEx extends JDialog {
 
     private int dialogResultCode = -1;
 
+    private Runnable copyValuesToControls;
+
+    private Runnable loadValues;
+    private Runnable commitChanges;
+
     private static Image DEFAULT_ICON_IMAGE;
 
     public static void setDefaultIconImage(Image defaultIconImage) {
@@ -46,6 +53,7 @@ public class DialogEx extends JDialog {
     public DialogEx(Frame frame, boolean trackDialogSizeToContent) {
         super(frame, true);
 
+        setTitle("Export options");
         setIconImage(DEFAULT_ICON_IMAGE);
 
         this.trackDialogSizeToContent = trackDialogSizeToContent;
@@ -58,6 +66,15 @@ public class DialogEx extends JDialog {
             setResizable(false);
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public void setLoadSaveLifecycle(Runnable loadValues, Runnable commitChanges) {
+        this.loadValues = loadValues;
+        this.commitChanges = commitChanges;
+    }
+
+    public void setCopyValuesToControls(Runnable copyValuesToControls) {
+        this.copyValuesToControls = copyValuesToControls;
     }
 
     public void setContentComponent(Component content) {
@@ -122,6 +139,9 @@ public class DialogEx extends JDialog {
             if (!performValidation(validateSupplier))
                 return;
 
+            if (commitChanges != null)
+                commitChanges.run();
+
             dialogResultCode = buttonResultCode;
 
             setVisible(false);
@@ -148,6 +168,12 @@ public class DialogEx extends JDialog {
     }
 
     public int showDialog() {
+        if (loadValues != null)
+            loadValues.run();
+
+        if (copyValuesToControls != null)
+            copyValuesToControls.run();
+
         JPanel mainPanel = new JPanel(MigLayoutUtils.createTopLevelLayout());
         mainPanel.add(content, "wrap, growx, growy, pushx, pushy");
 
