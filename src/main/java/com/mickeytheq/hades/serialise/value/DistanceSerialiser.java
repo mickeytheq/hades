@@ -8,8 +8,8 @@ import com.mickeytheq.hades.serialise.ValueSerialiser;
 import com.mickeytheq.hades.util.shape.Unit;
 
 public class DistanceSerialiser implements ValueSerialiser<Distance> {
-    private static final String AMOUNT_FIELD = "Amount";
-    private static final String UNIT_FIELD = "Unit";
+    public static final String AMOUNT_FIELD = "Amount";
+    public static final String UNIT_FIELD = "Unit";
 
     @Override
     public void serialiseValue(String fieldName, ObjectNode currentNode, Distance value, ProjectContext projectContext) {
