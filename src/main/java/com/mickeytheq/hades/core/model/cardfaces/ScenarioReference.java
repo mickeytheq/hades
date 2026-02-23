@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 @Model(typeCode = "ScenarioReference", version = 1)
-public class ScenarioReference extends BaseCardFaceModel implements HasCommonCardFieldsModel {
+public class ScenarioReference extends BaseCardFaceModel implements HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel {
     private final ScenarioReferenceFieldsModel scenarioReferenceFieldsModel = new ScenarioReferenceFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();

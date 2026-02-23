@@ -9,7 +9,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 
 // TODO: parallel investigator support
 @Model(typeCode = "Investigator", version = 1)
-public class Investigator implements CardFaceModel, HasCommonCardFieldsModel {
+public class Investigator implements CardFaceModel, HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel {
     private final InvestigatorFieldsModel investigatorFieldsModel = new InvestigatorFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();

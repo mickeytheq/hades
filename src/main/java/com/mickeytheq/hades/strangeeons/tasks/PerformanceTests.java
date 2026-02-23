@@ -66,21 +66,19 @@ public class PerformanceTests {
         return stopWatch;
     }
 
-    public static StopWatch performPaintTest(Path hadesFile, int iterations) {
+    public static StopWatch performPaintTest(Path hadesFile, int resolution, int iterations) {
 
         ProjectContext projectContext = StandardProjectContext.getContextForContentPath(hadesFile);
         Card card = CardIO.readCard(hadesFile, projectContext);
         CardView cardView = CardFaces.createCardView(card, projectContext);
 
         // clear out cold start issues
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
-        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
+        CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, resolution, 0);
 
         StopWatch stopWatch = StopWatch.createStarted();
 
         for (int i = 0; i < iterations; i++) {
-            CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
+            CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, resolution, 0);
         }
 
         stopWatch.stop();
@@ -94,10 +92,10 @@ public class PerformanceTests {
 //        System.setProperty("sun.java2d.d3d", "true");
 //        System.setProperty("sun.java2d.opengl", "True");
 
-        int iterations = 1000;
-        Path path = Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades");
+        int iterations = 200;
+        Path path = Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\01 - One Night Only\\Encounter Set\\01 Disguised Monstrosity.hades");
 
-        StopWatch stopWatch = PerformanceTests.performPaintTest(Paths.get("D:\\Temp\\Circus Ex Mortis SE-Hades\\07 - Red Sunrise\\Locations\\Open Forest 1.hades"), iterations);
+        StopWatch stopWatch = PerformanceTests.performPaintTest(path, 600, iterations);
         System.out.println("Ran " + iterations + " iterations of test on '" + path + "' in " + stopWatch.formatTime());
     }
 }

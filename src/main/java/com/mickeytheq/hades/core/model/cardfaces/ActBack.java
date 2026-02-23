@@ -8,7 +8,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "ActBack", version = 1)
-public class ActBack extends BaseCardFaceModel implements HasCommonCardFieldsModel {
+public class ActBack extends BaseCardFaceModel implements HasCommonCardFieldsModel, HasEncounterSetModel {
     private final ActFieldsModel actFieldsModel = new ActFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final StorySectionModel section1 = new StorySectionModel();
