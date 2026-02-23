@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.CardFaces;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
@@ -25,6 +26,8 @@ import java.util.Optional;
 public class ShadowView extends BaseCardFaceView<Shadow> {
     private CardFaceView shadowingFaceView;
 
+    private static final TemplateInfo NO_SHADOW_TEMPLATE = new TemplateInfoImpl(createNoShadowTemplateImage());
+
     @Override
     public void initialiseView() {
         refreshShadowView();
@@ -33,7 +36,7 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
     @Override
     public Optional<TemplateInfo> getCompatibleTemplateInfo(int desiredResolutionInPpi) {
         if (shadowingFaceView == null)
-            return Optional.empty();
+            return Optional.of(NO_SHADOW_TEMPLATE);
 
         return shadowingFaceView.getCompatibleTemplateInfo(desiredResolutionInPpi);
     }
@@ -89,8 +92,10 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
 
     @Override
     public void paint(PaintContext paintContext) {
-        if (shadowingFaceView == null)
+        if (shadowingFaceView == null) {
+            paintContext.paintTemplate();
             return;
+        }
 
         shadowingFaceView.paint(paintContext);
     }
@@ -122,6 +127,78 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
                 throw new RuntimeException("Card being shadowed does not have a Back face");
 
             shadowingFaceView = shadowingView.getBackFaceView();
+        }
+    }
+
+    public static BufferedImage createNoShadowTemplateImage() {
+        List<String> textStrings = Lists.newArrayList("Select card to be shadowed");
+
+        BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        try {
+            graphics2D.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+            graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            graphics2D.setColor(new Color(255, 200, 200));
+            graphics2D.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+
+            graphics2D.setColor(Color.BLACK);
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(24.0f));
+
+            int yPos = 100;
+
+            for (String textString : textStrings) {
+                int width = graphics2D.getFontMetrics().stringWidth(textString);
+                int height = graphics2D.getFontMetrics().getHeight();
+
+                graphics2D.drawString(textString, bufferedImage.getWidth() / 2 - width / 2, yPos);
+
+                yPos = (int)(yPos + height * 1.5f);
+            }
+        }
+        finally {
+            graphics2D.dispose();
+        }
+
+        return bufferedImage;
+    }
+
+    static class TemplateInfoImpl implements TemplateInfo {
+        private final BufferedImage image;
+
+        public TemplateInfoImpl(BufferedImage image) {
+            this.image = image;
+        }
+
+        @Override
+        public int getWidthInPixels() {
+            return image.getWidth();
+        }
+
+        @Override
+        public int getHeightInPixels() {
+            return image.getHeight();
+        }
+
+        @Override
+        public int getResolutionInPixelsPerInch() {
+            return 300;
+        }
+
+        @Override
+        public int getAvailableBleedMarginInPixels() {
+            return 0;
+        }
+
+        @Override
+        public double getAvailableBleedMarginInPoints() {
+            return 0;
+        }
+
+        @Override
+        public BufferedImage getTemplateImage() {
+            return image;
         }
     }
 }
