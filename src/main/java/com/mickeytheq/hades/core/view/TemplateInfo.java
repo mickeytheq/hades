@@ -33,4 +33,10 @@ public interface TemplateInfo {
 
     // returns a new TemplateInfo derived from this one with the resolution up or downscaled appropriately to the new resolution
     TemplateInfo scaleToResolution(int newPpi);
+
+    // returns the root/source template for this template which might be itself
+    // for example if scaleToResolution was used this will return the original TemplateInfo that the scaling was performed on
+    default TemplateInfo getSourceTemplate() {
+        return this;
+    }
 }

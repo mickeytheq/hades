@@ -141,7 +141,7 @@ public class CardFaceViewUtils {
 
         if (!templateInfoOptional.isPresent()) {
             if (generateImageOnError)
-                return new CardFacePaintResult(CardFacePaintResult.Status.NoTemplate, createMissingTemplateImage(cardFaceView, ppi), 0, 0);
+                return new CardFacePaintResult(CardFacePaintResult.Status.NoTemplate, createMissingTemplateImage(cardFaceView, ppi), 0, 0, ppi, ppi);
 
             String error = "No compatible template found for card face view " + cardFaceView.getBriefDisplayString() + " and requested resolution PPI " + ppi;
 
@@ -174,7 +174,8 @@ public class CardFaceViewUtils {
 
         long paintTimeInMs = stopWatch.getTime();
 
-        return new CardFacePaintResult(CardFacePaintResult.Status.Success, bleedTrimmedBufferedImage, bleedMarginToKeep, paintTimeInMs);
+        return new CardFacePaintResult(CardFacePaintResult.Status.Success, bleedTrimmedBufferedImage, bleedMarginToKeep,
+                paintTimeInMs, templateInfo.getResolutionInPixelsPerInch(), templateInfo.getSourceTemplate().getResolutionInPixelsPerInch());
     }
 
     public static BufferedImage createMissingTemplateImage(CardFaceView cardFaceView, int ppi) {

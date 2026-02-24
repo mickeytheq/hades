@@ -83,7 +83,7 @@ public class CardFaceViewViewer extends AbstractViewer {
         if (cardFacePaintResult == null)
             return 0;
 
-        return cardFacePaintResult.getBleedMarginInPixels();
+        return cardFacePaintResult.getPaintedBleedMarginInPixels();
     }
 
     // override just to adding timing for debugging
@@ -92,9 +92,16 @@ public class CardFaceViewViewer extends AbstractViewer {
         StopWatch stopWatch = StopWatch.createStarted();
         super.paintComponent(g1);
 
-        drawLabel((Graphics2D) g1, resolutionPpi + " PPI", 2);
-        drawLabel((Graphics2D) g1, getActualBleedMarginInPixels() + " bleed pixels", 3);
-        drawLabel((Graphics2D) g1, cardFacePaintResult.getPaintTimeInMilliseconds() + "ms render time", 4);
+        if (cardFacePaintResult.getStatus() == CardFacePaintResult.Status.Success) {
+            String resolutionString = resolutionPpi + " PPI";
+
+            if (cardFacePaintResult.getSourceTemplatePpi() != resolutionPpi)
+                resolutionString = resolutionString + " (scaled from " +  cardFacePaintResult.getSourceTemplatePpi() + ")";
+
+            drawLabel((Graphics2D) g1, resolutionString, 2);
+            drawLabel((Graphics2D) g1, getActualBleedMarginInPixels() + " bleed pixels", 3);
+            drawLabel((Graphics2D) g1, cardFacePaintResult.getPaintTimeInMilliseconds() + "ms render time", 4);
+        }
 
         logger.trace("paintComponent of " + CardFaceViewViewer.class.getSimpleName() + " completed in " + stopWatch.getTime() + "ms");
     }
@@ -126,10 +133,10 @@ public class CardFaceViewViewer extends AbstractViewer {
         try {
             graphics2D.setColor(Color.RED);
 
-            int x = cardFacePaintResult.getBleedMarginInPixels() - 1;
-            int y = cardFacePaintResult.getBleedMarginInPixels() - 1;
-            int width = cardFacePaintResult.getBufferedImage().getWidth() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 1;
-            int height = cardFacePaintResult.getBufferedImage().getHeight() - cardFacePaintResult.getBleedMarginInPixels() * 2 + 1;
+            int x = cardFacePaintResult.getPaintedBleedMarginInPixels() - 1;
+            int y = cardFacePaintResult.getPaintedBleedMarginInPixels() - 1;
+            int width = cardFacePaintResult.getBufferedImage().getWidth() - cardFacePaintResult.getPaintedBleedMarginInPixels() * 2 + 1;
+            int height = cardFacePaintResult.getBufferedImage().getHeight() - cardFacePaintResult.getPaintedBleedMarginInPixels() * 2 + 1;
 
             graphics2D.drawRect(x, y, width, height);
 

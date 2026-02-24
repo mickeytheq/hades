@@ -135,7 +135,21 @@ public class TemplateInfos {
                 graphics2D.dispose();
             }
 
-            return new TemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, bleedMarginInPoints, () -> scaledImage);
+            return new DerivedTemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, bleedMarginInPoints, () -> scaledImage, this);
+        }
+    }
+
+    static class DerivedTemplateInfoImpl extends TemplateInfoImpl {
+        private final TemplateInfo sourceTemplate;
+
+        public DerivedTemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier, TemplateInfo sourceTemplate) {
+            super(dimension, ppi, bleedMarginInPixels, bleedMarginInPoints, bufferedImageSupplier);
+            this.sourceTemplate = sourceTemplate;
+        }
+
+        @Override
+        public TemplateInfo getSourceTemplate() {
+            return sourceTemplate;
         }
     }
 }
