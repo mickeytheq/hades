@@ -200,5 +200,10 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
         public BufferedImage getTemplateImage() {
             return image;
         }
+
+        @Override
+        public TemplateInfo scaleToResolution(int newPpi) {
+            return this;
+        }
     }
 }

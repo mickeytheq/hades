@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.view;
 
+import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.util.shape.Unit;
@@ -9,6 +10,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.function.Supplier;
+
+import static java.awt.RenderingHints.*;
+import static java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 
 public class TemplateInfos {
     private static final int BLEED_600_PIXELS = 72;
@@ -22,8 +26,7 @@ public class TemplateInfos {
 
         if (orientation == CardFaceOrientation.Portrait) {
             return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
-        }
-        else {
+        } else {
             return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
     }
@@ -36,8 +39,7 @@ public class TemplateInfos {
 
         if (orientation == CardFaceOrientation.Portrait) {
             return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
-        }
-        else {
+        } else {
             return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         }
     }
@@ -84,12 +86,12 @@ public class TemplateInfos {
 
         @Override
         public int getWidthInPixels() {
-            return (int)dimension.getWidth();
+            return (int) dimension.getWidth();
         }
 
         @Override
         public int getHeightInPixels() {
-            return (int)dimension.getHeight();
+            return (int) dimension.getHeight();
         }
 
         @Override
@@ -110,6 +112,30 @@ public class TemplateInfos {
         @Override
         public BufferedImage getTemplateImage() {
             return bufferedImageSupplier.get();
+        }
+
+        @Override
+        public TemplateInfo scaleToResolution(int newPpi) {
+            double ratio = (double) newPpi / ppi;
+
+            int newWidth = (int) (dimension.getWidth() * ratio);
+            int newHeight = (int) (dimension.getHeight() * ratio);
+            int newBleedPixels = (int) (bleedMarginInPixels * ratio);
+
+            BufferedImage unscaledImage = bufferedImageSupplier.get();
+
+            BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D graphics2D = scaledImage.createGraphics();
+            try {
+                // TODO: assumes export quality - pass in the RenderTarget?
+                RenderTarget.EXPORT.applyTo(graphics2D);
+
+                graphics2D.drawImage(unscaledImage, 0, 0, newWidth, newHeight, null);
+            } finally {
+                graphics2D.dispose();
+            }
+
+            return new TemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, bleedMarginInPoints, () -> scaledImage);
         }
     }
 }

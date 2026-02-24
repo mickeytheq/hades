@@ -70,9 +70,8 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
         return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResource(), CardFaceOrientation.Landscape));
     }
 
-    // TODO: story template image is half-resolution
     private String getTemplateResource() {
-        return "/templates/investigator/investigator_" + getModel().getInvestigatorFieldsModel().getInvestigatorClass().name().toLowerCase() + ".png";
+        return "/templates/investigator/investigator_" + getModel().getInvestigatorFieldsModel().getInvestigatorClass().name().toLowerCase();
     }
 
     @Override
@@ -172,13 +171,13 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     }
 
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(8.13, 1.86, 35.05, 4.57);
-    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(12.19, 6.60, 29.63, 3.39);
+    private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetres(12.19, 6.50, 29.63, 3.39);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(51.99, 13.55, 33.87, 36.91);
     private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(66.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
     private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(49, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
-    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(64.35, 52.15, 0.00, 3.39);
-    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(73.49, 52.15, 0.00, 3.39);
+    private static final RectangleEx HEALTH_STATISTIC_DRAW_REGION = RectangleEx.millimetres(64.35, 52.35, 0.00, 3.39);
+    private static final RectangleEx SANITY_STATISTIC_DRAW_REGION = RectangleEx.millimetres(73.59, 52.35, 0.00, 3.39);
 
     private static final DimensionEx STAT_DIMENSION = DimensionEx.millimetres(2.71, 3.73);
     private static final double STAT_Y_POSITION = 3.22;
