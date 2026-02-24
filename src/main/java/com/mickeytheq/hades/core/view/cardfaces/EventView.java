@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -62,6 +63,9 @@ public class EventView extends BaseCardFaceView<Event> implements HasCollectionV
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
+        if (getModel().getPlayerCardFieldsModel().isMultiClass())
+            return Collections.emptyList();
+
         return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
     }
 
