@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
-import com.mickeytheq.hades.core.model.CardMetadataModel;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
@@ -23,7 +22,6 @@ import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
 import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -225,7 +223,7 @@ public class JsonCardSerialiser {
         checkCardFaceVersion(faceNode, cardFaceInfo, deserialisingCardVersion);
 
         // do the serialisation
-        CardFaceModel cardFaceModel = CardFaces.createFaceModelForTypeCode(typeCode, ProjectContexts.getCurrentContext());
+        CardFaceModel cardFaceModel = Cards.createFaceModelForTypeCode(typeCode, ProjectContexts.getCurrentContext());
 
         EntityMetadata entityMetadata = AnnotatedEntityMetadataBuilder.build(cardFaceModel.getClass());
         new Deserialiser(objectMapper).deserialiseEntity(entityMetadata, faceNode, cardFaceModel);

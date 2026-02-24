@@ -24,7 +24,7 @@ import java.nio.file.Path;
 public class Migrator {
     private static final Logger logger = LogManager.getLogger(Migrator.class);
 
-    private static final double PIXEL_MULTIPLIER = 2;
+    private static final String TTS_ZOOP_GUID_KEY = "TtsZoopGuid";
 
     private final ProjectContext projectContext;
 
@@ -92,9 +92,22 @@ public class Migrator {
 
             // TODO: log out any settings that are not accessed to detect properties that are not picked up
 
+
+
             Card card = new Card();
             card.setFrontFaceModel(frontFaceModel);
             card.setBackFaceModel(backFaceModel);
+
+            // have the card assume the Zoop GUID if it exists
+            // as this will be used again by Zoop from the Hades card it keeps the card identity intact when linking to
+            // any existing TTS content
+            String zoopGuid = diy.getSettings().get(TTS_ZOOP_GUID_KEY);
+
+            if (!StringUtils.isEmpty(zoopGuid))
+                card.setId(zoopGuid);
+
+            // copy any comments
+            card.getCardMetadataModel().setComments(diy.getComment());
 
             return card;
         }

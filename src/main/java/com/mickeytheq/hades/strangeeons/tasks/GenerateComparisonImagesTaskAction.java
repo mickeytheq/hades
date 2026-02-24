@@ -6,7 +6,7 @@ import ca.cgjennings.apps.arkham.project.Member;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
 import com.google.common.collect.Lists;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
@@ -28,7 +28,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -112,7 +111,7 @@ public class GenerateComparisonImagesTaskAction extends BaseTaskAction {
             return Lists.newArrayList(null, null);
 
         Card card = CardIO.readCard(cardPath, projectContext);
-        CardView cardView = CardFaces.createCardView(card, projectContext);
+        CardView cardView = Cards.createCardView(card, projectContext);
 
         BufferedImage hadesFrontImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), renderTarget, dpi, 0);
 

@@ -60,7 +60,7 @@ public class InvestigatorBackView extends BaseCardFaceView<InvestigatorBack> {
     private String getTemplateResource() {
         InvestigatorClass investigatorClass = getInvestigatorFront().getModel().getInvestigatorFieldsModel().getInvestigatorClass();
 
-        return "/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase() + ".png";
+        return "/templates/investigator/investigator_back_" + investigatorClass.name().toLowerCase();
     }
 
     @Override

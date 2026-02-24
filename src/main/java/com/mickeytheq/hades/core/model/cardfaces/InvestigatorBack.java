@@ -4,6 +4,7 @@ import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.model.common.CardModelPropertyNames;
 import com.mickeytheq.hades.core.model.common.Distance;
+import com.mickeytheq.hades.core.model.common.HasPortraitModel;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Model(typeCode = "InvestigatorBack", version = 1)
-public class InvestigatorBack implements CardFaceModel {
+public class InvestigatorBack implements CardFaceModel, HasPortraitModel {
     public static class InvestigatorBackSection implements EmptyEntityDiscriminator {
         private String header;
         private String text;

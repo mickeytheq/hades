@@ -3,7 +3,7 @@ package com.mickeytheq.hades.scratchpad;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
 import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
@@ -30,7 +30,7 @@ public class SerialiseScratch {
         model.getPlayerCardFieldsModel().setCost("3");
         model.getPlayerCardFieldsModel().setLevel(5);
 
-        Card card = CardFaces.createCardModel(model, null);
+        Card card = Cards.createCardModel(model, null);
         ObjectNode objectNode = JsonCardSerialiser.serialiseCard(card);
 
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();

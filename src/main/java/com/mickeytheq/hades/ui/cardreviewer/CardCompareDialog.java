@@ -3,7 +3,7 @@ package com.mickeytheq.hades.ui.cardreviewer;
 import ca.cgjennings.apps.arkham.component.GameComponent;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import ca.cgjennings.apps.arkham.sheet.Sheet;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
@@ -141,7 +141,7 @@ public class CardCompareDialog extends DialogEx {
         Path currentPath = pathItemSource.getCurrent();
         ProjectContext projectContext = StandardProjectContext.getContextForContentPath(currentPath);
         Card card = CardIO.readCard(currentPath, projectContext);
-        CardView cardView = CardFaces.createCardView(card, projectContext);
+        CardView cardView = Cards.createCardView(card, projectContext);
         BufferedImage hadesImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 300, 0);
 
         // load the equivalent SE card

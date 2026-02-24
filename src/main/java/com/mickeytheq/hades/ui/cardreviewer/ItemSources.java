@@ -1,6 +1,6 @@
 package com.mickeytheq.hades.ui.cardreviewer;
 
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
@@ -23,7 +23,7 @@ public class ItemSources {
             ProjectContext projectContext = StandardProjectContext.getContextForContentPath(path);
 
             Card card = CardIO.readCard(path, projectContext);
-            CardView cardView = CardFaces.createCardView(card, projectContext);
+            CardView cardView = Cards.createCardView(card, projectContext);
 
             return cardView;
         });

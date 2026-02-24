@@ -76,7 +76,7 @@ public class ImageProxy implements NeedsDeepCopy {
         return identifier;
     }
 
-    // creates an empty proxy that will load nothing
+    // creates an empty proxy that will load nothing but can be altered
     public static ImageProxy createEmpty() {
         return new ImageProxy(getImagePersister(), null);
     }
@@ -89,6 +89,12 @@ public class ImageProxy implements NeedsDeepCopy {
     // creates a proxy with a specific image - primarily useful for testing
     public static ImageProxy createStatic(BufferedImage image) {
         return new ImageProxy(image);
+    }
+
+    // creates an empty proxy that will never load anything - useful for creating a read-only image proxy
+    // that represents no image
+    public static ImageProxy createEmptyReadOnly() {
+        return new ImageProxy(null, null);
     }
 
     private static ImagePersister getImagePersister() {

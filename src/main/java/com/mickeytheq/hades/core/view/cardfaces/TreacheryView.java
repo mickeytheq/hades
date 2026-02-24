@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.model.cardfaces.Treachery;
@@ -105,7 +106,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
                 resourcePathPrefix = resourcePathPrefix + "_encounter";
         }
 
-        return TemplateInfos.createStandard300And600(resourcePathPrefix, CardFaceOrientation.Portrait);
+        return Lists.newArrayList(TemplateInfos.createStandard600(resourcePathPrefix, CardFaceOrientation.Portrait));
     }
 
     @Override

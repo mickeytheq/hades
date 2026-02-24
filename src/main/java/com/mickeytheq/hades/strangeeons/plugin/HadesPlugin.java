@@ -6,7 +6,7 @@ import ca.cgjennings.apps.arkham.plugins.Plugin;
 import ca.cgjennings.apps.arkham.plugins.PluginContext;
 import ca.cgjennings.apps.arkham.project.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.global.configuration.GlobalConfiguration;
@@ -16,7 +16,6 @@ import com.mickeytheq.hades.core.global.ui.GlobalConfigurationDialog;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
-import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.project.ui.ProjectConfigurationDialog;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
@@ -198,7 +197,7 @@ public class HadesPlugin extends AbstractPlugin {
 
                 Card card = CardIO.readCard(path, projectContext);
 
-                CardView cardView = CardFaces.createCardView(card, projectContext);
+                CardView cardView = Cards.createCardView(card, projectContext);
 
                 return new CardGameComponent(cardView);
             }

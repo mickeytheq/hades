@@ -8,7 +8,7 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 @Model(typeCode = "Event", version = 1)
-public class Event implements CardFaceModel, HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel {
+public class Event implements CardFaceModel, HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel, HasPortraitModel {
     private final CommonCardFieldsModel commonCardFieldsModel;
     private final CollectionModel collectionModel = new CollectionModel();
     private final EncounterSetModel encounterSetModel = new EncounterSetModel();

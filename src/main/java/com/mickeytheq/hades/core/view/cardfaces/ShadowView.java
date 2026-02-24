@@ -3,7 +3,7 @@ package com.mickeytheq.hades.core.view.cardfaces;
 import ca.cgjennings.apps.arkham.StrangeEons;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
@@ -117,7 +117,7 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
         // shadowing is only allowed within projects so the project context will be the same
         ProjectContext shadowingProjectContext = getCardView().getProjectContext();
 
-        CardView shadowingView = CardFaces.createCardView(shadowingCard, shadowingProjectContext);
+        CardView shadowingView = Cards.createCardView(shadowingCard, shadowingProjectContext);
 
         if (getModel().getShadowSide() == CardFaceSide.Front) {
             shadowingFaceView = shadowingView.getFrontFaceView();

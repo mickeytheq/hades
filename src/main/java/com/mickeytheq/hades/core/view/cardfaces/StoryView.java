@@ -50,7 +50,7 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return Lists.newArrayList(TemplateInfos.createStandard300And600("/templates/story/story_" + getModel().getStoryFieldsModel().getPlayerCardClass().name().toLowerCase(), CardFaceOrientation.Portrait));
+        return Lists.newArrayList(TemplateInfos.createStandard600("/templates/story/story_" + getModel().getStoryFieldsModel().getPlayerCardClass().name().toLowerCase(), CardFaceOrientation.Portrait));
     }
 
     @Override

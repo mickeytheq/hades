@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.scratchpad;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.Enemy;
@@ -12,15 +12,11 @@ import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardView;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
-import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -47,9 +43,9 @@ public class QuickExport {
     }
 
     private static void writeCardFace(CardFaceModel cardFaceModel, ProjectContext projectContext, Path destination) {
-        Card card = CardFaces.createCardModel(cardFaceModel, null);
+        Card card = Cards.createCardModel(cardFaceModel, null);
 
-        CardView cardView = CardFaces.createCardView(card, projectContext);
+        CardView cardView = Cards.createCardView(card, projectContext);
 
         BufferedImage bufferedImage = CardFaceViewUtils.paintCardFace(cardView.getFrontFaceView(), RenderTarget.PREVIEW, 600, 72);
 

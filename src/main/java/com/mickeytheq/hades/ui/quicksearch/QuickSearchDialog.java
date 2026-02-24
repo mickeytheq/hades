@@ -1,7 +1,7 @@
 package com.mickeytheq.hades.ui.quicksearch;
 
 import ca.cgjennings.ui.DocumentEventAdapter;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.global.carddatabase.BasicCardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabase;
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
@@ -45,15 +45,15 @@ public class QuickSearchDialog extends JDialog {
                 asset.getCommonCardFieldsModel().setTitle("Asset" + i);
                 asset.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
                 asset.getCommonCardFieldsModel().setRules("Asset" + i);
-                cards.add(CardFaces.createCardModel(asset, new PlayerCardBack()));
+                cards.add(Cards.createCardModel(asset, new PlayerCardBack()));
 
                 Event event = new Event();
                 event.getCommonCardFieldsModel().setTitle("Event" + i);
-                cards.add(CardFaces.createCardModel(event, new PlayerCardBack()));
+                cards.add(Cards.createCardModel(event, new PlayerCardBack()));
 
                 Skill skill = new Skill();
                 skill.getCommonCardFieldsModel().setTitle("Skill" + i);
-                cards.add(CardFaces.createCardModel(skill, new PlayerCardBack()));
+                cards.add(Cards.createCardModel(skill, new PlayerCardBack()));
             }
 
             CardDatabase cardDatabase = new BasicCardDatabase(cards);

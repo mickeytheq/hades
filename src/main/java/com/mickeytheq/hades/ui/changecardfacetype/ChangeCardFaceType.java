@@ -2,7 +2,7 @@ package com.mickeytheq.hades.ui.changecardfacetype;
 
 import ca.cgjennings.apps.arkham.StrangeEons;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
-import com.mickeytheq.hades.core.CardFaces;
+import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.*;
@@ -38,7 +38,7 @@ public class ChangeCardFaceType {
             CardFaceModel sourceCardFaceModel = dialog.getSourceCardFaceModel();
             CardFaceTypeRegister.CardFaceInfo targetCardFaceInfo = dialog.getTargetCardFaceInfo();
 
-            CardFaceModel targetCardFaceModel = CardFaces.createFaceModelForTypeCode(targetCardFaceInfo.getTypeCode(), projectContext);
+            CardFaceModel targetCardFaceModel = Cards.createFaceModelForTypeCode(targetCardFaceInfo.getTypeCode(), projectContext);
 
             EntityUtils.copyEntity(sourceCardFaceModel, targetCardFaceModel);
 

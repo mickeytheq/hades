@@ -9,7 +9,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.serialise.discriminator.NumberEmptyWhenZeroDiscriminator;
 
 @Model(typeCode = "Enemy", version = 1)
-public class Enemy extends BaseCardFaceModel implements HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel {
+public class Enemy extends BaseCardFaceModel implements HasCommonCardFieldsModel, HasEncounterSetModel, HasCollectionModel, HasPortraitModel {
     private final EnemyFieldsModel enemyFieldsModel = new EnemyFieldsModel();
     private final CommonCardFieldsModel commonCardFieldsModel = new CommonCardFieldsModel();
     private final CollectionModel collectionModel = new CollectionModel();
