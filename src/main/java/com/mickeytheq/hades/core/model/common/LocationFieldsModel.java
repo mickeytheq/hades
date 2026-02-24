@@ -4,6 +4,11 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class LocationFieldsModel implements EmptyEntityDiscriminator {
     public static final String EMPTY_VALUE = null;
     public static final String NONE_VALUE = "(None)";
@@ -111,6 +116,21 @@ public class LocationFieldsModel implements EmptyEntityDiscriminator {
 
     public void setConnectionIcon6(String connectionIcon6) {
         this.connectionIcon6 = connectionIcon6;
+    }
+
+    public List<String> getConnectionIcons() {
+        List<String> connectionIcons = Stream.of(
+                        getConnectionIcon1(),
+                        getConnectionIcon2(),
+                        getConnectionIcon3(),
+                        getConnectionIcon4(),
+                        getConnectionIcon5(),
+                        getConnectionIcon6())
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return connectionIcons;
     }
 
     @Override

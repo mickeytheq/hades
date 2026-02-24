@@ -176,7 +176,7 @@ public class PlayerCardFieldsView {
     }
 
     public void paintLevelPips(PaintContext paintContext) {
-        if (getModel().hasLevel()) {
+        if (getModel().hasLevel() && getModel().getLevel() > 0) {
             PaintUtils.paintBufferedImage(paintContext.getGraphics(),
                     ImageUtils.loadImageReadOnly("/overlays/level_" + getModel().getLevel() + ".png"),
                     paintContext.toPixelRect(LEVEL_DRAW_REGION));

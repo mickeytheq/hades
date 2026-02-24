@@ -15,13 +15,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.*;
+import java.nio.file.Files;
 
 public class Scratch {
     public static void main(String[] args) throws Exception {
-        Bootstrapper.initaliseOutsideStrangeEons();
-
-        ExportCardDialog dialog = new ExportCardDialog(null);
-        dialog.showDialog();
+        BufferedImage image = SvgUtils.toBufferedImage(Scratch.class.getResourceAsStream("/overlays/location/symbols/triangle.svg"), 100, 100);
+        int i = 1;
     }
 
 }
