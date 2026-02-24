@@ -25,6 +25,7 @@ public class Event implements CardFaceModel, HasCommonCardFieldsModel, HasEncoun
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
         collectionModel.initialiseNew(projectContext, cardFaceSide);
+        playerCardFieldsModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property(CardModelPropertyNames.GENERAL)

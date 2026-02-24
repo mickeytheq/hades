@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.Model;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
         collectionModel.initialiseNew(projectContext, cardFaceSide);
+        playerCardFieldsModel.initialiseNew(projectContext, cardFaceSide);
     }
 
     @Property("Asset")
@@ -75,7 +77,7 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
         return portraitModel;
     }
 
-    public static class AssetFieldsModel {
+    public static class AssetFieldsModel implements EmptyEntityDiscriminator {
         private AssetSlot slot1;
         private AssetSlot slot2;
         private Statistic health = Statistic.empty();
@@ -125,5 +127,15 @@ public class Asset extends BaseCardFaceModel implements HasCommonCardFieldsModel
                     .collect(Collectors.toList());
         }
 
+        @Override
+        public boolean isEmpty() {
+            if (slot1 != null || slot2 != null)
+                return false;
+
+            if (!getHealth().isEmpty() || !getSanity().isEmpty())
+                return false;
+
+            return true;
+        }
     }
 }

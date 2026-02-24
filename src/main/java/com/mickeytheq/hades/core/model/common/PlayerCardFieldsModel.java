@@ -1,6 +1,8 @@
 package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
+import com.mickeytheq.hades.core.project.ProjectContext;
+import com.mickeytheq.hades.core.view.CardFaceSide;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,11 +23,11 @@ public class PlayerCardFieldsModel {
     private PlayerCardSkillIcon skillIcon5;
     private PlayerCardSkillIcon skillIcon6;
 
-    public PlayerCardFieldsModel() {
+    public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
         cardType = PlayerCardType.Standard;
         cardClass1 = PlayerCardClass.Guardian;
-        cost = "0";
         level = 0;
+        cost = "0";
     }
 
     @Property("CardType")
