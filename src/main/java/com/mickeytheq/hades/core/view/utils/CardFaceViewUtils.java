@@ -14,6 +14,8 @@ import com.mickeytheq.hades.core.view.utils.PaintUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -120,17 +122,31 @@ public class CardFaceViewUtils {
         }
     }
 
+    // paints the card face view returning a BufferedImage
+    // throws an exception if there is a problem with the painting
     public static BufferedImage paintCardFace(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int requestedBleedMarginInPixels) {
-        CardFacePaintResult result = paintCardFaceFullDetails(cardFaceView, renderTarget, ppi, requestedBleedMarginInPixels);
+        CardFacePaintResult result = paintCardFaceFullDetails(cardFaceView, renderTarget, ppi, requestedBleedMarginInPixels, false);
+
+        if (result.getStatus() != CardFacePaintResult.Status.Success)
+            throw new RuntimeException("Failed to paint card face " + cardFaceView.getBriefDisplayString() + ". Status code was '" + result.getStatus() + "'");
 
         return result.getBufferedImage();
     }
 
-    public static CardFacePaintResult paintCardFaceFullDetails(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int requestedBleedMarginInPixels) {
+    // paints the card face view returning a full result container of details
+    // if true is passed to generateImageOnError then an image containing the error will be generated instead of throwing an exception
+    // this is useful in UI situations where it is a better UX to show the user an error rather than it being in an error dialog somewhere
+    public static CardFacePaintResult paintCardFaceFullDetails(CardFaceView cardFaceView, RenderTarget renderTarget, int ppi, int requestedBleedMarginInPixels, boolean generateImageOnError) {
         Optional<TemplateInfo> templateInfoOptional = cardFaceView.getCompatibleTemplateInfo(ppi);
 
-        if (!templateInfoOptional.isPresent())
-            return new CardFacePaintResult(createMissingTemplateImage(cardFaceView, ppi), 0, 0);
+        if (!templateInfoOptional.isPresent()) {
+            if (generateImageOnError)
+                return new CardFacePaintResult(CardFacePaintResult.Status.NoTemplate, createMissingTemplateImage(cardFaceView, ppi), 0, 0);
+
+            String error = "No compatible template found for card face view " + cardFaceView.getBriefDisplayString() + " and requested resolution PPI " + ppi;
+
+            throw new RuntimeException(error);
+        }
 
         TemplateInfo templateInfo = templateInfoOptional.get();
 
@@ -158,7 +174,7 @@ public class CardFaceViewUtils {
 
         long paintTimeInMs = stopWatch.getTime();
 
-        return new CardFacePaintResult(bleedTrimmedBufferedImage, bleedMarginToKeep, paintTimeInMs);
+        return new CardFacePaintResult(CardFacePaintResult.Status.Success, bleedTrimmedBufferedImage, bleedMarginToKeep, paintTimeInMs);
     }
 
     public static BufferedImage createMissingTemplateImage(CardFaceView cardFaceView, int ppi) {

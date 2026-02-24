@@ -104,7 +104,9 @@ public class CardFaceViewViewer extends AbstractViewer {
         if (!needRefresh)
             return cardFacePaintResult.getBufferedImage();
 
-        cardFacePaintResult = CardFaceViewUtils.paintCardFaceFullDetails(cardFaceView, RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0);
+        cardFacePaintResult = CardFaceViewUtils.paintCardFaceFullDetails(cardFaceView,
+                RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0, 
+                true);
 
         paintBleedBorder();
 
