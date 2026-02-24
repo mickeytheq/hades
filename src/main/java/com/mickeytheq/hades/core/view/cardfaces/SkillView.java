@@ -22,6 +22,7 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -61,7 +62,36 @@ public class SkillView extends BaseCardFaceView<Skill> implements HasCollectionV
 
     @Override
     protected List<TemplateInfo> getAvailableTemplateInfos() {
-        return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
+        // TODO: hi-res skills are not complete yet so there's a split set of available options
+        PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();
+
+        // weakness is in 300 and 600
+        if (playerCardType.isWeakness())
+            return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
+
+        // TODO: multi-class not available at all
+        if (getModel().getPlayerCardFieldsModel().isMultiClass())
+            return Collections.emptyList();
+
+        // TODO: story multi-class not available at all
+        if (playerCardType == PlayerCardType.Story)
+            return Collections.emptyList();
+
+        // TODO: neutral only in 300
+        if (playerCardType == PlayerCardType.Neutral)
+            return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResourcePrefix(), CardFaceOrientation.Portrait));
+
+        switch (getModel().getPlayerCardFieldsModel().getCardClass1()) {
+            // these are in 600
+            case Guardian:
+            case Rogue:
+            case Survivor:
+                return TemplateInfos.createStandard300And600(getTemplateResourcePrefix(), CardFaceOrientation.Portrait);
+
+            // TODO: others only in 300
+            default:
+                return Lists.newArrayList(TemplateInfos.createStandard300(getTemplateResourcePrefix(), CardFaceOrientation.Portrait));
+        }
     }
 
     private String getTemplateResourcePrefix() {
