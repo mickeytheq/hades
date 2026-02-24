@@ -279,7 +279,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private static final RectangleEx ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(53.71, 0, PaintConstants.ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE);
     private static final RectangleEx WEAKNESS_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(50.87, 34.37, 2.54);
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.BASIC_WEAKNESS_ICON_SIZE);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = ENCOUNTER_SET_CIRCLE_WEAKNESS_DRAW_REGION.centreOn(PaintConstants.ENCOUNTER_SET_ICON_SIZE).nudgeUp(0.4).nudgeLeft(0.2);
 
     private void paintWeaknessContent(PaintContext paintContext) {
         PlayerCardType playerCardType = getModel().getPlayerCardFieldsModel().getCardType();

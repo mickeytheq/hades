@@ -309,7 +309,7 @@ public class LocationFieldsView {
     public static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(47.00, 16.93, 2.37);
     public static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(1.20, 40.98, 4.91);
     public static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(6.40, 32.34, 3.56);
-    public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.49, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    public static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(41.29, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
 
     // negative as the overlay has a fair bit of transparent surrounding space which can clip outside the total draw region safely
     private static final RectangleEx CIRCLE_OVERLAY_DRAW_REGION = RectangleEx.millimetres(0.10, -1.00, 10.58, 10.58);
