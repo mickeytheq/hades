@@ -26,32 +26,32 @@ public class Agenda extends BaseCardFaceModel implements HasCommonCardFieldsMode
         collectionModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(CardModelPropertyNames.AGENDA)
+    @Property(CardModelUtils.AGENDA)
     public AgendaFieldsModel getAgendaFieldsModel() {
         return agendaFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.STORY)
+    @Property(CardModelUtils.STORY)
     public StorySectionModel getStorySectionModel() {
         return storySectionModel;
     }
 
-    @Property(CardModelPropertyNames.COLLECTION)
+    @Property(CardModelUtils.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(CardModelPropertyNames.ART_PORTRAIT)
+    @Property(CardModelUtils.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

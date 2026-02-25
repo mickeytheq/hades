@@ -38,7 +38,7 @@ public class CommonCardFieldsModel {
         this.subtitle = subtitle;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE + "Titles", discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE + "Titles", discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean getCopyOtherFaceTitles() {
         return copyOtherFaceTitles;
     }

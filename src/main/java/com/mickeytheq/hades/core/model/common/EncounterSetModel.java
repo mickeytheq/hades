@@ -38,7 +38,7 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
         return true;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }
@@ -65,7 +65,7 @@ public class EncounterSetModel implements EmptyEntityDiscriminator {
         this.total = total;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetConfiguration getEncounterSetConfiguration() {
         return encounterSetConfiguration;
     }

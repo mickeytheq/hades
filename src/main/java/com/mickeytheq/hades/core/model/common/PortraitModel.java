@@ -71,7 +71,7 @@ public class PortraitModel implements EmptyEntityDiscriminator {
         this.artist = artist;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }

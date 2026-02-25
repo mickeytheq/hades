@@ -25,32 +25,32 @@ public class ActBack extends BaseCardFaceModel implements HasCommonCardFieldsMod
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(CardModelPropertyNames.ACT)
+    @Property(CardModelUtils.ACT)
     public ActFieldsModel getActFieldsModel() {
         return actFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_1)
+    @Property(CardModelUtils.STORY_SECTION_1)
     public StorySectionModel getSection1() {
         return section1;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_2)
+    @Property(CardModelUtils.STORY_SECTION_2)
     public StorySectionModel getSection2() {
         return section2;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_3)
+    @Property(CardModelUtils.STORY_SECTION_3)
     public StorySectionModel getSection3() {
         return section3;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }

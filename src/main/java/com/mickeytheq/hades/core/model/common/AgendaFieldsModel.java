@@ -9,7 +9,7 @@ public class AgendaFieldsModel {
     private String deckId;
     private Statistic doom = Statistic.empty();
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }

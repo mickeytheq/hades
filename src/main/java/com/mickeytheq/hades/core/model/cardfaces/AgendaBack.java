@@ -25,32 +25,32 @@ public class AgendaBack extends BaseCardFaceModel implements HasCommonCardFields
         encounterSetModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(CardModelPropertyNames.AGENDA)
+    @Property(CardModelUtils.AGENDA)
     public AgendaFieldsModel getAgendaFieldsModel() {
         return agendaFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_1)
+    @Property(CardModelUtils.STORY_SECTION_1)
     public StorySectionModel getSection1() {
         return section1;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_2)
+    @Property(CardModelUtils.STORY_SECTION_2)
     public StorySectionModel getSection2() {
         return section2;
     }
 
-    @Property(CardModelPropertyNames.STORY_SECTION_3)
+    @Property(CardModelUtils.STORY_SECTION_3)
     public StorySectionModel getSection3() {
         return section3;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }

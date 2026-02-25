@@ -24,12 +24,12 @@ public class LocationBack extends BaseCardFaceModel implements HasCommonCardFiel
         portraitModel.setCopyOtherFace(true);
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.ART_PORTRAIT)
+    @Property(CardModelUtils.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

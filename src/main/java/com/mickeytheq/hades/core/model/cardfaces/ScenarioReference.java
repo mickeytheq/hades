@@ -38,17 +38,17 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
         return scenarioReferenceFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(CardModelPropertyNames.COLLECTION)
+    @Property(CardModelUtils.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }

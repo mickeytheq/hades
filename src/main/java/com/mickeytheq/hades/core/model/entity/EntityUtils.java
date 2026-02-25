@@ -8,6 +8,20 @@ import java.util.Optional;
 public class EntityUtils {
     private static final Logger logger = LogManager.getLogger(EntityUtils.class);
 
+    // attempts to create a copy of the given entity by invoking the zero-arg constructor of its class
+    // and then performing a property by property copy
+    public static Object cloneEntity(Object fromEntity) {
+        try {
+            Object toEntity = fromEntity.getClass().newInstance();
+            copyEntity(fromEntity, toEntity);
+            return toEntity;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("Error creating copy of entity with class '" + fromEntity.getClass().getName() + "'", e);
+        }
+    }
+
+    // performs an in place copy from one entity to another
+    // the entities do not have to be the same type as matching is done on property names at each level
     public static void copyEntity(Object fromEntity, Object toEntity) {
         new CardCopier().copy(fromEntity, toEntity);
     }

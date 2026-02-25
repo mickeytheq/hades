@@ -1,8 +1,11 @@
 package com.mickeytheq.hades.core;
 
+import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.Location;
+import com.mickeytheq.hades.core.model.cardfaces.Shadow;
 import com.mickeytheq.hades.core.model.common.*;
+import com.mickeytheq.hades.core.model.entity.EntityUtils;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
@@ -115,18 +118,18 @@ public class Cards {
     // this makes it easier for readers to consume the data rather than having to detect these instances
     public static void resolveReferences(Card card) {
         if (!card.hasBack()) {
-            resolveReferences(card.getFrontFaceModel(), null);
+            resolveReferences(card, CardFaceSide.Front, card.getFrontFaceModel(), null);
             return;
         }
 
         // resolve references both ways
         // any circular references will be resolved by the first pass setting the target to null/not-set which will then be copied
         // back on the second pass
-        resolveReferences(card.getFrontFaceModel(), card.getBackFaceModel());
-        resolveReferences(card.getBackFaceModel(), card.getFrontFaceModel());
+        resolveReferences(card, CardFaceSide.Front, card.getFrontFaceModel(), card.getBackFaceModel());
+        resolveReferences(card, CardFaceSide.Back, card.getBackFaceModel(), card.getFrontFaceModel());
     }
 
-    private static void resolveReferences(CardFaceModel targetModel, CardFaceModel otherFaceModel) {
+    private static void resolveReferences(Card card, CardFaceSide targetModelSide, CardFaceModel targetModel, CardFaceModel otherFaceModel) {
         // titles
         HasCommonCardFieldsModel.getInstance(targetModel).ifPresent(commonCardFieldsModel -> {
             if (!commonCardFieldsModel.getCopyOtherFaceTitles())
@@ -143,7 +146,7 @@ public class Cards {
             }
             else {
                 commonCardFieldsModel.setTitle(otherModel.get().getTitle());
-                commonCardFieldsModel.setTitle(otherModel.get().getSubtitle());
+                commonCardFieldsModel.setSubtitle(otherModel.get().getSubtitle());
             }
         });
 
@@ -269,7 +272,7 @@ public class Cards {
             }
             else {
                 actFieldsModel.setNumber(otherModel.get().getNumber());
-                actFieldsModel.setDeckId(otherModel.get().getDeckId());
+                actFieldsModel.setDeckId(CardModelUtils.getNextDeckId(otherModel.get().getDeckId()));
             }
         });
 
@@ -289,8 +292,23 @@ public class Cards {
             }
             else {
                 agendaFieldsModel.setNumber(otherModel.get().getNumber());
-                agendaFieldsModel.setDeckId(otherModel.get().getDeckId());
+                agendaFieldsModel.setDeckId(CardModelUtils.getNextDeckId(otherModel.get().getDeckId()));
             }
         });
+
+        // shadow
+        if (targetModel instanceof Shadow) {
+            Shadow shadow = (Shadow)targetModel;
+            String shadowCardId = shadow.getShadowCardId();
+
+            Optional<Card> shadowedCard = CardDatabases.getCardDatabase().getCardWithId(shadowCardId);
+
+            if (!shadowedCard.isPresent())
+                throw new RuntimeException("Shadow card is shadowing a card with id '" + shadowCardId + "' that could not be found. ");
+
+            CardFaceModel modelToCopy = shadowedCard.get().getCardFaceModel(shadow.getShadowSide());
+
+            card.setCardFaceModel(targetModelSide, (CardFaceModel) EntityUtils.cloneEntity(modelToCopy));
+        }
     }
 }

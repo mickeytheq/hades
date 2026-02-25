@@ -25,27 +25,27 @@ public class Skill extends BaseCardFaceModel implements HasCommonCardFieldsModel
         playerCardFieldsModel.initialiseNew(projectContext, cardFaceSide);
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.COLLECTION)
+    @Property(CardModelUtils.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(CardModelPropertyNames.PLAYER)
+    @Property(CardModelUtils.PLAYER)
     public PlayerCardFieldsModel getPlayerCardFieldsModel() {
         return playerCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.ART_PORTRAIT)
+    @Property(CardModelUtils.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

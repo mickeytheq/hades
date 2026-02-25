@@ -34,7 +34,7 @@ public class CollectionModel implements EmptyEntityDiscriminator {
         return true;
     }
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }
@@ -52,7 +52,7 @@ public class CollectionModel implements EmptyEntityDiscriminator {
         this.number = number;
     }
 
-    @Property(CardModelPropertyNames.COLLECTION)
+    @Property(CardModelUtils.COLLECTION)
     public CollectionConfiguration getCollectionConfiguration() {
         return collectionConfiguration;
     }

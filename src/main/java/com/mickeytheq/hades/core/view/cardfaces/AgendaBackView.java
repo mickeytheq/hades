@@ -5,6 +5,7 @@ import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Agenda;
 import com.mickeytheq.hades.core.model.cardfaces.AgendaBack;
+import com.mickeytheq.hades.core.model.common.CardModelUtils;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.common.*;
@@ -160,9 +161,8 @@ public class AgendaBackView extends BaseCardFaceView<AgendaBack> implements HasE
             if (otherFaceAgenda.isPresent()) {
                 Agenda agenda = otherFaceAgenda.get();
 
-                // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
-                // deck id should only be one character in most cases but preserve the rest of the string if there is anything
-                String newDeckId = (char)(agenda.getAgendaFieldsModel().getDeckId().charAt(0) + 1) + StringUtils.substring(agenda.getAgendaFieldsModel().getDeckId(), 1);
+                // copy the number from the front and for the deck id increment it
+                String newDeckId = CardModelUtils.getNextDeckId(agenda.getAgendaFieldsModel().getDeckId());
                 PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_AGENDA), agenda.getAgendaFieldsModel().getNumber(), newDeckId);
             }
 

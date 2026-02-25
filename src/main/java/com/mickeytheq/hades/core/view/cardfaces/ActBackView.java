@@ -5,6 +5,8 @@ import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.cardfaces.Act;
 import com.mickeytheq.hades.core.model.cardfaces.ActBack;
+import com.mickeytheq.hades.core.model.common.ActFieldsModel;
+import com.mickeytheq.hades.core.model.common.CardModelUtils;
 import com.mickeytheq.hades.core.view.PaintContext;
 import com.mickeytheq.hades.core.view.*;
 import com.mickeytheq.hades.core.view.common.*;
@@ -160,9 +162,8 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
             if (otherFaceModel.isPresent()) {
                 Act act = otherFaceModel.get();
 
-                // copy the number from the front and for the deck id take the first character and increment it by 1, e.g. 'a' -> 'b'
-                // deck id should only be one character in most cases but preserve the rest of the string if there is anything
-                String newDeckId = (char)(act.getActFieldsModel().getDeckId().charAt(0) + 1) + StringUtils.substring(act.getActFieldsModel().getDeckId(), 1);
+                // copy the number from the front
+                String newDeckId = CardModelUtils.getNextDeckId(act.getActFieldsModel().getDeckId());
                 PaintUtils.paintScenarioIndexBack(paintContext, paintContext.toPixelRect(SCENARIO_INDEX_DRAW_REGION), Language.gstring(GameConstants.LABEL_ACT), act.getActFieldsModel().getNumber(), newDeckId);
             }
 

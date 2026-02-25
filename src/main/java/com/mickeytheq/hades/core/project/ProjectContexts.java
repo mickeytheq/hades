@@ -28,13 +28,23 @@ public class ProjectContexts {
             return runnableResult.get();
         }
 
-        CONTEXT_THREAD_LOCAL.set(projectContext);
+        setCurrentContext(projectContext);
         try {
             return runnableResult.get();
         }
         finally {
-            CONTEXT_THREAD_LOCAL.remove();
+            unsetCurrentContext();
         }
+    }
+
+    // should not use these two methods directly, instead use the withXXX methods above
+    // however these direct accesses can be useful when testing
+    public static void setCurrentContext(ProjectContext projectContext) {
+        CONTEXT_THREAD_LOCAL.set(projectContext);
+    }
+
+    public static void unsetCurrentContext() {
+        CONTEXT_THREAD_LOCAL.remove();
     }
 
     public static ProjectContext getCurrentContext() {

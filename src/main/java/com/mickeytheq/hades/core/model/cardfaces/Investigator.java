@@ -39,22 +39,22 @@ public class Investigator implements CardFaceModel, HasCommonCardFieldsModel, Ha
         return investigatorFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.GENERAL)
+    @Property(CardModelUtils.GENERAL)
     public CommonCardFieldsModel getCommonCardFieldsModel() {
         return commonCardFieldsModel;
     }
 
-    @Property(CardModelPropertyNames.COLLECTION)
+    @Property(CardModelUtils.COLLECTION)
     public CollectionModel getCollectionModel() {
         return collectionModel;
     }
 
-    @Property(CardModelPropertyNames.ENCOUNTER_SET)
+    @Property(CardModelUtils.ENCOUNTER_SET)
     public EncounterSetModel getEncounterSetModel() {
         return encounterSetModel;
     }
 
-    @Property(CardModelPropertyNames.ART_PORTRAIT)
+    @Property(CardModelUtils.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

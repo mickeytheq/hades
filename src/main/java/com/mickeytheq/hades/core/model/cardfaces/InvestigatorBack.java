@@ -2,7 +2,7 @@ package com.mickeytheq.hades.core.model.cardfaces;
 
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.Model;
-import com.mickeytheq.hades.core.model.common.CardModelPropertyNames;
+import com.mickeytheq.hades.core.model.common.CardModelUtils;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.HasPortraitModel;
 import com.mickeytheq.hades.core.model.common.PortraitModel;
@@ -164,7 +164,7 @@ public class InvestigatorBack implements CardFaceModel, HasPortraitModel {
         this.story = story;
     }
 
-    @Property(CardModelPropertyNames.ART_PORTRAIT)
+    @Property(CardModelUtils.ART_PORTRAIT)
     public PortraitModel getPortraitModel() {
         return portraitModel;
     }

@@ -2,6 +2,7 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
+import org.apache.commons.lang3.StringUtils;
 
 public class ActFieldsModel {
     private boolean copyOtherFace = false;
@@ -9,7 +10,7 @@ public class ActFieldsModel {
     private String deckId;
     private Statistic clues = Statistic.empty();
 
-    @Property(value = CardModelPropertyNames.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
+    @Property(value = CardModelUtils.COPY_OTHER_FACE, discriminator = BooleanEmptyWhenFalseDiscriminator.class)
     public boolean isCopyOtherFace() {
         return copyOtherFace;
     }
