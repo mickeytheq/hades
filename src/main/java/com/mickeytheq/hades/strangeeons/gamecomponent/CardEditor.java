@@ -19,6 +19,7 @@ import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ui.ExportCardDialog;
 import com.mickeytheq.hades.ui.DialogEx;
+import com.mickeytheq.hades.ui.ErrorDialog;
 import com.mickeytheq.hades.util.shape.Unit;
 import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -26,9 +27,12 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.imageio.ImageIO;
+import javax.print.PrintException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -134,12 +138,22 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     @Override
     protected void exportImpl() {
-        ExportCardDialog dialog = new ExportCardDialog(StrangeEons.getWindow());
-        if (dialog.showDialog() != DialogEx.OK_OPTION)
-            return;
+        try {
+            ExportCardDialog dialog = new ExportCardDialog(StrangeEons.getWindow());
+            if (dialog.showDialog() != DialogEx.OK_OPTION)
+                return;
 
-        exportFace(CardFaceSide.Front, dialog);
-        exportFace(CardFaceSide.Back, dialog);
+            exportFace(CardFaceSide.Front, dialog);
+            exportFace(CardFaceSide.Back, dialog);
+        }
+        catch (Throwable t) {
+            ErrorDialog.error("Error while exporting card '" + getFile().getAbsolutePath() + "'", t);
+        }
+    }
+
+    @Override
+    protected void printImpl(PrinterJob job) throws PrintException, PrinterException {
+        throw new UnsupportedOperationException("Printing not currently supported");
     }
 
     private void exportFace(CardFaceSide cardFaceSide, ExportCardDialog dialog) {

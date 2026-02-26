@@ -185,6 +185,10 @@ public class CardFaceViewUtils {
                 "of type '" + cardFaceView.getClass().getSimpleName() + "'",
                 "for desired PPI " + ppi);
 
+        return createErrorImage(textStrings);
+    }
+
+    public static BufferedImage createErrorImage(List<String> textStrings) {
         BufferedImage bufferedImage = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = bufferedImage.createGraphics();
         try {

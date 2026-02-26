@@ -2,7 +2,9 @@ package com.mickeytheq.hades.core.view.utils;
 
 import ca.cgjennings.apps.arkham.AbstractViewer;
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.view.CardFaceView;
+import com.mickeytheq.hades.ui.ErrorDialog;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,7 +91,6 @@ public class CardFaceViewViewer extends AbstractViewer {
     // override just to adding timing for debugging
     @Override
     protected void paintComponent(Graphics g1) {
-        StopWatch stopWatch = StopWatch.createStarted();
         super.paintComponent(g1);
 
         if (cardFacePaintResult.getStatus() == CardFacePaintResult.Status.Success) {
@@ -102,8 +103,6 @@ public class CardFaceViewViewer extends AbstractViewer {
             drawLabel((Graphics2D) g1, getActualBleedMarginInPixels() + " bleed pixels", 3);
             drawLabel((Graphics2D) g1, cardFacePaintResult.getPaintTimeInMilliseconds() + "ms render time", 4);
         }
-
-        logger.trace("paintComponent of " + CardFaceViewViewer.class.getSimpleName() + " completed in " + stopWatch.getTime() + "ms");
     }
 
     @Override
@@ -111,13 +110,19 @@ public class CardFaceViewViewer extends AbstractViewer {
         if (!needRefresh)
             return cardFacePaintResult.getBufferedImage();
 
-        cardFacePaintResult = CardFaceViewUtils.paintCardFaceFullDetails(cardFaceView,
-                RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0,
-                true);
-
-        paintBleedBorder();
-
         needRefresh = false;
+
+        try {
+            cardFacePaintResult = CardFaceViewUtils.paintCardFaceFullDetails(cardFaceView,
+                    RenderTarget.PREVIEW, resolutionPpi, includeBleed ? desiredBleedMarginInPixels : 0,
+                    true);
+
+            paintBleedBorder();
+        } catch (Throwable t) {
+            ErrorDialog.error("Error while painting card face " + cardFaceView.getBriefDisplayString(), t);
+
+            return CardFaceViewUtils.createErrorImage(Lists.newArrayList("Error while painting card face", t.getMessage(), "Consult the log for more details"));
+        }
 
         return cardFacePaintResult.getBufferedImage();
     }

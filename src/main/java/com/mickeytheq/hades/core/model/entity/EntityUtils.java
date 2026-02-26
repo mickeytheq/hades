@@ -21,7 +21,7 @@ public class EntityUtils {
     }
 
     // performs an in place copy from one entity to another
-    // the entities do not have to be the same type as matching is done on property names at each level
+    // the entities do not have to be the same type as matching is done on property names at each level and any mismatches are ignored
     public static void copyEntity(Object fromEntity, Object toEntity) {
         new CardCopier().copy(fromEntity, toEntity);
     }

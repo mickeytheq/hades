@@ -27,6 +27,8 @@ import com.mickeytheq.hades.strangeeons.tasks.ViewLog;
 import com.mickeytheq.hades.strangeeons.ui.FontInstallManager;
 import com.mickeytheq.hades.strangeeons.util.MemberUtils;
 import com.mickeytheq.hades.ui.DialogEx;
+import com.mickeytheq.hades.ui.Environment;
+import com.mickeytheq.hades.ui.ErrorDialog;
 import com.mickeytheq.hades.ui.quicksearch.QuickSearchDialog;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
@@ -172,6 +174,14 @@ public class HadesPlugin extends AbstractPlugin {
 
             @Override
             public void open(File file) throws Exception {
+                try {
+                    doOpen(file);
+                } catch (Throwable t) {
+                    ErrorDialog.error("Error opening file '" + file.getAbsolutePath() + "'", t);
+                }
+            }
+
+            private void doOpen(File file) {
                 // check if this file is already open
                 for (StrangeEonsEditor editor : StrangeEons.getWindow().getEditors()) {
                     if (file.equals(editor.getFile())) {
@@ -205,6 +215,7 @@ public class HadesPlugin extends AbstractPlugin {
     }
 
     private void installUiElements() {
+        Environment.setTopLevelWindow(StrangeEons.getWindow());
         DialogEx.setDefaultIconImage(ImageUtils.HADES_PURPLE_H_IMAGE);
     }
 

@@ -27,6 +27,8 @@ import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.ui.DialogEx;
+import com.mickeytheq.hades.ui.Environment;
+import com.mickeytheq.hades.ui.ErrorDialog;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +114,7 @@ public class QuickCardView {
         asset.getCommonCardFieldsModel().setTitle("Rat Swarm");
         asset.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
 
-        Card shadowingCard = Cards.createCardModel(asset, new PlayerCardBack());
+        Card shadowingCard = Cards.createNewCardModel(asset, new PlayerCardBack(), projectContext);
 
         CardDatabase cardDatabase = new BasicCardDatabase(Lists.newArrayList(shadowingCard));
         CardDatabases.set(cardDatabase);
@@ -121,7 +123,7 @@ public class QuickCardView {
         shadow.setShadowCardId(shadowingCard.getId());
         shadow.setShadowSide(CardFaceSide.Front);
 
-        Card shadowCard = Cards.createCardModel(shadow, null);
+        Card shadowCard = Cards.createNewCardModel(shadow, null, projectContext);
 
         displayEditor(shadowCard);
     }
@@ -135,7 +137,7 @@ public class QuickCardView {
         front.getSection1().setStory("Story story");
         front.getSection1().setRules("Rules are rules");
 
-        Card card = Cards.createCardModel(front, null);
+        Card card = Cards.createNewCardModel(front, null, projectContext);
 
         displayEditor(card);
     }
@@ -149,7 +151,7 @@ public class QuickCardView {
         front.getScenarioReferenceFieldsModel().getTablet().setRules("-2. Take 1 horror");
         front.getScenarioReferenceFieldsModel().getElderThing().setRules("-4. If this is an evade test you automatically fail instead.");
 
-        Card card = Cards.createCardModel(front, null);
+        Card card = Cards.createNewCardModel(front, null, projectContext);
 
         displayEditor(card);
 
@@ -169,7 +171,7 @@ public class QuickCardView {
         model.getCommonCardFieldsModel().setRules("Rules rules.");
         model.getCommonCardFieldsModel().setFlavourText("Flava flava.");
 
-        Card card = Cards.createCardModel(model, null);
+        Card card = Cards.createNewCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -197,7 +199,7 @@ public class QuickCardView {
         backModel.getSection4().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
         backModel.setStory("'Waffle waffle waffle fdsfdsfdsfsd fdskl;fdskfds fdfdsfsd fdsfdsfd sfds fds fsd fds fds fsd fdsf dsf dsf dsf dsf sdfds fsd fsd fds fds fsd fsd fds fds fsd fds fdsf dsdfsfd'");
 
-        Card card = Cards.createCardModel(model, backModel);
+        Card card = Cards.createNewCardModel(model, backModel, projectContext);
 
         displayEditor(card);
     }
@@ -215,7 +217,7 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
-        Card card = Cards.createCardModel(model, null);
+        Card card = Cards.createNewCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -232,7 +234,7 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
-        Card card = Cards.createCardModel(model, null);
+        Card card = Cards.createNewCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -254,7 +256,7 @@ public class QuickCardView {
         model.getAssetFieldsModel().setSanity(new Statistic("1", true));
 
 
-        Card card = Cards.createCardModel(model, null);
+        Card card = Cards.createNewCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -266,7 +268,7 @@ public class QuickCardView {
 
         PlayerCardBack back = new PlayerCardBack();
 
-        Card card = Cards.createCardModel(model, back);
+        Card card = Cards.createNewCardModel(model, back, projectContext);
 
         displayEditor(card);
     }
@@ -283,7 +285,7 @@ public class QuickCardView {
         back.getCommonCardFieldsModel().setTitle("Back");
         back.getCommonCardFieldsModel().setRules("Rules back");
 
-        Card card = Cards.createCardModel(model, back);
+        Card card = Cards.createNewCardModel(model, back, projectContext);
 
         displayEditor(card);
     }
@@ -311,7 +313,7 @@ public class QuickCardView {
         agendaBack.getSection3().setRules("Rules rules");
         agendaBack.getSection3().setStory("Story story");
 
-        Card card = Cards.createCardModel(model, agendaBack);
+        Card card = Cards.createNewCardModel(model, agendaBack, projectContext);
 
         displayEditor(card);
     }
@@ -339,7 +341,7 @@ public class QuickCardView {
         backModel.getSection3().setRules("Rules rules");
         backModel.getSection3().setStory("Story story");
 
-        Card card = Cards.createCardModel(frontModel, backModel);
+        Card card = Cards.createNewCardModel(frontModel, backModel, projectContext);
 
         displayEditor(card);
     }
@@ -375,7 +377,7 @@ public class QuickCardView {
 
             Asset asset = generator.createAsset();
 
-            Card card = Cards.createCardModel(asset, null);
+            Card card = Cards.createNewCardModel(asset, null, projectContext);
             CardView cardView = Cards.createCardView(card, projectContext);
             accumulated.add(cardView);
 
@@ -487,16 +489,24 @@ public class QuickCardView {
                 populateCard();
             });
 
+            JButton testButton = new JButton("Test");
+            testButton.addActionListener(e -> {
+                ErrorDialog.error("An error fds gdf gfd gfd gf gd gd gd ds ds fsdfasfsfsfsd fgds g gsd gsd gsd gsd gsd gs gs gds ", new Throwable());
+            });
+
             buttonPanel.add(showJsonButton);
             buttonPanel.add(previousButton);
             buttonPanel.add(nextButton);
             buttonPanel.add(toggleDebug);
+            buttonPanel.add(testButton);
 
             populateCard();
 
             JPanel mainPanel = MigLayoutUtils.createDialogPanel();
             mainPanel.add(splitPane, "wrap, grow, push");
             mainPanel.add(buttonPanel, "wrap");
+
+            Environment.setTopLevelWindow(frame);
 
             frame.getContentPane().setLayout(new BorderLayout(2, 2));
             frame.getContentPane().add(mainPanel);

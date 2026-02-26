@@ -43,6 +43,23 @@ public class Cards {
         return card;
     }
 
+    public static Card createNewCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel, ProjectContext projectContext) {
+        Card card = new Card();
+
+        if (frontFaceModel != null) {
+            frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
+        }
+
+        if (backFaceModel != null) {
+            backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
+        }
+
+        card.setFrontFaceModel(frontFaceModel);
+        card.setBackFaceModel(backFaceModel);
+
+        return card;
+    }
+
     public static CardView createCardView(Card card, ProjectContext projectContext) {
         CardView cardView = new CardView(card, projectContext);
 
