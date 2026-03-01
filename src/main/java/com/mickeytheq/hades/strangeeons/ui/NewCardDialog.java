@@ -5,6 +5,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
+import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.ui.DialogEx;
@@ -31,7 +32,7 @@ public class NewCardDialog extends DialogEx {
 
     private void initialise() {
         frontFaceOptionEditor = new JComboBox<>();
-        backFaceOptionEditor = new JComboBox<>();
+        backFaceOptionEditor = EditorUtils.createNullableComboBox();
 
         CardFaceTypeRegister cardFaceTypeRegister = CardFaceTypeRegister.get();
 
@@ -100,7 +101,6 @@ public class NewCardDialog extends DialogEx {
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(EncounterCardBack.class)));
 
         filenameEditor = new JTextField(20);
-
 
         // layout
         JPanel helpPanel = MigLayoutUtils.createOrganiserPanel();
