@@ -73,7 +73,7 @@ public class QuickCardView {
 //            shadow();
 //            investigator();
 //            investigatorMiniCard();
-//            asset();
+            asset();
 //        event();
 //        skill();
 //        treachery();
@@ -84,7 +84,7 @@ public class QuickCardView {
 //            enemy();
 //            scenarioReference();
 //            story();
-            image();
+//            image();
         });
     }
 

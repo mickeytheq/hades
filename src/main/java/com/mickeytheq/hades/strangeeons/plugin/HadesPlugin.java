@@ -304,7 +304,7 @@ public class HadesPlugin extends AbstractPlugin {
                     return;
 
                 ProjectContext projectContext = StandardProjectContext.getContextForContentPath(project.getFile().toPath());
-                ProjectConfigurationDialog.openDialog(appWindow, projectContext);
+                ProjectConfigurationDialog.openDialog(appWindow, projectContext, null);
             }
         });
     }

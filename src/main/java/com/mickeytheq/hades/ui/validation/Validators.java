@@ -3,7 +3,6 @@ package com.mickeytheq.hades.ui.validation;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.util.SwingUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +18,7 @@ public class Validators {
 
     static {
         try {
-            ERROR_ICON = ImageIO.read(Validators.class.getResource("/icons/application_icons/icons8-cancel-16.png"));
+            ERROR_ICON = ImageIO.read(Validators.class.getResource("/icons/application/icons8-cancel-16.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
