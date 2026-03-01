@@ -194,8 +194,6 @@ public class HadesPlugin extends AbstractPlugin {
 
                 AbstractGameComponentEditor<CardGameComponent> editor = gameComponent.createDefaultEditor();
 
-                editor.setFrameIcon(ImageUtils.HADES_PURPLE_H_ICON);
-
                 RecentFiles.addRecentDocument(file);
                 editor.handleOpenRequest(gameComponent, file);
 

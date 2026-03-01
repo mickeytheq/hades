@@ -15,6 +15,7 @@ import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewUtils;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
+import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.ui.ExportCardDialog;
@@ -48,6 +49,8 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
 
     public CardEditor(CardGameComponent cardGameComponent) {
         setGameComponent(cardGameComponent);
+
+        setFrameIcon(ImageUtils.HADES_PURPLE_H_ICON);
 
         updateTitle();
 
