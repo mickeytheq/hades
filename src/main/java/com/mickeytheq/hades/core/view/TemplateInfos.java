@@ -16,8 +16,6 @@ public class TemplateInfos {
     private static final Dimension PORTRAIT_600 = CardDimensions.STANDARD_PORTRAIT_600_PPI_WITH_BLEED_PIXELS;
     private static final Dimension LANDSCAPE_600 = CardDimensions.STANDARD_LANDSCAPE_600_PPI_WITH_BLEED_PIXELS;
 
-    private static final double BLEED_POINTS = CardDimensions.BLEED_POINTS;
-
     public static TemplateInfo createStandard600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation orientation) {
         String resourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 600, "png");
 
@@ -28,7 +26,6 @@ public class TemplateInfos {
         }
     }
 
-    // TODO: version with bleed pixels where available
     private static final Dimension PORTRAIT_300 = CardDimensions.STANDARD_PORTRAIT_300_PPI;
     private static final Dimension LANDSCAPE_300 = CardDimensions.STANDARD_LANDSCAPE_300_PPI;
 
