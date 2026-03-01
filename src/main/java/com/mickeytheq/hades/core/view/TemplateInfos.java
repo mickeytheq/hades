@@ -2,37 +2,35 @@ package com.mickeytheq.hades.core.view;
 
 import ca.cgjennings.apps.arkham.sheet.RenderTarget;
 import com.google.common.collect.Lists;
+import com.mickeytheq.hades.core.CardDimensions;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
-import com.mickeytheq.hades.util.shape.Unit;
-import com.mickeytheq.hades.util.shape.UnitConversionUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static java.awt.RenderingHints.*;
-import static java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-
 public class TemplateInfos {
-    private static final int BLEED_600_PIXELS = 72;
-    private static final Dimension PORTRAIT_600 = new Dimension(1500 + BLEED_600_PIXELS * 2, 2100 + BLEED_600_PIXELS * 2);
-    private static final Dimension LANDSCAPE_600 = new Dimension(2100 + BLEED_600_PIXELS * 2, 1500 + BLEED_600_PIXELS * 2);
+    private static final int BLEED_STANDARD_600_PIXELS = CardDimensions.BLEED_PIXELS_AT_600_PPI;
+    private static final Dimension PORTRAIT_600 = CardDimensions.STANDARD_PORTRAIT_600_PPI_WITH_BLEED_PIXELS;
+    private static final Dimension LANDSCAPE_600 = CardDimensions.STANDARD_LANDSCAPE_600_PPI_WITH_BLEED_PIXELS;
 
-    private static final double BLEED_600_POINTS = BLEED_600_PIXELS / 600.0 * 72.0;
+    private static final double BLEED_POINTS = CardDimensions.BLEED_POINTS;
 
     public static TemplateInfo createStandard600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation orientation) {
         String resourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 600, "png");
 
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         } else {
-            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_600_PIXELS, BLEED_600_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
     }
 
-    private static final Dimension PORTRAIT_300 = new Dimension(750, 1050);
-    private static final Dimension LANDSCAPE_300 = new Dimension(1050, 750);
+    // TODO: version with bleed pixels where available
+    private static final Dimension PORTRAIT_300 = CardDimensions.STANDARD_PORTRAIT_300_PPI;
+    private static final Dimension LANDSCAPE_300 = CardDimensions.STANDARD_LANDSCAPE_300_PPI;
 
     public static TemplateInfo createStandard300(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation orientation) {
         String templateResourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 300, "png");
@@ -42,6 +40,28 @@ public class TemplateInfos {
         } else {
             return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         }
+    }
+
+    // convience method to generate the standard 300 and 600 templates
+    public static List<TemplateInfo> createStandard300And600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation cardFaceOrientation) {
+        return Lists.newArrayList(
+                createStandard300(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation),
+                createStandard600(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation)
+        );
+    }
+
+    private static final Dimension MINI_CARD_600_PORTRAIT = new Dimension(975 + BLEED_STANDARD_600_PIXELS * 2, 1440 + BLEED_STANDARD_600_PIXELS * 2);
+    private static final Dimension MINI_CARD_600_LANDSCAPE = new Dimension((int) MINI_CARD_600_PORTRAIT.getHeight(), (int) MINI_CARD_600_PORTRAIT.getWidth());
+
+    public static TemplateInfo createBlankMiniCard600(CardFaceOrientation cardFaceOrientation) {
+        Dimension dimension = cardFaceOrientation == CardFaceOrientation.Portrait ? MINI_CARD_600_PORTRAIT : MINI_CARD_600_LANDSCAPE;
+
+        return new TemplateInfoImpl(dimension, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> null);
+    }
+
+    public static TemplateInfo createBlankCustom600(DimensionEx dimension) {
+        Dimension dimensionInPixels = dimension.toPixelDimension(600);
+        return new TemplateInfoImpl(dimensionInPixels, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> null);
     }
 
     // the convention for resource paths is <prefix>_<ppi>.png
@@ -61,23 +81,15 @@ public class TemplateInfos {
         return sb.toString();
     }
 
-    // convience method to generate the standard 300 and 600 templates
-    public static List<TemplateInfo> createStandard300And600(String resourcePathPrefixWithoutPpiOrExtension, CardFaceOrientation cardFaceOrientation) {
-        return Lists.newArrayList(
-                createStandard300(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation),
-                createStandard600(resourcePathPrefixWithoutPpiOrExtension, cardFaceOrientation)
-        );
-    }
-
     static class TemplateInfoImpl implements TemplateInfo {
-        private final Dimension dimension;
+        private final Dimension dimensionInPixels;
         private final int ppi;
         private final int bleedMarginInPixels;
         private final double bleedMarginInPoints;
         private final Supplier<BufferedImage> bufferedImageSupplier;
 
-        public TemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier) {
-            this.dimension = dimension;
+        public TemplateInfoImpl(Dimension dimensionInPixels, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier) {
+            this.dimensionInPixels = dimensionInPixels;
             this.ppi = ppi;
             this.bleedMarginInPixels = bleedMarginInPixels;
             this.bleedMarginInPoints = bleedMarginInPoints;
@@ -86,12 +98,12 @@ public class TemplateInfos {
 
         @Override
         public int getWidthInPixels() {
-            return (int) dimension.getWidth();
+            return (int) dimensionInPixels.getWidth();
         }
 
         @Override
         public int getHeightInPixels() {
-            return (int) dimension.getHeight();
+            return (int) dimensionInPixels.getHeight();
         }
 
         @Override
@@ -118,21 +130,28 @@ public class TemplateInfos {
         public TemplateInfo scaleToResolution(int newPpi) {
             double ratio = (double) newPpi / ppi;
 
-            int newWidth = (int) (dimension.getWidth() * ratio);
-            int newHeight = (int) (dimension.getHeight() * ratio);
+            int newWidth = (int) (dimensionInPixels.getWidth() * ratio);
+            int newHeight = (int) (dimensionInPixels.getHeight() * ratio);
             int newBleedPixels = (int) (bleedMarginInPixels * ratio);
 
             BufferedImage unscaledImage = bufferedImageSupplier.get();
 
-            BufferedImage scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D graphics2D = scaledImage.createGraphics();
-            try {
-                // TODO: assumes export quality - pass in the RenderTarget?
-                RenderTarget.EXPORT.applyTo(graphics2D);
+            BufferedImage scaledImage;
 
-                graphics2D.drawImage(unscaledImage, 0, 0, newWidth, newHeight, null);
-            } finally {
-                graphics2D.dispose();
+            if (unscaledImage != null) {
+                scaledImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D graphics2D = scaledImage.createGraphics();
+                try {
+                    // TODO: assumes export quality - pass in the RenderTarget?
+                    RenderTarget.EXPORT.applyTo(graphics2D);
+
+                    graphics2D.drawImage(unscaledImage, 0, 0, newWidth, newHeight, null);
+                } finally {
+                    graphics2D.dispose();
+                }
+            }
+            else {
+                scaledImage = null;
             }
 
             return new DerivedTemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, bleedMarginInPoints, () -> scaledImage, this);

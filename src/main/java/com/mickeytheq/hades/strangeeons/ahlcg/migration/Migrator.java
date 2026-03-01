@@ -5,6 +5,7 @@ import ca.cgjennings.apps.arkham.diy.DIY;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.cardfaces.EncounterCardBack;
+import com.mickeytheq.hades.core.model.cardfaces.InvestigatorMiniCard;
 import com.mickeytheq.hades.core.model.cardfaces.PlayerCardBack;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
@@ -151,6 +152,8 @@ public class Migrator {
                     return new ScenarioReferenceMigrator().build(context);
                 case Story:
                     return new StoryMigrator().build(context);
+                case MiniInvestigator:
+                    return new InvestigatorMiniCardMigrator().build(context);
                 default:
                     return null;
             }

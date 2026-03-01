@@ -22,6 +22,8 @@ public class InterfaceConstants {
     public static final String AGENDASTORYASSET = "Hades-AgendaStoryAsset";
     // English value: Fortune and Folly
     public static final String FORTUNEANDFOLLY = "Hades-FortuneAndFolly";
+    // English value: Investigator mini card
+    public static final String INVESTIGATOR_MINI_CARD = "Hades-Investigator-Mini-Card";
     // English value: Enemy / Portrait
     public static final String ENEMYPORTRAIT = "Hades-EnemyPortrait";
     // English value: Seeping Nightmares
@@ -74,6 +76,8 @@ public class InterfaceConstants {
     public static final String BEYONDTHEGATESOFSLEEP = "Hades-BeyondTheGatesOfSleep";
     // English value: Campaign Guide Letter (8.5" x 11")
     public static final String CAMPAIGNGUIDELETTER = "Hades-CampaignGuideLetter";
+    // English value: Standard landscape (3.5" x 2.5")
+    public static final String STANDARD_LANDSCAPE = "Hades-Standard-Landscape";
     // English value: To the Forbidden Peaks
     public static final String TOTHEFORBIDDENPEAKS = "Hades-ToTheForbiddenPeaks";
     // English value: Victory
@@ -140,6 +144,8 @@ public class InterfaceConstants {
     public static final String CHILDRENOFPARADISE = "Hades-ChildrenOfParadise";
     // English value: Agents of Yuggoth
     public static final String AGENTSOFYUGGOTH = "Hades-AgentsOfYuggoth";
+    // English value: Custom
+    public static final String CUSTOM_CARD = "Hades-Custom-Card";
     // English value: Back Portrait
     public static final String BACKPORTRAIT = "Hades-BackPortrait";
     // English value: None
@@ -302,6 +308,8 @@ public class InterfaceConstants {
     public static final String SKILL_WILD = "Hades-Skill-Wild";
     // English value: Default encounter set
     public static final String PREF_DEFAULTSET = "Hades-Pref-DefaultSet";
+    // English value: Mini card portrait (1.865" x 2.4")
+    public static final String MINI_CARD_PORTRAIT = "Hades-Mini-Card-Portrait";
     // English value: Treachery
     public static final String TREACHERY = "Hades-Treachery";
     // English value: Chilling Cold
@@ -356,6 +364,8 @@ public class InterfaceConstants {
     public static final String SPATIALANOMALY = "Hades-SpatialAnomaly";
     // English value: Story Investigator
     public static final String STORYINVESTIGATOR = "Hades-StoryInvestigator";
+    // English value: Image
+    public static final String IMAGE_CARD_TYPE = "Hades-Image-Card-Type";
     // English value: Sanity
     public static final String SANITY = "Hades-Sanity";
     // English value: Body font
@@ -860,6 +870,8 @@ public class InterfaceConstants {
     public static final String EVENT = "Hades-Event";
     // English value: Flooded Caverns
     public static final String FLOODEDCAVERNS = "Hades-FloodedCaverns";
+    // English value: Standard portrait (2.5" x 3.5")
+    public static final String STANDARD_PORTRAIT = "Hades-Standard-Portrait";
     // English value: Permanently remove the selected user encounter sets from the list?
     public static final String PREF_PERMANENTLYREMOVESETS = "Hades-Pref-PermanentlyRemoveSets";
     // English value: Act / Enemy
@@ -1272,6 +1284,8 @@ public class InterfaceConstants {
     public static final String PREF_ADDCOLLECTION = "Hades-Pref-AddCollection";
     // English value: Silence and Mystery
     public static final String SILENCEANDMYSTERY = "Hades-SilenceAndMystery";
+    // English value: Mini card landscape (2.4" x 1.865")
+    public static final String MINI_CARD_LANDSCAPE = "Hades-Mini-Card-Landscape";
     // English value: Option
     public static final String OPTION = "Hades-Option";
     // English value: Agenda / Portrait

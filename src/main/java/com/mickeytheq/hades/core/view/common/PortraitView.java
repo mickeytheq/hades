@@ -16,6 +16,7 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +67,7 @@ public class PortraitView {
     public static final URL DEFAULT_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/portrait/DefaultTexture.jp2");
     private final PortraitModel portraitModel;
     private final CardFaceView cardFaceView;
-    private final Dimension portraitDrawDimension;
+    private Dimension portraitDrawDimension;
 
     private final URL defaultImageResource;
 
@@ -111,6 +112,10 @@ public class PortraitView {
         return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
+    public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, DimensionEx portraitDrawDimension) {
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension.toPixelDimension(ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
+    }
+
     private void installDefaultImage() {
         // install the default image
         // note that we do not set the model's image to this when installing a default as default images are not persisted
@@ -133,6 +138,16 @@ public class PortraitView {
         portraitModel.setPanY(0);
         portraitModel.setScale(computeDefaultImageScale(image));
         portraitModel.setRotation(0);
+    }
+
+    // can be called when the portrait needs to support changes to its dimension, for example a card type that
+    // has different options for its size
+    public void setDimension(DimensionEx dimension) {
+        portraitDrawDimension = dimension.toPixelDimension(ASSUMED_PERSISTENCE_PPI);
+
+        // trigger a change/re-validate of the owned portrait panel to update with the new dimension
+        if (portraitPanel != null)
+            portraitPanel.setPortrait(portraitPanel.getPortrait());
     }
 
     public Dimension getPortraitDrawDimension() {
@@ -174,13 +189,16 @@ public class PortraitView {
         artistWithPortraitPanel.add(portraitPanel, "wrap, pushx, growx");
 
         return artistWithPortraitPanel;
-
     }
 
     private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(2.37, 86.70, 20.49, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
     public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion) {
-        paint(paintContext, drawRegion, false);
+        paint(paintContext, drawRegion, null);
+    }
+
+    public void paintArtPortrait(PaintContext paintContext, Rectangle drawRegion, BufferedImageOp filter) {
+        paint(paintContext, drawRegion, filter);
     }
 
     public void paintArtist(PaintContext paintContext) {
@@ -204,8 +222,10 @@ public class PortraitView {
     }
 
     // creates a portrait panel hosting this portrait content and passes changed events back through the EditorContext
+    private PortraitPanel portraitPanel;
+
     public PortraitPanel createPortraitPanel(EditorContext editorContext, String panelTitle) {
-        PortraitPanel portraitPanel = new PortraitPanel();
+        portraitPanel = new PortraitPanel();
         portraitPanel.setPanelTitle(panelTitle);
         portraitPanel.setPortrait(new PortraitImpl(editorContext::markChanged));
         return portraitPanel;
@@ -229,15 +249,15 @@ public class PortraitView {
         return fillBackground;
     }
 
-    public void paint(PaintContext paintContext, Rectangle drawRegion, boolean inverted) {
+    private void paint(PaintContext paintContext, Rectangle drawRegion, BufferedImageOp filter) {
         StopWatch stopWatch = StopWatch.createStarted();
-        doPaint(paintContext, drawRegion, inverted);
+        doPaint(paintContext, drawRegion, filter);
 
         if (logger.isTraceEnabled())
             logger.trace("Painting of art portrait completed in " + stopWatch.getTime() + "ms");
     }
 
-    private void doPaint(PaintContext paintContext, Rectangle drawRegion, boolean inverted) {
+    private void doPaint(PaintContext paintContext, Rectangle drawRegion, BufferedImageOp filter) {
         Graphics2D g = paintContext.getGraphics();
 
         // if copying the other face delegate to its paint function
@@ -245,7 +265,7 @@ public class PortraitView {
             Optional<PortraitView> otherFacePortraitView = cardFaceView.getOtherFaceView()
                     .filter(o -> o instanceof HasArtPortraitView).map(o -> (((HasArtPortraitView)o).getArtPortraitView()));
 
-            otherFacePortraitView.ifPresent(portraitView -> portraitView.paint(paintContext, drawRegion, inverted));
+            otherFacePortraitView.ifPresent(portraitView -> portraitView.paint(paintContext, drawRegion, filter));
 
             return;
         }
@@ -270,11 +290,8 @@ public class PortraitView {
             g.setPaint(p);
         }
 
-        // sometimes we want the portrait inverted, for example when painting an icon provided with a black foreground
-        // onto a black background. in this case the inversion will convert black to white
-        if (inverted) {
-            BufferedImageOp inversionOp = new InversionFilter();
-            image = inversionOp.filter(image, null);
+        if (filter != null) {
+            image = filter.filter(image, null);
         }
 
         double rotation = portraitModel.getRotation();
@@ -311,7 +328,7 @@ public class PortraitView {
             final int w = (int) (scaledWidth + 0.5d);
             final int h = (int) (scaledHeight + 0.5d);
 
-            BufferedImage scaledImage = getScaledImage(paintContext, image, w, h);
+            BufferedImage scaledImage = getScaledImage(paintContext, image, w, h, filter);
 
             g.drawImage(scaledImage, x0, y0, w, h, null);
         }
@@ -321,15 +338,17 @@ public class PortraitView {
         }
     }
 
-    private MultiKey<Integer> lastScaledImageKey = new MultiKey<>(0, 0);
+    private MultiKey<Object> lastScaledImageKey = new MultiKey<>(0, 0, null);
     private BufferedImage lastScaledImage;
 
     // it is the norm for an art portrait's image to be a different size to the region it is drawn into so scaling is required
     // scaling is a moderately expensive operation so this caches the result of the scaling and returns the same scaled image on subsequent calls
-    // if the width and height do not change
+    // if the width, height and filter do not change
     // this is primarily important for UI interaction where the card is rendered repeatedly as the user makes edits
-    private BufferedImage getScaledImage(PaintContext paintContext, BufferedImage sourceImage, int width, int height) {
-        MultiKey<Integer> key = new MultiKey<>(width, height);
+    private BufferedImage getScaledImage(PaintContext paintContext, BufferedImage sourceImage, int width, int height, BufferedImageOp filter) {
+        // TODO: using the filter class as the key is slightly dubious as this only works if the filter is entirely class based and has no parameters
+        // TODO: but filters don't tend to implement hashcode or equals so there's no way to use it as part of the key
+        MultiKey<Object> key = new MultiKey<>(width, height, filter != null ? filter.getClass().getName() : null);
 
         if (key.equals(lastScaledImageKey))
             return lastScaledImage;

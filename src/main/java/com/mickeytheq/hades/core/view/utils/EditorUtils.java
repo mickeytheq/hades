@@ -4,10 +4,12 @@ import ca.cgjennings.apps.arkham.StrangeEonsAppWindow;
 import ca.cgjennings.ui.DocumentEventAdapter;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
+import com.mickeytheq.hades.core.view.component.DimensionExComponent;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.ui.FileChooser;
 import com.mickeytheq.hades.util.SwingUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -117,6 +119,12 @@ public class EditorUtils {
     public static void bindDistanceComponent(DistanceComponent distanceComponent, Consumer<Distance> consumer) {
         distanceComponent.addActionListener(e -> {
             consumer.accept(distanceComponent.getDistance());
+        });
+    }
+
+    public static void bindDimensionExComponent(DimensionExComponent dimensionExComponent, Consumer<DimensionEx> consumer) {
+        dimensionExComponent.addActionListener(e -> {
+            consumer.accept(dimensionExComponent.getDimensionEx());
         });
     }
 

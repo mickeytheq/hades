@@ -25,6 +25,7 @@ public class CardFaceTypeRegister {
     private CardFaceTypeRegister() {
         register(Investigator.class, InvestigatorView.class);
         register(InvestigatorBack.class, InvestigatorBackView.class);
+        register(InvestigatorMiniCard.class, InvestigatorMiniCardView.class);
 
         register(Asset.class, AssetView.class);
         register(Event.class, EventView.class);
@@ -48,6 +49,8 @@ public class CardFaceTypeRegister {
         register(PlayerCardBack.class, PlayerCardBackView.class);
 
         register(Shadow.class, ShadowView.class);
+
+        register(Image.class, ImageView.class);
     }
 
     private void register(Class<? extends CardFaceModel> cardFaceModelClass, Class<? extends CardFaceView> cardFaceViewClass) {

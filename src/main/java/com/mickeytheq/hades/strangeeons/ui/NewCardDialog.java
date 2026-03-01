@@ -72,6 +72,9 @@ public class NewCardDialog extends DialogEx {
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.INVESTIGATOR), "Investigator",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Investigator.class),
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(InvestigatorBack.class)));
+        bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.INVESTIGATOR_MINI_CARD), "Investigator mini card",
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(InvestigatorMiniCard.class),
+                cardFaceTypeRegister.getInfoForCardFaceModelClass(InvestigatorMiniCard.class)));
 
         bothFacesOptionEditor.addItem(new BothFacesOption(Language.string(InterfaceConstants.LOCATION), "Location with a standard location back",
                 cardFaceTypeRegister.getInfoForCardFaceModelClass(Location.class),

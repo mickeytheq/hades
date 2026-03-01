@@ -8,13 +8,13 @@ public class PaintConstants {
     public static double FOOTER_TEXT_HEIGHT_MMS = 1.69;
 
     // container for encounter set icons and basic weakness icons used on story/story weakness/basic weakness cards
-    public static DimensionEx ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE = DimensionEx.millimetres(10.245, 10.245);
+    public static final DimensionEx ENCOUNTER_SET_CIRCLE_OVERLAY_SIZE = DimensionEx.millimetres(10.245, 10.245);
 
     // the vanilla basic weakness icon size
-    public static DimensionEx BASIC_WEAKNESS_ICON_SIZE = DimensionEx.millimetres(6.00, 6.00);
+    public static final DimensionEx BASIC_WEAKNESS_ICON_SIZE = DimensionEx.millimetres(6.00, 6.00);
 
     // encounter set icon size to be used on player cards
-    public static DimensionEx ENCOUNTER_SET_ICON_SIZE = DimensionEx.millimetres(5.08, 5.08);
+    public static final DimensionEx ENCOUNTER_SET_ICON_SIZE = DimensionEx.millimetres(5.08, 5.08);
 
     // class symbols as used on asset/event multiclass cards
     public static final DimensionEx CLASS_SYMBOL_SIZE = DimensionEx.millimetres(8.805, 8.805);

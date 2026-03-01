@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.cardfaces.Event;
+import com.mickeytheq.hades.core.model.cardfaces.Image;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.model.image.NothingImagePersister;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -71,9 +72,10 @@ public class QuickCardView {
         ProjectContexts.withContext(projectContext, () -> {
 //            shadow();
 //            investigator();
+//            investigatorMiniCard();
 //            asset();
 //        event();
-        skill();
+//        skill();
 //        treachery();
 //            location();
 //            random();
@@ -82,6 +84,7 @@ public class QuickCardView {
 //            enemy();
 //            scenarioReference();
 //            story();
+            image();
         });
     }
 
@@ -138,6 +141,14 @@ public class QuickCardView {
         front.getSection1().setRules("Rules are rules");
 
         Card card = Cards.createNewCardModel(front, null, projectContext);
+
+        displayEditor(card);
+    }
+
+    private void image() {
+        Image image = new Image();
+
+        Card card = Cards.createNewCardModel(image, null, projectContext);
 
         displayEditor(card);
     }
@@ -200,6 +211,14 @@ public class QuickCardView {
         backModel.setStory("'Waffle waffle waffle fdsfdsfdsfsd fdskl;fdskfds fdfdsfsd fdsfdsfd sfds fds fsd fds fds fsd fdsf dsf dsf dsf dsf sdfds fsd fsd fds fds fsd fsd fds fds fsd fds fdsf dsdfsfd'");
 
         Card card = Cards.createNewCardModel(model, backModel, projectContext);
+
+        displayEditor(card);
+    }
+
+    private void investigatorMiniCard() {
+        InvestigatorMiniCard model = new InvestigatorMiniCard();
+
+        Card card = Cards.createNewCardModel(model, null, projectContext);
 
         displayEditor(card);
     }

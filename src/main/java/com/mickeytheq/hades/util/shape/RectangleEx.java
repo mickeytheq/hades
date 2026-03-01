@@ -55,7 +55,7 @@ public class RectangleEx {
         return new RectangleEx(Unit.Millimetre, UNDEFINED, XRelativeTo.Centred, topY, YRelativeTo.Top, size.getWidth() * ratio, size.getHeight() * ratio);
     }
 
-    public Rectangle toPixelRectangle(double ppi) {
+    public Rectangle toPixelRectangle(int ppi) {
         return toPixelRectangle(ppi, null);
     }
 
@@ -104,7 +104,7 @@ public class RectangleEx {
         return new RectangleEx(unit, newX, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
     }
 
-    public Rectangle toPixelRectangle(double ppi, Rectangle templateRegionInPixels) {
+    public Rectangle toPixelRectangle(int ppi, Rectangle templateRegionInPixels) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
         int pixelWidth = (int) (width * conversionRatio + 0.5);
 
@@ -123,7 +123,7 @@ public class RectangleEx {
         return new Rectangle(pixelX, (int) (y * conversionRatio + 0.5), pixelWidth, (int) (height * conversionRatio + 0.5));
     }
 
-    public Dimension toPixelDimension(double ppi) {
+    public Dimension toPixelDimension(int ppi) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
 
         // add 0.5 as this has the same effect as rounding to the nearest whole number with the int cast

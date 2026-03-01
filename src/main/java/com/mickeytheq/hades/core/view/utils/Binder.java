@@ -1,14 +1,19 @@
 package com.mickeytheq.hades.core.view.utils;
 
+import com.mickeytheq.hades.core.view.component.DimensionExComponent;
+import com.mickeytheq.hades.util.shape.DimensionEx;
+
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * utility class for creating bindings between swing components and java objects/fields/methods
   */
 public class Binder {
-    private Runnable callOnAnyChange;
+    private final List<Runnable> callOnAnyChange = new ArrayList<>();
 
     private static final Consumer<JComponent> MARK_CHANGED = EditorUtils::markChanged;
 
@@ -17,7 +22,7 @@ public class Binder {
     }
 
     public Binder onAnyChange(Runnable callOnAnyChange) {
-        this.callOnAnyChange = callOnAnyChange;
+        this.callOnAnyChange.add(callOnAnyChange);
         return this;
     }
 
@@ -46,15 +51,23 @@ public class Binder {
         return this;
     }
 
+    public Binder dimension(DimensionExComponent editor, Consumer<DimensionEx> consumer) {
+        EditorUtils.bindDimensionExComponent(editor, wrapEditorChanged(editor, consumer));
+        return this;
+    }
+
     private <T> Consumer<T> wrapEditorChanged(JComponent component, Consumer<T> consumer) {
         Consumer<T> wrapped = wrapWithMarkChanged(component, consumer);
 
-        if (callOnAnyChange == null)
+        if (callOnAnyChange.isEmpty())
             return wrapped;
 
         return t -> {
             wrapped.accept(t);
-            callOnAnyChange.run();
+
+            for (Runnable runnable : callOnAnyChange) {
+                runnable.run();
+            }
         };
     }
 
