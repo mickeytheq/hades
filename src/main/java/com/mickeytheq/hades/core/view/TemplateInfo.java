@@ -27,8 +27,6 @@ public interface TemplateInfo {
         return getHeightInPixels() - getAvailableBleedMarginInPixels() * 2;
     }
 
-    double getAvailableBleedMarginInPoints();
-
     BufferedImage getTemplateImage();
 
     // returns a new TemplateInfo derived from this one with the resolution up or downscaled appropriately to the new resolution

@@ -22,9 +22,9 @@ public class TemplateInfos {
         String resourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 600, "png");
 
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(PORTRAIT_600, 600, BLEED_STANDARD_600_PIXELS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         } else {
-            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> ImageUtils.loadImageReadOnly(resourcePath));
+            return new TemplateInfoImpl(LANDSCAPE_600, 600, BLEED_STANDARD_600_PIXELS, () -> ImageUtils.loadImageReadOnly(resourcePath));
         }
     }
 
@@ -36,9 +36,9 @@ public class TemplateInfos {
         String templateResourcePath = getTemplateResourcePath(resourcePathPrefixWithoutPpiOrExtension, 300, "png");
 
         if (orientation == CardFaceOrientation.Portrait) {
-            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
+            return new TemplateInfoImpl(PORTRAIT_300, 300, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         } else {
-            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
+            return new TemplateInfoImpl(LANDSCAPE_300, 300, 0, () -> ImageUtils.loadImageReadOnly(templateResourcePath));
         }
     }
 
@@ -56,12 +56,12 @@ public class TemplateInfos {
     public static TemplateInfo createBlankMiniCard600(CardFaceOrientation cardFaceOrientation) {
         Dimension dimension = cardFaceOrientation == CardFaceOrientation.Portrait ? MINI_CARD_600_PORTRAIT : MINI_CARD_600_LANDSCAPE;
 
-        return new TemplateInfoImpl(dimension, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> null);
+        return new TemplateInfoImpl(dimension, 600, BLEED_STANDARD_600_PIXELS, () -> null);
     }
 
     public static TemplateInfo createBlankCustom600(DimensionEx dimension) {
         Dimension dimensionInPixels = dimension.toPixelDimension(600);
-        return new TemplateInfoImpl(dimensionInPixels, 600, BLEED_STANDARD_600_PIXELS, BLEED_POINTS, () -> null);
+        return new TemplateInfoImpl(dimensionInPixels, 600, BLEED_STANDARD_600_PIXELS, () -> null);
     }
 
     // the convention for resource paths is <prefix>_<ppi>.png
@@ -85,14 +85,12 @@ public class TemplateInfos {
         private final Dimension dimensionInPixels;
         private final int ppi;
         private final int bleedMarginInPixels;
-        private final double bleedMarginInPoints;
         private final Supplier<BufferedImage> bufferedImageSupplier;
 
-        public TemplateInfoImpl(Dimension dimensionInPixels, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier) {
+        public TemplateInfoImpl(Dimension dimensionInPixels, int ppi, int bleedMarginInPixels, Supplier<BufferedImage> bufferedImageSupplier) {
             this.dimensionInPixels = dimensionInPixels;
             this.ppi = ppi;
             this.bleedMarginInPixels = bleedMarginInPixels;
-            this.bleedMarginInPoints = bleedMarginInPoints;
             this.bufferedImageSupplier = bufferedImageSupplier;
         }
 
@@ -114,11 +112,6 @@ public class TemplateInfos {
         @Override
         public int getAvailableBleedMarginInPixels() {
             return bleedMarginInPixels;
-        }
-
-        @Override
-        public double getAvailableBleedMarginInPoints() {
-            return bleedMarginInPoints;
         }
 
         @Override
@@ -154,15 +147,15 @@ public class TemplateInfos {
                 scaledImage = null;
             }
 
-            return new DerivedTemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, bleedMarginInPoints, () -> scaledImage, this);
+            return new DerivedTemplateInfoImpl(new Dimension(newWidth, newHeight), newPpi, newBleedPixels, () -> scaledImage, this);
         }
     }
 
     static class DerivedTemplateInfoImpl extends TemplateInfoImpl {
         private final TemplateInfo sourceTemplate;
 
-        public DerivedTemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, double bleedMarginInPoints, Supplier<BufferedImage> bufferedImageSupplier, TemplateInfo sourceTemplate) {
-            super(dimension, ppi, bleedMarginInPixels, bleedMarginInPoints, bufferedImageSupplier);
+        public DerivedTemplateInfoImpl(Dimension dimension, int ppi, int bleedMarginInPixels, Supplier<BufferedImage> bufferedImageSupplier, TemplateInfo sourceTemplate) {
+            super(dimension, ppi, bleedMarginInPixels, bufferedImageSupplier);
             this.sourceTemplate = sourceTemplate;
         }
 

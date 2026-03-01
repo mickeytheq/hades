@@ -192,11 +192,6 @@ public class ShadowView extends BaseCardFaceView<Shadow> {
         }
 
         @Override
-        public double getAvailableBleedMarginInPoints() {
-            return 0;
-        }
-
-        @Override
         public BufferedImage getTemplateImage() {
             return image;
         }
