@@ -1,7 +1,6 @@
 package com.mickeytheq.hades.core.view.component;
 
 import com.google.common.collect.Lists;
-import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.Unit;

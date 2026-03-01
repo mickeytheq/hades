@@ -18,9 +18,11 @@ import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
+import com.mickeytheq.hades.core.view.component.DimensionExComponent;
 import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,6 +72,7 @@ public class JsonCardSerialiser {
         VALUE_SERIALISERS.put(Boolean.TYPE, new BooleanSerialiser());
 
         VALUE_SERIALISERS.put(Distance.class, new DistanceSerialiser());
+        VALUE_SERIALISERS.put(DimensionEx.class, new DimensionExSerialiser());
         VALUE_SERIALISERS.put(Statistic.class, new StatisticSerialiser());
         VALUE_SERIALISERS.put(URL.class, new UrlSerialiser());
         VALUE_SERIALISERS.put(EncounterSetConfiguration.class, new EncounterSetConfigurationSerialiser());

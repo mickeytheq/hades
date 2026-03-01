@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
+import com.mickeytheq.hades.serialise.value.DimensionExSerialiser;
 import com.mickeytheq.hades.serialise.value.DistanceSerialiser;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.Unit;
 
 import java.awt.image.BufferedImage;
@@ -25,6 +27,9 @@ public class HadesJacksonModule extends SimpleModule {
 
         addSerializer(Distance.class, new DistanceSerialiser());
         addDeserializer(Distance.class, new DistanceDeserialiser());
+
+        addSerializer(DimensionEx.class, new DimensionExSerialiser());
+        addDeserializer(DimensionEx.class, new DimensionExDeserialiser());
     }
 
     static class ImageSerialiser extends StdScalarSerializer<ImageProxy> {
@@ -81,6 +86,37 @@ public class HadesJacksonModule extends SimpleModule {
 
             return new Distance(distanceNode.get(com.mickeytheq.hades.serialise.value.DistanceSerialiser.AMOUNT_FIELD).asDouble(),
                     Unit.valueOf(distanceNode.get(com.mickeytheq.hades.serialise.value.DistanceSerialiser.UNIT_FIELD).asText()));
+        }
+    }
+
+    static class DimensionExSerialiser extends StdSerializer<DimensionEx> {
+        protected DimensionExSerialiser() {
+            super(DimensionEx.class);
+        }
+
+        @Override
+        public void serialize(DimensionEx value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            gen.writeStartObject();
+            gen.writeNumberField(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.WIDTH_FIELD, value.getWidth());
+            gen.writeNumberField(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.HEIGHT_FIELD, value.getHeight());
+            gen.writeStringField(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.UNIT_FIELD, value.getUnit().name());
+            gen.writeEndObject();
+        }
+    }
+
+    static class DimensionExDeserialiser extends StdDeserializer<DimensionEx> {
+        protected DimensionExDeserialiser() {
+            super(DimensionEx.class);
+        }
+
+        @Override
+        public DimensionEx deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            JsonNode node = p.getCodec().readTree(p);
+
+            return DimensionEx.create(
+                    Unit.valueOf(node.get(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.UNIT_FIELD).asText()),
+                    node.get(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.WIDTH_FIELD).asDouble(),
+                    node.get(com.mickeytheq.hades.serialise.value.DimensionExSerialiser.HEIGHT_FIELD).asDouble());
         }
     }
 }

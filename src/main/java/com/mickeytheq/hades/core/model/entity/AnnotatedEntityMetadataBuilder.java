@@ -7,6 +7,7 @@ import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyValueDiscriminator;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -212,6 +213,9 @@ public class AnnotatedEntityMetadataBuilder {
             return true;
 
         if (Distance.class.isAssignableFrom(propertyType))
+            return true;
+
+        if (DimensionEx.class.isAssignableFrom(propertyType))
             return true;
 
         if (Statistic.class.isAssignableFrom(propertyType))
