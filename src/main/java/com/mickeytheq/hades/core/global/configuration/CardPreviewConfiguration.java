@@ -1,15 +1,14 @@
 package com.mickeytheq.hades.core.global.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mickeytheq.hades.core.CardDimensions;
 import com.mickeytheq.hades.util.shape.Unit;
 import com.mickeytheq.hades.util.shape.UnitConversionUtils;
 
 public class CardPreviewConfiguration {
-    private int desiredPreviewResolutionPpi = 300;
-    private boolean showBleedMargin = false;
-
-    // the bleed margin in the 600ppi templates is 72 pixels so use this is our default value, i.e. use all the available bleed
-    private double desiredBleedMarginInPoints = UnitConversionUtils.convertUnit(Unit.Pixel, Unit.Point, 72, 600);
+    private int desiredPreviewResolutionPpi = 600;
+    private boolean showBleedMargin = true;
+    private double desiredBleedMarginInPoints = CardDimensions.BLEED_POINTS;
 
     @JsonProperty("DesiredPreviewResolutionPpi")
     public int getDesiredPreviewResolutionPpi() {
