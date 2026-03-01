@@ -7,14 +7,13 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CollectionModel;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
+import com.mickeytheq.hades.core.project.ui.ProjectConfigurationDialog;
 import com.mickeytheq.hades.core.view.CardFaceOrientation;
 import com.mickeytheq.hades.core.view.CardFaceView;
 import com.mickeytheq.hades.core.view.EditorContext;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.utils.EditorUtils;
-import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.core.view.utils.PaintUtils;
-import com.mickeytheq.hades.core.view.utils.TextStyleUtils;
+import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.ui.Environment;
 import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import org.apache.commons.lang3.StringUtils;
@@ -85,7 +84,16 @@ public class CollectionView {
     public JPanel createStandardCollectionPanel(EditorContext editorContext) {
         JPanel collectionDetailPanel = MigLayoutUtils.createTitledPanel(Language.string(InterfaceConstants.COLLECTION));
         MigLayoutUtils.addLabelledComponentWrapGrowPush(collectionDetailPanel, Language.string(InterfaceConstants.COPY_OTHER_FACE), copyOtherFaceEditor);
-        MigLayoutUtils.addLabelledComponentWrapGrowPush(collectionDetailPanel, Language.string(InterfaceConstants.COLLECTION), collectionEditor);
+
+        JButton jumpToButton = new JButton(new ImageIcon(ImageUtils.GEAR_IMAGE));
+        jumpToButton.addActionListener(e -> {
+            ProjectConfigurationDialog.openDialog(Environment.getTopLevelWindow(), editorContext.getProjectContext(), ProjectConfigurationDialog.OpenAt.Collection);
+        });
+
+        MigLayoutUtils.addLabel(collectionDetailPanel, Language.string(InterfaceConstants.COLLECTION));
+        MigLayoutUtils.addComponentGrowXPushX(collectionDetailPanel, collectionEditor, "split 2");
+        collectionDetailPanel.add(jumpToButton, "growy, pushy, wrap, wmax 30");
+
         MigLayoutUtils.addLabelledComponentWrapGrowPush(collectionDetailPanel, Language.string(InterfaceConstants.COLLECTIONNUMBER), numberEditor);
 
         return collectionDetailPanel;

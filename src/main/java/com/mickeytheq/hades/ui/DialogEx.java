@@ -50,8 +50,8 @@ public class DialogEx extends JDialog {
         DEFAULT_ICON_IMAGE = defaultIconImage;
     }
 
-    public DialogEx(Frame frame, boolean trackDialogSizeToContent) {
-        super(frame, true);
+    public DialogEx(Window window, boolean trackDialogSizeToContent) {
+        super(window, ModalityType.APPLICATION_MODAL);
 
         setIconImage(DEFAULT_ICON_IMAGE);
 
