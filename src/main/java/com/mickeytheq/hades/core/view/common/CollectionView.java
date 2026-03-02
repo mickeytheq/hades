@@ -27,13 +27,13 @@ import java.util.Optional;
 
 public class CollectionView {
     public static final DimensionEx COLLECTION_IMAGE_SIZE = DimensionEx.millimetres(2.20, 2.20);
-    public static final DimensionEx COLLECTION_NUMBER_SIZE = DimensionEx.millimetres(6.27, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    public static final DimensionEx COLLECTION_NUMBER_SIZE = DimensionEx.millimetres(3.27, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
     private static final RectangleEx COLLECTION_IMAGE_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(54.19, 86.36, COLLECTION_IMAGE_SIZE);
-    private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(53.85, 86.70, COLLECTION_NUMBER_SIZE);
+    private static final RectangleEx COLLECTION_NUMBER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(56.85, 86.70, COLLECTION_NUMBER_SIZE);
 
     private static final RectangleEx COLLECTION_IMAGE_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(80.60, 60.96, COLLECTION_IMAGE_SIZE);
-    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(79.93, 61.38, COLLECTION_NUMBER_SIZE);
+    private static final RectangleEx COLLECTION_NUMBER_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(82.93, 61.38, COLLECTION_NUMBER_SIZE);
 
     private final CollectionModel model;
     private final CardFaceView cardFaceView;

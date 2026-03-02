@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.view.utils;
 
+import ca.cgjennings.graphics.ImageUtilities;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,7 +37,7 @@ public class ImageUtils {
     public static final Image HADES_PURPLE_H_IMAGE = ImageUtils.loadImageReadOnly("/icons/application/hades-purple-h.png").getScaledInstance(18, 18, Image.SCALE_SMOOTH);
     public static final Icon HADES_PURPLE_H_ICON = new ImageIcon(HADES_PURPLE_H_IMAGE);
 
-    public static final Image GEAR_IMAGE = ImageUtils.loadImageReadOnly("/icons/application/gear.png").getScaledInstance(14, 14, Image.SCALE_SMOOTH);
+    public static final BufferedImage GEAR_IMAGE = ImageUtilities.resample(ImageUtils.loadImageReadOnly("/icons/application/gear.png"), 14, 14);
 
     public static final URL PER_INVESTIGATOR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-PerInvestigator.png");
     public static final URL UNIQUE_STAR_ICON_RESOURCE = ImageUtils.class.getResource("/icons/AHLCG-Unique.png");

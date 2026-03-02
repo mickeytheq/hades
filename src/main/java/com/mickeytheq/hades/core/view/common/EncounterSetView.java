@@ -23,10 +23,10 @@ import java.awt.*;
 import java.util.Optional;
 
 public class EncounterSetView {
-    public static final DimensionEx ENCOUNTER_NUMBERS_SIZE = DimensionEx.millimetres(9.31, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
+    public static final DimensionEx ENCOUNTER_NUMBERS_SIZE = DimensionEx.millimetres(5.31, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
-    private static final RectangleEx ENCOUNTER_NUMBERS_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(41.83, 86.70, ENCOUNTER_NUMBERS_SIZE);
-    private static final RectangleEx ENCOUNTER_NUMBERS_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(67.90, 61.38, ENCOUNTER_NUMBERS_SIZE);
+    private static final RectangleEx ENCOUNTER_NUMBERS_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(45.83, 86.70, ENCOUNTER_NUMBERS_SIZE);
+    private static final RectangleEx ENCOUNTER_NUMBERS_LANDSCAPE_DRAW_REGION = RectangleEx.millimetres(71.90, 61.38, ENCOUNTER_NUMBERS_SIZE);
 
     private final EncounterSetModel model;
     private final CardFaceView cardFaceView;

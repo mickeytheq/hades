@@ -23,7 +23,7 @@ import com.mickeytheq.hades.core.model.common.Statistic;
 import com.mickeytheq.hades.core.view.utils.CardFaceViewViewer;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.generator.CardFaceGenerator;
+import com.mickeytheq.hades.generator.RandomCardFaceGenerator;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
 import com.mickeytheq.hades.core.Cards;
@@ -377,7 +377,7 @@ public class QuickCardView {
 
     private class RandomCardIterator implements ListIterator<CardView> {
         private final List<CardView> accumulated = new ArrayList<>();
-        private final CardFaceGenerator generator = new CardFaceGenerator(projectContext);
+        private final RandomCardFaceGenerator generator = new RandomCardFaceGenerator(projectContext);
 
         private int currentIndex = -1;
 

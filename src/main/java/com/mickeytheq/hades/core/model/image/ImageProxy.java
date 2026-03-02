@@ -87,8 +87,16 @@ public class ImageProxy implements NeedsDeepCopy {
     }
 
     // creates a proxy with a specific image - primarily useful for testing
+    // the image can be read successfully but saving/updating will not function correctly
     public static ImageProxy createStatic(BufferedImage image) {
         return new ImageProxy(image);
+    }
+
+    // creates a proxy that is fully functional and primed with an image that is not yet saved
+    public static ImageProxy createPrimed(BufferedImage image) {
+        ImageProxy imageProxy = ImageProxy.createEmpty();
+        imageProxy.set(image);
+        return imageProxy;
     }
 
     // creates an empty proxy that will never load anything - useful for creating a read-only image proxy

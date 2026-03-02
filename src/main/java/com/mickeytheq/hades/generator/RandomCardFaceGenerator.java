@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // utility for generating card faces with random content
-public class CardFaceGenerator {
+public class RandomCardFaceGenerator {
     private final ProjectContext projectContext;
     private final Random random = new Random();
 
-    public CardFaceGenerator(ProjectContext projectContext) {
+    public RandomCardFaceGenerator(ProjectContext projectContext) {
         this.projectContext = projectContext;
     }
 

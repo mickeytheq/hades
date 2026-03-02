@@ -30,7 +30,7 @@ import com.mickeytheq.hades.core.view.CardFaceSide;
  */
 public interface CardFaceModel {
     /**
-     * Called to set any default values that require context such as the {@link ProjectContext} or the side of the card this model is initially for
+     * Called to set any default values on the face model immediately after it is created
      */
     void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide);
 }
