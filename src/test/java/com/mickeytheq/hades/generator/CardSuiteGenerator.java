@@ -5,6 +5,7 @@ import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.common.*;
+import com.mickeytheq.hades.core.model.image.ImagePersister;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.model.image.NothingImagePersister;
 import com.mickeytheq.hades.core.model.image.SingleDirectoryUuidEncodedFilenamesImagePersister;
@@ -14,6 +15,8 @@ import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.StandardProjectContext;
 import com.mickeytheq.hades.core.project.configuration.*;
 import com.mickeytheq.hades.core.view.CardFaceSide;
+import com.mickeytheq.hades.core.view.cardfaces.AssetView;
+import com.mickeytheq.hades.core.view.cardfaces.EnemyView;
 import com.mickeytheq.hades.core.view.utils.ImageUtils;
 import com.mickeytheq.hades.serialise.CardIO;
 import com.mickeytheq.hades.strangeeons.util.ProjectUtils;
@@ -55,7 +58,9 @@ public class CardSuiteGenerator {
 
         HadesProject hadesProject = HadesProject.getFromPath(rootDirectory);
 
-        ProjectContexts.withContext(new StandardProjectContext(null, new SingleDirectoryUuidEncodedFilenamesImagePersister(hadesProject.getImagesDirectory())), () -> {
+        ImagePersister imagePersister = new SingleDirectoryUuidEncodedFilenamesImagePersister(hadesProject.getImagesDirectory());
+
+        ProjectContexts.withContext(new StandardProjectContext(null, imagePersister), () -> {
             gearCollectionConfiguration = new CollectionConfiguration();
             gearCollectionConfiguration.setImage(ImageProxy.createPrimed(GEAR_IMAGE));
             gearCollectionConfiguration.setTag("gear");
@@ -72,7 +77,7 @@ public class CardSuiteGenerator {
         ProjectConfigurationProvider provider = new ProjectConfigurationProviderJson(hadesProject.getProjectConfigurationFile());
         provider.save(projectConfiguration);
 
-        this.projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
+        this.projectContext = new StandardProjectContext(projectConfiguration, imagePersister);
     }
 
     public Card asset() {
@@ -88,6 +93,8 @@ public class CardSuiteGenerator {
             asset.getCommonCardFieldsModel().setFlavourText("It's just a knife.");
 
             asset.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
+
+            asset.getPortraitModel().prime(AssetView.ART_PORTRAIT_DRAW_REGION.getSize(), ImageUtils.loadImageWithNoCaching(getClass().getResource("/art_portraits/knife.jpg")));
 
             asset.getAssetFieldsModel().setSlot1(Asset.AssetSlot.Hand);
 
@@ -164,7 +171,7 @@ public class CardSuiteGenerator {
             Enemy enemy = new Enemy();
             enemy.initialiseNew(projectContext, CardFaceSide.Front);
 
-            enemy.getCommonCardFieldsModel().setTitle("Dubious Salesman");
+            enemy.getCommonCardFieldsModel().setTitle("Shady Salesman");
             enemy.getCommonCardFieldsModel().setSubtitle("Sixteen times the detail");
             enemy.getCommonCardFieldsModel().setTraits("Yithian.");
             enemy.getCommonCardFieldsModel().setKeywords("Aloof. Hunter.");
@@ -172,6 +179,8 @@ public class CardSuiteGenerator {
             enemy.getCommonCardFieldsModel().setFlavourText("All of this. Just. Works.");
 
             enemy.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
+
+            enemy.getPortraitModel().prime(EnemyView.ART_PORTRAIT_DRAW_REGION.getSize(), ImageUtils.loadImageWithNoCaching(getClass().getResource("/art_portraits/todd-howard.jpg")));
 
             enemy.getEnemyFieldsModel().setCombat(new Statistic("1", false));
             enemy.getEnemyFieldsModel().setEvade(new Statistic("5", false));

@@ -45,7 +45,7 @@ public class EnemyView extends BaseCardFaceView<Enemy> implements HasCollectionV
 
     // locations to draw portraits
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(45.90, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(43.81, 69.50, 51.09);
+    public static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(43.81, 69.50, 51.09);
 
     // locations to draw other elements
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.70, 10.33, 2.37);

@@ -1,12 +1,20 @@
 package com.mickeytheq.hades.core.model.common;
 
+import ca.cgjennings.graphics.ImageUtilities;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import com.mickeytheq.hades.serialise.discriminator.EmptyEntityDiscriminator;
+import com.mickeytheq.hades.util.shape.DimensionEx;
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class PortraitModel implements EmptyEntityDiscriminator {
+    // the PPI used as noted above to define the image draw region for the purposes of editing/positioning the art image
+    // note that this value CANNOT be changed unless migration occurs to adjust the existing portrait values to match
+    public static final int ASSUMED_PERSISTENCE_PPI = 600;
     private double panX = 0;
     private double panY = 0;
     private double scale = 1.0;
@@ -94,5 +102,28 @@ public class PortraitModel implements EmptyEntityDiscriminator {
 
         // otherwise any pan/scale settings are irrelevant and we can skip the entire entity
         return true;
+    }
+
+    // computes a scale to apply so that the image completely fills the draw area
+    public static double computeDefaultImageScale(DimensionEx drawDimension, BufferedImage image) {
+        Dimension pixelDimension = drawDimension.toPixelDimension(ASSUMED_PERSISTENCE_PPI);
+
+        return computeDefaultImageScale(pixelDimension, image);
+    }
+
+    public static double computeDefaultImageScale(Dimension pixelDimension, BufferedImage image) {
+        double idealWidth = pixelDimension.getWidth();
+        double idealHeight = pixelDimension.getHeight();
+        double imageWidth = image.getWidth();
+        double imageHeight = image.getHeight();
+
+        return ImageUtilities.idealCoveringScaleForImage(idealWidth, idealHeight, imageWidth, imageHeight);
+    }
+
+    // helper for testing that primes this portrait model with an image, automatically scaling it to a useful default size
+    public void prime(DimensionEx drawDimension, BufferedImage image) {
+        double scale = computeDefaultImageScale(drawDimension, image);
+        setScale(scale);
+        setImage(ImageProxy.createPrimed(image));
     }
 }

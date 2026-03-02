@@ -34,7 +34,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
     private PlayerCardFieldsView playerCardFieldsView;
     private PortraitView portraitView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(6.77, 60.62, 43.69);
+    public static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(9.77, 60.62, 43.69);
 
     @Override
     public void initialiseView() {

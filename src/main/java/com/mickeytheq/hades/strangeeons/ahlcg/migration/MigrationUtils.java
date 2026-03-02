@@ -7,7 +7,6 @@ import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.core.project.configuration.ProjectConfiguration;
 import com.mickeytheq.hades.core.view.CardFaceSide;
-import com.mickeytheq.hades.core.view.common.PortraitView;
 import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -273,7 +272,7 @@ public class MigrationUtils {
     // the scaling factor used to adjust the AHLCG portait settings to Hades
     // see the PortraitView doco for full details.
     private static final int AHLCG_PORTRAIT_PPI = 150;
-    private static final int PORTRAIT_VALUE_SCALING_FACTOR = PortraitView.ASSUMED_PERSISTENCE_PPI / AHLCG_PORTRAIT_PPI;
+    private static final int PORTRAIT_VALUE_SCALING_FACTOR = PortraitModel.ASSUMED_PERSISTENCE_PPI / AHLCG_PORTRAIT_PPI;
 
     public static void populateArt(CardFaceMigrationContext context, PortraitModel portraitModel) {
         SettingsAccessor settingsAccessor = context.getSettingsAccessor();

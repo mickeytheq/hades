@@ -104,6 +104,10 @@ public class RectangleEx {
         return new RectangleEx(unit, newX, xRelativeTo, centreExistingY - newHeight / 2, yRelativeTo, newWidth, newHeight);
     }
 
+    public DimensionEx getSize() {
+        return DimensionEx.create(unit, width, height);
+    }
+
     public Rectangle toPixelRectangle(int ppi, Rectangle templateRegionInPixels) {
         double conversionRatio = UnitConversionUtils.getConversionRatio(unit, Unit.Pixel, ppi);
         int pixelWidth = (int) (width * conversionRatio + 0.5);

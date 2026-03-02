@@ -4,7 +4,6 @@ import ca.cgjennings.apps.arkham.PortraitPanel;
 import ca.cgjennings.apps.arkham.component.AbstractPortrait;
 import ca.cgjennings.apps.arkham.component.Portrait;
 import ca.cgjennings.graphics.ImageUtilities;
-import ca.cgjennings.graphics.filters.InversionFilter;
 import ca.cgjennings.layout.MarkupRenderer;
 import com.mickeytheq.hades.codegenerated.GameConstants;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
@@ -59,10 +58,6 @@ import java.util.*;
 public class PortraitView {
     private static final Logger logger = LogManager.getLogger(PortraitView.class);
 
-    // the PPI used as noted above to define the image draw region for the purposes of editing/positioning the art image
-    // note that this value CANNOT be changed unless migration occurs to adjust the existing portrait values to match
-    public static final int ASSUMED_PERSISTENCE_PPI = 600;
-
     public static final URL BLANK_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/resources/spacers/empty1x1.png");
     public static final URL DEFAULT_PORTRAIT_IMAGE_RESOURCE = PortraitModel.class.getResource("/portrait/DefaultTexture.jp2");
     private final PortraitModel portraitModel;
@@ -103,17 +98,17 @@ public class PortraitView {
     // create a new PortraitView with the given model and draw dimension which defaults to a blank image when
     // no source is provided by the model
     public static PortraitView createWithBlankImage(PortraitModel portraitModel, CardFaceView cardFaceView, RectangleEx portraitDrawRegion) {
-        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(ASSUMED_PERSISTENCE_PPI), BLANK_PORTRAIT_IMAGE_RESOURCE);
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(PortraitModel.ASSUMED_PERSISTENCE_PPI), BLANK_PORTRAIT_IMAGE_RESOURCE);
     }
 
     // create a new PortraitView with the given model and draw dimension which defaults to a standard/default image when
     // no source is provided by the model
     public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, RectangleEx portraitDrawRegion) {
-        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawRegion.toPixelDimension(PortraitModel.ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
     public static PortraitView createWithDefaultImage(PortraitModel portraitModel, CardFaceView cardFaceView, DimensionEx portraitDrawDimension) {
-        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension.toPixelDimension(ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
+        return new PortraitView(portraitModel, cardFaceView, portraitDrawDimension.toPixelDimension(PortraitModel.ASSUMED_PERSISTENCE_PPI), DEFAULT_PORTRAIT_IMAGE_RESOURCE);
     }
 
     private void installDefaultImage() {
@@ -136,14 +131,14 @@ public class PortraitView {
         // set pan/scale/rotation to sensible defaults
         portraitModel.setPanX(0);
         portraitModel.setPanY(0);
-        portraitModel.setScale(computeDefaultImageScale(image));
+        portraitModel.setScale(PortraitModel.computeDefaultImageScale(getPortraitDrawDimension(), image));
         portraitModel.setRotation(0);
     }
 
     // can be called when the portrait needs to support changes to its dimension, for example a card type that
     // has different options for its size
     public void setDimension(DimensionEx dimension) {
-        portraitDrawDimension = dimension.toPixelDimension(ASSUMED_PERSISTENCE_PPI);
+        portraitDrawDimension = dimension.toPixelDimension(PortraitModel.ASSUMED_PERSISTENCE_PPI);
 
         // trigger a change/re-validate of the owned portrait panel to update with the new dimension
         if (portraitPanel != null)
@@ -300,7 +295,7 @@ public class PortraitView {
         double scale = portraitModel.getScale();
 
         // perform the scaling as noted above by apply a scaling factor to account for the default vs painting PPI
-        double resolutionScalingFactor = (double)paintContext.getResolutionInPixelsPerInch() / ASSUMED_PERSISTENCE_PPI;
+        double resolutionScalingFactor = (double)paintContext.getResolutionInPixelsPerInch() / PortraitModel.ASSUMED_PERSISTENCE_PPI;
         panX = panX * resolutionScalingFactor;
         panY = panY * resolutionScalingFactor;
         scale = scale * resolutionScalingFactor;
@@ -366,16 +361,6 @@ public class PortraitView {
         lastScaledImageKey = key;
 
         return scaledImage;
-    }
-
-    private double computeDefaultImageScale(BufferedImage image) {
-        Dimension clip = getPortraitDrawDimension();
-        double idealWidth = clip.getWidth();
-        double idealHeight = clip.getHeight();
-        double imageWidth = image.getWidth();
-        double imageHeight = image.getHeight();
-
-        return ImageUtilities.idealCoveringScaleForImage(idealWidth, idealHeight, imageWidth, imageHeight);
     }
 
     private class PortraitImpl extends AbstractPortrait {

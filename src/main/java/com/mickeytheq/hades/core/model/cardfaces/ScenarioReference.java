@@ -21,6 +21,9 @@ public class ScenarioReference extends BaseCardFaceModel implements HasCommonCar
 
     @Override
     public void initialiseNew(ProjectContext projectContext, CardFaceSide cardFaceSide) {
+        encounterSetModel.initialiseNew(projectContext, cardFaceSide);
+        collectionModel.initialiseNew(projectContext, cardFaceSide);
+
         if (cardFaceSide == CardFaceSide.Front) {
             getScenarioReferenceFieldsModel().setDifficulty(Difficulty.EasyStandard);
             getCommonCardFieldsModel().setCopyOtherFaceTitles(false);
