@@ -26,7 +26,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     private PortraitView portraitView;
 
     // locations to draw portraits
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(42.71, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    // the circle for the encounter icon isn't exactly centred horizontally so we have to specify an exact position
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresCentredOn(31.9, 45.20, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
     private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(0.00, 58.25, 53.46);
 
     // locations to draw other elements

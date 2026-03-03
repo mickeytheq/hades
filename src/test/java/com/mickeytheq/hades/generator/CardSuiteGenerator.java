@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 
 // generate a fixed set of cards
 public class CardSuiteGenerator {
-    public static final BufferedImage GEAR_IMAGE = ImageUtils.loadImageReadOnly("/icons/application/gear.png");
+    public static final BufferedImage GEAR_IMAGE = ImageUtils.loadImageReadOnly("/icons/gear.png");
 
     private final ProjectContext projectContext;
     private CollectionConfiguration gearCollectionConfiguration;
@@ -175,7 +175,7 @@ public class CardSuiteGenerator {
             enemy.getCommonCardFieldsModel().setSubtitle("Sixteen times the detail");
             enemy.getCommonCardFieldsModel().setTraits("Yithian.");
             enemy.getCommonCardFieldsModel().setKeywords("Aloof. Hunter.");
-            enemy.getCommonCardFieldsModel().setRules("<for> After you succeed at a skill test by 2 or more at <title>'s location, it attacks you.");
+            enemy.getCommonCardFieldsModel().setRules("<for> After you succeed at a skill test by 2 or more at <title>'s location: <title> attacks you.");
             enemy.getCommonCardFieldsModel().setFlavourText("All of this. Just. Works.");
 
             enemy.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
@@ -206,7 +206,7 @@ public class CardSuiteGenerator {
 
             treachery.getCommonCardFieldsModel().setTitle("Rat Swarm");
             treachery.getCommonCardFieldsModel().setTraits("Terror.");
-            treachery.getCommonCardFieldsModel().setRules("<rev> Put <title> into play in your threat area.\n<vs><for> When you would take any amount of damage: Take 1 additional damage.");
+            treachery.getCommonCardFieldsModel().setRules("<rev> Put <title> into play in your threat area.\n<vs>\n<for> When you would take any amount of damage: Take 1 additional damage.");
             treachery.getCommonCardFieldsModel().setAfterRulesSpacing(new Distance(20, Unit.Point));
             treachery.getCommonCardFieldsModel().setFlavourText("We've had one rat yes. But what about 723rd rat?");
 

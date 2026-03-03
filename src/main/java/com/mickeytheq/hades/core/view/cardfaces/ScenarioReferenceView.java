@@ -107,7 +107,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(15.66, 50.02, 8.47);
     private static final RectangleEx DIFFICULTY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(21.51, 19.30, 2.37);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(16.51, 26.42, 40.64, 51.65);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.51, 10.50, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(29.51, 10.75, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
     private static final RectangleEx TRACKING_BOX_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(62.82, 51.82, 15.58);
     private static final RectangleEx TRACKING_TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(63.50, 47.41, 3.39);
 

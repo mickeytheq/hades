@@ -40,7 +40,7 @@ public class InvestigatorView extends BaseCardFaceView<Investigator> implements 
     private JTextField agilityEditor;
 
     private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0.00, 10.16, 47.07, 53.34);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(1.86, 2.03, 4.74, 4.74);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(1.86, 2.03, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
 
     @Override
     public void initialiseView() {

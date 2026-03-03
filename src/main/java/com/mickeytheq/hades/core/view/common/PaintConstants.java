@@ -14,7 +14,7 @@ public class PaintConstants {
     public static final DimensionEx BASIC_WEAKNESS_ICON_SIZE = DimensionEx.millimetres(6.00, 6.00);
 
     // encounter set icon size to be used on player cards
-    public static final DimensionEx ENCOUNTER_SET_ICON_SIZE = DimensionEx.millimetres(5.08, 5.08);
+    public static final DimensionEx ENCOUNTER_SET_ICON_SIZE = DimensionEx.millimetres(4.5, 4.5);
 
     // class symbols as used on asset/event multiclass cards
     public static final DimensionEx CLASS_SYMBOL_SIZE = DimensionEx.millimetres(8.805, 8.805);

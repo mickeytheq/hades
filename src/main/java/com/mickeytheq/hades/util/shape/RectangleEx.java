@@ -43,6 +43,15 @@ public class RectangleEx {
                 UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getHeight()));
     }
 
+    public static RectangleEx millimetresCentredOn(double centreX, double centreY, DimensionEx size) {
+        double widthInMillis = UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getWidth());
+        double heightInMillis = UnitConversionUtils.convertUnit(size.getUnit(), Unit.Millimetre, size.getHeight());
+
+        double topLeftX = centreX - widthInMillis / 2.0;
+        double topLeftY = centreY - heightInMillis / 2.0;
+        return millimetres(topLeftX, topLeftY, widthInMillis, heightInMillis);
+    }
+
     // creates a rectangle where the resulting draw region will be centred horizontally in the total painting region which
     // must be supplied externally
     public static RectangleEx millimetresHorizontallyCentred(double topY, double width, double height) {
@@ -57,12 +66,6 @@ public class RectangleEx {
 
     public Rectangle toPixelRectangle(int ppi) {
         return toPixelRectangle(ppi, null);
-    }
-
-    public RectangleEx centreOn(DimensionEx size) {
-        double ratio = UnitConversionUtils.getConversionRatio(unit, size.getUnit(), null);
-
-        return centreOn(ratio * size.getWidth(), ratio * size.getHeight());
     }
 
     public RectangleEx nudgeLeft(double amount) {
@@ -86,6 +89,13 @@ public class RectangleEx {
     public RectangleEx nudgeDown(double amount) {
         return new RectangleEx(unit, x, xRelativeTo, y + amount, yRelativeTo, width, height);
     }
+
+    public RectangleEx centreOn(DimensionEx size) {
+        double ratio = UnitConversionUtils.getConversionRatio(unit, size.getUnit(), null);
+
+        return centreOn(ratio * size.getWidth(), ratio * size.getHeight());
+    }
+
     // creates a new RectangleEx with the same units as this one where the
     // position of the new rectangle is centred on this rectangle
     public RectangleEx centreOn(double newWidth, double newHeight) {
