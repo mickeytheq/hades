@@ -26,7 +26,8 @@ public class LocationBackView extends BaseCardFaceView<LocationBack> implements 
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(7.11, 69.50, 46.57);
+    // should be identical to the front location view
+    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = LocationView.ART_PORTRAIT_DRAW_REGION;
 
     @Override
     public void initialiseView() {

@@ -29,7 +29,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
     private PortraitView portraitView;
     private LocationFieldsView locationFieldsView;
 
-    private static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0, 7.11, 69.60, 49.57);
+    public static final RectangleEx ART_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(0, 9.60, 69.60, 50.00);
 
     @Override
     public void initialiseView() {
@@ -145,7 +145,7 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
 
         // victory is painted separate from the body on locations
         commonCardFieldsView.paintBody(paintContext, paintContext.toPixelRect(BODY_DRAW_REGION), BODY_PAGE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()), false);
-        paintVictory(paintContext);
+        commonCardFieldsView.paintVictory(paintContext, paintContext.toPixelRect(VICTORY_DRAW_REGION));
         commonCardFieldsView.paintCopyright(paintContext);
 
         encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Portrait);
@@ -175,20 +175,6 @@ public class LocationView extends BaseCardFaceView<Location> implements HasLocat
         pageShapeBuilder.lineTo(new Point2D.Double(0.074, 0.0));
 
         return pageShapeBuilder.build();
-    }
-
-    private void paintVictory(PaintContext paintContext) {
-        String victory = getModel().getCommonCardFieldsModel().getVictory();
-
-        if (StringUtils.isEmpty(victory))
-            return;
-
-        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
-        markupRenderer.setDefaultStyle(TextStyleUtils.getVictoryTextStyle());
-        markupRenderer.setLineTightness(0.7f);
-        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
-        markupRenderer.setMarkupText(getModel().getCommonCardFieldsModel().getVictory());
-        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(VICTORY_DRAW_REGION));
     }
 }
 

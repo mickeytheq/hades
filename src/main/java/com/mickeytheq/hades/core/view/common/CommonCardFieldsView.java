@@ -16,6 +16,7 @@ import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import resources.Language;
 
 import javax.swing.*;
@@ -314,17 +315,39 @@ public class CommonCardFieldsView {
         addSpacing(sb, model.getAfterFlavourTextSpacing());
 
         if (includeVictory) {
-            if (!StringUtils.isEmpty(model.getVictory())) {
+            String victory = model.getVictory();
+            if (!StringUtils.isEmpty(victory)) {
+                // victory should always end with a period
+                victory = Strings.CS.appendIfMissing(victory, ".");
+
                 if (sb.length() > 0)
                     sb.append("\n");
                 sb.append("<center>");
                 sb.append("<vic>");
-                sb.append(model.getVictory());
+                sb.append(victory);
                 sb.append("</vic>");
             }
         }
 
         return sb.toString();
+    }
+
+    // typically victory is part of the body text but occasionally it is rendered separately
+    public void paintVictory(PaintContext paintContext, Rectangle drawRegion) {
+        String victory = getModel().getVictory();
+
+        if (StringUtils.isEmpty(victory))
+            return;
+
+        // victory should always end with a period
+        victory = Strings.CS.appendIfMissing(victory, ".");
+
+        MarkupRenderer markupRenderer = paintContext.createMarkupRenderer();
+        markupRenderer.setDefaultStyle(TextStyleUtils.getVictoryTextStyle());
+        markupRenderer.setLineTightness(0.7f);
+        markupRenderer.setAlignment(MarkupRenderer.LAYOUT_RIGHT | MarkupRenderer.LAYOUT_MIDDLE);
+        markupRenderer.setMarkupText(victory);
+        markupRenderer.drawAsSingleLine(paintContext.getGraphics(), drawRegion);
     }
 
     private void addSpacing(StringBuilder sb, Distance spacing) {
