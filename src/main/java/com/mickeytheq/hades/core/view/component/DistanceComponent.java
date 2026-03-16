@@ -33,7 +33,9 @@ public class DistanceComponent extends JPanel {
         setLayout(new MigLayout(MigLayoutUtils.createDefaultLayoutConstraints().gridGap("0", "0").insets("0")));
 
         add(valueEditor, "width 80:80:80");
-        add(unitEditor, "width 100:100:100");
+
+        // for some reason the unit editor positions slightly above the value editor, the aligny constraint fixes this
+        add(unitEditor, "width 100:100:100, aligny center");
 
         valueEditor.addChangeListener(e -> fireActionPerformed());
 
