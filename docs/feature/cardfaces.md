@@ -18,30 +18,32 @@ The status columns indicates the current development state
 - Alpha - built but needs review testing
 - Missing - not yet built
 
-| Hades card type | Restrictions | AHLCG plugin card types | Status |
-| ------ | -------- | --------- | ---- |
-| Asset | None | Asset, Asset/Asset, Story Asset | Alpha |
-| Event | None | Event | Alpha |
-| Skill | None |Skill | Alpha |
-| Customizable Upgrade | None | Customizable Upgrades | Missing |
-| Investigator | None | Investigator, Story investigator | Alpha |
-| Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Alpha |
-| Minicard | None | Mini Investigator Marker | Missing |
-| Scenario Reference | None | Chaos | Alpha |
-| Agenda | None | Agenda, numerous variants | Alpha |
-| Agenda Back | Only supported as the back face paired with an Agenda front face | (back of agenda card) | Alpha |
-| Act | None | Act, numerous variants | Alpha |
-| Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Alpha |
-| Location | None (however 'copy front' options are only available with a front location) | Location, Location/Location | Alpha |
-| Treachery | None | Treachery, Treachery (weakness) | Alpha |
-| Enemy | None | Enemy, Enemy (weakness) | Alpha |
-| Treachery Location | None | TreacheryLocation | Missing |
-| Story | None | Story, numerous variants | Missing |
-| Key | None | Key | Missing |
-| Portrait | None | Potrait | Missing |
-| Concealed | None | Concealed | Missing |
-| Rules | None | Campaign Rules | Missing |
-| Player card back | None | (the default back on many cards) | Alpha |
-| Encounter card back | None | (the default back on many cards) | Alpha |
-| Purple player card back | None | (the default back on customizable upgrade cards) | Missing |
-| Concealed card back | None | (the default back on customizable upgrade cards) | Missing |
+PPI available indicates the template resolution that is available
+
+| Hades card type | Restrictions | AHLCG plugin card types | Status | PPI available |
+| ------ | -------- | --------- | ---- | ---- |
+| Asset | None | Asset, Asset/Asset, Story Asset | Beta | 600 |
+| Event | None | Event | Beta | 600, except for multi-class |
+| Skill | None |Skill | Beta | 600 for Guardian, Rogue, Survivor, Weakness |
+| Customizable Upgrade | None | Customizable Upgrades | Missing | Missing |
+| Investigator | None | Investigator, Story investigator | Beta | 300 |
+| Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Beta | 300 |
+| Minicard | None | Mini Investigator Marker | Beta | 300 |
+| Scenario Reference | None | Chaos | Beta | 600 |
+| Agenda | None | Agenda, numerous variants | Beta | 600 |
+| Agenda Back | Only supported as the back face paired with an Agenda front face | (back of agenda card) | Beta | 600 |
+| Act | None | Act, numerous variants | Beta | 600 |
+| Act Back | Only supported as the back face paired with an Act front face | (back of act card) | Beta | 600 |
+| Location | None (however 'copy front' options are only available with a front location) | Location, Location/Location | Beta | 600 |
+| Treachery | None | Treachery, Treachery (weakness) | Beta | 600 |
+| Enemy | None | Enemy, Enemy (weakness) | Beta | 600 |
+| Treachery Location | None | TreacheryLocation | Missing | Missing |
+| Story | None | Story, numerous variants | Missing | Missing |
+| Key | None | Key | Missing | Missing |
+| Image | None | Potrait | Beta | 600 |
+| Concealed | None | Concealed | Missing | Missing |
+| Rules | None | Campaign Rules | Missing | Missing |
+| Player card back | None | (the default back on many cards) | Beta | 600 |
+| Encounter card back | None | (the default back on many cards) | Beta | 600 |
+| Purple player card back | None | (the default back on customizable upgrade cards) | Missing | Missing |
+| Concealed card back | None | (the default back on customizable upgrade cards) | Missing | Missing |
