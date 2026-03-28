@@ -23,8 +23,8 @@ PPI available indicates the template resolution that is available
 | Hades card type | Restrictions | AHLCG plugin card types | Status | PPI available |
 | ------ | -------- | --------- | ---- | ---- |
 | Asset | None | Asset, Asset/Asset, Story Asset | Beta | 600 |
-| Event | None | Event | Beta | 600, except for multi-class |
-| Skill | None |Skill | Beta | 600 for Guardian, Rogue, Survivor, Weakness |
+| Event | None | Event | Beta | 600, except for multi-class 300 |
+| Skill | None |Skill | Beta | 600 for Guardian, Rogue, Survivor, Weakness; 300 otherwise |
 | Customizable Upgrade | None | Customizable Upgrades | Missing | Missing |
 | Investigator | None | Investigator, Story investigator | Beta | 300 |
 | Investigator Back | Only supported as the back face paired with an Investigator front face | (back of investigator card) | Beta | 300 |
