@@ -170,7 +170,7 @@ public class AssetView extends BaseCardFaceView<Asset> implements HasCollectionV
         editorContext.addDisplayComponent("Rules / portrait", mainPanel); // TODO: i18n
     }
 
-    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.32, 10.54, 6.43, 2.37);
+    private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetres(3.42, 10.54, 6.33, 2.37);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(2.37, 40.30, 4.91);
     private static final RectangleEx SUBTITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(7.05, 40.30, 3.73);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(54.19, 56.90, 22.71);
