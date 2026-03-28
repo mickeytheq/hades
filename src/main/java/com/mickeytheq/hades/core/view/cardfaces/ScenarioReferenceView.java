@@ -18,6 +18,7 @@ import java.awt.font.TextAttribute;
 import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @View(interfaceLanguageKey = InterfaceConstants.SCENARIO_REFERENCE)
 public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> implements HasEncounterSetView, HasCollectionView {
@@ -210,7 +211,7 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
         tokenMap.put(ScenarioReference.SymbolChaosToken.Tablet, getModel().getScenarioReferenceFieldsModel().getTablet());
         tokenMap.put(ScenarioReference.SymbolChaosToken.ElderThing, getModel().getScenarioReferenceFieldsModel().getElderThing());
 
-        Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosToken> combinedInto = new HashMap<>();
+        Map<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosToken> combinedInto = new LinkedHashMap<>();
 
         // iterate the possible tokens/info and build a reverse map with combinations resolved
         for (Map.Entry<ScenarioReference.SymbolChaosToken, ScenarioReference.SymbolChaosTokenInfo> entry : tokenMap.entrySet()) {
@@ -237,7 +238,12 @@ public class ScenarioReferenceView extends BaseCardFaceView<ScenarioReference> i
             }
         }
 
-        return combinedMap;
+        // finally filter out any tokens that have no text
+        return combinedMap.entrySet().stream()
+                .filter(o -> !StringUtils.isEmpty(o.getKey().getRules()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (o, o2) -> {
+                    throw new UnsupportedOperationException("Merge not allowed");
+                }, LinkedHashMap::new));
     }
 
     private static class SymbolChaosTokenInfoView {
