@@ -15,6 +15,8 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -61,8 +63,11 @@ public class AnnotatedEntityMetadataBuilder {
                 continue;
             }
 
-            if (isValueType(propertyDescriptor)) {
+            if (isValueType(propertyDescriptor.getPropertyType())) {
                 propertyMetadataList.add(createValuePropertyMetadata(clazz, propertyDescriptor, property));
+            }
+            else if (propertyDescriptor.getPropertyType().isAssignableFrom(List.class)) {
+                propertyMetadataList.add(createListPropertyMetadata(clazz, propertyDescriptor));
             }
             else {
                 propertyMetadataList.add(createEntityPropertyMetadata(propertyDescriptor));
@@ -182,9 +187,26 @@ public class AnnotatedEntityMetadataBuilder {
         return new EntityPropertyMetadataImpl(getPropertyName(propertyDescriptor), entityMetadata, readFunction);
     }
 
-    private boolean isValueType(PropertyDescriptor propertyDescriptor) {
-        Class<?> propertyType = propertyDescriptor.getPropertyType();
+    private PropertyMetadata createListPropertyMetadata(Class<?> owningClass, PropertyDescriptor propertyDescriptor) {
+        Type returnType = propertyDescriptor.getReadMethod().getGenericReturnType();
 
+        if (returnType instanceof ParameterizedType) {
+            Class<?> listValueType = (Class<?>) ((ParameterizedType)returnType).getActualTypeArguments()[0];
+
+            Function<Object, Object> readFunction = createReadFunction(propertyDescriptor);
+
+            EntityMetadata entityMetadata = null;
+            if (!isValueType(listValueType))
+                entityMetadata = createEntityMetadata(listValueType);
+
+            return new ListPropertyMetadataImpl(getPropertyName(propertyDescriptor), entityMetadata, readFunction);
+        }
+        else {
+            throw new RuntimeException("Cannot build list metadata for a non-parameterized type of property '" + propertyDescriptor.getName() + "' in class '" + owningClass.getName() + "'");
+        }
+    }
+
+    private boolean isValueType(Class<?> propertyType) {
         if (propertyType.isPrimitive())
             return true;
 
@@ -286,6 +308,63 @@ public class AnnotatedEntityMetadataBuilder {
         @Override
         public void setPropertyValue(Object parent, Object newValue) {
             throw new UnsupportedOperationException("Setting entity values is not supported. Default constructors of owning classes should initialise any child entities");
+        }
+    }
+
+    static class ListPropertyMetadataImpl implements ListPropertyMetadata {
+        private final String name;
+        private final EntityMetadata listItemEntityMetadata;
+        private final Function<Object, Object> readFunction;
+
+        public ListPropertyMetadataImpl(String name, EntityMetadata listItemEntityMetadata, Function<Object, Object> readFunction) {
+            this.name = name;
+            this.listItemEntityMetadata = listItemEntityMetadata;
+            this.readFunction = readFunction;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public Class<?> getPropertyClass() {
+            return listItemEntityMetadata.getEntityClass();
+        }
+
+        @Override
+        public boolean shouldInclude(Object value) {
+            List<?> list = (List<?>)value;
+
+            return !list.isEmpty();
+        }
+
+        @Override
+        public Object getPropertyValue(Object parent) {
+            return readFunction.apply(parent);
+        }
+
+        @Override
+        public void setPropertyValue(Object parent, Object newValue) {
+            throw new UnsupportedOperationException("Setting list values is not supported. Default constructors of owning classes should initialise any child lists");
+        }
+
+        @Override
+        public Class<?> getListItemClass() {
+            return listItemEntityMetadata.getEntityClass();
+        }
+
+        @Override
+        public boolean isListItemValueType() {
+            return listItemEntityMetadata == null;
+        }
+
+        @Override
+        public EntityMetadata asEntity() {
+            if (listItemEntityMetadata == null)
+                throw new RuntimeException("List holds value types, not entity types");
+
+            return listItemEntityMetadata;
         }
     }
 

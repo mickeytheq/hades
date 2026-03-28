@@ -1,11 +1,11 @@
 package com.mickeytheq.hades.serialise;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mickeytheq.hades.core.project.ProjectContext;
 
 public interface ValueSerialiser<T> {
-    void serialiseValue(String fieldName, ObjectNode currentNode, T value, ProjectContext projectContext);
+    JsonNode serialiseValue(T value, ObjectMapper objectMapper, ProjectContext projectContext);
 
     T deserialiseValue(JsonNode jsonNode, ProjectContext projectContext);
 }

@@ -2,6 +2,11 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
+import resources.Language;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonCardFieldsModel {
     private String title;
@@ -10,7 +15,7 @@ public class CommonCardFieldsModel {
     private boolean unique = false;
     private String traits;
     private Distance afterTraitsSpacing = Distance.createZeroPoint();
-    private String keywords;
+    private List<KeywordModel> keywords = new ArrayList<>();
     private Distance afterKeywordsSpacing = Distance.createZeroPoint();
     private String rules;
     private Distance afterRulesSpacing = Distance.createZeroPoint();
@@ -66,11 +71,11 @@ public class CommonCardFieldsModel {
     }
 
     @Property("Keywords")
-    public String getKeywords() {
+    public List<KeywordModel> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(String keywords) {
+    public void setKeywords(List<KeywordModel> keywords) {
         this.keywords = keywords;
     }
 
@@ -144,5 +149,96 @@ public class CommonCardFieldsModel {
 
     public void setAfterFlavourTextSpacing(Distance afterFlavourTextSpacing) {
         this.afterFlavourTextSpacing = afterFlavourTextSpacing;
+    }
+
+    public static class KeywordModel {
+        private String keyword;
+        private List<KeywordParameterModel> parameters = new ArrayList<>();
+
+        @Property("Keyword")
+        public String getKeyword() {
+            return keyword;
+        }
+
+        public void setKeyword(String keyword) {
+            this.keyword = keyword;
+        }
+
+        @Property("Parameters")
+        public List<KeywordParameterModel> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(List<KeywordParameterModel> parameters) {
+            this.parameters = parameters;
+        }
+
+        public static final String KEYWORD_LANGUAGE_KEY_PREFIX = "Hades-Keyword-";
+
+        // TODO: make the placeholder 3-part {key:type:translation} where key and type should not change but translation can be altered
+        // TODO: and maybe drop type entirely - although would be useful for having a translatable drop-down for uses types
+        private static final Pattern PLACEHOLDER = Pattern.compile("\\{(\\w+):(\\w+)}");
+
+        public Map<String, String> parsePlaceholders() {
+            String translation = Language.gstring(KEYWORD_LANGUAGE_KEY_PREFIX + getKeyword());
+
+            Map<String, String> placeholders = new LinkedHashMap<>();
+
+            Matcher matcher = PLACEHOLDER.matcher(translation);
+
+            while (matcher.find()) {
+                placeholders.put(matcher.group(1), matcher.group(2));
+            }
+
+            return placeholders;
+        }
+
+        public String resolveKeyword() {
+            String translation = Language.gstring(KEYWORD_LANGUAGE_KEY_PREFIX + getKeyword());
+
+            // map placeholder results back to the input string
+            Matcher matcher = PLACEHOLDER.matcher(translation);
+            StringBuffer sb = new StringBuffer();
+
+            while (matcher.find()) {
+                String placeholderKey = matcher.group(1);
+
+                Optional<KeywordParameterModel> parameterModelOptional = getParameters().stream().filter(o -> placeholderKey.equals(o.getKey())).findFirst();
+
+                if (parameterModelOptional.isPresent()) {
+                    matcher.appendReplacement(sb, parameterModelOptional.get().getValue());
+                }
+                else {
+                    matcher.appendReplacement(sb, "<Missing placeholder>");
+                }
+            }
+
+            matcher.appendTail(sb);
+
+            return sb.toString();
+        }
+    }
+
+    public static class KeywordParameterModel {
+        private String key;
+        private String value;
+
+        @Property("Key")
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        @Property("Value")
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
     }
 }

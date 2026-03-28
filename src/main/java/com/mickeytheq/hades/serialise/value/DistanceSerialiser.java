@@ -1,6 +1,7 @@
 package com.mickeytheq.hades.serialise.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -12,10 +13,11 @@ public class DistanceSerialiser implements ValueSerialiser<Distance> {
     public static final String UNIT_FIELD = "Unit";
 
     @Override
-    public void serialiseValue(String fieldName, ObjectNode currentNode, Distance value, ProjectContext projectContext) {
-        ObjectNode objectNode = currentNode.putObject(fieldName);
+    public JsonNode serialiseValue(Distance value, ObjectMapper objectMapper, ProjectContext projectContext) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put(AMOUNT_FIELD, value.getAmount());
         objectNode.put(UNIT_FIELD, value.getUnit().name());
+        return objectNode;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.mickeytheq.hades.core.view.common;
 
+import com.mickeytheq.hades.scratchpad.Scratch;
 import com.mickeytheq.hades.util.shape.DimensionEx;
+import com.mickeytheq.hades.util.svg.SvgUtils;
+
+import java.awt.image.BufferedImage;
 
 public class PaintConstants {
     // the height of regions used for footer text in millimetres
@@ -19,5 +23,6 @@ public class PaintConstants {
     // class symbols as used on asset/event multiclass cards
     public static final DimensionEx CLASS_SYMBOL_SIZE = DimensionEx.millimetres(8.805, 8.805);
 
-
+    public static final BufferedImage TAG_CLOSE_ICON = SvgUtils.toBufferedImage(Scratch.class.getResourceAsStream("/icons/application/icons8-close-black.svg"), 20, 20);
+    public static final BufferedImage TAG_CLOSE_ICON_HOVER = SvgUtils.toBufferedImage(Scratch.class.getResourceAsStream("/icons/application/icons8-close-red.svg"), 20, 20);
 }

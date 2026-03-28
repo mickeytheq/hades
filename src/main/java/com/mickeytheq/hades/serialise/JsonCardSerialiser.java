@@ -2,23 +2,21 @@ package com.mickeytheq.hades.serialise;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.mickeytheq.hades.core.CardFaceTypeRegister;
 import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
-import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
-import com.mickeytheq.hades.core.model.entity.EntityMetadata;
-import com.mickeytheq.hades.core.model.entity.EntityPropertyMetadata;
-import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
+import com.mickeytheq.hades.core.model.entity.*;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.ProjectContexts;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
-import com.mickeytheq.hades.core.view.component.DimensionExComponent;
 import com.mickeytheq.hades.serialise.value.*;
 import com.mickeytheq.hades.util.JsonUtils;
 import com.mickeytheq.hades.util.VersionUtils;
@@ -30,9 +28,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Handles converting a generic JSON object tree from/to a Card entity
@@ -146,8 +142,8 @@ public class JsonCardSerialiser {
         // for example the front/back card faces are deserialised separately from the Card itself. this is because the card faces
         // have individual version control so must be done on their own so any upgrading can be done independently of the other face
         // and the card itself
-        ObjectNode frontFaceNode = (ObjectNode)objectNode.remove(FRONT_FACE_FIELD_NAME);
-        ObjectNode backFaceNode = (ObjectNode)objectNode.remove(BACK_FACE_FIELD_NAME);
+        ObjectNode frontFaceNode = (ObjectNode) objectNode.remove(FRONT_FACE_FIELD_NAME);
+        ObjectNode backFaceNode = (ObjectNode) objectNode.remove(BACK_FACE_FIELD_NAME);
 
         // audit fields are generated on serialisation but not mapped to the Card model
         objectNode.remove(AUDIT_FIELD_NAME);
@@ -269,6 +265,12 @@ public class JsonCardSerialiser {
             this.projectContext = ProjectContexts.getCurrentContext();
         }
 
+        private ObjectNode serialiseEntity(EntityMetadata entityMetadata, Object entity) {
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            serialiseEntity(entityMetadata, entity, objectNode);
+            return objectNode;
+        }
+
         public void serialiseEntity(EntityMetadata entityMetadata, Object entity, ObjectNode currentNode) {
             for (PropertyMetadata propertyMetadata : entityMetadata.getProperties()) {
                 Object value = propertyMetadata.getPropertyValue(entity);
@@ -282,41 +284,65 @@ public class JsonCardSerialiser {
                     continue;
 
                 if (propertyMetadata.isValue()) {
-                    serialiseValue(value, propertyMetadata, currentNode);
+                    JsonNode valueNode = serialiseValue(value, propertyMetadata.getPropertyClass());
+
+                    if (valueNode != null)
+                        currentNode.set(propertyMetadata.getName(), valueNode);
+
                     continue;
                 }
 
                 if (propertyMetadata.isEntity()) {
-                    EntityPropertyMetadata entityPropertyMetadata = ((EntityPropertyMetadata)propertyMetadata);
+                    EntityPropertyMetadata entityPropertyMetadata = ((EntityPropertyMetadata) propertyMetadata);
 
                     if (!entityPropertyMetadata.shouldInclude(value))
                         continue;
 
-                    ObjectNode childEntityNode = currentNode.putObject(propertyMetadata.getName());
+                    ObjectNode childEntityNode = serialiseEntity(propertyMetadata.asEntity(), value);
+                    currentNode.set(propertyMetadata.getName(), childEntityNode);
+                    continue;
+                }
 
-                    serialiseEntity(propertyMetadata.asEntity(), value, childEntityNode);
+                if (propertyMetadata.isList()) {
+                    ListPropertyMetadata listPropertyMetadata = (ListPropertyMetadata) propertyMetadata;
+
+                    if (!listPropertyMetadata.shouldInclude(value))
+                        continue;
+
+                    ArrayNode arrayNode = currentNode.putArray(propertyMetadata.getName());
+
+                    List<?> list = (List<?>) value;
+
+                    for (Object listItem : list) {
+                        JsonNode itemNode;
+                        if (listPropertyMetadata.isValue()) {
+                            itemNode = serialiseValue(value, listPropertyMetadata.getListItemClass());
+                        } else {
+                            itemNode = serialiseEntity(listPropertyMetadata.asEntity(), listItem);
+                        }
+
+                        if (itemNode != null)
+                            arrayNode.add(itemNode);
+                    }
                 }
             }
         }
 
-        private void serialiseValue(Object value, PropertyMetadata propertyMetadata, ObjectNode currentNode) {
-            String propertyName = propertyMetadata.getName();
-
+        private JsonNode serialiseValue(Object value, Class<?> valueClass) {
             // handle enums specially
-            if (propertyMetadata.getPropertyClass().isEnum()) {
-                currentNode.put(propertyName, ((Enum<?>)value).name());
-                return;
-            }
+            if (valueClass.isEnum())
+                return TextNode.valueOf(((Enum<?>) value).name());
 
             ValueSerialiser valueSerialiser = VALUE_SERIALISERS.get(value.getClass());
 
             if (valueSerialiser == null)
-                throw new RuntimeException("Value '" + value + "' of class '" + propertyMetadata.getPropertyClass().getName() + "' from property '" + propertyName + "' is not supported by any value serialiser");
+                throw new RuntimeException("Value '" + value + "' of class '" + valueClass.getName() + "' is not supported by any value serialiser");
 
             try {
-                valueSerialiser.serialiseValue(propertyName, currentNode, value, projectContext);
+                JsonNode jsonNode = valueSerialiser.serialiseValue(value, objectMapper, projectContext);
+                return jsonNode;
             } catch (Exception e) {
-                throw new RuntimeException("Failed to serialise value '" + value + "' of class '" + propertyMetadata.getPropertyClass().getName() + "' from property '" + propertyName + "'");
+                throw new RuntimeException("Failed to serialise value '" + value + "' of class '" + valueClass.getName() + "'");
             }
         }
     }
@@ -347,12 +373,44 @@ public class JsonCardSerialiser {
                     if (propertyValue == null)
                         throw new RuntimeException("Found a field '" + fieldName + "' that is a JSON object but the corresponding property with name '" + propertyMetadata.getName() + "' is null. Model entities should be initialised by their owning object during construction");
 
-                    deserialiseEntity(propertyMetadata.asEntity(), (ObjectNode)fieldValueJsonNode, propertyValue);
+                    deserialiseEntity(propertyMetadata.asEntity(), (ObjectNode) fieldValueJsonNode, propertyValue);
                     continue;
                 }
 
                 if (propertyMetadata.isValue()) {
-                    deserialiseValue(fieldValueJsonNode, propertyMetadata, entity);
+                    Object value = deserialiseValue(fieldValueJsonNode, propertyMetadata.getPropertyClass());
+                    propertyMetadata.setPropertyValue(entity, value);
+                    continue;
+                }
+
+                if (propertyMetadata.isList()) {
+                    ListPropertyMetadata listPropertyMetadata = (ListPropertyMetadata) propertyMetadata;
+
+                    if (!fieldValueJsonNode.isArray())
+                        throw new RuntimeException("Deserialising a list property '" + listPropertyMetadata.getName() + "' but the corresponding JSON node is not an array");
+
+                    ArrayNode listNode = ((ArrayNode) fieldValueJsonNode);
+
+                    List list = (List)propertyMetadata.getPropertyValue(entity);
+                    list.clear();
+
+                    for (JsonNode listItemNode : listNode) {
+                        Object listItem;
+                        if (listPropertyMetadata.isListItemValueType()) {
+                            listItem = deserialiseValue(listItemNode, listPropertyMetadata.getListItemClass());
+                        } else {
+                            try {
+                                listItem = listPropertyMetadata.getListItemClass().newInstance();
+                            } catch (InstantiationException | IllegalAccessException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            deserialiseEntity(listPropertyMetadata.asEntity(), (ObjectNode) listItemNode, listItem);
+                        }
+
+                        list.add(listItem);
+                    }
+
                     continue;
                 }
 
@@ -360,26 +418,21 @@ public class JsonCardSerialiser {
             }
         }
 
-        private void deserialiseValue(JsonNode jsonNode, PropertyMetadata propertyMetadata, Object entity) {
+        private Object deserialiseValue(JsonNode jsonNode, Class<?> propertyClass) {
             // handle enums specially
-            if (propertyMetadata.getPropertyClass().isEnum()) {
-                propertyMetadata.setPropertyValue(entity, Enum.valueOf(propertyMetadata.getPropertyClass().asSubclass(Enum.class), jsonNode.asText()));
-                return;
-            }
+            if (propertyClass.isEnum())
+                return Enum.valueOf(propertyClass.asSubclass(Enum.class), jsonNode.asText());
 
-            ValueSerialiser<?> valueSerialiser = VALUE_SERIALISERS.get(propertyMetadata.getPropertyClass());
+            ValueSerialiser<?> valueSerialiser = VALUE_SERIALISERS.get(propertyClass);
 
             if (valueSerialiser == null)
-                throw new RuntimeException("No value serialiser found for raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'");
+                throw new RuntimeException("No value serialiser found for raw JSON value '" + jsonNode.asText() + "' for property class '" + propertyClass.getName() + "'");
 
-            Object value;
             try {
-                value = valueSerialiser.deserialiseValue(jsonNode, projectContext);
+                return valueSerialiser.deserialiseValue(jsonNode, projectContext);
             } catch (Exception e) {
-                throw new RuntimeException("Failed to deserialise raw JSON value '" + jsonNode.asText() + "' from property '" + propertyMetadata.getName() + "' on entity type '" + entity.getClass().getName() + "'", e);
+                throw new RuntimeException("Failed to deserialise raw JSON value '" + jsonNode.asText() + "' from property class '" + propertyClass.getName() + "'", e);
             }
-
-            propertyMetadata.setPropertyValue(entity, value);
         }
     }
 }

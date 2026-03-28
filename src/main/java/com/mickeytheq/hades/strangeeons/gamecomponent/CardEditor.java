@@ -65,7 +65,7 @@ public class CardEditor extends AbstractGameComponentEditor<CardGameComponent> {
             createEditorAndViewerForCardFaceView(editorTabbedPane, Language.string(InterfaceConstants.BACK), cardGameComponent.getCardView().getBackFaceView());
         }
 
-        cardGameComponent.getCardView().addCommentsTab(new EditorContextImpl(editorTabbedPane, null, null));
+        cardGameComponent.getCardView().addMetadataTab(new EditorContextImpl(editorTabbedPane, null, null));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, editorTabbedPane, previewPane);
 

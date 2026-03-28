@@ -1,8 +1,8 @@
 package com.mickeytheq.hades.serialise.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.serialise.ValueSerialiser;
 import com.mickeytheq.hades.util.shape.DimensionEx;
@@ -14,11 +14,12 @@ public class DimensionExSerialiser implements ValueSerialiser<DimensionEx> {
     public static final String UNIT_FIELD = "Unit";
 
     @Override
-    public void serialiseValue(String fieldName, ObjectNode currentNode, DimensionEx value, ProjectContext projectContext) {
-        ObjectNode objectNode = currentNode.putObject(fieldName);
+    public JsonNode serialiseValue(DimensionEx value, ObjectMapper objectMapper, ProjectContext projectContext) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put(WIDTH_FIELD, value.getWidth());
         objectNode.put(HEIGHT_FIELD, value.getWidth());
         objectNode.put(UNIT_FIELD, value.getUnit().name());
+        return objectNode;
     }
 
     @Override

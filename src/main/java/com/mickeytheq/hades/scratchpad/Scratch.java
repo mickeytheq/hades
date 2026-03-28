@@ -1,26 +1,61 @@
 package com.mickeytheq.hades.scratchpad;
 
-import ca.cgjennings.graphics.filters.TintFilter;
-import com.mickeytheq.hades.core.view.utils.ImageUtils;
+import com.google.common.collect.Lists;
+import com.mickeytheq.hades.core.view.common.PaintConstants;
+import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.strangeeons.plugin.Bootstrapper;
-import com.mickeytheq.hades.strangeeons.ui.ExportCardDialog;
-import com.mickeytheq.hades.util.svg.SvgUtils;
-import org.apache.batik.transcoder.Transcoder;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
+import com.mickeytheq.hades.ui.JTagSelector;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.io.*;
-import java.nio.file.Files;
+import javax.swing.*;
+import java.util.List;
 
 public class Scratch {
     public static void main(String[] args) throws Exception {
-        BufferedImage image = SvgUtils.toBufferedImage(Scratch.class.getResourceAsStream("/overlays/location/symbols/triangle.svg"), 100, 100);
-        int i = 1;
+        Bootstrapper.initaliseOutsideStrangeEons();
+
+//        MigLayoutUtils.setDebug(true);
+
+        List<String> keywords = Lists.newArrayList("Aloof", "Alert", "Peril", "Exceptional", "Retaliate", "Uses", "Myriad");
+
+
+        JPanel panel = MigLayoutUtils.createDialogPanel();
+
+//        JTag tag1 = new JTag("Exceptional", blackCloseIcon, redCloseIcon);
+//        tag1.addActionListener(e -> System.out.println("Exceptional"));
+//
+//        JTag tag2 = new JTag("Peril", blackCloseIcon, redCloseIcon);
+//        tag2.addActionListener(e -> System.out.println("Peril"));
+//
+//        JSelector<String> autoCompleteList = new JSelector<>(s -> keywords.stream().filter(o -> o.toLowerCase().contains(s.toLowerCase())).collect(Collectors.toList()));
+//
+//        panel.add(tag1);
+//        panel.add(tag2);
+//        panel.add(autoCompleteList, "wrap");
+
+
+        JTagSelector<String> tagSelector = new JTagSelector<>(keywords, (s, s2) -> s.toLowerCase().contains(s2.toLowerCase()));
+        tagSelector.setTagCloseIcon(PaintConstants.TAG_CLOSE_ICON);
+        tagSelector.setTagCloseHoverIcon(PaintConstants.TAG_CLOSE_ICON_HOVER);
+
+        panel.add(tagSelector);
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private static class TestClass {
+        private List<String> list;
+
+        public List<String> getList() {
+            return list;
+        }
+
+        public void setList(List<String> list) {
+            this.list = list;
+        }
     }
 
 }

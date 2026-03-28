@@ -1,23 +1,22 @@
 package com.mickeytheq.hades.serialise.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.Statistic;
-import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.serialise.ValueSerialiser;
-import com.mickeytheq.hades.util.shape.Unit;
 
 public class StatisticSerialiser implements ValueSerialiser<Statistic> {
     private static final String PER_INVESTIGATOR_FIELD = "PerInvestigator";
     private static final String VALUE_FIELD = "Value";
 
     @Override
-    public void serialiseValue(String fieldName, ObjectNode currentNode, Statistic value, ProjectContext projectContext) {
-        ObjectNode objectNode = currentNode.putObject(fieldName);
+    public JsonNode serialiseValue(Statistic value, ObjectMapper objectMapper, ProjectContext projectContext) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put(VALUE_FIELD, value.getValue());
         objectNode.put(PER_INVESTIGATOR_FIELD, value.isPerInvestigator());
+        return objectNode;
     }
 
     @Override

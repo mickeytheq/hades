@@ -18,4 +18,6 @@ public interface ListPropertyMetadata extends PropertyMetadata {
     }
 
     Class<?> getListItemClass();
+
+    boolean isListItemValueType();
 }

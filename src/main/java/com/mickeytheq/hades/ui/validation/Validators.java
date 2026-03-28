@@ -50,7 +50,7 @@ public class Validators {
     public static JPanel required(JTextComponent textEditor) {
         return addValidationIcon(textEditor, component -> {
             if (StringUtils.isEmpty(component.getText()))
-                return "Required field";
+                return "Required field"; // TODO: i18n
 
             return null;
         });

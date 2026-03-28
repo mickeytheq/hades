@@ -1,15 +1,16 @@
 package com.mickeytheq.hades.serialise.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
 import com.mickeytheq.hades.serialise.ValueSerialiser;
 
 public class EncounterSetConfigurationSerialiser implements ValueSerialiser<EncounterSetConfiguration> {
     @Override
-    public void serialiseValue(String fieldName, ObjectNode currentNode, EncounterSetConfiguration value, ProjectContext projectContext) {
-        currentNode.put(fieldName, value.getUniqueId());
+    public JsonNode serialiseValue(EncounterSetConfiguration value, ObjectMapper objectMapper, ProjectContext projectContext) {
+        return TextNode.valueOf(value.getUniqueId());
     }
 
     @Override

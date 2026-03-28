@@ -6,6 +6,7 @@ import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.entity.AnnotatedEntityMetadataBuilder;
 import com.mickeytheq.hades.core.model.entity.EntityMetadata;
+import com.mickeytheq.hades.core.model.entity.EntityUtils;
 import com.mickeytheq.hades.core.model.entity.PropertyMetadata;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;

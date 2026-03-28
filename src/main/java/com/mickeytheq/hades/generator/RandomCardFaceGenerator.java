@@ -56,7 +56,8 @@ public class RandomCardFaceGenerator {
         model.setUnique(random.nextBoolean());
         model.setRules(randomString(50, 8));
         model.setCopyright(randomString(2, 8));
-        model.setKeywords(randomString(3, 8));
+        // TODO:
+//        model.setKeywords(randomString(3, 8));
         model.setFlavourText(randomString(20, 6));
         model.setTraits(randomString(3, 8));
 

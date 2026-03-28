@@ -1,15 +1,16 @@
 package com.mickeytheq.hades.serialise.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.mickeytheq.hades.core.project.ProjectContext;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.serialise.ValueSerialiser;
 
 public class CollectionConfigurationSerialiser implements ValueSerialiser<CollectionConfiguration> {
     @Override
-    public void serialiseValue(String fieldName, ObjectNode currentNode, CollectionConfiguration value, ProjectContext projectContext) {
-        currentNode.put(fieldName, value.getUniqueId());
+    public JsonNode serialiseValue(CollectionConfiguration value, ObjectMapper objectMapper, ProjectContext projectContext) {
+        return TextNode.valueOf(value.getUniqueId());
     }
 
     @Override

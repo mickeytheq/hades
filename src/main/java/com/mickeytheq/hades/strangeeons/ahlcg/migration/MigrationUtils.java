@@ -45,7 +45,8 @@ public class MigrationUtils {
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
         commonCardFieldsModel.setAfterTraitsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS), Unit.Point));
-        commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
+        // TODO:
+//        commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
         commonCardFieldsModel.setAfterKeywordsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS), Unit.Point));
         commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
         commonCardFieldsModel.setAfterRulesSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT), Unit.Point));

@@ -88,7 +88,8 @@ public class CardSuiteGenerator {
             asset.getCommonCardFieldsModel().setTitle("Kitchen Knife");
             asset.getCommonCardFieldsModel().setSubtitle("Unexceptional");
             asset.getCommonCardFieldsModel().setTraits("Item. Weapon. Melee.");
-            asset.getCommonCardFieldsModel().setKeywords("Exceptional.");
+            // TODO:
+//            asset.getCommonCardFieldsModel().setKeywords("Exceptional.");
             asset.getCommonCardFieldsModel().setRules("<act>: <b>Fight</b>. You get +1 <com> and deal +1 damage for this attack.");
             asset.getCommonCardFieldsModel().setFlavourText("It's just a knife.");
 
@@ -119,7 +120,8 @@ public class CardSuiteGenerator {
 
             event.getCommonCardFieldsModel().setTitle("Cake or Death");
             event.getCommonCardFieldsModel().setTraits("Gambit.");
-            event.getCommonCardFieldsModel().setKeywords("Fast.");
+            // TODO:
+//            event.getCommonCardFieldsModel().setKeywords("Fast.");
             event.getCommonCardFieldsModel().setRules("Play when you would be defeated by damage and/or horror. Draw a random chaos token. If is a symbol set your remaining health and sanity to 1. Otherwise suffer 1 trauma of your choice.");
             event.getCommonCardFieldsModel().setFlavourText("Don't run out of cake.");
 
@@ -174,7 +176,8 @@ public class CardSuiteGenerator {
             enemy.getCommonCardFieldsModel().setTitle("Shady Salesman");
             enemy.getCommonCardFieldsModel().setSubtitle("Sixteen times the detail");
             enemy.getCommonCardFieldsModel().setTraits("Yithian.");
-            enemy.getCommonCardFieldsModel().setKeywords("Aloof. Hunter.");
+            // TODO:
+//            enemy.getCommonCardFieldsModel().setKeywords("Aloof. Hunter.");
             enemy.getCommonCardFieldsModel().setRules("<for> After you succeed at a skill test by 2 or more at <title>'s location: <title> attacks you.");
             enemy.getCommonCardFieldsModel().setFlavourText("All of this. Just. Works.");
 

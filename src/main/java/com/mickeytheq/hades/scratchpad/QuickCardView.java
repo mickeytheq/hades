@@ -178,7 +178,8 @@ public class QuickCardView {
         model.getEnemyFieldsModel().setHorror(1);
 
         model.getCommonCardFieldsModel().setTraits("Monster.");
-        model.getCommonCardFieldsModel().setKeywords("Hunter.");
+        // TODO:
+//        model.getCommonCardFieldsModel().setKeywords("Hunter.");
         model.getCommonCardFieldsModel().setRules("Rules rules.");
         model.getCommonCardFieldsModel().setFlavourText("Flava flava.");
 
@@ -556,7 +557,7 @@ public class QuickCardView {
                 currentCardView.getBackFaceView().createEditors(createEditorContext(backCardFaceViewViewer));
             }
 
-            currentCardView.addCommentsTab(new EditorContextImpl(editTabbedPane, () -> {}));
+            currentCardView.addMetadataTab(new EditorContextImpl(editTabbedPane, () -> {}));
         }
 
         private EditorContext createEditorContext(CardFaceViewViewer cardFaceViewViewer) {

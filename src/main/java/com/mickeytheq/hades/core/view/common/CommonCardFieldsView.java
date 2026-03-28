@@ -4,6 +4,7 @@ import ca.cgjennings.graphics.ImageUtilities;
 import ca.cgjennings.layout.MarkupRenderer;
 import ca.cgjennings.layout.PageShape;
 import ca.cgjennings.layout.TextStyle;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.model.common.Distance;
 import com.mickeytheq.hades.core.model.common.HasCommonCardFieldsModel;
 import com.mickeytheq.hades.core.view.CardFaceView;
@@ -13,6 +14,7 @@ import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.model.common.CommonCardFieldsModel;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.utils.*;
+import com.mickeytheq.hades.ui.JTagSelector;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +24,9 @@ import resources.Language;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CommonCardFieldsView {
     private static final RectangleEx COPYRIGHT_PORTRAIT_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(86.70, 17.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
@@ -40,7 +44,7 @@ public class CommonCardFieldsView {
 
     private JTextField traitsEditor;
     private DistanceComponent afterTraitsSpaceEditor;
-    private JTextArea keywordsEditor;
+    private KeywordEditor keywordsEditor;
     private DistanceComponent afterKeywordsSpaceEditor;
     private JTextArea rulesEditor;
     private DistanceComponent afterRulesSpaceEditor;
@@ -70,7 +74,7 @@ public class CommonCardFieldsView {
 
         traitsEditor = EditorUtils.createTextField(30);
         afterTraitsSpaceEditor = new DistanceComponent();
-        keywordsEditor = EditorUtils.createTextArea(6, 30);
+        keywordsEditor = new KeywordEditor();
         afterKeywordsSpaceEditor = new DistanceComponent();
         rulesEditor = EditorUtils.createTextArea(6, 30);
         afterRulesSpaceEditor = new DistanceComponent();
@@ -85,7 +89,10 @@ public class CommonCardFieldsView {
         EditorUtils.bindToggleButton(copyOtherFaceTitlesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setCopyOtherFaceTitles));
         EditorUtils.bindTextComponent(traitsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setTraits));
         EditorUtils.bindDistanceComponent(afterTraitsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterTraitsSpacing));
-        EditorUtils.bindTextComponent(keywordsEditor, editorContext.wrapConsumerWithMarkedChanged(model::setKeywords));
+        keywordsEditor.addListener(() -> {
+            model.setKeywords(keywordsEditor.getKeywordModels());
+            editorContext.markChanged();
+        });
         EditorUtils.bindDistanceComponent(afterKeywordsSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterKeywordsSpacing));
         EditorUtils.bindTextComponent(rulesEditor, editorContext.wrapConsumerWithMarkedChanged(model::setRules));
         EditorUtils.bindDistanceComponent(afterRulesSpaceEditor, editorContext.wrapConsumerWithMarkedChanged(model::setAfterRulesSpacing));
@@ -100,7 +107,7 @@ public class CommonCardFieldsView {
         copyOtherFaceTitlesEditor.setSelected(model.getCopyOtherFaceTitles());
         traitsEditor.setText(model.getTraits());
         afterTraitsSpaceEditor.setDistance(model.getAfterTraitsSpacing());
-        keywordsEditor.setText(model.getKeywords());
+        keywordsEditor.setKeywordModels(model.getKeywords());
         afterKeywordsSpaceEditor.setDistance(model.getAfterKeywordsSpacing());
         rulesEditor.setText(model.getRules());
         afterRulesSpaceEditor.setDistance(model.getAfterRulesSpacing());
@@ -276,11 +283,13 @@ public class CommonCardFieldsView {
 
         addSpacing(sb, model.getAfterTraitsSpacing());
 
-        if (!StringUtils.isEmpty(model.getKeywords())) {
+        if (!model.getKeywords().isEmpty()) {
             if (sb.length() > 0)
                 sb.append("\n");
             sb.append("<left>");
-            sb.append(model.getKeywords());
+
+            String keywordString = model.getKeywords().stream().map(o -> o.resolveKeyword() + ".").collect(Collectors.joining(" "));
+            sb.append(keywordString);
 
             sb.append("\n");
             sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), new Distance(1.5, Unit.Point)));
@@ -357,7 +366,6 @@ public class CommonCardFieldsView {
         if (spacing.getAmount() == 0)
             return;
 
-        // TODO: convert the amount to pixels for other units or use the unit natively if possible
         sb.append(MarkupUtils.getSpacerMarkup(new Distance(1, Unit.Point), spacing));
     }
 

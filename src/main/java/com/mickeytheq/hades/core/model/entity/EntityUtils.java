@@ -3,6 +3,7 @@ package com.mickeytheq.hades.core.model.entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Optional;
 
 public class EntityUtils {
@@ -73,7 +74,40 @@ public class EntityUtils {
                 return;
             }
 
-            logger.info("Skipped property '" + fromProperty.getName() + "' on entity type '" + fromEntity.getClass() + "' with value '" + fromPropertyValue + "' although there was a property with a matching name they were different fundamental types (e.g. entity vs value");
+            if (fromProperty.isList() && toProperty.isList()) {
+                Object toPropertyValue = toProperty.getPropertyValue(toEntity);
+
+                copyList((ListPropertyMetadata)fromProperty, (List)fromPropertyValue, (ListPropertyMetadata)toProperty, (List)toPropertyValue);
+            }
+
+            logger.info("Skipped property '" + fromProperty.getName() + "' on entity type '" + fromEntity.getClass() + "' with value '" + fromPropertyValue + "' although there was a property with a matching name they were different fundamental types (e.g. entity vs value)");
+        }
+
+        private void copyList(ListPropertyMetadata fromListPropertyMetadata, List fromList, ListPropertyMetadata toListPropertyMetadata, List toList) {
+            if (!fromListPropertyMetadata.getListItemClass().equals(toListPropertyMetadata.getListItemClass()))
+                return;
+
+            toList.clear();
+
+            // value copy - just copy references
+            if (fromListPropertyMetadata.isListItemValueType()) {
+                toList.addAll(fromList);
+                return;
+            }
+
+            // entity copy - copy entities
+            for (Object fromItem : fromList) {
+                Object toItem;
+                try {
+                    toItem = fromListPropertyMetadata.getListItemClass().newInstance();
+                } catch (InstantiationException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+                copyEntity(fromListPropertyMetadata.asEntity(), fromItem, toListPropertyMetadata.asEntity(), toItem);
+
+                toList.add(toItem);
+            }
         }
     }
 }

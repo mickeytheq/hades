@@ -8,6 +8,7 @@ import com.mickeytheq.hades.core.view.component.DimensionExComponent;
 import com.mickeytheq.hades.core.view.component.DistanceComponent;
 import com.mickeytheq.hades.core.view.component.StatisticComponent;
 import com.mickeytheq.hades.ui.FileChooser;
+import com.mickeytheq.hades.ui.JTagSelector;
 import com.mickeytheq.hades.util.SwingUtils;
 import com.mickeytheq.hades.util.shape.DimensionEx;
 
@@ -16,6 +17,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
