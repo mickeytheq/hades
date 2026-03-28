@@ -38,7 +38,7 @@ public class TestResolveReferences {
         LocationBack locationBack = new LocationBack();
         locationBack.getLocationFieldsModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(location, locationBack);
+        Card card = Cards.composeCardModel(location, locationBack);
 
         Cards.resolveReferences(card);
 
@@ -58,7 +58,7 @@ public class TestResolveReferences {
         locationBack.getLocationFieldsModel().setConnectionIcon2(LocationFieldsModel.COPY_OTHER_VALUE);
         locationBack.getLocationFieldsModel().setConnectionIcon3("XYZ");
 
-        Card card = Cards.createCardModel(location, locationBack);
+        Card card = Cards.composeCardModel(location, locationBack);
 
         Cards.resolveReferences(card);
 
@@ -77,7 +77,7 @@ public class TestResolveReferences {
         ActBack actBack = new ActBack();
         actBack.getActFieldsModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(act, actBack);
+        Card card = Cards.composeCardModel(act, actBack);
 
         Cards.resolveReferences(card);
 
@@ -94,7 +94,7 @@ public class TestResolveReferences {
         AgendaBack agendaBack = new AgendaBack();
         agendaBack.getAgendaFieldsModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(agenda, agendaBack);
+        Card card = Cards.composeCardModel(agenda, agendaBack);
 
         Cards.resolveReferences(card);
 
@@ -111,7 +111,7 @@ public class TestResolveReferences {
         LocationBack locationBack = new LocationBack();
         locationBack.getCommonCardFieldsModel().setCopyOtherFaceTitles(true);
 
-        Card card = Cards.createCardModel(location, locationBack);
+        Card card = Cards.composeCardModel(location, locationBack);
 
         Cards.resolveReferences(card);
 
@@ -131,7 +131,7 @@ public class TestResolveReferences {
         ActBack actBack = new ActBack();
         actBack.getEncounterSetModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(act, actBack);
+        Card card = Cards.composeCardModel(act, actBack);
 
         Cards.resolveReferences(card);
 
@@ -151,7 +151,7 @@ public class TestResolveReferences {
         Event event = new Event();
         event.getCollectionModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(asset, event);
+        Card card = Cards.composeCardModel(asset, event);
 
         Cards.resolveReferences(card);
 
@@ -173,7 +173,7 @@ public class TestResolveReferences {
         Event event = new Event();
         event.getPortraitModel().setCopyOtherFace(true);
 
-        Card card = Cards.createCardModel(asset, event);
+        Card card = Cards.composeCardModel(asset, event);
 
         Cards.resolveReferences(card);
 
@@ -189,7 +189,7 @@ public class TestResolveReferences {
         LocationBack sharedLocationBack = new LocationBack();
         sharedLocationBack.getCommonCardFieldsModel().setTitle("Dark Woods");
 
-        Card referencedCard = Cards.createCardModel(sharedLocationBack, null);
+        Card referencedCard = Cards.composeCardModel(sharedLocationBack, null);
 
         CardDatabases.set(new BasicCardDatabase(Lists.newArrayList(referencedCard)));
 
@@ -200,7 +200,7 @@ public class TestResolveReferences {
         Shadow shadow = new Shadow();
         shadow.setShadowCardId(referencedCard.getId());
 
-        Card card = Cards.createCardModel(location, shadow);
+        Card card = Cards.composeCardModel(location, shadow);
 
         Cards.resolveReferences(card);
 

@@ -1,13 +1,11 @@
 package com.mickeytheq.hades.generator;
 
-import ca.cgjennings.graphics.ImageUtilities;
 import com.mickeytheq.hades.core.Cards;
 import com.mickeytheq.hades.core.model.Card;
 import com.mickeytheq.hades.core.model.cardfaces.*;
 import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.image.ImagePersister;
 import com.mickeytheq.hades.core.model.image.ImageProxy;
-import com.mickeytheq.hades.core.model.image.NothingImagePersister;
 import com.mickeytheq.hades.core.model.image.SingleDirectoryUuidEncodedFilenamesImagePersister;
 import com.mickeytheq.hades.core.project.HadesProject;
 import com.mickeytheq.hades.core.project.ProjectContext;
@@ -109,7 +107,7 @@ public class CardSuiteGenerator {
             asset.getCollectionModel().setCollectionConfiguration(gearCollectionConfiguration);
             asset.getCollectionModel().setNumber("1");
 
-            return Cards.createCardModel(asset, new PlayerCardBack());
+            return Cards.composeCardModel(asset, new PlayerCardBack());
         });
     }
 
@@ -137,7 +135,7 @@ public class CardSuiteGenerator {
             event.getCollectionModel().setCollectionConfiguration(gearCollectionConfiguration);
             event.getCollectionModel().setNumber("2");
 
-            return Cards.createCardModel(event, new PlayerCardBack());
+            return Cards.composeCardModel(event, new PlayerCardBack());
         });
     }
 
@@ -164,7 +162,7 @@ public class CardSuiteGenerator {
             skill.getCollectionModel().setCollectionConfiguration(gearCollectionConfiguration);
             skill.getCollectionModel().setNumber("3");
 
-            return Cards.createCardModel(skill, new PlayerCardBack());
+            return Cards.composeCardModel(skill, new PlayerCardBack());
         });
     }
 
@@ -198,7 +196,7 @@ public class CardSuiteGenerator {
             enemy.getEncounterSetModel().setNumber("1-3");
             enemy.getEncounterSetModel().setTotal("6");
 
-            return Cards.createCardModel(enemy, new EncounterCardBack());
+            return Cards.composeCardModel(enemy, new EncounterCardBack());
         });
     }
 
@@ -222,7 +220,7 @@ public class CardSuiteGenerator {
             treachery.getEncounterSetModel().setNumber("4-6");
             treachery.getEncounterSetModel().setTotal("6");
 
-            return Cards.createCardModel(treachery, new EncounterCardBack());
+            return Cards.composeCardModel(treachery, new EncounterCardBack());
         });
     }
 
@@ -260,7 +258,7 @@ public class CardSuiteGenerator {
             back.getScenarioReferenceFieldsModel().getTablet().setRules("-3. Lose all your resources.");
             back.getScenarioReferenceFieldsModel().getElderThing().setRules("-4. Take 1 damage and 1 horror.");
 
-            return Cards.createCardModel(front, back);
+            return Cards.composeCardModel(front, back);
         });
     }
 
@@ -305,7 +303,7 @@ public class CardSuiteGenerator {
             back.getSection3().setStory("Some story");
             back.getSection3().setRules("Some rules");
 
-            return Cards.createCardModel(front, back);
+            return Cards.composeCardModel(front, back);
         });
     }
 
@@ -341,7 +339,7 @@ public class CardSuiteGenerator {
             back.getSection1().setStory("Some story");
             back.getSection1().setRules("Some rules");
 
-            return Cards.createCardModel(front, back);
+            return Cards.composeCardModel(front, back);
         });
     }
 }

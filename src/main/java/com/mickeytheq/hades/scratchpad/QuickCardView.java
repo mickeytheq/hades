@@ -117,7 +117,7 @@ public class QuickCardView {
         asset.getCommonCardFieldsModel().setTitle("Rat Swarm");
         asset.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
 
-        Card shadowingCard = Cards.createNewCardModel(asset, new PlayerCardBack(), projectContext);
+        Card shadowingCard = Cards.newCardModel(asset, new PlayerCardBack(), projectContext);
 
         CardDatabase cardDatabase = new BasicCardDatabase(Lists.newArrayList(shadowingCard));
         CardDatabases.set(cardDatabase);
@@ -126,7 +126,7 @@ public class QuickCardView {
         shadow.setShadowCardId(shadowingCard.getId());
         shadow.setShadowSide(CardFaceSide.Front);
 
-        Card shadowCard = Cards.createNewCardModel(shadow, null, projectContext);
+        Card shadowCard = Cards.newCardModel(shadow, null, projectContext);
 
         displayEditor(shadowCard);
     }
@@ -140,7 +140,7 @@ public class QuickCardView {
         front.getSection1().setStory("Story story");
         front.getSection1().setRules("Rules are rules");
 
-        Card card = Cards.createNewCardModel(front, null, projectContext);
+        Card card = Cards.newCardModel(front, null, projectContext);
 
         displayEditor(card);
     }
@@ -148,7 +148,7 @@ public class QuickCardView {
     private void image() {
         Image image = new Image();
 
-        Card card = Cards.createNewCardModel(image, null, projectContext);
+        Card card = Cards.newCardModel(image, null, projectContext);
 
         displayEditor(card);
     }
@@ -162,7 +162,7 @@ public class QuickCardView {
         front.getScenarioReferenceFieldsModel().getTablet().setRules("-2. Take 1 horror");
         front.getScenarioReferenceFieldsModel().getElderThing().setRules("-4. If this is an evade test you automatically fail instead.");
 
-        Card card = Cards.createNewCardModel(front, null, projectContext);
+        Card card = Cards.newCardModel(front, null, projectContext);
 
         displayEditor(card);
 
@@ -183,7 +183,7 @@ public class QuickCardView {
         model.getCommonCardFieldsModel().setRules("Rules rules.");
         model.getCommonCardFieldsModel().setFlavourText("Flava flava.");
 
-        Card card = Cards.createNewCardModel(model, null, projectContext);
+        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -211,7 +211,7 @@ public class QuickCardView {
         backModel.getSection4().setText("3fdjxk fdjsf sdkfj sdkl jdsf jk ls d f j k lsd jfsdj klfsjk fdsjkl fsdj klfs jklf jkld0");
         backModel.setStory("'Waffle waffle waffle fdsfdsfdsfsd fdskl;fdskfds fdfdsfsd fdsfdsfd sfds fds fsd fds fds fsd fdsf dsf dsf dsf dsf sdfds fsd fsd fds fds fsd fsd fds fds fsd fds fdsf dsdfsfd'");
 
-        Card card = Cards.createNewCardModel(model, backModel, projectContext);
+        Card card = Cards.newCardModel(model, backModel, projectContext);
 
         displayEditor(card);
     }
@@ -219,7 +219,7 @@ public class QuickCardView {
     private void investigatorMiniCard() {
         InvestigatorMiniCard model = new InvestigatorMiniCard();
 
-        Card card = Cards.createNewCardModel(model, null, projectContext);
+        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -237,7 +237,7 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
-        Card card = Cards.createNewCardModel(model, null, projectContext);
+        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -254,7 +254,7 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setLevel(5);
 
 
-        Card card = Cards.createNewCardModel(model, null, projectContext);
+        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -276,7 +276,7 @@ public class QuickCardView {
         model.getAssetFieldsModel().setSanity(new Statistic("1", true));
 
 
-        Card card = Cards.createNewCardModel(model, null, projectContext);
+        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }
@@ -288,7 +288,7 @@ public class QuickCardView {
 
         PlayerCardBack back = new PlayerCardBack();
 
-        Card card = Cards.createNewCardModel(model, back, projectContext);
+        Card card = Cards.newCardModel(model, back, projectContext);
 
         displayEditor(card);
     }
@@ -305,7 +305,7 @@ public class QuickCardView {
         back.getCommonCardFieldsModel().setTitle("Back");
         back.getCommonCardFieldsModel().setRules("Rules back");
 
-        Card card = Cards.createNewCardModel(model, back, projectContext);
+        Card card = Cards.newCardModel(model, back, projectContext);
 
         displayEditor(card);
     }
@@ -333,7 +333,7 @@ public class QuickCardView {
         agendaBack.getSection3().setRules("Rules rules");
         agendaBack.getSection3().setStory("Story story");
 
-        Card card = Cards.createNewCardModel(model, agendaBack, projectContext);
+        Card card = Cards.newCardModel(model, agendaBack, projectContext);
 
         displayEditor(card);
     }
@@ -361,7 +361,7 @@ public class QuickCardView {
         backModel.getSection3().setRules("Rules rules");
         backModel.getSection3().setStory("Story story");
 
-        Card card = Cards.createNewCardModel(frontModel, backModel, projectContext);
+        Card card = Cards.newCardModel(frontModel, backModel, projectContext);
 
         displayEditor(card);
     }
@@ -397,7 +397,7 @@ public class QuickCardView {
 
             Asset asset = generator.createAsset();
 
-            Card card = Cards.createNewCardModel(asset, null, projectContext);
+            Card card = Cards.newCardModel(asset, null, projectContext);
             CardView cardView = Cards.createCardView(card, projectContext);
             accumulated.add(cardView);
 

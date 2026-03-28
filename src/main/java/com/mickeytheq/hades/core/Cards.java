@@ -2,7 +2,6 @@ package com.mickeytheq.hades.core;
 
 import com.mickeytheq.hades.core.global.carddatabase.CardDatabases;
 import com.mickeytheq.hades.core.model.Card;
-import com.mickeytheq.hades.core.model.cardfaces.Location;
 import com.mickeytheq.hades.core.model.cardfaces.Shadow;
 import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.model.entity.EntityUtils;
@@ -18,23 +17,29 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+/**
+ * Factory methods for creating models such as {@link Card} and implementations {@link CardFaceModel}, and views {@link CardView} and {@link CardFaceView}
+ *
+ * For the model methods the convention is that
+ *
+ * - methods that begin 'create' just create a shell with no default initialisation. For example use this when deserialising an existing card/face
+ * - methods that begin 'new' invoke create and also perform default initialisation. For example use this when creating a new card/face
+ */
 public class Cards {
-    public static Card createNewCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass, ProjectContext projectContext) {
+    public static Card newCardModel(Class<? extends CardFaceModel> frontFaceModelClass, Class<? extends CardFaceModel> backFaceModelClass, ProjectContext projectContext) {
         return ProjectContexts.withContextReturn(projectContext, () -> {
-            CardFaceModel frontFaceModel = createModelForClass(frontFaceModelClass);
-            frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
+            CardFaceModel frontFaceModel = createCardFaceModelForClass(frontFaceModelClass);
 
             CardFaceModel backFaceModel = null;
             if (backFaceModelClass != null) {
-                backFaceModel = createModelForClass(backFaceModelClass);
-                backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
+                backFaceModel = createCardFaceModelForClass(backFaceModelClass);
             }
 
-            return createCardModel(frontFaceModel, backFaceModel);
+            return newCardModel(frontFaceModel, backFaceModel, projectContext);
         });
     }
 
-    public static Card createCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel) {
+    public static Card composeCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel) {
         Card card = new Card();
 
         card.setFrontFaceModel(frontFaceModel);
@@ -43,9 +48,7 @@ public class Cards {
         return card;
     }
 
-    public static Card createNewCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel, ProjectContext projectContext) {
-        Card card = new Card();
-
+    public static Card newCardModel(CardFaceModel frontFaceModel, CardFaceModel backFaceModel, ProjectContext projectContext) {
         if (frontFaceModel != null) {
             frontFaceModel.initialiseNew(projectContext, CardFaceSide.Front);
         }
@@ -54,12 +57,44 @@ public class Cards {
             backFaceModel.initialiseNew(projectContext, CardFaceSide.Back);
         }
 
-        card.setFrontFaceModel(frontFaceModel);
-        card.setBackFaceModel(backFaceModel);
-
-        return card;
+        return composeCardModel(frontFaceModel, backFaceModel);
     }
 
+    public static CardFaceModel newCardFaceModelForTypCode(String typeCode, CardFaceSide cardFaceSide, ProjectContext projectContext) {
+        CardFaceModel cardFaceModel = createFaceModelForTypeCode(typeCode, projectContext);
+        cardFaceModel.initialiseNew(projectContext, cardFaceSide);
+        return cardFaceModel;
+    }
+
+    public static CardFaceModel createFaceModelForTypeCode(String typeCode, ProjectContext projectContext) {
+        return ProjectContexts.withContextReturn(projectContext, () -> {
+            CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForTypeCode(typeCode);
+
+            return createCardFaceModelForClass(cardFaceInfo.getCardFaceModelClass());
+        });
+    }
+
+    private static CardFaceModel createCardFaceModelForClass(Class<? extends CardFaceModel> cardFaceClass) {
+        Constructor<? extends CardFaceModel> constructor;
+        try {
+            constructor = cardFaceClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("The required single argument 'Card' constructor is not present on CardFace class '" + cardFaceClass.getName() + "'");
+        }
+
+        CardFaceModel cardFaceModel;
+        try {
+            cardFaceModel = constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cardFaceModel;
+    }
+
+    //
+    // CardView methods
+    //
     public static CardView createCardView(Card card, ProjectContext projectContext) {
         CardView cardView = new CardView(card, projectContext);
 
@@ -80,40 +115,14 @@ public class Cards {
         return cardView;
     }
 
-    public static CardFaceModel createFaceModelForTypeCode(String typeCode, ProjectContext projectContext) {
-        return ProjectContexts.withContextReturn(projectContext, () -> {
-            CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForTypeCode(typeCode);
-
-            return createModelForClass(cardFaceInfo.getCardFaceModelClass());
-        });
-    }
-
-    private static CardFaceModel createModelForClass(Class<? extends CardFaceModel> cardFaceClass) {
-        Constructor<? extends CardFaceModel> constructor;
-        try {
-            constructor = cardFaceClass.getConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("The required single argument 'Card' constructor is not present on CardFace class '" + cardFaceClass.getName() + "'");
-        }
-
-        CardFaceModel cardFaceModel;
-        try {
-            cardFaceModel = constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-
-        return cardFaceModel;
-    }
-
     public static CardFaceView createViewForModel(CardFaceModel cardFaceModel) {
         CardFaceTypeRegister.CardFaceInfo cardFaceInfo = CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass());
-        CardFaceView cardFaceView = createView(cardFaceInfo.getCardFaceViewClass());
+        CardFaceView cardFaceView = createCardFaceView(cardFaceInfo.getCardFaceViewClass());
 
         return cardFaceView;
     }
 
-    private static CardFaceView createView(Class<? extends CardFaceView> cardFaceViewClass) {
+    private static CardFaceView createCardFaceView(Class<? extends CardFaceView> cardFaceViewClass) {
         Constructor<? extends CardFaceView> constructor;
         try {
             constructor = cardFaceViewClass.getConstructor();
@@ -133,6 +142,8 @@ public class Cards {
 
     // resolves any 'copy other face' or similar references in the card model so they reflect the value being pointed to
     // this makes it easier for readers to consume the data rather than having to detect these instances
+    // calls should treat the updated Card as read-only as writing this resolved Card state will replace the references
+    // with real values which is not consistent with how references are mastered
     public static void resolveReferences(Card card) {
         if (!card.hasBack()) {
             resolveReferences(card, CardFaceSide.Front, card.getFrontFaceModel(), null);

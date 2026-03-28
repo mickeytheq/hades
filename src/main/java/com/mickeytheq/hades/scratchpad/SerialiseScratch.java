@@ -30,7 +30,7 @@ public class SerialiseScratch {
         model.getPlayerCardFieldsModel().setCost("3");
         model.getPlayerCardFieldsModel().setLevel(5);
 
-        Card card = Cards.createCardModel(model, null);
+        Card card = Cards.composeCardModel(model, null);
         ObjectNode objectNode = JsonCardSerialiser.serialiseCard(card);
 
         ObjectMapper objectMapper = JsonUtils.createDefaultObjectMapper();

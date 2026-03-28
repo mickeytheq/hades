@@ -30,40 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 public class QuickSearchDialog extends JDialog {
-    public static void main(String[] args) {
-        Bootstrapper.initaliseOutsideStrangeEons();
-
-        ProjectConfiguration projectConfiguration = new ProjectConfiguration();
-
-        ProjectContext projectContext = new StandardProjectContext(projectConfiguration, new NothingImagePersister());
-
-        ProjectContexts.withContext(projectContext, () -> {
-            List<Card> cards = new ArrayList<>();
-
-            for (int i = 1; i <= 100; i++) {
-                Asset asset = new Asset();
-                asset.getCommonCardFieldsModel().setTitle("Asset" + i);
-                asset.getCommonCardFieldsModel().setCopyright("MickeyTheQ");
-                asset.getCommonCardFieldsModel().setRules("Asset" + i);
-                cards.add(Cards.createCardModel(asset, new PlayerCardBack()));
-
-                Event event = new Event();
-                event.getCommonCardFieldsModel().setTitle("Event" + i);
-                cards.add(Cards.createCardModel(event, new PlayerCardBack()));
-
-                Skill skill = new Skill();
-                skill.getCommonCardFieldsModel().setTitle("Skill" + i);
-                cards.add(Cards.createCardModel(skill, new PlayerCardBack()));
-            }
-
-            CardDatabase cardDatabase = new BasicCardDatabase(cards);
-            CardDatabases.set(cardDatabase);
-
-            QuickSearchDialog dialog = new QuickSearchDialog();
-            dialog.setVisible(true);
-        });
-    }
-
     private final JTextField searchTextField;
     private final JList<Object> resultList;
     private final JScrollPane scrollPane;

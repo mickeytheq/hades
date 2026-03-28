@@ -205,6 +205,9 @@ public class CardFaceViewUtils {
             int yPos = 100;
 
             for (String textString : textStrings) {
+                if (textString == null)
+                    continue;
+
                 int width = graphics2D.getFontMetrics().stringWidth(textString);
                 int height = graphics2D.getFontMetrics().getHeight();
 

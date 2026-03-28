@@ -38,7 +38,9 @@ public class ChangeCardFaceType {
             CardFaceModel sourceCardFaceModel = dialog.getSourceCardFaceModel();
             CardFaceTypeRegister.CardFaceInfo targetCardFaceInfo = dialog.getTargetCardFaceInfo();
 
-            CardFaceModel targetCardFaceModel = Cards.createFaceModelForTypeCode(targetCardFaceInfo.getTypeCode(), projectContext);
+            // use the 'new' type of creation method so that defaults are initialised, otherwise we may end up with the
+            // card in an invalid state
+            CardFaceModel targetCardFaceModel = Cards.newCardFaceModelForTypCode(targetCardFaceInfo.getTypeCode(), cardFaceSide, projectContext);
 
             EntityUtils.copyEntity(sourceCardFaceModel, targetCardFaceModel);
 

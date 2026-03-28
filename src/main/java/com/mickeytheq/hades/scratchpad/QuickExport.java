@@ -43,7 +43,7 @@ public class QuickExport {
     }
 
     private static void writeCardFace(CardFaceModel cardFaceModel, ProjectContext projectContext, Path destination) {
-        Card card = Cards.createCardModel(cardFaceModel, null);
+        Card card = Cards.composeCardModel(cardFaceModel, null);
 
         CardView cardView = Cards.createCardView(card, projectContext);
 
