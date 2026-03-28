@@ -5,8 +5,6 @@ import com.mickeytheq.hades.core.view.utils.EditorUtils;
 import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
 import com.mickeytheq.hades.ui.*;
 import com.mickeytheq.hades.ui.validation.Validators;
-import org.apache.commons.lang3.Strings;
-import resources.Language;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -14,11 +12,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class KeywordEditor extends JPanel {
-    private final JSelector<String> selector;
+    private final JSelector<TranslatedKeyword> selector;
     private final List<JTag> tags = new ArrayList<>();
     private final Map<String, JTag> tagMap = new HashMap<>();
 
-    private final List<String> allItems;
+    private final List<TranslatedKeyword> allItems;
 
     private final List<CommonCardFieldsModel.KeywordModel> keywordModels = new ArrayList<>();
 
@@ -28,15 +26,13 @@ public class KeywordEditor extends JPanel {
     public KeywordEditor() {
         // use the language file to fetch all the possible keywords
         // TODO: add project custom keywords
-        this.allItems = Language.getGame().keySet().stream()
-                .filter(o -> o.startsWith(CommonCardFieldsModel.KeywordModel.KEYWORD_LANGUAGE_KEY_PREFIX))
-                .map(o -> Strings.CS.removeStart(o, CommonCardFieldsModel.KeywordModel.KEYWORD_LANGUAGE_KEY_PREFIX))
-                .sorted()
+        this.allItems = CommonCardFieldsModel.KeywordModel.getAllKeywords().stream()
+                .map(o -> new TranslatedKeyword(o, CommonCardFieldsModel.KeywordModel.getKeywordTranslation(o)))
                 .collect(Collectors.toList());
 
         setLayout(MigLayoutUtils.createOrganiserLayout());
 
-        selector = new JSelector<>(s -> getUnselectedValues().stream().filter(o -> keywordMatcher(o, s)).collect(Collectors.toList()));
+        selector = new JSelector<>(s -> getUnselectedValues().stream().filter(o -> keywordMatcher(o.getTranslation(), s)).collect(Collectors.toList()));
         selector.addSelectionListener(this::select);
 
         relayout();
@@ -46,8 +42,8 @@ public class KeywordEditor extends JPanel {
         return keyword.toLowerCase().contains(searchText.toLowerCase());
     }
 
-    private List<String> getUnselectedValues() {
-        return allItems.stream().filter(o -> !isKeywordPresent(o)).collect(Collectors.toList());
+    private List<TranslatedKeyword> getUnselectedValues() {
+        return allItems.stream().filter(o -> !isKeywordPresent(o.getKeyword())).collect(Collectors.toList());
     }
 
     private boolean isKeywordPresent(String keyword) {
@@ -69,12 +65,12 @@ public class KeywordEditor extends JPanel {
         relayout();
     }
 
-    private void select(String item) {
-        if (isKeywordPresent(item))
+    private void select(TranslatedKeyword item) {
+        if (isKeywordPresent(item.getKeyword()))
             return;
 
         CommonCardFieldsModel.KeywordModel keywordModel = new CommonCardFieldsModel.KeywordModel();
-        keywordModel.setKeyword(item);
+        keywordModel.setKeyword(item.getKeyword());
 
         // if null then placeholder resolution failed/was cancelled
         if (!resolvePlaceholders(keywordModel))
@@ -190,5 +186,28 @@ public class KeywordEditor extends JPanel {
 
     public interface KeywordEditorListener {
         void keywordModelsChanged();
+    }
+
+    static class TranslatedKeyword {
+        private final String keyword;
+        private final String translation;
+
+        public TranslatedKeyword(String keyword, String translation) {
+            this.keyword = keyword;
+            this.translation = translation;
+        }
+
+        public String getKeyword() {
+            return keyword;
+        }
+
+        public String getTranslation() {
+            return translation;
+        }
+
+        @Override
+        public String toString() {
+            return translation;
+        }
     }
 }

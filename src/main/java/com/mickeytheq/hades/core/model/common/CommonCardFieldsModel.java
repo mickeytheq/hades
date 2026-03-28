@@ -2,11 +2,14 @@ package com.mickeytheq.hades.core.model.common;
 
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import resources.Language;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CommonCardFieldsModel {
     private String title;
@@ -174,17 +177,63 @@ public class CommonCardFieldsModel {
         }
 
         public static final String KEYWORD_LANGUAGE_KEY_PREFIX = "Hades-Keyword-";
+        public static final String KEYWORD_LANGUAGE_KEY_FORMAT_SUFFIX = "-Format";
 
         // TODO: make the placeholder 3-part {key:type:translation} where key and type should not change but translation can be altered
         // TODO: and maybe drop type entirely - although would be useful for having a translatable drop-down for uses types
         private static final Pattern PLACEHOLDER = Pattern.compile("\\{(\\w+):(\\w+)}");
 
+        private static final List<String> ALL_KEYWORDS;
+        private static final Map<String, String> KEYWORD_TRANSLATIONS = new HashMap<>();
+        private static final Map<String, String> KEYWORD_FORMATS = new HashMap<>();
+
+        static {
+            ALL_KEYWORDS = Language.getGame().keySet().stream()
+                    .filter(o -> o.startsWith(KEYWORD_LANGUAGE_KEY_PREFIX))
+                    .map(o -> Strings.CS.removeStart(o, KEYWORD_LANGUAGE_KEY_PREFIX))
+                    .filter(o -> !o.contains("-"))
+                    .sorted()
+                    .collect(Collectors.toList());
+
+            for (String keyword : ALL_KEYWORDS) {
+                String translation = Language.gstring(KEYWORD_LANGUAGE_KEY_PREFIX + keyword);
+                KEYWORD_TRANSLATIONS.put(keyword, translation);
+
+                String formatKey = KEYWORD_LANGUAGE_KEY_PREFIX + keyword + KEYWORD_LANGUAGE_KEY_FORMAT_SUFFIX;
+
+                String format;
+
+                // if there's no format just use the raw translated string
+                if (!Language.getGame().keySet().contains(formatKey))
+                    format = translation;
+                else
+                    format = Language.gstring(formatKey);
+
+                KEYWORD_FORMATS.put(keyword, format);
+            }
+        }
+
+        // returns all keywords in their immutable values (no translation)
+        public static List<String> getAllKeywords() {
+            return Collections.unmodifiableList(ALL_KEYWORDS);
+        }
+
+        // return a user displayable string in the current language for the given keyword
+        public static String getKeywordTranslation(String keyword) {
+            return KEYWORD_TRANSLATIONS.get(keyword);
+        }
+
+        // returns a format string in the current language for the given keyword
+        public static String getKeywordFormat(String keyword) {
+            return KEYWORD_FORMATS.get(keyword);
+        }
+
         public Map<String, String> parsePlaceholders() {
-            String translation = Language.gstring(KEYWORD_LANGUAGE_KEY_PREFIX + getKeyword());
+            String format = getKeywordFormat(keyword);
 
             Map<String, String> placeholders = new LinkedHashMap<>();
 
-            Matcher matcher = PLACEHOLDER.matcher(translation);
+            Matcher matcher = PLACEHOLDER.matcher(format);
 
             while (matcher.find()) {
                 placeholders.put(matcher.group(1), matcher.group(2));
@@ -194,10 +243,10 @@ public class CommonCardFieldsModel {
         }
 
         public String resolveKeyword() {
-            String translation = Language.gstring(KEYWORD_LANGUAGE_KEY_PREFIX + getKeyword());
+            String format = getKeywordFormat(keyword);
 
             // map placeholder results back to the input string
-            Matcher matcher = PLACEHOLDER.matcher(translation);
+            Matcher matcher = PLACEHOLDER.matcher(format);
             StringBuffer sb = new StringBuffer();
 
             while (matcher.find()) {
