@@ -2,6 +2,7 @@ package com.mickeytheq.hades.strangeeons.ahlcg.migration;
 
 import ca.cgjennings.apps.arkham.component.DefaultPortrait;
 import ca.cgjennings.apps.arkham.diy.DIY;
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.model.common.*;
 import com.mickeytheq.hades.core.project.configuration.CollectionConfiguration;
 import com.mickeytheq.hades.core.project.configuration.EncounterSetConfiguration;
@@ -11,10 +12,15 @@ import com.mickeytheq.hades.util.shape.Unit;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MigrationUtils {
+    private static final Logger logger = LogManager.getLogger(MigrationUtils.class);
+
     public static Statistic parseStatistic(SettingsAccessor settingsAccessor, String valueSetting, String perInvestigatorSetting) {
         String value = settingsAccessor.getString(valueSetting);
 
@@ -45,15 +51,69 @@ public class MigrationUtils {
         commonCardFieldsModel.setSubtitle(settingsAccessor.getString(SettingsFieldNames.SUBTITLE));
         commonCardFieldsModel.setTraits(settingsAccessor.getString(SettingsFieldNames.TRAITS));
         commonCardFieldsModel.setAfterTraitsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.TRAITS), Unit.Point));
-        // TODO:
-//        commonCardFieldsModel.setKeywords(settingsAccessor.getString(SettingsFieldNames.KEYWORDS));
+
+        KeywordParser keywordParser = new KeywordParser();
+        commonCardFieldsModel.setKeywords(keywordParser.parseKeywords(context));
+
+        String rulesText = settingsAccessor.getString(SettingsFieldNames.GAME_TEXT);
+
+        rulesText = keywordParser.addUnmigratedKeywords(rulesText);
+
         commonCardFieldsModel.setAfterKeywordsSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.KEYWORDS), Unit.Point));
-        commonCardFieldsModel.setRules(settingsAccessor.getString(SettingsFieldNames.GAME_TEXT));
+        commonCardFieldsModel.setRules(rulesText);
         commonCardFieldsModel.setAfterRulesSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.GAME_TEXT), Unit.Point));
         commonCardFieldsModel.setFlavourText(settingsAccessor.getString(SettingsFieldNames.FLAVOR));
         commonCardFieldsModel.setAfterFlavourTextSpacing(new Distance(settingsAccessor.getSpacingValue(SettingsFieldNames.FLAVOR), Unit.Point));
         commonCardFieldsModel.setVictory(settingsAccessor.getString(SettingsFieldNames.VICTORY));
         commonCardFieldsModel.setCopyright(settingsAccessor.getString("Copyright"));
+    }
+
+    static class KeywordParser {
+        private final List<String> unmigratedKeywords = new ArrayList<>();
+
+        private List<CommonCardFieldsModel.KeywordModel> parseKeywords(CardFaceMigrationContext context) {
+            SettingsAccessor settingsAccessor = context.getSettingsAccessor();
+
+            String keywords = settingsAccessor.getString(SettingsFieldNames.KEYWORDS);
+
+            if (StringUtils.isEmpty(keywords))
+                return Collections.emptyList();
+
+            return Arrays.stream(StringUtils.split(keywords, "."))
+                    .map(o -> parseKeyword(context, o))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+
+        private CommonCardFieldsModel.KeywordModel parseKeyword(CardFaceMigrationContext context, String keywordText) {
+            String trimmedKeywordText = StringUtils.trim(keywordText);
+
+            if (StringUtils.isEmpty(trimmedKeywordText))
+                return null;
+
+            CommonCardFieldsModel.KeywordModel keywordModel = CommonCardFieldsModel.KeywordModel.parseFromFreeText(trimmedKeywordText);
+
+            if (keywordModel == null) {
+                unmigratedKeywords.add(keywordText);
+                return null;
+            }
+
+            return keywordModel;
+        }
+
+        private String addUnmigratedKeywords(String rulesText) {
+            if (unmigratedKeywords.isEmpty())
+                return rulesText;
+
+            unmigratedKeywords.forEach(s -> logger.warn("Unrecognised keyword text '" + s + "' has been prepended to the rules text"));
+
+            String keywordText = StringUtils.join(unmigratedKeywords, ".");
+
+            // remove any new line from the start as this will be taken care of by the natural break between keywords and rules
+            keywordText = Strings.CS.removeStart(keywordText, "\n");
+
+            return StringUtils.join(Lists.newArrayList(keywordText, rulesText), "\n<vs>\n");
+        }
     }
 
     public static void populatePlayerCardFields(CardFaceMigrationContext context, PlayerCardFieldsModel playerCardFieldsModel) {

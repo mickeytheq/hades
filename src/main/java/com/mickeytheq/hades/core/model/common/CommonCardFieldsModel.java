@@ -179,9 +179,9 @@ public class CommonCardFieldsModel {
         public static final String KEYWORD_LANGUAGE_KEY_PREFIX = "Hades-Keyword-";
         public static final String KEYWORD_LANGUAGE_KEY_FORMAT_SUFFIX = "-Format";
 
-        // TODO: make the placeholder 3-part {key:type:translation} where key and type should not change but translation can be altered
-        // TODO: and maybe drop type entirely - although would be useful for having a translatable drop-down for uses types
-        private static final Pattern PLACEHOLDER = Pattern.compile("\\{(\\w+):(\\w+)}");
+        // the placeholder is 3-part {key:type:translation} where key and type should not change but translation can be altered
+        // when editing language files
+        private static final Pattern PLACEHOLDER = Pattern.compile("\\{(\\w+):(\\w+):(\\w+)}");
 
         private static final List<String> ALL_KEYWORDS;
         private static final Map<String, String> KEYWORD_TRANSLATIONS = new HashMap<>();
@@ -226,6 +226,83 @@ public class CommonCardFieldsModel {
         // returns a format string in the current language for the given keyword
         public static String getKeywordFormat(String keyword) {
             return KEYWORD_FORMATS.get(keyword);
+        }
+
+        public static KeywordModel parseFromFreeText(String text) {
+            // first check for an exact match (no parameters)
+            for (String keyword : getAllKeywords()) {
+                String translation = getKeywordTranslation(keyword);
+
+                if (translation.equals(text)) {
+                    KeywordModel keywordModel = new KeywordModel();
+                    keywordModel.setKeyword(keyword);
+                    return keywordModel;
+                }
+            }
+
+            for (String keyword : getAllKeywords()) {
+                // construct a regex to parse the keyword parameters
+                // this is done by parsing the format string and converting it into a regex and using that
+                // to parse the keyword text
+                String format = getKeywordFormat(keyword);
+
+                // escape brackets so they don't get used as groups for the regex we're building
+                format = Strings.CS.replace(format, "(", "\\(");
+                format = Strings.CS.replace(format, ")", "\\)");
+
+                Matcher placeholderMatcher = PLACEHOLDER.matcher(format);
+                StringBuffer sb = new StringBuffer();
+
+                List<String> placeholderKeysInOrder = new ArrayList<>();
+
+                while (placeholderMatcher.find()) {
+                    String placeholderKey = placeholderMatcher.group(1);
+                    String placeholderType = placeholderMatcher.group(2);
+
+                    placeholderKeysInOrder.add(placeholderKey);
+
+                    if (placeholderType.equals("Text")) {
+                        placeholderMatcher.appendReplacement(sb, "(.+)");
+                    }
+                    else if (placeholderType.equals("Word")) {
+                        placeholderMatcher.appendReplacement(sb, "([\\\\w\\\\d]+)");
+                    }
+                    else {
+                        throw new RuntimeException("Invalid placeholder type '" + placeholderType + "' in placeholder format '" + format + "' for keyword '" + keyword + "'");
+                    }
+                }
+
+                placeholderMatcher.appendTail(sb);
+
+                String regex = sb.toString();
+
+                Matcher keywordParser = Pattern.compile(regex, Pattern.UNICODE_CHARACTER_CLASS).matcher(text);
+
+                // did not match
+                if (!keywordParser.matches())
+                    continue;
+
+                // group count was wrong
+                if (keywordParser.groupCount() < placeholderKeysInOrder.size())
+                    continue;
+
+                KeywordModel keywordModel = new KeywordModel();
+                keywordModel.setKeyword(keyword);
+
+                for (int i = 0; i < placeholderKeysInOrder.size(); i++) {
+                    String placeholderKey = placeholderKeysInOrder.get(i);
+                    String placeholderValue = keywordParser.group(i + 1);
+
+                    KeywordParameterModel parameterModel = new KeywordParameterModel();
+                    parameterModel.setKey(placeholderKey);
+                    parameterModel.setValue(placeholderValue);
+                    keywordModel.getParameters().add(parameterModel);
+                }
+
+                return keywordModel;
+            }
+
+            return null;
         }
 
         public Map<String, String> parsePlaceholders() {
