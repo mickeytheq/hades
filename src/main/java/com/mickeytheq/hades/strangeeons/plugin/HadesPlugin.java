@@ -341,6 +341,14 @@ public class HadesPlugin extends AbstractPlugin {
 
         @Override
         public void projectOpened(Project project) {
+            try {
+                loadCardDatabase(project);
+            } catch (Exception e) {
+                ErrorDialog.error("Error loading card database while loading project '" + project.getFile().toPath() + "'", e);
+            }
+        }
+
+        private void loadCardDatabase(Project project) {
             Path projectPath = project.getFile().toPath();
 
             // look for the hades project context, if it doesn't exist skip
