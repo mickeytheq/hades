@@ -28,7 +28,7 @@ public class AgendaMigrator {
 
         // default logic will put 'rules' in the standard field, move it out
         agenda.getStorySectionModel().setRules(agenda.getCommonCardFieldsModel().getRules());
-        agenda.getStorySectionModel().setRules(null);
+        agenda.getCommonCardFieldsModel().setRules(null);
 
         return agenda;
     }
