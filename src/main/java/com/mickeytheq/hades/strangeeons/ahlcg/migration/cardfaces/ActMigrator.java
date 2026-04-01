@@ -28,7 +28,7 @@ public class ActMigrator {
 
         // default logic will put 'rules' in the standard field, move it out
         act.getStorySectionModel().setRules(act.getCommonCardFieldsModel().getRules());
-        act.getStorySectionModel().setRules(null);
+        act.getCommonCardFieldsModel().setRules(null);
 
         return act;
     }
