@@ -1,60 +1,57 @@
 package com.mickeytheq.hades.util.svg;
 
-import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
-import org.apache.batik.bridge.BridgeContext;
-import org.apache.batik.bridge.GVTBuilder;
-import org.apache.batik.bridge.UserAgentAdapter;
-import org.apache.batik.bridge.ViewBox;
-import org.apache.batik.ext.awt.RenderingHintsKeyExt;
-import org.apache.batik.gvt.GraphicsNode;
-import org.apache.batik.transcoder.SVGAbstractTranscoder;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.util.XMLResourceDescriptor;
-import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGException;
+import com.kitfox.svg.SVGUniverse;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 public class SvgUtils {
-    // converts an SVG input stream into a BufferedImage scaled to the desired size
     public static BufferedImage toBufferedImage(InputStream inputStream, int width, int height) {
-        TranscoderInput transcoderInput = new TranscoderInput(inputStream);
-        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, (float)width);
-        transcoder.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, (float)height);
-
+        SVGUniverse universe = new SVGUniverse();
+        URI uri;
         try {
-            transcoder.transcode(transcoderInput, null);
-        } catch (TranscoderException e) {
+            uri = universe.loadSVG(inputStream, "IMAGE");
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading SVG image", e);
+        }
+        SVGDiagram diagram = universe.getDiagram(uri);
+        diagram.setIgnoringClipHeuristic(true);
+
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = bufferedImage.createGraphics();
+        try {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            float diagramWidth = diagram.getWidth();
+            float diagramHeight = diagram.getHeight();
+
+            double scale = calculateScale( new Dimension((int) diagramWidth, (int) diagramHeight), new Dimension(width, height) );
+
+            AffineTransform transform = g.getTransform();
+            transform.setToScale(scale, scale);
+
+            g.setTransform(transform);
+
+            diagram.render(g);
+        } catch (SVGException e) {
             throw new RuntimeException(e);
+        } finally {
+            g.dispose();
         }
 
-        return transcoder.getLastRendered();
+        return bufferedImage;
     }
 
-    private static class BufferedImageTranscoder extends ImageTranscoder {
-        private BufferedImage lastRendered;
+    private static double calculateScale( final Dimension src, final Dimension dst ) {
+        double srcWidth = src.getWidth();
+        double srcHeight = src.getHeight();
 
-        @Override
-        public BufferedImage createImage(int width, int height) {
-            return new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        }
-
-        @Override
-        public void writeImage(BufferedImage bufferedImage, TranscoderOutput transcoderOutput) throws TranscoderException {
-            lastRendered = bufferedImage;
-        }
-
-        public BufferedImage getLastRendered() {
-            return lastRendered;
-        }
+        return Math.min(dst.getWidth() / srcWidth, dst.getHeight() / srcHeight);
     }
 }
