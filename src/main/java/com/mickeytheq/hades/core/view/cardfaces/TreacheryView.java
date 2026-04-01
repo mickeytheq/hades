@@ -1,6 +1,10 @@
 package com.mickeytheq.hades.core.view.cardfaces;
 
 import ca.cgjennings.layout.MarkupRenderer;
+import ca.cgjennings.layout.PageShape;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Lists;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.*;
@@ -15,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import resources.Language;
 
 import javax.swing.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 @View(interfaceLanguageKey = InterfaceConstants.TREACHERY)
@@ -33,8 +38,8 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
     // locations to draw other elements
     private static final RectangleEx LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(48.23, 17.61, 2.37);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(51.69, 50.63, 4.91);
-    private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(57.57, 53.85, 27.09);
-    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(60.45, 53.85, 24.55);
+    private static final RectangleEx BODY_NON_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(4.825, 57.57, 53.85, 27.09);
+    private static final RectangleEx BODY_WEAKNESS_DRAW_REGION = RectangleEx.millimetres(4.825, 60.45, 53.85, 24.55);
 
     private static final RectangleEx BASIC_WEAKNESS_ICON_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(42.84, 4.74, 4.74);
     private static final RectangleEx WEAKNESS_SUBTYPE_LABEL_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(56.77, 33.87, 2.88);
@@ -140,7 +145,7 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_NON_WEAKNESS_DRAW_REGION));
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_NON_WEAKNESS_DRAW_REGION), BODY_NON_WEAKNESS_PAGE_SHAPE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
     }
 
     private void paintWeaknessContent(PaintContext paintContext) {
@@ -167,9 +172,35 @@ public class TreacheryView extends BaseCardFaceView<Treachery> implements HasCol
         markupRenderer.setMarkupText(subTypeText.toUpperCase());
         markupRenderer.drawAsSingleLine(paintContext.getGraphics(), paintContext.toPixelRect(WEAKNESS_SUBTYPE_LABEL_DRAW_REGION));
 
-        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION));
+        commonCardFieldsView.paintBodyAndCopyright(paintContext, paintContext.toPixelRect(BODY_WEAKNESS_DRAW_REGION), BODY_WEAKNESS_PAGE_SHAPE_CACHE.getUnchecked(paintContext.getResolutionInPixelsPerInch()));
 
         collectionView.paintCollectionImage(paintContext, CardFaceOrientation.Portrait, true);
         collectionView.paintCollectionNumber(paintContext, CardFaceOrientation.Portrait);
     }
+
+    private static final LoadingCache<Integer, PageShape> BODY_WEAKNESS_PAGE_SHAPE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(TreacheryView::createBodyWeaknessPageShape));
+    private static final LoadingCache<Integer, PageShape> BODY_NON_WEAKNESS_PAGE_SHAPE_CACHE = CacheBuilder.newBuilder().build(CacheLoader.from(TreacheryView::createBodyNonWeaknessPageShape));
+
+    private static PageShape createBodyNonWeaknessPageShape(int ppi) {
+        return MarkupUtils.createStraightLinePathingPageShape(BODY_NON_WEAKNESS_DRAW_REGION.toPixelRectangle(ppi), Lists.newArrayList(
+                new Point2D.Double(0.0, 0.0),
+                new Point2D.Double(0.0, 0.905),
+                new Point2D.Double(0.18, 1.0),
+                new Point2D.Double(1 - 0.18, 1.0),
+                new Point2D.Double(1.0, 0.905),
+                new Point2D.Double(1.0, 0.0)
+        ));
+    }
+
+    private static PageShape createBodyWeaknessPageShape(int ppi) {
+        return MarkupUtils.createStraightLinePathingPageShape(BODY_WEAKNESS_DRAW_REGION.toPixelRectangle(ppi), Lists.newArrayList(
+                new Point2D.Double(0.0, 0.0),
+                new Point2D.Double(0.0, 0.848),
+                new Point2D.Double(0.252, 1.0),
+                new Point2D.Double(1 - 0.252, 1.0),
+                new Point2D.Double(1.0, 0.848),
+                new Point2D.Double(1.0, 0.0)
+        ));
+    }
+
 }
