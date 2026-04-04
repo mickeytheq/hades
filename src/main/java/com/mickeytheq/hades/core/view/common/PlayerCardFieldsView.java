@@ -8,10 +8,7 @@ import com.mickeytheq.hades.core.model.common.PlayerCardSkillIcon;
 import com.mickeytheq.hades.core.model.common.PlayerCardType;
 import com.mickeytheq.hades.codegenerated.InterfaceConstants;
 import com.mickeytheq.hades.core.view.PaintContext;
-import com.mickeytheq.hades.core.view.utils.EditorUtils;
-import com.mickeytheq.hades.core.view.utils.ImageUtils;
-import com.mickeytheq.hades.core.view.utils.MigLayoutUtils;
-import com.mickeytheq.hades.core.view.utils.PaintUtils;
+import com.mickeytheq.hades.core.view.utils.*;
 import com.mickeytheq.hades.util.shape.DimensionEx;
 import com.mickeytheq.hades.util.shape.RectangleEx;
 import resources.Language;
@@ -193,18 +190,36 @@ public class PlayerCardFieldsView {
     }
 
     private static final Font COST_FONT = new Font("Arkhamic", Font.PLAIN, 15);
+    private static final Font COST_HYPHEN_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 70);
     private static final RectangleEx COST_DRAW_REGION = RectangleEx.millimetres(3.35, 2.09, 6.77, 6.43);
 
     public void paintCost(PaintContext paintContext) {
-        PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getResolutionInPixelsPerInch(),
-                getModel().getCost(),
-                paintContext.toPixelRect(COST_DRAW_REGION),
-                COST_FONT,
-                15.0f, 1.6f,
-                Color.WHITE,
-                Color.BLACK,
-                0,
-                true);
+        String cost = getModel().getCost();
+
+        if (cost.equals("-")) {
+            RectangleEx drawRegion = COST_DRAW_REGION.nudgeUp(1.0f);
+
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getResolutionInPixelsPerInch(),
+                    cost,
+                    paintContext.toPixelRect(drawRegion),
+                    COST_HYPHEN_FONT,
+                    10.0f, 1.6f,
+                    Color.WHITE,
+                    Color.BLACK,
+                    0,
+                    true);
+        }
+        else {
+            PaintUtils.drawOutlinedTitle(paintContext.getGraphics(), paintContext.getResolutionInPixelsPerInch(),
+                    cost,
+                    paintContext.toPixelRect(COST_DRAW_REGION),
+                    COST_FONT,
+                    15.0f, 1.6f,
+                    Color.WHITE,
+                    Color.BLACK,
+                    0,
+                    true);
+        }
     }
 
     private static final DimensionEx SKILL_BOX_SIZE = DimensionEx.millimetres(8.47, 6.43);

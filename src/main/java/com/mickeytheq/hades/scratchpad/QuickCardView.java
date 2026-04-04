@@ -73,14 +73,14 @@ public class QuickCardView {
 //            shadow();
 //            investigator();
 //            investigatorMiniCard();
-            asset();
+//            asset();
 //        event();
 //        skill();
 //        treachery();
 //            location();
 //            random();
 //            agenda();
-//            act();
+            act();
 //            enemy();
 //            scenarioReference();
 //            story();
@@ -261,6 +261,8 @@ public class QuickCardView {
 
     private void asset() {
         Asset model = new Asset();
+        Card card = Cards.newCardModel(model, null, projectContext);
+
         model.getCommonCardFieldsModel().setTitle("Rat Swarm");
         model.getCommonCardFieldsModel().setRules("<rev> Do something with <t>A trait</t>.");
         model.getPlayerCardFieldsModel().setSkillIcon1(PlayerCardSkillIcon.Intellect);
@@ -270,13 +272,11 @@ public class QuickCardView {
         model.getPlayerCardFieldsModel().setSkillIcon5(PlayerCardSkillIcon.Intellect);
         model.getAssetFieldsModel().setSlot1(Asset.AssetSlot.Hand);
         model.getAssetFieldsModel().setSlot2(Asset.AssetSlot.Arcane);
-        model.getPlayerCardFieldsModel().setCost("3");
+        model.getPlayerCardFieldsModel().setCost("-");
         model.getPlayerCardFieldsModel().setLevel(5);
         model.getAssetFieldsModel().setHealth(new Statistic("1", false));
-        model.getAssetFieldsModel().setSanity(new Statistic("1", true));
+        model.getAssetFieldsModel().setSanity(new Statistic("-", false));
 
-
-        Card card = Cards.newCardModel(model, null, projectContext);
 
         displayEditor(card);
     }

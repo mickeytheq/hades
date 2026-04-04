@@ -97,7 +97,7 @@ public class PaintUtils {
     }
 
     private static final Font STATISTIC_DEFAULT_FONT = new Font("Bolton", Font.PLAIN, 12);
-    private static final Font STATISTIC_DASH_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 36);
+    public static final Font STATISTIC_HYPHEN_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 70);
     private static final Font PER_INVESTIGATOR_FONT = new Font(TextStyleUtils.AHLCG_SYMBOL_FONT, Font.PLAIN, 3).deriveFont(3.25f);
 
     public static final Color HEALTH_TEXT_OUTLINE_COLOUR = new Color(0.68f, 0.12f, 0.22f);
@@ -223,7 +223,7 @@ public class PaintUtils {
 
             // for a certain specific strings we use different fonts
             if (statistic.getValue().equals("-")) {
-                statisticValueFont = STATISTIC_DASH_FONT;
+                statisticValueFont = STATISTIC_HYPHEN_FONT;
                 performScaling = false;
             }
         }
@@ -253,9 +253,10 @@ public class PaintUtils {
 
             // in certain cases we disable the scaling, for example when rendering a single hyphen/dash
             // in general we want the automatic scaling to handle variable width text keeping the text the desired height
-            if (performScaling) {
-                scaleAdjust = drawRegion.getHeight() / valueTextBounds.getHeight();
-            }
+            if (!performScaling)
+                return;
+
+            scaleAdjust = drawRegion.getHeight() / valueTextBounds.getHeight();
 
             // recalculate glyph vector and text bounds with the new font size
             statisticValueFont = statisticValueFont.deriveFont(statisticValueFont.getSize() * (float)scaleAdjust);
