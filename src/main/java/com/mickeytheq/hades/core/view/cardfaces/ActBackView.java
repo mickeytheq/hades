@@ -126,7 +126,6 @@ public class ActBackView extends BaseCardFaceView<ActBack> implements HasEncount
         // title - vertical orientation
         commonCardFieldsView.paintTitleMultilineRotated(paintContext, paintContext.toPixelRect(TITLE_DRAW_REGION));
 
-        encounterSetView.paintEncounterNumbers(paintContext, CardFaceOrientation.Landscape);
         encounterSetView.paintEncounterImage(paintContext, paintContext.toPixelRect(ENCOUNTER_PORTRAIT_DRAW_REGION));
 
         paintScenarioIndex(paintContext);
