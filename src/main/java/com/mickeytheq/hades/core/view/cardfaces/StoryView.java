@@ -97,9 +97,9 @@ public class StoryView extends BaseCardFaceView<Story> implements HasEncounterSe
 
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(6.43, 4.91, 43.01, 7.45);
     private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetresHorizontallyCentred(18.12, 51.65, 66.89);
-    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(51.98, 6.00, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
+    private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(52.28, 6.00, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
     private static final RectangleEx ENCOUNTER_NUMBER_DRAW_REGION = RectangleEx.millimetres(34.54, 82.72, EncounterSetView.ENCOUNTER_NUMBERS_SIZE);
-    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(46.31, 82.38, 2.20, 2.20);
+    private static final RectangleEx COLLECTION_PORTRAIT_DRAW_REGION = RectangleEx.millimetres(43.00, 82.38, 2.20, 2.20);
     private static final RectangleEx COLLECTION_NUMBER_DRAW_REGION = RectangleEx.millimetres(45.30, 82.72, CollectionView.COLLECTION_NUMBER_SIZE);
     private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(9.99, 82.72, 14.56, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
 
