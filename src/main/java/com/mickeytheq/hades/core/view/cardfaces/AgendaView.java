@@ -115,7 +115,7 @@ public class AgendaView extends BaseCardFaceView<Agenda> implements HasCollectio
 
     private static final RectangleEx SCENARIO_INDEX_DRAW_REGION = RectangleEx.millimetres(53.34, 2.37, 21.00, 3.56);
     private static final RectangleEx TITLE_DRAW_REGION = RectangleEx.millimetres(43.18, 9.99, 42.33, 7.45);
-    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(42.33, 17.61, 44.70, 40.13);
+    private static final RectangleEx BODY_DRAW_REGION = RectangleEx.millimetres(42.33, 17.61, 44.70, 38.53);
     private static final RectangleEx COPYRIGHT_DRAW_REGION = RectangleEx.millimetres(57.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
     private static final RectangleEx ARTIST_DRAW_REGION = RectangleEx.millimetres(39.00, 61.38, 14.10, PaintConstants.FOOTER_TEXT_HEIGHT_MMS);
     private static final RectangleEx ENCOUNTER_PORTRAIT_DRAW_REGION = RectangleEx.millimetresCentredOn(64.10, 7.60, PaintConstants.ENCOUNTER_SET_ICON_SIZE);
