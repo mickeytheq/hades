@@ -88,28 +88,28 @@ public class BulkUpdateOptionsDialog extends DialogEx {
     private static final String SETTINGS_LOGGING_LEVEL = SETTINGS_PREFIX + "LoggingLevel";
     private static final String SETTINGS_DRY_RUN = SETTINGS_PREFIX + "DryRun";
 
-    @Override
-    public void load() {
-        Settings settings = Settings.getUser();
-
-        LoggingLevel loggingLevel = LoggingLevel.Normal;
-        try {
-            loggingLevel = LoggingLevel.valueOf(settings.get(SETTINGS_LOGGING_LEVEL, LoggingLevel.Normal.toString()));
-        } catch (IllegalArgumentException e) {
-            // ignore, probably an missing or invalid setting
-        }
-        loggingLevelCombo.setSelectedItem(loggingLevel);
-
-        dryRunCheckbox.setSelected(settings.getBoolean(SETTINGS_DRY_RUN, true));
-    }
-
-    @Override
-    public void save() {
-        Settings settings = Settings.getUser();
-
-        settings.set(SETTINGS_LOGGING_LEVEL, ((LoggingLevel) loggingLevelCombo.getSelectedItem()).name());
-        settings.setBoolean(SETTINGS_DRY_RUN, dryRunCheckbox.isSelected());
-    }
+//    @Override
+//    public void load() {
+//        Settings settings = Settings.getUser();
+//
+//        LoggingLevel loggingLevel = LoggingLevel.Normal;
+//        try {
+//            loggingLevel = LoggingLevel.valueOf(settings.get(SETTINGS_LOGGING_LEVEL, LoggingLevel.Normal.toString()));
+//        } catch (IllegalArgumentException e) {
+//            // ignore, probably an missing or invalid setting
+//        }
+//        loggingLevelCombo.setSelectedItem(loggingLevel);
+//
+//        dryRunCheckbox.setSelected(settings.getBoolean(SETTINGS_DRY_RUN, true));
+//    }
+//
+//    @Override
+//    public void save() {
+//        Settings settings = Settings.getUser();
+//
+//        settings.set(SETTINGS_LOGGING_LEVEL, ((LoggingLevel) loggingLevelCombo.getSelectedItem()).name());
+//        settings.setBoolean(SETTINGS_DRY_RUN, dryRunCheckbox.isSelected());
+//    }
 
     public LoggingLevel getLoggingLevel() {
         return (LoggingLevel) loggingLevelCombo.getSelectedItem();
