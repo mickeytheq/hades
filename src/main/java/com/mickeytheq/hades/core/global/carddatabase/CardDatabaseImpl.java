@@ -51,6 +51,10 @@ public class CardDatabaseImpl implements CardDatabase {
         readWriteLock.readLock().lock();
         try {
             CardEntry cardEntry = cardEntryMapById.get(card.getId());
+
+            if (cardEntry == null)
+                return null;
+
             return cardEntry.getSourcePath();
         } finally {
             readWriteLock.readLock().unlock();

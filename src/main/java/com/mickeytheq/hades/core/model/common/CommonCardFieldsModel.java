@@ -1,5 +1,6 @@
 package com.mickeytheq.hades.core.model.common;
 
+import com.mickeytheq.hades.core.model.CardFaceModel;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.serialise.discriminator.BooleanEmptyWhenFalseDiscriminator;
 import org.apache.commons.lang3.StringUtils;
@@ -152,6 +153,10 @@ public class CommonCardFieldsModel {
 
     public void setAfterFlavourTextSpacing(Distance afterFlavourTextSpacing) {
         this.afterFlavourTextSpacing = afterFlavourTextSpacing;
+    }
+
+    public static String getTitle(CardFaceModel cardFaceModel) {
+        return HasCommonCardFieldsModel.getInstance(cardFaceModel).map(o -> o.getTitle()).orElse(null);
     }
 
     public static class KeywordModel {

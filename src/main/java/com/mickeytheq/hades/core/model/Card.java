@@ -1,9 +1,11 @@
 package com.mickeytheq.hades.core.model;
 
+import com.google.common.collect.Lists;
 import com.mickeytheq.hades.core.model.entity.Property;
 import com.mickeytheq.hades.core.view.CardFaceSide;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,6 +67,13 @@ public class Card {
 
     public boolean hasBack() {
         return backFaceModel != null;
+    }
+
+    public List<CardFaceModel> getCardFaces() {
+        if (hasBack())
+            return Lists.newArrayList(getFrontFaceModel(), getBackFaceModel());
+
+        return Lists.newArrayList(getFrontFaceModel());
     }
 
     @Property("Metadata")

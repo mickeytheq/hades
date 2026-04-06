@@ -140,6 +140,16 @@ public class Cards {
         return cardFaceView;
     }
 
+    public static String toDisplayString(CardFaceModel cardFaceModel, CardFaceSide cardFaceSide) {
+        String title = HasCommonCardFieldsModel.getInstance(cardFaceModel).map(o -> o.getTitle()).orElse("<no title>");
+
+        return title + " (" + cardFaceSide.name() + ")";
+    }
+
+    public static String getType(CardFaceModel cardFaceModel) {
+        return CardFaceTypeRegister.get().getInfoForCardFaceModelClass(cardFaceModel.getClass()).getTypeCode();
+    }
+
     // resolves any 'copy other face' or similar references in the card model so they reflect the value being pointed to
     // this makes it easier for readers to consume the data rather than having to detect these instances
     // calls should treat the updated Card as read-only as writing this resolved Card state will replace the references
